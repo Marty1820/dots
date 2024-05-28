@@ -1,0 +1,89 @@
+# ███╗░░░███╗░█████╗░██████╗░████████╗██╗░░░██╗
+# ████╗░████║██╔══██╗██╔══██╗╚══██╔══╝╚██╗░██╔╝
+# ██╔████╔██║███████║██████╔╝░░░██║░░░░╚████╔╝░
+# ██║╚██╔╝██║██╔══██║██╔══██╗░░░██║░░░░░╚██╔╝░░
+# ██║░╚═╝░██║██║░░██║██║░░██║░░░██║░░░░░░██║░░░
+# ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░
+# BASH&ZSH ALIASES/FUNCTIONS
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# Terminal specific settings
+[ "$TERM" != wezterm ] && . "$HOME"/.config/shell/profile
+if [ "$TERM" = "xterm-kitty" ]; then
+  alias ssh="kitten ssh"
+  alias icat="kitten icat"
+fi
+
+# History file sizes
+HISTFILE="$XDG_CACHE_HOME/sh_hist"
+HISTSIZE=2000
+SAVEHIST=2000
+HISTFILESIZE=2000
+
+### ALIAS ###
+alias ..='cd ..'
+alias cd..='cd ..'
+alias mkdir='mkdir -p'
+alias psa='ps auxf'
+# Interactive Mode
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+# Human readable formate
+alias df='df -h'
+alias free='free -h'
+alias du='du -h'
+# Colorize
+alias tree='tree -C'
+alias cls='clear -x && color10bit.sh'
+alias grep='grep --color=auto'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
+alias diff='diff --color=auto'
+alias ip='ip -color=auto'
+# Simple info pull
+alias psgrep='ps aux | grep -v grep | grep -i -e VSZ -e'
+alias psmem='ps auxf | sort -nr -k 4'
+alias pscpu='ps auxf | sort -nr -k 3'
+alias wifikey="sudo grep -r '^psk=' /etc/NetworkManager/system-connections/"
+# Keeping $HOME(~) clean
+alias vim='vim -u "$XDG_CONFIG_HOME/vim/vimrc"'
+alias wget='wget --hsts-file="$XDG_DATA_HOME"/wget-hsts'
+alias adb='HOME="$XDG_DATA_HOME"/android adb'
+# Use bat instead of cat
+alias cat='bat'
+# Changing "ls" to "exa"
+alias ls='exa --icons --color=always --group-directories-first' # adds icons, color, dirs firts
+alias la='exa -a --icons --color=always --group-directories-first' # all files and dirs
+alias ll='exa -al --icons --color=always --group-directories-first' # long format
+alias lt='exa -aT --icons --color=always --group-directories-first' # tree listing
+alias l='exa -a --icons --color=always' # Show all dirs/files
+alias l.='exa -a | grep -E "^\."' # Show only .dot files
+
+# package management
+alias pacsyu='sudo pacman -Syyu' # update only standard pkgs
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)' # remove orphaned packages
+# get fastest mirrors
+alias mirror="sudo reflector --latest 10 --sort rate --protocol https --verbose --save /etc/pacman.d/mirrorlist"
+
+# get error messages from journalctl
+alias jctl="journalctl -p 3 -xb"
+
+# GitHub Dot Files
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+### FUN STUFF ###
+# the terminal rickroll
+alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+# UTF-8 termnal display tester
+alias utftest="curl https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-demo.txt"
+
+if [ "$(tty)" != "/dev/tty2" ] && [ -f ~/.local/bin/color10bit.sh ]; then
+  color10bit.sh
+fi
+
+### BASH INSULTER (works in zsh too) ###
+# sudo wget -O /etc/bash.command-not-found https://gitlab.com/dwt1/bash-insulter/-/raw/master/src/bash.command-not-found
+[ -f /etc/bash.command-not-found ] && . /etc/bash.command-not-found

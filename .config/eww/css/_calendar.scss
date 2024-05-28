@@ -1,0 +1,43 @@
+// Calendar
+.cal-container {
+  border: 1px solid $purple;
+  background-color: $background-darker;
+  color: $foreground;
+  padding: 5px;
+  border-radius: 20px;
+}
+
+.cal-date {
+  font-size: 20px;
+  margin: 10px;
+}
+
+.cal-cal {
+  font-size: 14px;
+}
+
+.cal-cal.header {
+  color: $foreground;
+}
+
+.cal-cal.button {
+  color: $selection;
+}
+
+.cal-cal.highlight {
+  color: $purple;
+}
+
+.cal-cal {
+  color: $pink;
+}
+
+.cal-cal:selected {
+  background: linear-gradient($selection, $purple);
+  border-radius: 6px;
+  color: $foreground;
+}
+
+.cal-cal:indeterminate {
+  color: $background;
+}

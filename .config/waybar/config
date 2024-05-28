@@ -1,0 +1,204 @@
+/* vim: set filetype=json : */
+{
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+  "spacing": 4,
+  "modules-left": [
+    "clock",
+    "hyprland/workspaces",
+    "wlr/taskbar"
+  ],
+  "modules-center": [
+    "hyprland/window"
+  ],
+  "modules-right": [
+    "custom/weather",
+    "group/system",
+    "battery",
+    "group/power"
+  ],
+  "clock": {
+    "interval": 60,
+    "format": "{:%I:%M %p}",
+    "on-click": "sleep 0.15 && eww open --toggle cal && eww open --toggle cal-closer"
+  },
+  "hyprland/workspaces": {
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "active-only": false,
+    "all-outputs": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": ""
+    },
+    "persistent-workspaces": {
+      "*": 4
+    }
+  },
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 18,
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "ignore-list": [
+      "kitty"
+    ]
+  },
+  "hyrpland/window": {
+    "format": "{}",
+    "separate-outputs": true
+  },
+  "custom/weather": {
+    "format": "{}",
+    "on-click": "sleep 0.15 && eww open --toggle weather && eww open --toggle weather-closer",
+    "interval": 300,
+    "exec": "$HOME/.config/scripts/weather.sh --waybar",
+    "tooltip": false,
+    "return-type": "json"
+  },
+  "group/system": {
+    "orientation": "horizontal",
+    "children-class": "system",
+    "modules": [
+      "custom/panel",
+      "bluetooth",
+      "network",
+      "pulseaudio",
+      "backlight",
+      "idle_inhibitor"
+    ]
+  },
+  "custom/panel": {
+    "format": "󰙀",
+    "tooltip": false,
+    "on-click": "sleep 0.15 && eww open --toggle control-center && eww open --toggle control-center-closer"
+  },
+  "bluetooth": {
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "format-on": "󰂯",
+    "format-connected": "󰂱",
+    "on-click": "blueman-manager",
+    "format-connected-battery": "󰥉{device_battery_percentage}󰏰"
+  },
+  "network": {
+    "format-ethernet": "󰈀",
+    "format-wifi": "{icon}",
+    "format-disconnected": "󰤭",
+    "format-icons": [
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "on-click": "nm-connection-editor",
+    "tooltip-format-ethernet": "{ipaddr}",
+    "tooltip-format-wifi": "{essid}",
+    "tooltip-format-disconnected": "Disconnected"
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-bluetooth": "{icon}",
+    "format-muted": "󰝟",
+    "format-icons": {
+      "default": [
+        "",
+        "",
+        "󰕾"
+      ]
+    },
+    "scroll-step": 1,
+    "on-click": "pamixer -t",
+    "tooltip-format": "{volume}󰏰 {desc}"
+  },
+  "backlight": {
+    "format": "{icon}",
+    "format-icons": [
+      "󰃝",
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
+    "tooltip-format": "{percent}󰏰",
+    "on-click": "$HOME/.config/scripts/screen_brightness_info.sh --toggle"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󱦠",
+      "deactivated": "󰔟"
+    }
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{capacity}󰏰 {icon}",
+    "format-charging": "{capacity}󰏰 󰂄",
+    "format-icons": [
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
+    "tooltip": false
+  },
+  "group/power": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "power",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/shutdown",
+      "custom/logout",
+      "custom/hibernate",
+      "custom/lock",
+      "custom/reboot"
+    ]
+  },
+  "custom/shutdown": {
+    "format": "",
+    "exec-on-event": true,
+    "on-click": "systemctl poweroff",
+    "tooltip": false
+  },
+  "custom/reboot": {
+    "format": "󰜉",
+    "exec-on-event": true,
+    "on-click": "systemctl reboot",
+    "tooltip": false
+  },
+  "custom/hibernate": {
+    "format": "󰤁",
+    "exec-on-event": true,
+    "on-click": "systemctl hibernate",
+    "tooltip": false
+  },
+  "custom/lock": {
+    "format": "󰌾",
+    "exec-on-event": true,
+    "on-click": "swaylock",
+    "tooltip": false
+  },
+  "custom/logout": {
+    "format": "󰍃",
+    "exec-on-event": true,
+    "on-click": "hyprctl exit",
+    "tooltip": false
+  }
+}

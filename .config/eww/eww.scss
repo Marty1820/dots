@@ -1,0 +1,16 @@
+// Global
+@import "css/colors";
+
+* {
+  all: unset;
+  font-family: mononoki Nerd Font Mono;
+}
+
+// Weather
+@import "css/weather";
+
+// Calendar
+@import "css/calendar";
+
+// Control-Center
+@import "css/control-center";

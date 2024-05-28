@@ -1,0 +1,85 @@
+.control-center {
+  border: 1px solid $purple;
+  background: $background-darker;
+  border-radius: 20px;
+}
+
+.control-center-buttons {
+  background: $background-darker;
+  margin: 10px 30px 0px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px $background;
+}
+
+.bluetooth-status,
+.net-status {
+  color: $background-darker;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+  font-size: 24px;
+}
+
+.bluetooth-on {
+  background-color: $cyan;
+}
+
+.net-on {
+  background-color: $green;
+}
+
+.bluetooth-off,
+.net-off {
+  background-color: $red;
+}
+
+.setting-separator {
+  background-color: $background;
+  padding: 2px;
+  border-radius: 6px;
+  margin: 0px 5px;
+}
+
+.volume-slider-container,
+.brightness-slider-container {
+  margin: 5px 20px;
+}
+
+.volume-slider-icon,
+.brightness-slider-icon {
+  padding: 5px 10px;
+  margin-right: 10px;
+  font-size: 22px;
+  background-color: $selection;
+  border-radius: 50px;
+  box-shadow: 0px 0px 7px $selection;
+}
+
+.volume-slider-icon {
+  color: $purple;
+}
+
+.volume-slider trough,
+.brightness-slider trough {
+  border-radius: 20px;
+  background-color: $selection;
+  box-shadow: 0px 0px 7px $selection;
+}
+
+.volume-slider highlight,
+.brightness-slider highlight {
+  padding: 0.5em;
+  border-radius: 20px;
+}
+
+.volume-slider highlight {
+  background: linear-gradient(to right, $green, $red);
+}
+
+.brightness-slider-icon {
+  color: $yellow;
+}
+
+.brightness-slider highlight {
+  background: linear-gradient(to right, $orange, $foreground);
+}
