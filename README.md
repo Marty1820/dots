@@ -2,7 +2,7 @@
 
 # Marty's Dotfiles
 
-![GitHub Repo stars](https://img.shields.io/github/stars/Marty1820/dotfiles?style=for-the-badge&labelColor=44475a&color=bd93f9) ![GitHub last commit](https://img.shields.io/github/last-commit/Marty1820/dotfiles?style=for-the-badge&labelColor=44475a&color=bd93f9) ![GitHub repo size](https://img.shields.io/github/repo-size/Marty1820/dotfiles?style=for-the-badge&labelColor=44475a&color=bd93f9)
+![GitHub Repo stars](https://img.shields.io/github/stars/Marty1820/configs?style=for-the-badge&labelColor=44475a&color=bd93f9) ![GitHub last commit](https://img.shields.io/github/last-commit/Marty1820/configs?style=for-the-badge&labelColor=44475a&color=bd93f9) ![GitHub repo size](https://img.shields.io/github/repo-size/Marty1820/configs?style=for-the-badge&labelColor=44475a&color=bd93f9)
 
 </div>
 
