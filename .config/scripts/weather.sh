@@ -112,6 +112,6 @@ case $1 in
 	;;
 --waybar)
 	set_icon
-	printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\">%s</span> %s\", \"alt\":\"%s\", \"tooltip\":\"Real feel: %s\"}\n" "$w_hex" "$w_icon" "$w_temp" "$w_stat" "$w_ftemp"
+	printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\">%s</span> %sF\", \"alt\":\"%s\", \"tooltip\":\"Real feel: %s\"}\n" "$w_hex" "$w_icon" "$w_temp" "$w_stat" "$w_ftemp"
 	;;
 esac
