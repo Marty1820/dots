@@ -12,6 +12,10 @@
   "$HOME/.config/scripts/weather.sh --wind")
 (defpoll weather_color :interval "10m"
   "$HOME/.config/scripts/weather.sh --hex")
+(defpoll air_pollution :interval "10m"
+  "$HOME/.config/scripts/weather.sh --aqi")
+(defpoll aqi_color :interval "10m"
+  "$HOME/.config/scripts/weather.sh --aqi_color")
 
 (defwidget weather [] 
 	(box :class "weather-container" 
@@ -38,9 +42,25 @@
         :space-evenly "false"
         :vexpand "false"
         :hexpand "false" 
-				(label :class "weather-desc" :text "${weather_desc}")
-				(label :class "weather-feel" :text "Feels like ${weather_feels_like}F")
-				(label :class "weather-humidity" :text "Humidity is ${weather_humidity}󰏰")
+				(label :class "weather-desc" 
+          :text "${weather_desc}"
+        )
+				(label :class "weather-feel" 
+          :text "Feels like ${weather_feels_like}F"
+        )
+        (box :orientation "h"
+          :space-evenly "false"
+				  (label :class "weather-humidity"
+            :text "Humidity: ${weather_humidity}󰏰 "
+          )
+          (label :class "spacer"
+            :text "| "
+          )
+          (label :class "air-pollution"
+            :style "color: ${aqi_color};"
+            :text "AQI: ${air_pollution}"
+          )
+        )
       )
     )
   )
@@ -56,7 +76,7 @@
   :geometry (geometry
     :x "140px"
     :y "2px"
-    :width "300px"
+    :width "350px"
     :anchor "right top")
   (box :class "weather"
     (weather)
