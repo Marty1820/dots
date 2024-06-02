@@ -3,6 +3,7 @@
 ## Data dir
 cache_dir="$HOME/.cache/weather"
 weather_file="$cache_dir/weatherdata"
+aqi_file="$cache_dir/aqidata"
 
 ## Weather data | openweatherdata file first line key second line id
 FILE="$HOME/.config/scripts/openweatherdata"
@@ -20,6 +21,8 @@ fi
 get_weather_data() {
 	weather=$(curl -sf "http://api.openweathermap.org/data/2.5/weather?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT")
 	echo "$weather" >"${weather_file}"
+  air_polution=$(curl -sf "http://api.openweathermap.org/data/2.5/air_pollution?lat=$LAT&lon=$LON&appid=$KEY")
+	echo "$air_polution" >"${aqi_file}"
 }
 
 # Pulling info from file
@@ -29,6 +32,28 @@ w_stat=$(jq -r ".weather[].description" <"$weather_file" | head -1 | sed -e "s/\
 w_city=$(jq -r ".name" <"$weather_file" | head -1)
 w_humid=$(jq -r ".main.humidity" <"$weather_file" | cut -d "." -f 1)
 w_wind=$(jq -r ".wind" <"$weather_file" | cut -d ":" -f 2 -s | head -1 | sed 's/.$//')
+
+# Set air pollution condition
+set_aqi() {
+  aqi=$(jq -r ".list[].main" <"$aqi_file" | cut -d ":" -f 2 -s | xargs)
+
+  if [ "$aqi" = "1" ]; then
+    aqi="Good"
+    aqi_color="#f8f8f2"
+  elif [ "$aqi" = "2" ]; then
+    aqi="Fair"
+    aqi_color="#f8f8f2"
+  elif [ "$aqi" = "3" ]; then
+    aqi="Moderate"
+    aqi_color="#ffb86c"
+  elif [ "$aqi" = "4" ]; then
+    aqi="Poor"
+    aqi_color="#ff5555"
+  elif [ "aqi" = "5" ]; then
+    aqi="Very Poor"
+    aqi_color="#ff5555"
+  fi  
+}
 
 # Setting icon and hex values
 set_icon() {
@@ -110,6 +135,14 @@ case $1 in
 --wind)
 	echo "$w_wind"
 	;;
+--aqi)
+  set_aqi
+  echo "$aqi"
+  ;;
+--aqi_color)
+  set_aqi
+  echo "$aqi_color"
+  ;;
 --waybar)
 	set_icon
 	printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\">%s</span> %sF\", \"alt\":\"%s\", \"tooltip\":\"Real feel: %s\"}\n" "$w_hex" "$w_icon" "$w_temp" "$w_stat" "$w_ftemp"
