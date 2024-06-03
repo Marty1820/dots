@@ -33,7 +33,7 @@
         )
 				(label :class "weather-temp"
           :halign "end"
-          :text "${weather_temp}F"
+          :text "${weather_temp}"
         )
       )
 			(box :orientation "v"
