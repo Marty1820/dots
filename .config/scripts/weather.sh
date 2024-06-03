@@ -35,21 +35,21 @@ w_wind=$(jq -r ".wind" <"$weather_file" | cut -d ":" -f 2 -s | head -1 | sed 's/
 
 # Set air pollution condition
 set_aqi() {
-  aqi=$(jq -r ".list[].main" <"$aqi_file" | cut -d ":" -f 2 -s | xargs)
+  aqi_number=$(jq -r ".list[].main" <"$aqi_file" | cut -d ":" -f 2 -s | xargs)
 
-  if [ "$aqi" = "1" ]; then
+  if [ "$aqi_number" = "1" ]; then
     aqi="Good"
     aqi_color="#f8f8f2"
-  elif [ "$aqi" = "2" ]; then
+  elif [ "$aqi_number" = "2" ]; then
     aqi="Fair"
     aqi_color="#f8f8f2"
-  elif [ "$aqi" = "3" ]; then
+  elif [ "$aqi_number" = "3" ]; then
     aqi="Moderate"
     aqi_color="#ffb86c"
-  elif [ "$aqi" = "4" ]; then
+  elif [ "$aqi_number" = "4" ]; then
     aqi="Poor"
     aqi_color="#ff5555"
-  elif [ "aqi" = "5" ]; then
+  elif [ "aqi_number" = "5" ]; then
     aqi="Very Poor"
     aqi_color="#ff5555"
   fi  
@@ -145,6 +145,7 @@ case $1 in
   ;;
 --waybar)
 	set_icon
-	printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\">%s</span> %s\", \"alt\":\"%s\", \"tooltip\":\"Real feel: %s\"}\n" "$w_hex" "$w_icon" "$w_temp" "$w_stat" "$w_ftemp"
+  set_aqi
+printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\">%s</span> %sF | <span foreground=\\\\\"%s\\\\\">AQI:%s</span>\"}\n" "$w_hex" "$w_icon" "$w_temp" "$aqi_color" "$aqi_number"
 	;;
 esac
