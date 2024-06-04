@@ -146,6 +146,6 @@ case $1 in
 --waybar)
 	set_icon
   set_aqi
-printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\">%s</span> %sF | <span foreground=\\\\\"%s\\\\\">AQI:%s</span>\"}\n" "$w_hex" "$w_icon" "$w_temp" "$aqi_color" "$aqi_number"
+printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\">%s</span> %s | <span foreground=\\\\\"%s\\\\\">AQI:%s</span>\"}\n" "$w_hex" "$w_icon" "$w_temp" "$aqi_color" "$aqi_number"
 	;;
 esac

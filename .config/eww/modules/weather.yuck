@@ -46,7 +46,7 @@
           :text "${weather_desc}"
         )
 				(label :class "weather-feel" 
-          :text "Feels like ${weather_feels_like}F"
+          :text "Feels like ${weather_feels_like}"
         )
         (box :orientation "h"
           :space-evenly "false"
