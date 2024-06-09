@@ -53,7 +53,7 @@ set_aqi() {
     aqi="Poor"
     aqi_icon=" 󰡴"
     aqi_color="#ffb86c"
-  elif [ "aqi_number" = "5" ]; then
+  elif [ "$aqi_number" = "5" ]; then
     aqi="Very Poor"
     aqi_icon=" "
     aqi_color="#ff5555"
