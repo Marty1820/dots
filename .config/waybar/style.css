@@ -8,7 +8,7 @@
 */
 
 /* Colors */
-@import url("./colors.css");
+@import "colors.css";
 
 /* Main */
 * {
