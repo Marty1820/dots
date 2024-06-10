@@ -9,7 +9,7 @@ SensorDelay=1
 
 # Scale sensor to displays brightness range
 # NOW WITH FLOAT SUPPORT
-SensorToDiplayScale=2
+SensorToDiplayScale=1
 
 # This should match your refresh rate otherwise it will either change the backlight more times than needed or to few for a smooth animation
 LevelSteps=60
@@ -17,7 +17,7 @@ LevelSteps=60
 AnimationDelay=0.016
 
 # Read the variable names
-MinimumBrightness=960
+MinimumBrightness=060
 
 # 2 : Default | 1 : Add Offset | 0 : Subtract Offset, Recommended to not change
 op=2
