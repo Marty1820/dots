@@ -16,20 +16,27 @@
   border-radius: 0;
   font-family: "Mononoki Nerd Font Mono";
   font-size: 14px;
-  min-height: 0;
 }
 
 /* Bar styling */
 window#waybar {
   color: @foreground;
-  background: linear-gradient(0deg, transparent, @background);
+  background: transparent;
 }
 
 /* Module Group Styling */
-.modules-left,
-.modules-center,
+.modules-left {
+  border-radius: 0 0 15px 0;
+  background: @background-darker;
+}
+
+.modules-center {
+  border-radius: 15px;
+}
+
 .modules-right {
-  padding: 2px 2px 1px;
+  border-radius: 0 0 0 15px;
+  background: @background-darker;
 }
 
 /* Tooltips */
@@ -51,25 +58,23 @@ tooltip {
 /* Modules */
 /* Left */
 #clock {
-  background-color: @background-darker;
-  border-radius: 20px;
+  border-radius: 0 15px 15px 0;
   padding: 0 10px;
 }
 
 #workspaces {
-  background-color: @background-darker;
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
 #workspaces button {
   padding: 0 0.5em;
   margin: 0.25em;
-  border-radius: 10px;
-  background-image: linear-gradient(0deg, @green, @background-darker);
+  border-radius: 15px;
+  background-image: linear-gradient(0deg, @green, @background);
 }
 
 #workspaces button.empty {
-  background-image: linear-gradient(0deg, @background, @background-darker);
+  background-image: linear-gradient(0deg, @background, @background);
 }
 
 #workspaces button.active {
@@ -87,7 +92,7 @@ tooltip {
 }
 
 #taskbar {
-  border-radius: 20px;
+  border-radius: 15px;
   background: @background-darker;
 }
 
@@ -96,15 +101,15 @@ tooltip {
 }
 
 #taskbar button.active {
-  border-radius: 20px;
-  background-image: linear-gradient(0deg, @selection, @background-darker);
+  border-radius: 15px;
+  background-image: linear-gradient(0deg, @selection, @background);
 }
 
 /* Middle */
 #window {
   padding: 0 10px;
   background-color: @background-darker;
-  border-radius: 20px;
+  border-radius: 0 0 15px 15px;
 }
 
 #waybar.empty #window {
@@ -113,14 +118,13 @@ tooltip {
 
 /* Right */
 #custom-weather {
-  background-color: @background-darker;
-  border-radius: 20px;
+  border-radius: 15px;
   padding: 0 10px;
 }
 
 #system {
-  background-color: @background-darker;
-  border-radius: 20px;
+  background-color: @background;
+  border-radius: 15px;
   padding: 0 10px;
 }
 
@@ -193,11 +197,9 @@ tooltip {
 }
 
 #battery {
-  padding: 0 10px;
-  border-radius: 20px;
+  border-radius: 15px;
   transition: none;
   color: @cyan;
-  background: @background-darker;
 }
 
 #battery.charging {
@@ -227,7 +229,7 @@ tooltip {
 
 #power {
   background: @background-darker;
-  border-radius: 20px;
+  border-radius: 15px;
   padding: 0 10px;
 }
 

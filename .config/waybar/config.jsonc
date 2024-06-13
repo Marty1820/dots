@@ -1,4 +1,3 @@
-/* vim: set filetype=json : */
 {
   "layer": "top",
   "position": "top",
@@ -87,7 +86,7 @@
     ]
   },
   "custom/panel": {
-    "format": "󰙀",
+    "format": "",
     "tooltip": false,
     "on-click": "sleep 0.05 && eww open --toggle control-center && eww open --toggle control-center-closer"
   },
@@ -152,8 +151,8 @@
       "warning": 20,
       "critical": 10
     },
-    "format": "{capacity}󰏰 {icon}",
-    "format-charging": "{capacity}󰏰 󰂄",
+    "format": "{icon}{capacity}󰏰",
+    "format-charging": "󰂄{capacity}󰏰",
     "format-icons": [
       "󰁺",
       "󰁻",
