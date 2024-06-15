@@ -20,8 +20,8 @@
 
 /* Bar styling */
 window#waybar {
-  color: @foreground;
   background: transparent;
+  color: @foreground;
 }
 
 /* Module Group Styling */
@@ -42,9 +42,9 @@ window#waybar {
 /* Tooltips */
 tooltip {
   opacity: 0.95;
+  border-radius: 15px;
   border: 1px solid @purple;
   background: @background-darker;
-  border-radius: 15px;
 }
 
 /* KeyFrames */
@@ -116,8 +116,8 @@ tooltip {
 /* Middle */
 #window {
   padding: 0 10px;
-  background-color: @background-darker;
   border-radius: 0 0 15px 15px;
+  background-color: @background-darker;
 }
 
 #waybar.empty #window {
@@ -131,9 +131,9 @@ tooltip {
 }
 
 #system {
-  background-color: @background;
   border-radius: 15px;
   padding: 0 10px;
+  background-color: @background;
 }
 
 #custom-panel,
@@ -238,9 +238,9 @@ tooltip {
 }
 
 #power {
-  background: @background-darker;
   border-radius: 15px;
   padding: 0 10px;
+  background: @background-darker;
 }
 
 #custom-shutdown,
