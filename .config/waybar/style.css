@@ -42,9 +42,9 @@ window#waybar {
 /* Tooltips */
 tooltip {
   opacity: 0.95;
-  border: 2px solid @selection;
-  background: @background;
-  border-radius: 20px;
+  border: 1px solid @purple;
+  background: @background-darker;
+  border-radius: 15px;
 }
 
 /* KeyFrames */
@@ -101,7 +101,7 @@ tooltip {
 
 #taskbar button.active {
   border-radius: 15px;
-  background-image: linear-gradient(0deg, @selection, @background);
+  background-image: linear-gradient(115deg, @selection, @background-darker);
 }
 
 /* Middle */
