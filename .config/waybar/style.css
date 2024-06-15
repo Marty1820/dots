@@ -48,10 +48,9 @@ tooltip {
 }
 
 /* KeyFrames */
-@keyframes blink {
+@keyframes batcolor {
   to {
-    background-color: @foreground;
-    color: @red;
+    color: @foreground;
   }
 }
 
@@ -203,28 +202,30 @@ tooltip {
 }
 
 #battery.charging {
-  color: @foreground;
-  background-image: linear-gradient(0deg, @green, @background);
+  animation-name: batcolor;
+  animation-duration: 1s;
+  animation-timing-function: steps(2);
+  animation-iteration-count: 10;
+  animation-direction: alternate;
+  color: @green;
 }
 
 #battery.warning:not(.charging) {
-  animation-name: blink;
-  animation-duration: 0.5s;
-  animation-timing-function: linear;
+  animation-name: batcolor;
+  animation-duration: 1s;
+  animation-timing-function: steps(2);
   animation-iteration-count: 10;
   animation-direction: alternate;
-  background-image: linear-gradient(0deg, @orange, @background);
-  color: black;
+  color: @orange;
 }
 
 #battery.critical:not(.charging) {
-  animation-name: blink;
-  animation-duration: 0.5s;
-  animation-timing-function: linear;
+  animation-name: batcolor;
+  animation-duration: 1s;
+  animation-timing-function: steps(2);
   animation-iteration-count: infinite;
   animation-direction: alternate;
-  background-image: linear-gradient(0deg, @red, @background);
-  color: @foreground;
+  color: @red;
 }
 
 #power {
