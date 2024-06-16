@@ -16,41 +16,33 @@
   border-radius: 0;
   font-family: "Mononoki Nerd Font Mono";
   font-size: 14px;
+  min-height: 0;
 }
 
 /* Bar styling */
 window#waybar {
   background: transparent;
-  color: @foreground;
+  color: @foreground
 }
 
 /* Module Group Styling */
-.modules-left {
-  border-radius: 0 0 15px 0;
-  background: transparent;
-}
-
-.modules-center {
-  border-radius: 15px;
-}
-
+.modules-left,
+.modules-center,
 .modules-right {
-  border-radius: 0 0 0 15px;
-  background: @background-darker;
+  padding: 0 0.2em;
 }
 
 /* Tooltips */
 tooltip {
-  opacity: 0.95;
   border-radius: 15px;
   border: 1px solid @purple;
-  background: @background-darker;
+  background: @background-darker
 }
 
 /* KeyFrames */
 @keyframes batcolor {
   to {
-    color: @foreground;
+    color: @foreground
   }
 }
 
@@ -58,44 +50,44 @@ tooltip {
 /* Left */
 #clock {
   padding: 0 0.5em;
-  border-radius: 0 0 15px 0;
-  background-color: @background-darker;
+  border-radius: 0 0 15px 15px;
+  background-color: @background-darker
 }
 
 #workspaces {
   padding: 0 0.5em;
   border-radius: 0 0 15px 15px;
-  background-color: @background-darker;
+  background-color: @background-darker
 }
 
 #workspaces button {
   padding: 0 0.5em;
   margin: 0.25em;
   border-radius: 15px;
-  background-image: linear-gradient(0deg, @green, @background);
+  background-image: linear-gradient(0deg, @green, @background)
 }
 
 #workspaces button.empty {
-  background-image: linear-gradient(0deg, @background, @background);
+  background-image: linear-gradient(0deg, @background, @background)
 }
 
 #workspaces button.active {
-  background-image: linear-gradient(0deg, @purple, @background);
+  background-image: linear-gradient(0deg, @purple, @background)
 }
 
 #workspaces button:hover {
   box-shadow: inherit;
   text-shadow: inherit;
-  background-image: linear-gradient(0deg, @selection, @background);
+  background-image: linear-gradient(0deg, @selection, @background)
 }
 
 #workspaces button.urgent {
-  background-image: linear-gradient(0deg, @red, @background);
+  background-image: linear-gradient(0deg, @red, @background)
 }
 
 #taskbar {
   border-radius: 0 0 15px 15px;
-  background: @background-darker;
+  background: @background-darker
 }
 
 #taskbar.empty {
@@ -110,14 +102,14 @@ tooltip {
 }
 
 #taskbar button.active {
-  background-image: linear-gradient(115deg, @selection, @background-darker);
+  background-image: linear-gradient(115deg, @selection, @background-darker)
 }
 
 /* Middle */
 #window {
   padding: 0 10px;
   border-radius: 0 0 15px 15px;
-  background-color: @background-darker;
+  background-color: @background-darker
 }
 
 #waybar.empty #window {
@@ -126,14 +118,15 @@ tooltip {
 
 /* Right */
 #custom-weather {
-  border-radius: 15px;
-  padding: 0 10px;
+  border-radius: 0 0 15px 15px;
+  padding: 0 0.5em;
+  background: @background-darker
 }
 
 #system {
-  border-radius: 15px;
-  padding: 0 10px;
-  background-color: @background;
+  border-radius: 0 0 15px 15px;
+  padding: 0 0.5em;
+  background-color: @background-darker
 }
 
 #custom-panel,
@@ -158,56 +151,58 @@ tooltip {
 
 #bluetooth {
   font-size: 1.3rem;
-  color: @cyan;
+  color: @cyan
 }
 
 #bluetooth.disabled,
 #bluetooth.off {
   font-size: 1.5rem;
-  color: @red;
+  color: @red
 }
 
 #network {
-  color: @green;
+  color: @green
 }
 
 #network.disconnected {
-  color: @red;
+  color: @red
 }
 
 #network.disabled {
-  color: @red;
+  color: @red
 }
 
 #pulseaudio {
-  color: @purple;
+  color: @purple
 }
 
 #pulseaudio.bluetooth {
-  color: @cyan;
+  color: @cyan
 }
 
 #pulseaudio.muted {
-  color: @red;
   padding-right: 4px;
+  color: @red
 }
 
 #backlight {
-  color: @yellow;
+  color: @yellow
 }
 
 #idle_inhibitor {
-  color: @orange;
+  color: @orange
 }
 
 #idle_inhibitor.activated {
-  color: @red;
+  color: @red
 }
 
 #battery {
-  border-radius: 15px;
+  border-radius: 0 0 15px 15px;
+  padding: 0 0.5em;
   transition: none;
-  color: @cyan;
+  background: @background-darker;
+  color: @cyan
 }
 
 #battery.charging {
@@ -216,7 +211,7 @@ tooltip {
   animation-timing-function: steps(2);
   animation-iteration-count: 10;
   animation-direction: alternate;
-  color: @green;
+  color: @green
 }
 
 #battery.warning:not(.charging) {
@@ -225,7 +220,7 @@ tooltip {
   animation-timing-function: steps(2);
   animation-iteration-count: 10;
   animation-direction: alternate;
-  color: @orange;
+  color: @orange
 }
 
 #battery.critical:not(.charging) {
@@ -234,13 +229,13 @@ tooltip {
   animation-timing-function: steps(2);
   animation-iteration-count: infinite;
   animation-direction: alternate;
-  color: @red;
+  color: @red
 }
 
 #power {
-  border-radius: 15px;
-  padding: 0 10px;
-  background: @background-darker;
+  border-radius: 0 0 15px 15px;
+  padding: 0 0.5em;
+  background: @background-darker
 }
 
 #custom-shutdown,
@@ -249,26 +244,25 @@ tooltip {
 #custom-hibernate,
 #custom-logout {
   font-size: 1.7rem;
+  padding: 0 0.2em;
 }
 
 #custom-shutdown {
-  color: @red;
+  color: @red
 }
 
 #custom-reboot {
-  padding: 0 6px;
-  color: @yellow;
+  color: @yellow
 }
 
 #custom-lock {
-  color: @green;
+  color: @green
 }
 
 #custom-hibernate {
-  padding: 0 6px;
-  color: @purple;
+  color: @purple
 }
 
 #custom-logout {
-  color: @orange;
+  color: @orange
 }
