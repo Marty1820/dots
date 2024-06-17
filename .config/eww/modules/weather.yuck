@@ -1,64 +1,80 @@
+(defpoll weather_city :interval "10m" :initial "0"
+  "$HOME/.config/scripts/weather.sh --city")
+(defpoll weather_color :interval "10m"
+  "$HOME/.config/scripts/weather.sh --hex")
+(defpoll weather_icon :interval "10m"
+  "$HOME/.config/scripts/weather.sh --icon")
 (defpoll weather_temp :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.sh --temp")
 (defpoll weather_desc :interval "10m"
   "$HOME/.config/scripts/weather.sh --stat")
 (defpoll weather_feels_like :interval "10m"
   "$HOME/.config/scripts/weather.sh --feel")
-(defpoll weather_humidity :interval "10m"
-  "$HOME/.config/scripts/weather.sh --humid")
-(defpoll weather_icon :interval "10m"
-  "$HOME/.config/scripts/weather.sh --icon")
 (defpoll weather_wind :interval "10m"
   "$HOME/.config/scripts/weather.sh --wind")
-(defpoll weather_color :interval "10m"
-  "$HOME/.config/scripts/weather.sh --hex")
-(defpoll air_pollution :interval "10m"
-  "$HOME/.config/scripts/weather.sh --aqi")
+(defpoll weather_humidity :interval "10m"
+  "$HOME/.config/scripts/weather.sh --humid")
 (defpoll aqi_color :interval "10m"
   "$HOME/.config/scripts/weather.sh --aqi_color")
+(defpoll air_pollution :interval "10m"
+  "$HOME/.config/scripts/weather.sh --aqi")
 
-(defwidget weather [] 
-	(box :class "weather-container" 
-		(box :orientation "v"
-      :spacing 10
+(defwidget weather []
+  (box :class "weather-container"
+    (box :orientation "v"
       :space-evenly "false"
-      :vexpand "false"
-      :hexpand "false" 
-			(box :orientation "h"
-        :vexpand "false"
-        :hexpand "false" 
-				(label :class "weather-icon"
-          :halign "start"
-          :style "color: ${weather_color};" :text weather_icon
-        )
-				(label :class "weather-temp"
+      (label :class "weather-location"
+        :halign "center"
+        :text weather_city
+      )
+      (box :orientation "h"
+        (label :class "weather-icon"
           :halign "end"
+          :style "color: ${weather_color};"
+          :text weather_icon
+        )
+        (label :class "weather-temp"
+          :halign "start"
           :text "${weather_temp}"
         )
       )
-			(box :orientation "v"
-        :spacing 10
+      (label :class "weather-desc"
         :halign "center"
-        :space-evenly "false"
-        :vexpand "false"
-        :hexpand "false" 
-				(label :class "weather-desc" 
-          :text "${weather_desc}"
-        )
-				(label :class "weather-feel" 
-          :text "Feels like ${weather_feels_like}"
-        )
-        (box :orientation "h"
-          :space-evenly "false"
-				  (label :class "weather-humidity"
-            :text "Humidity: ${weather_humidity}󰏰 "
+        :text weather_desc
+      )
+      (box :orientation "h"
+        :class "weather-extras"
+        (box :orientation "v"
+          (label :class "weather-feel"
+            :text "Feels like 󰔏"
           )
-          (label :class "spacer"
-            :text "| "
+          (label :class "weather-feel"
+            :text "${weather_feels_like}"
+          )
+        )
+        (box :orientation "v"
+          (label :class "weather-wind"
+            :text "Wind "
+          )
+          (label :class "weather-wind"
+            :text "${weather_wind} mph"
+          )
+        )
+        (box :orientation "v"
+          (label :class "weather-humidity"
+            :text "Humidity "
+          )
+          (label :class "weather-humidity"
+            :text "${weather_humidity}"
+          )
+        )
+        (box :orientation "v"
+          (label :class "air-pollution"
+            :text "AQI"
           )
           (label :class "air-pollution"
             :style "color: ${aqi_color};"
-            :text "AQI: ${air_pollution}"
+            :text "${air_pollution}"
           )
         )
       )
@@ -74,9 +90,9 @@
   :focusable "false"
   :stacking "overlay"
   :geometry (geometry
-    :x "140px"
+    :x "2px"
     :y "2px"
-    :width "350px"
+    :width "450px"
     :anchor "right top")
   (box :class "weather"
     (weather)
