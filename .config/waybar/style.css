@@ -29,7 +29,7 @@ window#waybar {
 .modules-left,
 .modules-center,
 .modules-right {
-  padding: 0 0.2em;
+  padding: 0 0.5em;
 }
 
 /* Tooltips */
@@ -97,7 +97,6 @@ tooltip {
 
 #taskbar button {
   padding: 0 0.5em;
-  margin: 0.25em;
   border-radius: 15px;
 }
 
@@ -107,7 +106,7 @@ tooltip {
 
 /* Middle */
 #window {
-  padding: 0 10px;
+  padding: 0 0.5em;
   border-radius: 0 0 15px 15px;
   background-color: @background-darker
 }
@@ -135,14 +134,14 @@ tooltip {
 #pulseaudio,
 #backlight,
 #idle_inhibitor {
-  padding: 0 2px;
+  padding: 0 0.2em;
 }
 
 #custom-panel,
 #network,
 #pulseaudio,
 #backlight {
-  font-size: 1.7rem;
+  font-size: 1.7em;
 }
 
 #custom-panel {
@@ -150,13 +149,12 @@ tooltip {
 }
 
 #bluetooth {
-  font-size: 1.3rem;
+  font-size: 1.3em;
   color: @cyan
 }
 
 #bluetooth.disabled,
 #bluetooth.off {
-  font-size: 1.5rem;
   color: @red
 }
 
@@ -181,7 +179,6 @@ tooltip {
 }
 
 #pulseaudio.muted {
-  padding-right: 4px;
   color: @red
 }
 
