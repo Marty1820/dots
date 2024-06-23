@@ -2,7 +2,10 @@
 
 ;; Close widget on clickoff
 (defwidget closer [window]
-  (eventbox :onclick "${eww} close ${window} && ${eww} close ${window}-closer"))
+  (eventbox 
+    :onclick "${eww} close ${window} && ${eww} close ${window}-closer"
+  )
+)
 
 ;; Modules
 (include "./modules/weather.yuck")
