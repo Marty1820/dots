@@ -1,22 +1,23 @@
-(defpoll weather_city :interval "10m" :initial "0"
+(defvar weather_visible false)
+(defpoll weather_city :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --city")
-(defpoll weather_color :interval "10m"
+(defpoll weather_color :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --hex")
-(defpoll weather_icon :interval "10m"
+(defpoll weather_icon :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --icon")
-(defpoll weather_temp :interval "10m" :initial "0"
+(defpoll weather_temp :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --temp")
-(defpoll weather_desc :interval "10m"
+(defpoll weather_desc :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --stat")
-(defpoll weather_feels_like :interval "10m"
+(defpoll weather_feels_like :interval "10m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --feel")
-(defpoll weather_wind :interval "10m"
+(defpoll weather_wind :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --wind")
-(defpoll weather_humidity :interval "10m"
+(defpoll weather_humidity :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --humid")
-(defpoll aqi_color :interval "10m"
+(defpoll aqi_color :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --aqi_color")
-(defpoll air_pollution :interval "10m"
+(defpoll air_pollution :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --aqi")
 
 (defwidget weather []

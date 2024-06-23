@@ -1,15 +1,25 @@
 ;; https://github.com/Syndrizzle/hotfiles/blob/worm/.config/eww/Control-Center
 
 ;; for controls and tray
-(defvar bluetooth-toggle "scripts/bluetooth.sh --toggle")
-(defpoll bluetooth-icon :interval "1s" "scripts/bluetooth.sh --icon")
-(defvar net-toggle "scripts/net.sh --toggle")
-(defpoll net-icon :interval "1s" "scripts/net.sh --status")
-(defpoll volume :interval "1s" "pamixer --get-volume")
-(defpoll volume-icon :interval "1s" "scripts/vol.sh")
-(defvar brightness-toggle "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
-(defpoll brightness-icon :interval "2s" "$HOME/.config/scripts/screen_brightness_info.sh --icon")
-(defpoll brightness :interval "1s" "xbacklight -get | cut -d '.' -f 1")
+(defvar control_visible false)
+(defvar bluetooth-toggle
+  "scripts/bluetooth.sh --toggle")
+(defpoll bluetooth-icon :interval "1s" :run-while control_visible
+  "scripts/bluetooth.sh --icon")
+(defvar net-toggle
+  "scripts/net.sh --toggle")
+(defpoll net-icon :interval "1s" :run-while control_visible
+  "scripts/net.sh --status")
+(defpoll volume :interval "1s" :run-while control_visible
+  "pamixer --get-volume")
+(defpoll volume-icon :interval "1s" :run-while control_visible
+  "scripts/vol.sh")
+(defvar brightness-toggle
+  "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
+(defpoll brightness-icon :interval "2s" :run-while control_visible
+  "$HOME/.config/scripts/screen_brightness_info.sh --icon")
+(defpoll brightness :interval "1s" :run-while control_visible
+  "xbacklight -get | cut -d '.' -f 1")
 
 (defwidget control-center []
   (box 

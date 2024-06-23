@@ -1,20 +1,20 @@
 .control-center {
   border: 1px solid $purple;
   background: $background-darker;
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
 .control-center-buttons {
   background: $background-darker;
   margin: 10px 30px 0px;
-  border-radius: 20px;
+  border-radius: 15px;
   box-shadow: 0px 0px 10px $background;
 }
 
 .bluetooth-status,
 .net-status {
   color: $background-darker;
-  border-radius: 10px;
+  border-radius: 15px;
   margin: 10px;
   padding: 10px;
   font-size: 24px;
@@ -51,7 +51,7 @@
   margin-right: 10px;
   font-size: 22px;
   background-color: $selection;
-  border-radius: 50px;
+  border-radius: 500px;
   box-shadow: 0px 0px 7px $selection;
 }
 
@@ -68,7 +68,7 @@
 
 .volume-slider highlight,
 .brightness-slider highlight {
-  padding: 0.5em;
+  padding: 0.4em;
   border-radius: 20px;
 }
 
