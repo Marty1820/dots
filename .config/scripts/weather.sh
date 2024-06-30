@@ -28,14 +28,14 @@ get_weather_data() {
 # Pulling info from file
 w_temp=$(jq ".main.temp" <"$weather_file" | cut -d "." -f 1)
 w_ftemp=$(jq ".main.feels_like" <"$weather_file" | cut -d "." -f 1)
-w_stat=$(jq -r ".weather[].description" <"$weather_file" | head -1 | sed -e "s/\b\(.\)/\u\1/g")
-w_city=$(jq -r ".name" <"$weather_file" | head -1)
+w_stat=$(jq -r ".weather[].description" <"$weather_file" | sed -e "s/\b\(.\)/\u\1/g")
+w_city=$(jq -r ".name" <"$weather_file")
 w_humid=$(jq -r ".main.humidity" <"$weather_file" | cut -d "." -f 1)
-w_wind=$(jq -r ".wind" <"$weather_file" | cut -d ":" -f 2 -s | head -1 | sed 's/.$//')
+w_wind=$(jq -r ".wind.speed" <"$weather_file" | cut -d "." -f 1)
 
 # Set air pollution condition
 set_aqi() {
-  aqi_number=$(jq -r ".list[].main" <"$aqi_file" | cut -d ":" -f 2 -s | xargs)
+  aqi_number=$(jq -r ".list[].main.aqi" <"$aqi_file")
 
   if [ "$aqi_number" = "1" ]; then
     aqi="Good"
@@ -147,6 +147,10 @@ case $1 in
 --aqi_color)
   set_aqi
   echo "$aqi_color"
+  ;;
+--aqi_icon)
+  set_aqi
+  echo "$aqi_icon"
   ;;
 --waybar)
 	set_icon
