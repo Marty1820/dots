@@ -12,7 +12,7 @@ Otherwise these are pretty basic configs with nothing special. Lots of older con
 
 ## Details
 
-Current setup is running [Hyprland](https://hyprland.org/) for windows manager, [Waybar](https://github.com/Alexays/Waybar) for the status bar, [EWW](https://elkowar.github.io/eww/eww.html) for a couple widgets, & [rofi wayland fork](https://github.com/lbonn/rofi) for an application launcher.
+Current setup is running [Hyprland](https://hyprland.org/) for windows manager, [EWW](https://elkowar.github.io/eww/eww.html) for status bar and widgets, & [rofi wayland fork](https://github.com/lbonn/rofi) for an application launcher.
 
 #### Keybound Apps
 
@@ -37,9 +37,13 @@ Current setup is running [Hyprland](https://hyprland.org/) for windows manager, 
 
 # Hyprland Screenshot
 
-Control panel for Bluetooth/Network & Volume/Screen Brightness
+Desktop & status bar
 ![screenshot](.screenshots/hyprland.png)
-Calendar & Weather Widgets
-![screenshot](.screenshots/hyprland2.png)
-Application Launcher [rofi](https://github.com/lbonn/rofi)
+Application launcher [rofi](https:/github.com/lbonn/rofi)
 ![screenshot](.screenshots/apps-menu.png)
+Calendar
+![screenshot](.screenshots/calendar.png)
+Control center
+![screenshot](.screenshots/control_center.png)
+Weather widget
+![screenshot](.screenshots/weather_widget.png)
