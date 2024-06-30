@@ -1,152 +1,195 @@
-;; https://github.com/Syndrizzle/hotfiles/blob/worm/.config/eww/Control-Center
-
-;; for controls and tray
-(defvar control_visible false)
-(defvar bluetooth-toggle
-  "scripts/bluetooth.sh --toggle")
-(defpoll bluetooth-icon :interval "1s" :run-while control_visible
-  "scripts/bluetooth.sh --icon")
-(defvar net-toggle
-  "scripts/net.sh --toggle")
-(defpoll net-icon :interval "1s" :run-while control_visible
-  "scripts/net.sh --status")
-(defpoll volume :interval "1s" :run-while control_visible
-  "pamixer --get-volume")
-(defpoll volume-icon :interval "1s" :run-while control_visible
-  "scripts/vol.sh")
-(defvar brightness-toggle
-  "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
-(defpoll brightness-icon :interval "2s" :run-while control_visible
-  "$HOME/.config/scripts/screen_brightness_info.sh --icon")
-(defpoll brightness :interval "1s" :run-while control_visible
-  "xbacklight -get | cut -d '.' -f 1")
-
-(defwidget control-center []
-  (box 
-    :class "control-center"
-    :orientation "v" 
+(defwidget action-info []
+  (box :class "action-info"
+    :orientation "h"
     :space-evenly "false"
-    (box
-      :class "control-center-buttons"
-      :orientation "h"
-      (box
-        :class "bluetooth-status ${bluetooth-icon == "󰂯" ? "bluetooth-on" : "bluetooth-off"}"
-        :orientation "h"
-        (overlay
-          (box
-            :class "bluetooth-container"
-            :orientation "h"
-            :tooltip "bluetooth"
-            (button
-              :halign "end"
-              :class "bluetooth-icon"
-              :onclick bluetooth-toggle
-              bluetooth-icon
-            )
-            (box
-              :class "setting-separator"
-              :halign "center"
-            )
-            (button
-              :halign "start"
-              :class "bluetooth-controls"
-              :onclick "blueman-manager &"
-              ""
-            )
-          )
-        )
-      )
-      (box
-        :class "net-status ${net-icon == "󰤭" ? "net-off" : "net-on"}" 
-        :orientation "h"
-        (overlay
-          (box
-            :class "net-container"
-            :orientation "h"
-            :tooltip "WIFI"
-            (button
-              :halign "end"
-              :class "net-icon"
-              :onclick net-toggle
-              net-icon
-            )
-            (box
-              :class "setting-separator"
-              :halign "center"
-            )
-            (button
-              :halign "start"
-              :class "net-controls"
-              :onclick "nm-connection-editor &"
-              ""
-            )
-          )
-        )
+    (box :orientation "h"
+      :halign "start"
+      (label :class "battery-info ${EWW_BATTERY.BAT1.status == "Charging" ? "charging" : "discharging"}"
+        :halign "start"
+        :text {EWW_BATTERY.BAT1.status == "Charging" ? "󰂄 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 95 ? "󰁹 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 90 ? "󰂂 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 80 ? "󰂁 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 70 ? "󰂀 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 60 ? "󰁿 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 50 ? "󰁾 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 40 ? "󰁽 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 30 ? "󰁼 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 20 ? "󰁻 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 10 ? "󰁺 ${EWW_BATTERY.BAT1.capacity}" : 
+                                           "󰂎 ${EWW_BATTERY.BAT1.capacity}"}
       )
     )
-    (box 
-      :orientation "h" 
-      :class "volume-slider-container" 
+    (box :orientation "h"
       :space-evenly "false"
-      (button
-        :onclick "pamixer -t"
-        :class "volume-slider-icon" 
-        volume-icon
+      :halign "end"
+      :hexpand "true"
+      (box :orientation "h"
+        :space-evenly "false"
+        :halign "end"
+        (label :class "user-clock-time"
+          :text {formattime(EWW_TIME, "%I:%M %p")}
+        )
+        (label :class "user-clock-separator" :text "|")
+        (label :class "user-clock-date"
+          :text {formattime(EWW_TIME, "%a, %b %d")}
+        )
       )
-      (scale :class "volume-slider"
-        :value volume
-        :orientation "h"
-        :width 370
-        :active true
-        :max 101
-        :min 0
-        :onchange "pamixer --set-volume {}"
-      )
-    )
-    (box
-      :orientation "h"
-      :class "brightness-slider-container"
-      :space-evenly "false"
-      (button
-        :onclick brightness-toggle
-        :class "brightness-slider-icon"
-        brightness-icon
-      )
-      (scale :class "brightness-slider"
-        :value brightness
-        :orientation "h"
-        :width 370
-        :active true
-        :max 101
-        :min 0
-        :onchange "xbacklight -set {}"
+      (button :class "powermenu-button"
+        :onclick "systemctl poweroff" "⏻"
       )
     )
   )
 )
 
-(defwindow control-center
+(defwidget action-settings []
+  (box :orientation "v"
+    :class "action_settings_box"
+    :space-evenly "true"
+    (box :orientation "h"
+      :space-evenly "true"
+      (bluetooth)
+      (network)
+    )
+  )
+)
+
+(defwidget action_settings_button [condition action icon label class]
+  (button :onclick {action} 
+    :class {condition ? "action_settings_button ${class}" : "action_settings_button action_settings_button_toggled ${class}"}
+    (box :orientation "h" 
+      :space-evenly "false"
+      (box :orientation "h" 
+        :space-evenly "false" 
+        :halign "start"
+        (label :class "action-settings-icon" 
+          :text {icon}
+        )
+      )
+      (box :orientation "v" 
+        :class "action-settings-info" 
+        :space-evenly "false" 
+        :halign "end" 
+        :valign "center"
+        (box :orientation "h" 
+          :space-evenly "false" 
+          :halign "start"
+          (label :class "action-settings-text" 
+            :text {label}
+          )
+        )
+        (box :orientation "h" 
+          :space-evenly "false" 
+          :halign "start"
+          (label :class {condition ? "action-settings-state" : "action-settings-state action-settings-state-enabled"} 
+            :text {condition ? "Off" : "On"}
+          )
+        )
+      )
+    )
+  )
+)
+(defwidget bluetooth []
+  (action_settings_button :condition {bluetooth-icon == "󰂲"}
+    :action "blueman-manager &"
+    :icon bluetooth-icon
+    :label "Bluetooth"
+    :class "left-top-plite"
+  )
+)
+
+(defwidget network []
+  (action_settings_button :condition {network.essid == "lo"}
+    :action {network.essid == "lo" ? "nm-connection-editor &" : "nmcli connection down id '${network.essid}'"}
+    :icon {network.essid == "lo" ? "󰤭" : network.signal == "" ? "󰤩" : network.signal < 25 ? "󰤟" : network.signal < 50 ? "󰤢" : network.signal < 75 ? "󰤥" : "󰤨"}
+    :label {network.essid == "lo" ? "Not connected" : network.essid}
+    :class "right-top-plite"
+  )
+)
+
+(defwidget brightness_scale []
+  (overlay :hexpand "true"
+    (scale :min 0 :max 100
+      :active "true"
+      :value brightness
+      :onchange "xbacklight -set {}"
+      :class "brightness-scale"
+    )
+    (label :class 'brightness-icon ${brightness < 5 ? "less" : "more"}'
+      :halign "start"
+      :text "󰳲"
+    )
+  )
+)
+
+(defwidget brightness_control_center []
+  (box :orientation "h"
+    :class "brightness-control-center"
+    :space-evenly "false"
+    (brightness_scale)
+    (button :class "brightness-button"
+      :onclick brightness-toggle brightness-icon
+    )
+  )
+)
+
+(defwidget volume_scale []
+  (overlay :hexpand "true"
+    (scale :min 0 :max 100 
+      :active {volume != "muted"}
+      :value {volume == "muted" ? 0 : volume}
+      :onchange "pamixer --set-volume {}"
+      :class "volume-scale"
+    )
+    (label :class 'volume-icon ${volume == "muted" ? "less" : volume < 5 ? "less" : "more"}'
+      :halign "start"
+      :text {volume == "muted" ? "󰝟" : volume < 33 ? "" : volume < 67 ? "" : "󰕾"}
+    )
+  )
+)
+
+(defwidget volume_control_center []
+  (box :orientation "h"
+    :class "volume-control-center"
+    :space-evenly "false"
+    (volume_scale)
+    (button :class "volume-button ${volume == 'muted' ? 'active' : ''}"
+      :onclick "pamixer -t" ""
+    )
+  )
+)
+
+(defwidget action-center []
+  (box :class "action_center"
+    :orientation "v"
+    :space-evenly "false"
+    (action-info)
+    (action-settings)
+    (brightness_control_center)
+    (volume_control_center)
+  )
+)
+
+(defwindow action-center
   :monitor 0
   :geometry (geometry
     :x "2px"
     :y "2px"
-    :anchor "right top")
+    :width "400px"
+    :anchor "top right")
   :stacking "overlay"
   :exclusive "false"
   :focusable "false"
-  (control-center)
+  (action-center)
 )
 
-;; Closer 
-(defwindow control-center-closer
+(defwindow action-center-closer
   :monitor 0
   :geometry (geometry
-    :width "100%"
-    :height "100%")
+    :width "150%"
+    :height "150%")
   :stacking "fg"
   :exclusive "false"
   :focusable "false"
-  (closer
-    :window "control-center"
-  )
+  (closer :window "action-center")
 )

@@ -1,86 +1,104 @@
-(defvar weather_visible false)
-(defpoll weather_city :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --city")
-(defpoll weather_color :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --hex")
-(defpoll weather_icon :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --icon")
-(defpoll weather_temp :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --temp")
-(defpoll weather_desc :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --stat")
-(defpoll weather_feels_like :interval "10m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --feel")
-(defpoll weather_wind :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --wind")
-(defpoll weather_humidity :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --humid")
-(defpoll aqi_color :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --aqi_color")
-(defpoll air_pollution :interval "5m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --aqi")
+(defwidget refresh []
+  (button :class "weather-refresh"
+    :onclick "eww close weather & $HOME/.config/scripts/weather.sh --getdata & eww open weather"
+    (label :text "")
+  )
+)
+
+(defwidget w_city []
+  (label :class "weather-location"
+    :halign "center"
+    :text weather_city
+  )
+)
+
+(defwidget close []
+  (button :class "weather-close"
+    :onclick "eww close weather-closer & eww close weather"
+    (label :text "")
+  )
+)
+
+(defwidget w_temp [] 
+  (box :orientation "h"
+    (label :class "weather-icon"
+      :halign "end"
+      :style "color: ${weather_color};"
+      :text weather_icon
+    )
+    (label :class "weather-temp ${weather_temp < 32 ? 'less' : weather_feels_like < 90 ? 'normal' : 'more'}"
+      :halign "start"
+      :text "${weather_temp}"
+    )
+  )
+)
+
+(defwidget w_desc []
+  (label :class "weather-desc"
+    :halign "center"
+    :text weather_desc
+  )
+)
+
+(defwidget w_extras []
+  (box :orientation "h"
+    :class "weather-extras"
+    :halign "center"
+    :space-evenly "true"
+    (box :orientation "v"
+      :class "weather-section"
+      (label :class "weather-feel"
+        :text "Real Feel"
+      )
+      (label :class "weather-feel-data ${weather_feels_like < 32 ? 'less' : weather_feels_like < 85 ? 'normal' : 'more'}"
+        :text "󰔏 ${weather_feels_like}"
+      )
+    )
+    (box :orientation "v"
+      :class "weather-section"
+      (label :class "weather-wind"
+        :text "Wind "
+      )
+      (label :class "weather-wind-data ${weather_wind > 32 ? 'more' : ''}"
+        :text "${weather_wind}mph"
+      )
+    )
+    (box :orientation "v"
+      :class "weather-section"
+      (label :class "weather-humidity"
+        :text "Humidity"
+      )
+      (label :class "weather-humidity"
+        :text " ${weather_humidity}"
+      )
+    )
+    (box :orientation "v"
+      :class "weather-section"
+      (label :class "air-pollution"
+        :text "AQI${aqi_icon}"
+      )
+      (label :class "air-pollution"
+        :style "color: ${aqi_color};"
+        :text "${air_pollution}"
+      )
+    )
+  )
+)
 
 (defwidget weather []
   (box :class "weather-container"
-    (box :orientation "v"
-      :space-evenly "false"
-      (label :class "weather-location"
-        :halign "center"
-        :text weather_city
-      )
-      (box :orientation "h"
-        (label :class "weather-icon"
-          :halign "end"
-          :style "color: ${weather_color};"
-          :text weather_icon
-        )
-        (label :class "weather-temp"
-          :halign "start"
-          :text "${weather_temp}"
-        )
-      )
-      (label :class "weather-desc"
-        :halign "center"
-        :text weather_desc
-      )
-      (box :orientation "h"
-        :class "weather-extras"
-        :halign "center"
-        (box :orientation "v"
-          (label :class "weather-feel"
-            :text "Feels like 󰔏"
-          )
-          (label :class "weather-feel"
-            :text "${weather_feels_like}"
-          )
-        )
-        (box :orientation "v"
-          (label :class "weather-wind"
-            :text "Wind "
-          )
-          (label :class "weather-wind"
-            :text "${weather_wind} mph"
-          )
-        )
-        (box :orientation "v"
-          (label :class "weather-humidity"
-            :text "Humidity "
-          )
-          (label :class "weather-humidity"
-            :text "${weather_humidity}"
-          )
-        )
-        (box :orientation "v"
-          (label :class "air-pollution"
-            :text "AQI"
-          )
-          (label :class "air-pollution"
-            :style "color: ${aqi_color};"
-            :text "${air_pollution}"
-          )
-        )
-      )
+    :orientation "v"
+    :space-evenly "false"
+    (box :orientation "h"
+      :space-evenly "true"
+      :halign "center"
+      (refresh)
+      (w_city)
+      (close)
     )
+    (w_temp)
+    (w_desc)
+    (w_extras)
   )
 )
 
@@ -90,7 +108,7 @@
     :x "2px"
     :y "2px"
     :width "370px"
-    :anchor "right top")
+    :anchor "top right")
   :stacking "overlay"
   :exclusive "false"
   :focusable "false"
@@ -99,16 +117,13 @@
   )
 )
 
-;; Closer
 (defwindow weather-closer
   :monitor 0
   :geometry (geometry
-    :width "100%"
-    :height "100%")
+    :width "150%"
+    :height "150%")
   :stacking "fg"
   :exclusive "false"
   :focusable "false"
-  (closer
-    :window "weather"
-  )
+  (closer :window "weather")
 )

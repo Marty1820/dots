@@ -1,85 +1,169 @@
-.control-center {
-  border: 1px solid $purple;
-  background: $background-darker;
-  border-radius: 15px;
+.action_center {
+  background-color: $background-darker;
+  border-radius: 1rem;
+  padding: 1rem;
+  color: $foreground;
+  box-shadow: 0 0 4px 2px $background;
+  margin: 0.5rem;
 }
 
-.control-center-buttons {
-  background: $background-darker;
-  margin: 10px 30px 0px;
-  border-radius: 15px;
-  box-shadow: 0px 0px 10px $background;
+.battery-info {
+  font-size: 1.2em;
+  color: $cyan;
+
+  &.charging {
+    color: $green;
+  }
 }
 
-.bluetooth-status,
-.net-status {
-  color: $background-darker;
-  border-radius: 15px;
-  margin: 10px;
-  padding: 10px;
-  font-size: 2em;
-}
-
-.bluetooth-on {
-  background-color: $cyan;
-}
-
-.net-on {
-  background-color: $green;
-}
-
-.bluetooth-off,
-.net-off {
-  background-color: $red;
-}
-
-.setting-separator {
+.powermenu-button {
+  border-radius: 1em;
+  padding: 0 0.3em;
+  margin-left: 1em;
+  transition: 0.3s;
+  font-size: 1.7em;
   background-color: $background;
-  padding: 2px;
-  border-radius: 6px;
-  margin: 0px 5px;
+  color: $red;
 }
 
-.volume-slider-container,
-.brightness-slider-container {
-  margin: 5px 20px;
+.powermenu-button:hover {
+  background-color: $red;
+  color: $foreground;
 }
 
-.volume-slider-icon,
-.brightness-slider-icon {
-  padding: 5px 10px;
-  margin-right: 10px;
-  font-size: 2em;
+.user-clock-time {
+  font-size: 1.4rem;
+}
+
+.user-clock-separator {
+  font-size: 1.4rem;
+  margin: 0 0.25rem;
+}
+
+.user-clock-date {
+  font-size: 1.2rem;
+}
+
+.action_settings_button {
+  transition: 500ms;
+  background-color: $red;
+  color: $background;
+  border-radius: 1.5rem;
+  padding: 0.75rem;
+  font-size: 1.05rem;
+}
+
+.action_settings_button:hover {
+  background-color: $purple;
+}
+
+.action_settings_button_toggled {
+  background-color: $green;
+  color: $background;
+}
+
+.action_settings_button_toggled:hover {
+  background-color: $purple;
+}
+
+.action_settings_box {
+  margin-top: 1rem;
+}
+
+.action-settings-icon {
+  font-size: 1.3rem;
+}
+
+.action-settings-info {
+  margin-left: 1rem;
+}
+
+.action-settings-state {
+  font-size: 0.9rem;
+  color: $background;
+}
+
+.action-settings-state-enabled {
+  color: $background;
+}
+
+.left-top-plite {
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.right-top-plite {
+  margin-left: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.brightness-control-center,
+.volume-control-center {
+  margin-top: 1rem;
+}
+
+.brightness-scale trough,
+.volume-scale trough {
   background-color: $selection;
-  border-radius: 500px;
-  box-shadow: 0px 0px 7px $selection;
+  border-radius: 1rem;
+  min-height: 2.25rem;
 }
 
-.volume-slider-icon {
-  color: $purple;
+.brightness-scale trough highlight,
+.volume-scale trough highlight {
+  border-radius: 1rem;
+  min-height: 2.25rem;
 }
 
-.volume-slider trough,
-.brightness-slider trough {
-  border-radius: 20px;
-  background-color: $selection;
-  box-shadow: 0px 0px 7px $selection;
+.brightness-scale trough highlight {
+  background-color: $yellow;
 }
 
-.volume-slider highlight,
-.brightness-slider highlight {
-  padding: 0.4em;
-  border-radius: 20px;
+.volume-scale trough highlight {
+  background-color: $purple;
 }
 
-.volume-slider highlight {
-  background: linear-gradient(to right, $green, $red);
+.brightness-icon,
+.volume-icon {
+  margin-left: 0.75rem;
+  font-size: 1.5rem;
+
+  &.less {
+    color: $foreground;
+  }
+
+  &.more {
+    color: $background-darker;
+  }
 }
 
-.brightness-slider-icon {
-  color: $yellow;
+.brightness-button,
+.volume-button {
+  color: $background;
+  margin-left: 0.5rem;
+  font-size: 1.5rem;
+  min-width: 2.25rem;
+  border-radius: 2rem;
+  transition: 0.3s;
+
+  &.active {
+    background-color: $red;
+  }
+
+  &.active:hover {
+    background-color: $comment;
+  }
 }
 
-.brightness-slider highlight {
-  background: linear-gradient(to right, $orange, $foreground);
+.brightness-button {
+  background-color: $yellow;
+}
+
+.volume-button {
+  background-color: $purple;
+}
+
+.brightness-button:hover,
+.volume-mute:hover {
+  background-color: $comment;
 }

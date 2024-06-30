@@ -1,0 +1,164 @@
+(defwidget app-launcher []
+  (button :class "app-launcher"
+    :onclick "rofi -show drun -theme ~/.config/rofi/config.rasi &"
+    (label :text "󰀻")
+  )
+)
+
+(defwidget workspaces []
+  (eventbox :class "workspaces"
+    :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}"
+    (box :space-evenly "true"
+      (label :visible "false"
+        :text "${workspaces}${current_workspace}"
+      )
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box :class "workspace ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
+            (label :text "${workspace.id == "1" ? "" : workspace.id == "2" ? "" : workspace.id == "3" ? "" : workspace.id == "4" ? "" : "${workspace.id}"}")
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget window []
+  (box :class {window == "" ? "" : "window"}
+    (label :text "${window}")
+  )
+)
+
+(defwidget bar-weather []
+  (button :class "bar-weather-info"
+    :onclick "eww open --toggle weather-closer && eww open --toggle weather"
+    (box :orientation "h"
+      :space-evenly "false"
+      (label :class "bar-weather-icon"
+        :style "color: ${weather_color};"
+        :text weather_icon
+      )
+      (label :class "bar-weather-temp ${weather_temp < 32 ? 'less' : weather_temp < 90 ? 'normal' : 'more'}"
+        :text "${weather_temp}"
+      )
+      (label :class "bar-weather-separator" :text "|")
+      (label :class "bar-weather-text"
+        :text "AQI:"
+      )
+      (label :class "bar-weather-aqi"
+        :style "color: ${aqi_color};"
+        :text "${aqi_icon}"
+      )
+    )
+  )
+)
+
+(defwidget bluetooth_icon []
+  (label :class "system-info-icon bluetooth_icon ${bluetooth-icon == "󰂲" ? "off" : "on"}"
+    :text bluetooth-icon
+  )
+)
+
+(defwidget network_icon []
+  (label :class "system-info-icon network_icon ${network.essid == "lo" ? "disconnected" : ""}"
+    :text {network.essid == "lo" ? "󰤭" : network.signal == "" ? "󰤩" : network.signal < 25 ? "󰤟" : network.signal < 50 ? "󰤢" : network.signal < 75 ? "󰤥" : "󰤨"}
+  )
+)
+
+(defwidget volume_icon []
+  (label :class "system-info-icon volume_icon ${volume == "muted" ? "muted" : ""}"
+    :text {volume == "muted" ? "󰸈" : volume < 33 ? "" : volume < 67 ? "" : ""}
+  )
+)
+
+(defwidget brightness_icon []
+  (label :class "system-info-icon brightness_icon"
+    :text brightness-icon
+  )
+)
+
+(defwidget battery_icon []
+  (box :visible {EWW_BATTERY == "" ? false : true}
+    (label :class "system-info-icon battery_icon ${EWW_BATTERY.BAT1.status == "Charging" ? "charging" : "discharging"} ${EWW_BATTERY.BAT1.capacity < 10 ? "critical" : EWW_BATTERY.BAT1.capacity < 20 ? "low" : ""}"
+      :text {
+          EWW_BATTERY.BAT1.capacity > 90 ? "" : 
+          EWW_BATTERY.BAT1.capacity > 75 ? "" : 
+          EWW_BATTERY.BAT1.capacity > 50 ? "" : 
+          EWW_BATTERY.BAT1.capacity > 25 ? "" : 
+                                           ""
+      }
+    )
+  )
+)
+
+(defwidget clock []
+  (label :class "system-info-icon clock"
+    :text {formattime(EWW_TIME, "%I:%M%p")}
+  )
+)
+
+(defwidget system-info []
+  (button :class "system-info"
+    :onclick "eww open --toggle action-center-closer && eww open --toggle action-center"
+    (box :orientation "h"
+      :space-evenly "false"
+      (bluetooth_icon)
+      (network_icon)
+      (volume_icon)
+      (brightness_icon)
+      (battery_icon)
+      (clock)
+    )
+  )
+)
+
+(defwidget left-modules []
+  (box :class "left-modules"
+    :orientation "h"
+    :space-evenly "false"
+    :halign "start" 
+    (app-launcher)
+    (workspaces)
+    ;(taskbar)
+  )
+)
+
+(defwidget middle-modules []
+  (box :class "middle-modules"
+    :orientation "h"
+    :space-evenly "false"
+    :halign "center"
+    (window)
+  )
+)
+
+(defwidget right-modules []
+  (box :class "right-modules"
+    :orientation "h"
+    :space-evenly "false"
+    :halign "end"
+    (bar-weather)
+    (system-info)
+  )
+)
+
+(defwidget bar []
+  (box :class "eww-bar"
+    :orientation "h"
+    :space-evenly "true"
+    (left-modules)
+    (middle-modules)
+    (right-modules)
+  )
+)
+
+(defwindow bar
+  :monitor 0
+  :geometry (geometry
+    :width "150%"
+    :anchor "top center")
+  :stacking "fg"
+  :exclusive "true"
+  :focusable "false"
+  (bar)
+)

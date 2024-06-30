@@ -1,16 +1,7 @@
 #!/usr/bin/env sh
 
-STATUS=$(pamixer --get-mute)
-VOLUME=$(pamixer --get-volume)
+pamixer --get-volume-human | tr -d '%'
 
-if [ "$STATUS" = "true" ]; then
-  echo "󰝟"
-else
-  if [ "$VOLUME" -ge 66 ]; then
-    echo "󰕾"
-  elif [ "$VOLUME" -ge 33 ]; then
-    echo ""
-  else
-    echo ""
-  fi
-fi
+pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
+  pamixer --get-volume-human | tr -d '%'
+done

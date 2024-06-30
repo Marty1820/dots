@@ -1,11 +1,15 @@
 (defvar eww "/usr/bin/eww -c $HOME/.config/eww")
 
+;; Variables
+(include "./modules/variables.yuck")
+
 ;; Close widget on clickoff
 (defwidget closer [window]
-  (eventbox 
-    :onclick "${eww} close ${window} && ${eww} close ${window}-closer"
-  )
+  (eventbox :onclick "${eww} close ${window} && ${eww} close ${window}-closer")
 )
+
+;; Bar
+(include "./modules/bar.yuck")
 
 ;; Modules
 (include "./modules/weather.yuck")

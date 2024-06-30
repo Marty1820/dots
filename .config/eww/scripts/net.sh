@@ -1,17 +1,11 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-STATUS=$(nmcli -t -f STATE g)
+signal=$(nmcli -f in-use,signal dev wifi | rg "\*" | awk '{ print $2 }')
+essid=$(nmcli -t -f NAME connection show --active | head -n1 | sed 's/\"/\\"/g')
+echo '{"essid": "'"$essid"'", "signal": "'"$signal"'"}'
 
-toggle() {
-  [ "$STATUS" = "connected" ] && nmcli radio wifi off || nmcli radio wifi on
-}
-
-status() {
-  [ "$STATUS" = "connected" ] && echo "󰤨" || echo "󰤭"
-}
-
-if [ "$1" = "--toggle" ]; then
-  toggle
-elif [ "$1" = "--status" ]; then
-  status
-fi
+ip monitor link | while read -r line; do
+    signal=$(nmcli -f in-use,signal dev wifi | rg "\*" | awk '{ print $2 }')
+    essid=$(nmcli -t -f NAME connection show --active | head -n1 | sed 's/\"/\\"/g')
+    echo '{"essid": "'"$essid"'", "signal": "'"$signal"'"}'
+done

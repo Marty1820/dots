@@ -1,0 +1,46 @@
+; VARS
+(defvar bluetooth-toggle
+  "scripts/bluetooth.sh --toggle")
+(defvar brightness-toggle
+  "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
+
+; POLLS
+(defpoll weather_city :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --city")
+(defpoll weather_color :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --hex")
+(defpoll weather_icon :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --icon")
+(defpoll weather_temp :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --temp")
+(defpoll weather_desc :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --stat")
+(defpoll weather_feels_like :interval "10m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --feel")
+(defpoll weather_wind :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --wind")
+(defpoll weather_humidity :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --humid")
+(defpoll aqi_color :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --aqi_color")
+(defpoll air_pollution :interval "5m" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --aqi")
+(defpoll aqi_icon :interval "5m"
+  "$HOME/.config/scripts/weather.sh --aqi_icon")
+
+(defpoll bluetooth-icon :interval "1s"
+  "scripts/bluetooth.sh --icon")
+(defpoll brightness-icon :interval "2s"
+  "$HOME/.config/scripts/screen_brightness_info.sh --icon")
+(defpoll brightness :interval "1s"
+  "xbacklight -get | cut -d '.' -f 1")
+
+; LISTENS
+(deflisten network :initial '{"essid": "lo", "signal": ""}'
+  "scripts/net.sh")
+(deflisten volume :initial "0"
+  "scripts/vol.sh")
+
+(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title")

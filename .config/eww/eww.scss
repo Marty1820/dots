@@ -6,8 +6,11 @@
   font-family: mononoki Nerd Font Mono;
 }
 
+// Bar
+@import "css/bar";
+
 // Weather
 @import "css/weather";
 
-// Control-Center
+// Action-Center
 @import "css/control-center";

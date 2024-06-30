@@ -1,38 +1,74 @@
 // Weather
 .weather-container {
   background: $background-darker;
-  border: 1px solid $purple;
-  border-radius: 15px;
+  border-radius: 1rem;
+  padding: 1rem;
+  color: $foreground;
+  box-shadow: 0 0 4px 2px $background;
+  margin: 0.5rem;
+}
+
+.weather-refresh,
+.weather-close {
+  background-color: $background;
+  border-radius: 3em;
+  padding: 0 1.2rem;
+  font-size: 3em;
+}
+
+.weather-refresh:hover,
+.weather-close:hover {
+  background: linear-gradient(180deg, $selection, $background);
+}
+
+.weather-refresh {
+  margin-right: 3rem;
+}
+
+.weather-close {
+  margin-left: 3rem;
 }
 
 .weather-location {
-  font-size: 1.5em;
-  margin-top: 15px;
+  font-size: 1.7em;
+  margin-top: 1rem;
 }
 
 .weather-icon {
   font-size: 7em;
-  margin-right: 5px;
+  margin-right: 1.5rem;
 }
 
 .weather-temp {
-  color: $foreground;
   font-size: 3em;
-  margin-left: 5px;
+  margin-left: 1.5rem;
 }
 
 .weather-desc {
-  color: $foreground;
-  font-size: 3em;
+  font-size: 2em;
 }
 
 .weather-extras {
-  margin: 15px 0;
+  margin: 0.5rem 0;
 }
 
-.weather-feel,
-.weather-wind,
-.weather-humidity,
-.air-pollution {
-  color: $foreground;
+.weather-section {
+  padding: 0 0.5em;
+}
+
+.weather-temp,
+.weather-feel-data {
+  &.less {
+    color: $cyan;
+  }
+
+  &.more {
+    color: $red;
+  }
+}
+
+.weather-wind-data {
+  &.more {
+    color: $red;
+  }
 }
