@@ -39,11 +39,15 @@ Current setup is running [Hyprland](https://hyprland.org/) for windows manager, 
 
 Desktop & status bar
 ![screenshot](.screenshots/hyprland.png)
+
 Application launcher [rofi](https:/github.com/lbonn/rofi)
 ![screenshot](.screenshots/apps-menu.png)
+
 Calendar
 ![screenshot](.screenshots/calendar.png)
+
 Control center
 ![screenshot](.screenshots/control_center.png)
+
 Weather widget
 ![screenshot](.screenshots/weather_widget.png)
