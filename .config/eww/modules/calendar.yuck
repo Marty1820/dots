@@ -1,0 +1,37 @@
+(defwidget cal-info []
+  (box :orientation "v"
+    :space-evenly "false"
+    (label :class "cal-header"
+      :halign "start"
+      :text {formattime(EWW_TIME, "%B %Y")}
+    )
+    (calendar :class "cal"
+      :show-heading "false"
+    )
+  )
+)
+
+(defwindow cal-info
+  :monitor 0
+  :geometry (geometry
+    :x "2px"
+    :y "2px"
+    :anchor "top right")
+  :stacking "overlay"
+  :exclusive "false"
+  :focusable "false"
+  (box :class "cal-box"
+    (cal-info)
+  )
+)
+
+(defwindow cal-info-closer
+  :monitor 0
+  :geometry (geometry
+    :width "150%"
+    :height "150%")
+  :stacking "fg"
+  :exclusive "false"
+  :focusable "false"
+  (closer :window "cal-info")
+)

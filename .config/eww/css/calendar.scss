@@ -1,0 +1,36 @@
+.cal-box {
+  background: $background-darker;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 0 4px 2px $background;
+  margin: 0.5rem;
+}
+
+.cal-header {
+  font-size: 1.7rem;
+  padding: 0.2rem;
+}
+
+calendar {
+  color: $foreground;
+  font-size: 1.4em;
+  padding: 0.2rem;
+}
+
+calendar:selected {
+  color: $foreground;
+  background: $purple;
+  border-radius: 2rem;
+}
+
+calendar.button {
+  color: $purple;
+}
+
+calendar.highlight {
+  color: $purple;
+}
+
+calendar:indeterminate {
+  color: $pink;
+}

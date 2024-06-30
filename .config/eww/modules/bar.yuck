@@ -92,8 +92,11 @@
 )
 
 (defwidget clock []
-  (label :class "system-info-icon clock"
-    :text {formattime(EWW_TIME, "%I:%M%p")}
+  (button :class "clock"
+    :onclick "eww open --toggle cal-info-closer && eww open --toggle cal-info"
+    (label :class "clock-text"
+      :text {formattime(EWW_TIME, "%I:%M%p")}
+    )
   )
 )
 
@@ -107,7 +110,6 @@
       (volume_icon)
       (brightness_icon)
       (battery_icon)
-      (clock)
     )
   )
 )
@@ -119,7 +121,6 @@
     :halign "start" 
     (app-launcher)
     (workspaces)
-    ;(taskbar)
   )
 )
 
@@ -139,6 +140,7 @@
     :halign "end"
     (bar-weather)
     (system-info)
+    (clock)
   )
 )
 
