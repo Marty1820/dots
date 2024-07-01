@@ -1,4 +1,6 @@
 ; VARS
+(defvar time_rev false)
+
 (defvar bluetooth-toggle
   "scripts/bluetooth.sh --toggle")
 (defvar brightness-toggle
