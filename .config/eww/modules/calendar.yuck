@@ -1,9 +1,16 @@
 (defwidget cal-info []
   (box :orientation "v"
     :space-evenly "false"
-    (label :class "cal-header"
-      :halign "start"
-      :text {formattime(EWW_TIME, "%B %Y")}
+    (box :class "cal-header"
+      :orientation "h"
+      (label :class "cal-date"
+        :halign "start"
+        :text {formattime(EWW_TIME, "%B %Y")}
+      )
+      (label :class "cal-time"
+        :halign "end"
+        :text {formattime(EWW_TIME, "%T %p")}
+      )
     )
     (calendar :class "cal"
       :show-heading "false"
