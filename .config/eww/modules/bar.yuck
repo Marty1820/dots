@@ -124,7 +124,7 @@
 
 (defwidget system-info []
   (button :class "system-info"
-    :onclick "${eww} open --toggle action-center-closer && ${eww} open --toggle action-center"
+    :onclick "${eww} update control_visible=true && ${eww} open --toggle action-center-closer && ${eww} open --toggle action-center"
     (box :orientation "h"
       :space-evenly "false"
       (bluetooth_icon)
