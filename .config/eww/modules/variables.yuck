@@ -1,5 +1,6 @@
 ; VARS
 (defvar time_rev false)
+(defvar weather_visible false)
 
 (defvar bluetooth-toggle
   "scripts/bluetooth.sh --toggle")
@@ -7,21 +8,24 @@
   "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
 
 ; POLLS
-(defpoll weather_city :interval "5m" :run-while weather_visible
+(defpoll weather_city :interval "5m"
+  :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --city")
-(defpoll weather_color :interval "5m" :run-while weather_visible
+(defpoll weather_color :interval "5m"
   "$HOME/.config/scripts/weather.sh --hex")
-(defpoll weather_icon :interval "5m" :run-while weather_visible
+(defpoll weather_icon :interval "5m"
   "$HOME/.config/scripts/weather.sh --icon")
-(defpoll weather_temp :interval "5m" :run-while weather_visible
+(defpoll weather_temp :interval "5m" :initial "0"
   "$HOME/.config/scripts/weather.sh --temp")
-(defpoll weather_desc :interval "5m" :run-while weather_visible
+(defpoll weather_desc :interval "5m"
+  :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --stat")
-(defpoll weather_feels_like :interval "10m" :run-while weather_visible
+(defpoll weather_feels_like :interval "10m" :initial "0"
+  :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --feel")
-(defpoll weather_wind :interval "5m" :run-while weather_visible
+(defpoll weather_wind :interval "5m" :initial "0"
   "$HOME/.config/scripts/weather.sh --wind")
-(defpoll weather_humidity :interval "5m" :run-while weather_visible
+(defpoll weather_humidity :interval "5m"
   "$HOME/.config/scripts/weather.sh --humid")
 (defpoll aqi_color :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --aqi_color")
