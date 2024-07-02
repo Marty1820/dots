@@ -81,11 +81,12 @@
   (box :visible {EWW_BATTERY == "" ? false : true}
     (label :class "system-info-icon battery_icon ${EWW_BATTERY.BAT1.status == "Charging" ? "charging" : "discharging"} ${EWW_BATTERY.BAT1.capacity < 10 ? "critical" : EWW_BATTERY.BAT1.capacity < 20 ? "low" : ""}"
       :text {
-          EWW_BATTERY.BAT1.capacity > 90 ? "" : 
-          EWW_BATTERY.BAT1.capacity > 75 ? "" : 
-          EWW_BATTERY.BAT1.capacity > 50 ? "" : 
-          EWW_BATTERY.BAT1.capacity > 25 ? "" : 
-                                           ""
+        EWW_BATTERY.BAT1.status == "Charging" ? "" :
+        EWW_BATTERY.BAT1.capacity > 90 ? "" :
+        EWW_BATTERY.BAT1.capacity > 75 ? "" :
+        EWW_BATTERY.BAT1.capacity > 50 ? "" :
+        EWW_BATTERY.BAT1.capacity > 25 ? "" :
+                                         ""
       }
     )
   )
