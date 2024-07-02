@@ -93,32 +93,9 @@
 )
 
 (defwidget clock []
-  (eventbox :onhover "${eww} update time_rev=true"
-    :onhoverlost "${eww} update time_rev=false"
-    (button :onclick "${eww} open --toggle cal-info-closer && ${eww} open --toggle cal-info"
-      (box :class "clock"
-        :space-evenly "false"
-        :orientation "h"
-        :spacing "5"
-        (label :class "clock-text"
-          :text {formattime(EWW_TIME, "%I:%M%p")}
-        )
-        (revealer :transition "slideleft"
-          :reveal time_rev
-          :duration "500ms"
-          (box :space-evenly "false"
-            :orientation "h"
-            :spacing "5"
-            (label :class "clock-seperator"
-              :text "|"
-            )
-            (label :class "clock-date"
-              :text "${formattime(EWW_TIME, '%m/%d/%Y')}"
-            )
-          )
-        )
-      )
-    )
+  (button :class "clock"
+    :onclick "${eww} open --toggle cal-info-closer && ${eww} open --toggle cal-info"
+    (label :text {formattime(EWW_TIME, "%I:%M%p")})
   )
 )
 
