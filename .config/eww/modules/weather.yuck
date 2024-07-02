@@ -1,6 +1,7 @@
 (defwidget refresh []
   (button :class "weather-refresh"
-    :onclick "eww close weather & $HOME/.config/scripts/weather.sh --getdata & eww open weather"
+    :timeout "5s"
+    :onclick "$HOME/.config/scripts/weather.sh --getdata; eww reload"
     (label :text "")
   )
 )
