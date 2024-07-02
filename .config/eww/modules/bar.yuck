@@ -31,7 +31,7 @@
 
 (defwidget bar-weather []
   (button :class "bar-weather-info"
-    :onclick "eww open --toggle weather-closer && eww open --toggle weather"
+    :onclick "${eww} update weather_visible=true && ${eww} open --toggle weather-closer && ${eww} open --toggle weather"
     (box :orientation "h"
       :space-evenly "false"
       (label :class "bar-weather-icon"
@@ -95,7 +95,7 @@
 (defwidget clock []
   (eventbox :onhover "${eww} update time_rev=true"
     :onhoverlost "${eww} update time_rev=false"
-    (button :onclick "eww open --toggle cal-info-closer && eww open --toggle cal-info"
+    (button :onclick "${eww} open --toggle cal-info-closer && ${eww} open --toggle cal-info"
       (box :class "clock"
         :space-evenly "false"
         :orientation "h"
@@ -124,7 +124,7 @@
 
 (defwidget system-info []
   (button :class "system-info"
-    :onclick "eww open --toggle action-center-closer && eww open --toggle action-center"
+    :onclick "${eww} open --toggle action-center-closer && ${eww} open --toggle action-center"
     (box :orientation "h"
       :space-evenly "false"
       (bluetooth_icon)
