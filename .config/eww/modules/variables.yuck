@@ -8,17 +8,15 @@
   "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
 
 ; POLLS
-(defpoll weather_city :interval "5m"
-  :run-while weather_visible
+(defpoll weather_city :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --city")
 (defpoll weather_color :interval "5m" :initial "#ffffff"
   "$HOME/.config/scripts/weather.sh --hex")
-(defpoll weather_icon :interval "5m"
+(defpoll weather_icon :interval "5m" :initial ""
   "$HOME/.config/scripts/weather.sh --icon")
 (defpoll weather_temp :interval "5m" :initial "0"
   "$HOME/.config/scripts/weather.sh --temp")
-(defpoll weather_desc :interval "5m"
-  :run-while weather_visible
+(defpoll weather_desc :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --stat")
 (defpoll weather_feels_like :interval "10m" :initial "0"
   :run-while weather_visible
@@ -32,12 +30,12 @@
   "$HOME/.config/scripts/weather.sh --aqi_color")
 (defpoll air_pollution :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --aqi")
-(defpoll aqi_icon :interval "5m"
+(defpoll aqi_icon :interval "5m" :initial ""
   "$HOME/.config/scripts/weather.sh --aqi_icon")
 
-(defpoll bluetooth-icon :interval "1s"
+(defpoll bluetooth-icon :interval "1s" :initial "󰂲"
   "scripts/bluetooth.sh --icon")
-(defpoll brightness-icon :interval "2s"
+(defpoll brightness-icon :interval "2s" :initial "󰳲"
   "$HOME/.config/scripts/screen_brightness_info.sh --icon")
 (defpoll brightness :interval "1s" :run-while control_visible
   "xbacklight -get | cut -d '.' -f 1")
@@ -49,5 +47,6 @@
   "scripts/vol.sh")
 
 (deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
-(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(deflisten current_workspace 
+  :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
 (deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title")
