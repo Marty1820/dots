@@ -27,7 +27,12 @@
       :style "color: ${weather_color};"
       :text weather_icon
     )
-    (label :class "weather-temp ${weather_temp < 32 ? 'less' : weather_temp < 90 ? 'normal' : 'more'}"
+    (label
+      :class "weather-temp ${
+        weather_temp < 32 ? 'less' :
+        weather_temp < 90 ? 'normal' :
+                            'more'
+      }"
       :halign "start"
       :text "${weather_temp}"
     )
@@ -51,7 +56,12 @@
       (label :class "weather-feel"
         :text "Real Feel"
       )
-      (label :class "weather-feel-data ${weather_feels_like < 32 ? 'less' : weather_feels_like < 85 ? 'normal' : 'more'}"
+      (label
+        :class "weather-feel-data ${
+          weather_feels_like < 32 ? 'less' :
+          weather_feels_like < 85 ? 'normal' : 
+                                    'more'
+        }"
         :text "󰔏 ${weather_feels_like}"
       )
     )

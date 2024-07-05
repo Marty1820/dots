@@ -4,9 +4,13 @@
     :space-evenly "false"
     (box :orientation "h"
       :halign "start"
-      (label :class "battery-info ${EWW_BATTERY.BAT1.status == "Charging" ? "charging" : "discharging"}"
+      (label
+        :class "battery-info ${
+          EWW_BATTERY.BAT1.status == "Charging" ? "charging" : "discharging"
+        }"
         :halign "start"
-        :text {EWW_BATTERY.BAT1.status == "Charging" ? "󰂄 ${EWW_BATTERY.BAT1.capacity}" : 
+        :text {
+          EWW_BATTERY.BAT1.status == "Charging" ? "󰂄 ${EWW_BATTERY.BAT1.capacity}" : 
           EWW_BATTERY.BAT1.capacity > 95 ? "󰁹 ${EWW_BATTERY.BAT1.capacity}" : 
           EWW_BATTERY.BAT1.capacity > 90 ? "󰂂 ${EWW_BATTERY.BAT1.capacity}" : 
           EWW_BATTERY.BAT1.capacity > 80 ? "󰂁 ${EWW_BATTERY.BAT1.capacity}" : 
@@ -17,7 +21,8 @@
           EWW_BATTERY.BAT1.capacity > 30 ? "󰁼 ${EWW_BATTERY.BAT1.capacity}" : 
           EWW_BATTERY.BAT1.capacity > 20 ? "󰁻 ${EWW_BATTERY.BAT1.capacity}" : 
           EWW_BATTERY.BAT1.capacity > 10 ? "󰁺 ${EWW_BATTERY.BAT1.capacity}" : 
-                                           "󰂎 ${EWW_BATTERY.BAT1.capacity}"}
+                                           "󰂎 ${EWW_BATTERY.BAT1.capacity}"
+        }
       )
     )
     (box :orientation "h"
@@ -56,32 +61,39 @@
 
 (defwidget action_settings_button [condition action icon label class]
   (button :onclick {action} 
-    :class {condition ? "action_settings_button ${class}" : "action_settings_button action_settings_button_toggled ${class}"}
-    (box :orientation "h" 
+    :class {
+      condition ? "action_settings_button ${class}" :
+      "action_settings_button action_settings_button_toggled ${class}"
+    }
+    (box :orientation "h"
       :space-evenly "false"
-      (box :orientation "h" 
-        :space-evenly "false" 
+      (box :orientation "h"
+        :space-evenly "false"
         :halign "start"
-        (label :class "action-settings-icon" 
+        (label :class "action-settings-icon"
           :text {icon}
         )
       )
-      (box :orientation "v" 
-        :class "action-settings-info" 
-        :space-evenly "false" 
-        :halign "end" 
+      (box :orientation "v"
+        :class "action-settings-info"
+        :space-evenly "false"
+        :halign "end"
         :valign "center"
-        (box :orientation "h" 
-          :space-evenly "false" 
+        (box :orientation "h"
+          :space-evenly "false"
           :halign "start"
-          (label :class "action-settings-text" 
+          (label :class "action-settings-text"
             :text {label}
           )
         )
-        (box :orientation "h" 
-          :space-evenly "false" 
+        (box :orientation "h"
+          :space-evenly "false"
           :halign "start"
-          (label :class {condition ? "action-settings-state" : "action-settings-state action-settings-state-enabled"} 
+          (label
+            :class {
+              condition ? "action-settings-state" :
+              "action-settings-state action-settings-state-enabled"
+            } 
             :text {condition ? "Off" : "On"}
           )
         )
@@ -100,8 +112,15 @@
 
 (defwidget network []
   (action_settings_button :condition {network.essid == "lo"}
-    :action {network.essid == "lo" ? "nm-connection-editor &" : "nmcli connection down id '${network.essid}'"}
-    :icon {network.essid == "lo" ? "󰤭" : network.signal == "" ? "󰤩" : network.signal < 25 ? "󰤟" : network.signal < 50 ? "󰤢" : network.signal < 75 ? "󰤥" : "󰤨"}
+    :action {
+      network.essid == "lo" ? "nm-connection-editor &" :
+      "nmcli connection down id '${network.essid}'"
+    }
+    :icon {
+      network.essid == "lo" ? "󰤭" : network.signal == "" ? "󰤩" :
+      network.signal < 25 ? "󰤟" : network.signal < 50 ? "󰤢" :
+      network.signal < 75 ? "󰤥" : "󰤨"
+    }
     :label {network.essid == "lo" ? "Not connected" : network.essid}
     :class "right-top-plite"
   )
@@ -141,7 +160,11 @@
       :onchange "pamixer --set-volume {}"
       :class "volume-scale"
     )
-    (label :class 'volume-icon ${volume == "muted" ? "less" : volume < 5 ? "less" : "more"}'
+    (label
+      :class 'volume-icon ${
+        volume == "muted" ? "less" :
+        volume < 5 ? "less" : "more"
+      }'
       :halign "start"
       :text "󰎇"
     )
@@ -154,7 +177,12 @@
     :space-evenly "false"
     (volume_scale)
     (button :class "volume-button ${volume == 'muted' ? 'active' : ''}"
-      :onclick "pamixer -t" '${volume == "muted" ? "󰝟" : volume < 33 ? "" : volume < 67 ? "" : "󰕾"}'
+      :onclick "pamixer -t" '${
+        volume == "muted" ? "󰝟" :
+        volume < 33 ? "" :
+        volume < 67 ? "" :
+                      "󰕾"
+      }'
     )
   )
 )
