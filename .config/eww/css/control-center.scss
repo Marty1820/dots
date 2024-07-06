@@ -16,21 +16,6 @@
   }
 }
 
-.powermenu-button {
-  border-radius: 1em;
-  padding: 0 0.3em;
-  margin-left: 1em;
-  transition: 0.3s;
-  font-size: 1.7em;
-  background-color: $background;
-  color: $red;
-}
-
-.powermenu-button:hover {
-  background-color: $red;
-  color: $foreground;
-}
-
 .user-clock-time {
   font-size: 1.4rem;
 }

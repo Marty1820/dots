@@ -15,3 +15,4 @@
 (include "./modules/weather.yuck")
 (include "./modules/control-center.yuck")
 (include "./modules/calendar.yuck")
+(include "./modules/powermenu.yuck")

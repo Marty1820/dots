@@ -150,6 +150,17 @@
   )
 )
 
+(defwidget power-button []
+  (eventbox :class "bar-power-box"
+    :onhover "${eww} update power_reveal=true"
+    :onhoverlost "${eww} update power_reveal=false"
+    (button :class "bar-power-button"
+      :onclick "${eww} open --toggle powermenu-closer && ${eww} open --toggle powermenu"
+      (label :text "⏻")
+    )
+  )
+)
+
 (defwidget left-modules []
   (box :class "left-modules"
     :orientation "h"
@@ -177,6 +188,7 @@
     (bar-weather)
     (system-info)
     (clock)
+    (power-button)
   )
 )
 

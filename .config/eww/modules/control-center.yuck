@@ -40,9 +40,6 @@
           :text {formattime(EWW_TIME, "%a, %b %d")}
         )
       )
-      (button :class "powermenu-button"
-        :onclick "systemctl poweroff" "⏻"
-      )
     )
   )
 )
