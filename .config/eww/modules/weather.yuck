@@ -42,6 +42,7 @@
 (defwidget w_desc []
   (label :class "weather-desc"
     :halign "center"
+    :justify "center"
     :text weather_desc
   )
 )
