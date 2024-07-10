@@ -42,10 +42,15 @@
 }
 
 .window {
-  background-color: $background-darker;
-  border-radius: 1rem;
-  padding: 0 0.5em;
-  margin: 0 0.5rem;
+  background-color: transparent;
+  color: transparent;
+  &.occupied {
+    background-color: $background-darker;
+    color: $foreground;
+    border-radius: 1rem;
+    padding: 0 0.5em;
+    margin: 0 0.5rem;
+  }
 }
 
 .bar-weather-icon,
@@ -75,6 +80,7 @@
   &.less {
     color: $cyan;
   }
+
   &.more {
     color: $red;
   }

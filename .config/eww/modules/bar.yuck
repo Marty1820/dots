@@ -37,7 +37,7 @@
 )
 
 (defwidget window []
-  (box :class {window == "" ? "" : "window"}
+  (box :class "window ${window == "" ? "" : window == "null" ? "" : "occupied"}"
     (label :text "${window}")
   )
 )
