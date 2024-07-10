@@ -39,23 +39,23 @@ set_aqi() {
 
   if [ "$aqi_number" = "1" ]; then
     aqi="Good"
-    aqi_icon=" 󰡳"
+    aqi_icon="󰡳"
     aqi_color="#50fa7b"
   elif [ "$aqi_number" = "2" ]; then
     aqi="Fair"
-    aqi_icon=" 󰡵"
+    aqi_icon="󰡵"
     aqi_color="#50fa7b"
   elif [ "$aqi_number" = "3" ]; then
     aqi="Moderate"
-    aqi_icon=" 󰊚"
+    aqi_icon="󰊚"
     aqi_color="#f1fa8c"
   elif [ "$aqi_number" = "4" ]; then
     aqi="Poor"
-    aqi_icon=" 󰡴"
+    aqi_icon="󰡴"
     aqi_color="#ffb86c"
   elif [ "$aqi_number" = "5" ]; then
     aqi="Very Poor"
-    aqi_icon=" "
+    aqi_icon=""
     aqi_color="#ff5555"
   fi  
 }
@@ -155,6 +155,6 @@ case $1 in
 --waybar)
 	set_icon
   set_aqi
-printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\"><big>%s</big></span> %s | <span foreground=\\\\\"%s\\\\\">AQI:<big>%s</big></span>\"}\n" "$w_hex" "$w_icon" "$w_temp" "$aqi_color" "$aqi_icon"
+printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\"><big>%s</big></span> %s | <span foreground=\\\\\"%s\\\\\">AQI: <big>%s</big></span>\"}\n" "$w_hex" "$w_icon" "$w_temp" "$aqi_color" "$aqi_icon"
 	;;
 esac
