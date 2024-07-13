@@ -34,6 +34,8 @@ w_stat=$(jq -r ".weather[].description" <"$weather_file" | head -n 1 | sed -e "s
 w_city=$(jq -r ".name" <"$weather_file")
 w_humid=$(jq -r ".main.humidity" <"$weather_file" | cut -d "." -f 1)
 w_wind=$(jq -r ".wind.speed" <"$weather_file" | cut -d "." -f 1)
+w_srise=$(date -d @"$(jq -r ".sys.sunrise" < "$weather_file")" '+%I:%M %p')
+w_sset=$(date -d @"$(jq -r ".sys.sunset" < "$weather_file")" '+%I:%M %p')
 
 # Set air pollution condition
 set_aqi() {
@@ -160,6 +162,12 @@ case $1 in
   set_aqi
   echo "$aqi_icon"
   ;;
+--srise)
+	echo "$w_srise"
+	;;
+--sset)
+	echo "$w_sset"
+	;;
 --waybar)
 	set_icon
   set_aqi

@@ -64,6 +64,18 @@
   )
 )
 
+(defwidget w_sun []
+  (box :orientation "h"
+    :class "weather-sun"
+    (label :class "weather-rise"
+      :text "󰖜 ${weather_sunr}"
+    )
+    (label :class "weather-set"
+      :text "󰖛 ${weather_suns}"
+    )
+  )
+)
+
 (defwidget w_extras []
   (box :orientation "h"
     :class "weather-extras"
@@ -127,6 +139,7 @@
     )
     (w_temp)
     (w_desc)
+    (w_sun)
     (w_extras)
   )
 )
