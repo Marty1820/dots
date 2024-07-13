@@ -36,6 +36,23 @@
       :halign "start"
       :text "${weather_temp}"
     )
+    (box  :class "weather-minmax"
+      :orientation "v"
+      (label :class "weather-temph ${
+        weather_temp < 32 ? 'less' :
+        weather_temp < 90 ? 'normal' :
+                            'more'
+      }"
+        :text "H:${weather_temph}"
+      )
+      (label :class "weather-templ ${
+        weather_temp < 32 ? 'less' :
+        weather_temp < 90 ? 'normal' :
+                            'more'
+      }"
+        :text "L:${weather_templ}"
+      )
+    )
   )
 )
 
@@ -63,7 +80,7 @@
           weather_feels_like < 85 ? 'normal' : 
                                     'more'
         }"
-        :text "󰔏 ${weather_feels_like}"
+        :text "󰔏 ${weather_feels_like}"
       )
     )
     (box :orientation "v"
@@ -87,7 +104,7 @@
     (box :orientation "v"
       :class "weather-section"
       (label :class "air-pollution"
-        :text "AQI${aqi_icon}"
+        :text "AQI ${aqi_icon}"
       )
       (label :class "air-pollution"
         :style "color: ${aqi_color};"

@@ -27,8 +27,10 @@ get_weather_data() {
 
 # Pulling info from file
 w_temp=$(jq ".main.temp" <"$weather_file" | cut -d "." -f 1)
+w_temphigh=$(jq ".main.temp_max" <"$weather_file")
+w_templow=$(jq ".main.temp_min" <"$weather_file")
 w_ftemp=$(jq ".main.feels_like" <"$weather_file" | cut -d "." -f 1)
-w_stat=$(jq -r ".weather[].description" <"$weather_file" | sed -e "s/\b\(.\)/\u\1/g")
+w_stat=$(jq -r ".weather[].description" <"$weather_file" | head -n 1 | sed -e "s/\b\(.\)/\u\1/g")
 w_city=$(jq -r ".name" <"$weather_file")
 w_humid=$(jq -r ".main.humidity" <"$weather_file" | cut -d "." -f 1)
 w_wind=$(jq -r ".wind.speed" <"$weather_file" | cut -d "." -f 1)
@@ -124,6 +126,12 @@ case $1 in
 	;;
 --temp)
 	echo "$w_temp"
+	;;
+--temphigh)
+	echo "$w_temphigh"
+	;;
+--templow)
+	echo "$w_templow"
 	;;
 --feel)
 	echo "$w_ftemp"

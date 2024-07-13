@@ -17,6 +17,10 @@
   "$HOME/.config/scripts/weather.sh --icon")
 (defpoll weather_temp :interval "5m" :initial "0"
   "$HOME/.config/scripts/weather.sh --temp")
+(defpoll weather_temph :interval "5m" :initial "0" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --temphigh")
+(defpoll weather_templ :interval "5m" :initial "0" :run-while weather_visible
+  "$HOME/.config/scripts/weather.sh --templow")
 (defpoll weather_desc :interval "5m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --stat")
 (defpoll weather_feels_like :interval "10m" :initial "0"
