@@ -1,23 +1,6 @@
 -- [[ Basic Keymaps ]]
 local wk = require('which-key')
 
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
--- Diagnostic keymaps
-wk.register({
-  ['<leader>d'] = { name = '+[D]iagnostics' },
-  ['<leader>d['] = { vim.diagnostic.goto_prev, 'Go to previous diagnostic message' },
-  ['<leader>d]'] = { vim.diagnostic.goto_next, 'Go to next diagnostic message' },
-  ['<leader>de'] = { vim.diagnostic.open_float, 'Open floating diagnostic message' },
-  ['<leader>dq'] = { vim.diagnostic.setloclist, 'Open diagnostics list' },
-})
-
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -29,56 +12,66 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
-vim.keymap.set('n', '<leader>xl', '<cmd>lopen<cr>', { desc = 'Location List' })
-vim.keymap.set('n', '<leader>xq', '<cmd>copen<cr>', { desc = '[Q]uickfix List' })
-vim.keymap.set('n', '[q', vim.cmd.cprev, { desc = 'Previous quickfix' })
-vim.keymap.set('n', ']q', vim.cmd.cnext, { desc = 'Next quickfix' })
+wk.add({
+  -- Keymaps for better default experience
+  -- See `:help vim.keymap.set()`
+  {
+    mode = { 'n', 'v' },
+    { '<Space>',   '<Nop>',      { silent = true } },
+    { '<leader>q', '<cmd>q<cr>', desc = 'Quit' },
+    { '<leader>w', '<cmd>w<cr>', desc = 'Write' },
+  },
 
--- Buffer
-wk.register({
-  ['<leader>b'] = { name = '+[B]uffer' },
-  ['<leader>bh'] = { ':TSBufEnable highlight<cr>', '[H]ighlight enabled' },
-  ['<S-h>'] = { ':bprevious<cr>', 'Previous buffer' },
-  ['<S-l>'] = { ':bnext<cr>', 'Next buffer' },
-})
+  -- Diagnostics
+  { '<leader>d',  group = '+[D]iagnostics' },
+  { '<leader>d[', vim.diagnostic.goto_prev,                  desc = 'Go to previous diagnostic message' },
+  { '<leader>d]', vim.diagnostic.goto_next,                  desc = 'Go to next diagnostic message' },
+  { '<leader>de', vim.diagnostic.open_float,                 desc = 'Open floating diagnostic message' },
+  { '<leader>dq', vim.diagnostic.setloclist,                 desc = 'Open diagnostics list' },
 
--- File
-wk.register({
-  ['<leader>f'] = { name = '+[F]iles' },
-  ['<leader>fn'] = { ':enew<cr>', '[N]ew File' },
-  ['<leader>ff'] = { vim.lsp.buf.format, '[F]ormat [F]ile' },
-  ['<leader>fp'] = { ':Prettier<cr>', '[F]ormat with [P]rettier' },
+  -- Buffer
+  { '<leader>b',  group = '+[B]uffer' },
+  { '<leader>bh', '<cmd>TSBufEnable highlight<cr>',          desc = '[H]ighlight enabled' },
+  { '<S-h>',      '<cmd>bprevious<cr>',                      desc = 'Previous buffer' },
+  { '<S-l>',      '<cmd>bnext<cr>',                          desc = 'Next buffer' },
+
+  -- File
+  { '<leader>f',  group = '+[F]iles' },
+  { '<leader>fn', '<cmd>enew<cr>',                           desc = '[N]ew File' },
+  { '<leader>ff', vim.lsp.buf.format,                        desc = '[F]ormat [F]ile' },
+  { '<leader>fp', '<cmd>Prettier<cr>',                       desc = '[F]ormat with [P]rettier' },
   -- See `:help telescope.builtin`
-  ['<leader>fr'] = { ':Telescope oldfiles<cr>', '[F]ind [R]ecent files' },
-  ['<leader>fg'] = { ':Telescope git_files<cr>', '[F]ind [G]it files' },
-})
--- save file
-vim.keymap.set({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
+  { '<leader>fr', '<cmd>Telescope oldfiles<cr>',             desc = '[F]ind [R]ecent files' },
+  { '<leader>fg', '<cmd>Telescope git_files<cr>',            desc = '[F]ind [G]it files' },
 
--- Search
-wk.register({
-  ['<leader>s'] = { name = '+[S]earch' },
-  ['<leader>sf'] = { ':Telescope find_files<cr>', '[S]earch [F]iles' },
-  ['<leader>sh'] = { ':Telescope help_tags<cr>', '[S]earch [H]elp' },
-  ['<leader>sw'] = { ':Telescope grep_string<cr>', '[S]earch [W]ord' },
-  ['<leader>sg'] = { ':Telescope live_grep<cr>', '[S]earch [G]rep' },
-  ['<leader>sd'] = { ':Telescope diagnostics<cr>', '[S]earch [D]iagnostics' },
-  ['<leader>sr'] = { ':Telescope resume<cr>', '[S]earch [R]esume' },
-})
+  -- Search
+  { '<leader>s',  group = '+[S]earch' },
+  { '<leader>sf', '<cmd>Telescope find_files<cr>',           desc = '[S]earch [F]iles' },
+  { '<leader>sh', '<cmd>Telescope help_tags<cr>',            desc = '[S]earch [H]elp' },
+  { '<leader>sw', '<cmd>Telescope grep_string<cr>',          desc = '[S]earch [W]ord' },
+  { '<leader>sg', '<cmd>Telescope live_grep<cr>',            desc = '[S]earch [G]rep' },
+  { '<leader>sd', '<cmd>Telescope diagnostics<cr>',          desc = '[S]earch [D]iagnostics' },
+  { '<leader>sr', '<cmd>Telescope resume<cr>',               desc = '[S]earch [R]esume' },
 
--- LSP
--- See `:help vim.lsp.*` for documentation on the below functions
-wk.register({
-  ['<leader>l'] = { name = '+[L]SP' },
-  ['<leader>lk'] = { vim.lsp.buf.hover, 'Diagnostics pop-up' },
-  ['<leader>ld'] = { vim.lsp.buf.definition, '[D]efinition' },
-  ['<leader>lr'] = { vim.lsp.buf.references, '[R]eferences' },
-  ['<leader>lc'] = { vim.lsp.buf.code_action, '[C]ode action' },
-})
+  -- LSP
+  -- See `:help vim.lsp.*` for documentation on the below functions
+  { '<leader>l',  group = '+[L]SP' },
+  { '<leader>lk', vim.lsp.buf.hover,                         desc = 'Diagnostics pop-up' },
+  { '<leader>ld', vim.lsp.buf.definition,                    desc = '[D]efinition' },
+  { '<leader>lr', vim.lsp.buf.references,                    desc = '[R]eferences' },
+  { '<leader>lc', vim.lsp.buf.code_action,                   desc = '[C]ode action' },
 
--- Neotree
-wk.register({
-  ['<leader>n'] = { name = '+[N]eotree' },
-  ['<leader>nn'] = { ':Neotree filesystem reveal left<cr>', '[O]pen Neotree' },
-  ['<leader>nb'] = { ':Neotree buffers reveal float<cr>', 'Neotree [b]uffers' },
+  -- Neotree
+  { '<leader>n',  group = '+[N]eotree' },
+  { '<leader>nn', '<cmd>Neotree filesystem reveal left<cr>', desc = 'Open Neotree' },
+  { '<leader>nb', '<cmd>Neotree bufferes reveal float<cr>',  desc = 'Neotree [b]uffers' },
+
+  -- MISC
+  { '<leader>xl', '<cmd>lopen<cr>',                          desc = 'Location List' },
+  { '<leader>xq', '<cmd>copen<cr>',                          desc = 'Quickfix List' },
+  { '[q',         '<cmd>cprev<cr>',                          desc = 'Previous quickfix' },
+  { ']q',         '<cmd>cnext<cr>',                          desc = 'Next quickfix' },
+  -- Remap for dealing with word wrap
+  { 'k',          "v:count == 0 ? 'gk' : 'k'",               { expr = true, silent = true } },
+  { 'j',          "v:count == 0 ? 'gj' : 'j'",               { expr = true, silent = true } },
 })
