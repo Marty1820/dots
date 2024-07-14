@@ -10,17 +10,18 @@
         }"
         :halign "start"
         :text {
-          EWW_BATTERY.BAT1.status == "Charging" ? "󰂄 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 95 ? "󰁹 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 90 ? "󰂂 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 80 ? "󰂁 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 70 ? "󰂀 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 60 ? "󰁿 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 50 ? "󰁾 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 40 ? "󰁽 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 30 ? "󰁼 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 20 ? "󰁻 ${EWW_BATTERY.BAT1.capacity}" : 
-          EWW_BATTERY.BAT1.capacity > 10 ? "󰁺 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.status == "Charging"
+                                         ? "󰂄 ${EWW_BATTERY.BAT1.capacity}" : 
+          EWW_BATTERY.BAT1.capacity > 95 ? "󰁹 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 90 ? "󰂂 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 80 ? "󰂁 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 70 ? "󰂀 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 60 ? "󰁿 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 50 ? "󰁾 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 40 ? "󰁽 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 30 ? "󰁼 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 20 ? "󰁻 ${EWW_BATTERY.BAT1.capacity}" :
+          EWW_BATTERY.BAT1.capacity > 10 ? "󰁺 ${EWW_BATTERY.BAT1.capacity}" :
                                            "󰂎 ${EWW_BATTERY.BAT1.capacity}"
         }
       )

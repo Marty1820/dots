@@ -7,7 +7,8 @@
 
 (defwidget workspaces []
   (eventbox :class "workspaces"
-    :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}"
+    :onscroll "$HOME/.config/eww/scripts/change-active-workspace {} \
+      ${current_workspace}"
     (box :space-evenly "true"
       (label :visible "false"
         :text "${workspaces}${current_workspace}"
@@ -44,7 +45,9 @@
 
 (defwidget bar-weather []
   (button :class "bar-weather-info"
-    :onclick "${eww} update weather_visible=true && ${eww} open --toggle weather-closer && ${eww} open --toggle weather"
+    :onclick "${eww} update weather_visible=true && \
+              ${eww} open --toggle weather-closer && \
+              ${eww} open --toggle weather"
     (box :orientation "h"
       :space-evenly "false"
       (label :class "bar-weather-icon"
@@ -137,7 +140,9 @@
 
 (defwidget system-info []
   (button :class "system-info"
-    :onclick "${eww} update control_visible=true && ${eww} open --toggle action-center-closer && ${eww} open --toggle action-center"
+    :onclick "${eww} update control_visible=true && \
+              ${eww} open --toggle action-center-closer && \
+              ${eww} open --toggle action-center"
     (box :orientation "h"
       :space-evenly "false"
       (bluetooth_icon)
@@ -151,14 +156,16 @@
 
 (defwidget clock []
   (button :class "clock"
-    :onclick "${eww} open --toggle cal-info-closer && ${eww} open --toggle cal-info"
+    :onclick "${eww} open --toggle cal-info-closer && \
+              ${eww} open --toggle cal-info"
     (label :text {formattime(EWW_TIME, "%I:%M%p")})
   )
 )
 
 (defwidget power-button []
   (button :class "bar-power-button"
-    :onclick "${eww} open --toggle powermenu-closer && ${eww} open --toggle powermenu"
+    :onclick "${eww} open --toggle powermenu-closer && \
+              ${eww} open --toggle powermenu"
     (label :text "⏻")
   )
 )
