@@ -86,19 +86,25 @@
       network.essid == "lo" ? "disconnected" : ""
     }"
     :text {
-      network.essid == "lo" ? "󰤭" :
-      network.signal == "" ? "󰤩" :
-      network.signal < 25 ? "󰤟" :
-      network.signal < 50 ? "󰤢" :
-      network.signal < 75 ? "󰤥" :
-                            "󰤨"
+      network.essid  == "lo" ? "󰤭" :
+      network.signal == ""   ? "󰤩" :
+      network.signal <   25  ? "󰤟" :
+      network.signal <   50  ? "󰤢" :
+      network.signal <   75  ? "󰤥" :
+                               "󰤨"
     }
   )
 )
 
 (defwidget volume_icon []
-  (label :class "system-info-icon volume_icon ${volume == "muted" ? "muted" : ""}"
-    :text {volume == "muted" ? "󰸈" : volume < 33 ? "" : volume < 67 ? "" : ""}
+  (label
+    :class "system-info-icon volume_icon ${volume == "muted" ? "muted" : ""}"
+    :text {
+      volume == "muted" ? "󰸈" :
+      volume <   33     ? "" :
+      volume <   67     ? "" :
+                          ""
+    }
   )
 )
 
@@ -129,13 +135,6 @@
   )
 )
 
-(defwidget clock []
-  (button :class "clock"
-    :onclick "${eww} open --toggle cal-info-closer && ${eww} open --toggle cal-info"
-    (label :text {formattime(EWW_TIME, "%I:%M%p")})
-  )
-)
-
 (defwidget system-info []
   (button :class "system-info"
     :onclick "${eww} update control_visible=true && ${eww} open --toggle action-center-closer && ${eww} open --toggle action-center"
@@ -150,14 +149,17 @@
   )
 )
 
+(defwidget clock []
+  (button :class "clock"
+    :onclick "${eww} open --toggle cal-info-closer && ${eww} open --toggle cal-info"
+    (label :text {formattime(EWW_TIME, "%I:%M%p")})
+  )
+)
+
 (defwidget power-button []
-  (eventbox :class "bar-power-box"
-    :onhover "${eww} update power_reveal=true"
-    :onhoverlost "${eww} update power_reveal=false"
-    (button :class "bar-power-button"
-      :onclick "${eww} open --toggle powermenu-closer && ${eww} open --toggle powermenu"
-      (label :text "⏻")
-    )
+  (button :class "bar-power-button"
+    :onclick "${eww} open --toggle powermenu-closer && ${eww} open --toggle powermenu"
+    (label :text "⏻")
   )
 )
 

@@ -1,5 +1,4 @@
 ; VARS
-(defvar power_reveal false)
 (defvar weather_visible false)
 (defvar control_visible false)
 
