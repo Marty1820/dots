@@ -1,0 +1,49 @@
+(defwidget powermenu []
+  (box :orientation "h"
+    :class "power-box"
+    :space-evenly "true"
+    (button :class "power-button power-reboot"
+      :onclick "systemctl reboot"
+      (label :text "󰜉")
+    )
+    (button :class "power-button power-lock"
+      :onclick "loginctl lock-session && hyprlock &"
+      (label :text "󰌾")
+    )
+    (button :class "power-button power-hibernate"
+      :onclick "systemctl hibernate"
+      (label :text "󰤁")
+    )
+    (button :class "power-button power-logout"
+      :onclick "hyprctl dispatch exit &"
+      (label :text "󰍃")
+    )
+    (button :class "power-button power-shutdown"
+      :onclick "systemctl poweroff"
+      (label :text "")
+    )
+  )
+)
+
+(defwindow powermenu
+  :monitor 0
+  :geometry (geometry
+    :x "2px"
+    :y "2px"
+    :anchor "top right")
+  :stacking "overlay"
+  :exclusive "false"
+  :focusable "false"
+  (powermenu)
+)
+
+(defwindow powermenu-closer
+  :monitor 0
+  :geometry (geometry
+    :width "150%"
+    :height "150%")
+  :stacking "fg"
+  :exclusive "false"
+  :focusable "false"
+  (closer :window "powermenu")
+)
