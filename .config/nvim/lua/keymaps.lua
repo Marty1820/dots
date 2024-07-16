@@ -71,7 +71,8 @@ wk.add({
   { '<leader>xq', '<cmd>copen<cr>',                          desc = 'Quickfix List' },
   { '[q',         '<cmd>cprev<cr>',                          desc = 'Previous quickfix' },
   { ']q',         '<cmd>cnext<cr>',                          desc = 'Next quickfix' },
-  -- Remap for dealing with word wrap
-  { 'k',          "v:count == 0 ? 'gk' : 'k'",               { expr = true, silent = true } },
-  { 'j',          "v:count == 0 ? 'gj' : 'j'",               { expr = true, silent = true } },
 })
+
+-- Remap for dealing with word wrap
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
