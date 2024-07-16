@@ -25,6 +25,19 @@ return {
     'neovim/nvim-lspconfig',
     lazy = false,
     config = function()
+      -- Diagnostic fixs
+      vim.diagnostic.config({
+        signs = {
+          text = {
+            [vim.diagnostic.severity.INFO] = '󰙎',
+            [vim.diagnostic.severity.WARN] = '',
+            [vim.diagnostic.severity.ERROR] = '',
+          },
+        },
+        virtual_text = false,
+        underline = true,
+        update_in_insert = true,
+      })
       -- Setup language servers.
       local lspconfig = require('lspconfig')
       lspconfig.bashls.setup({})
