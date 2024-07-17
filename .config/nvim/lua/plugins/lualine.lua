@@ -6,7 +6,6 @@ return {
     require('lualine').setup({
       -- See `:help lualine.txt`
       options = {
-        icons_enabled = true,
         theme = 'dracula-nvim',
       },
     })

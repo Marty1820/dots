@@ -39,7 +39,7 @@ return {
           },
           {
             desc = '󰂓 > LazyVim',
-            action = 'Lazy',
+            action = 'Lazy check',
             key = 'l',
           },
           {

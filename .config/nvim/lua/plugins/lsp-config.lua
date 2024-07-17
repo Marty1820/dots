@@ -1,31 +1,32 @@
 return {
   {
     'williamboman/mason.nvim',
-    lazy = false,
     config = function()
-      require('mason').setup()
-      ui = {
-        icons = {
-          package_installed = '✓',
-          package_pending = '➜',
-          package_uninstalled = '✗',
+      require('mason').setup({
+        ui = {
+          icons = {
+            package_installed = '✓',
+            package_pending = '➜',
+            package_uninstalled = '✗',
+          },
         },
-      }
+      })
     end,
   },
   {
     'williamboman/mason-lspconfig.nvim',
-    lazy = false,
     dependencies = { 'williamboman/mason.nvim' },
+    config = function()
+      require('mason-lspconfig').setup()
+    end,
     opts = {
-      auto_install = true,
+      automatic_installation = true,
     },
   },
   {
     'neovim/nvim-lspconfig',
-    lazy = false,
     config = function()
-      -- Diagnostic fixs
+      -- Diagnostic icons
       vim.diagnostic.config({
         signs = {
           text = {

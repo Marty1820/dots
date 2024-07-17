@@ -2,7 +2,10 @@ return {
   'm4xshen/autoclose.nvim',
   config = function()
     require('autoclose').setup({
-      pair_spaces = true,
+      options = {
+        disable_when_touch = true,
+        pair_spaces = true,
+      },
     })
   end,
 }

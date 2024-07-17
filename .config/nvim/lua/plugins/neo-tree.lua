@@ -5,5 +5,6 @@ return {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- not required, but recommened
     'MunifTanjim/nui.nvim',
+    '3rd/image.nvim', -- image support in preview window
   },
 }
