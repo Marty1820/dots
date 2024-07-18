@@ -1,6 +1,7 @@
 return {
   {
     'williamboman/mason.nvim',
+    cmd = { 'Mason', 'MasonInstall', 'MasonInstallAll', 'MasonUpdate' },
     config = function()
       require('mason').setup({
         ui = {
@@ -10,6 +11,7 @@ return {
             package_uninstalled = '✗',
           },
         },
+        max_concurent_installers = 10,
       })
     end,
   },

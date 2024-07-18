@@ -1,19 +1,16 @@
 return {
   {
     'L3MON4D3/LuaSnip',
-    lazy = false,
     dependencies = {
       'rafamadriz/friendly-snippets',
     },
   },
   {
     'hrsh7th/cmp-nvim-lsp',
-    lazy = false,
     config = true,
   },
   {
     'hrsh7th/nvim-cmp',
-    lazy = false,
     config = function()
       local cmp = require('cmp')
       cmp.setup({

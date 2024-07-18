@@ -17,6 +17,7 @@ return {
         'luap',
         'markdown',
         'markdown_inline',
+        'printf',
         'python',
         'vim',
         'vimdoc',
