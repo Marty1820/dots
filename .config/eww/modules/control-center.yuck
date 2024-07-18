@@ -127,6 +127,7 @@
 (defwidget brightness_scale []
   (overlay :hexpand "true"
     (scale :min 0 :max 100
+      :round-digits 0
       :active "true"
       :value brightness
       :onchange "xbacklight -set {}"
@@ -153,6 +154,7 @@
 (defwidget volume_scale []
   (overlay :hexpand "true"
     (scale :min 0 :max 100 
+      :round-digits 0
       :active {volume != "muted"}
       :value {volume == "muted" ? 0 : volume}
       :onchange "pamixer --set-volume {}"
