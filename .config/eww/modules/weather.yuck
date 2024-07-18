@@ -67,11 +67,29 @@
 (defwidget w_sun []
   (box :orientation "h"
     :class "weather-sun"
-    (label :class "weather-rise"
-      :text "󰖜 ${weather_sunr}"
+    (box :spacing 8
+      :orientation "h"
+      :space-evenly "false"
+      :class "weather-rise"
+      :halign "center"
+      (label :class "weather-rise-icon"
+        :text "󰖜"
+      )
+      (label :class "weather-rise-text"
+        :text "${weather_sunr}"
+      )
     )
-    (label :class "weather-set"
-      :text "󰖛 ${weather_suns}"
+    (box :spacing 8
+      :orientation "h"
+      :space-evenly "false"
+      :class "weather-set"
+      :halign "center"
+      (label :class "weather-set-icon"
+        :text "󰖛"
+      )
+      (label :class "weather-set-text"
+        :text "${weather_suns}"
+      )
     )
   )
 )
@@ -109,8 +127,17 @@
       (label :class "weather-humidity"
         :text "Humidity"
       )
-      (label :class "weather-humidity"
-        :text " ${weather_humidity}"
+      (box :spacing 5
+        :orientation "h"
+        :space-evenly "false"
+        :class "weather-humidity"
+        :halign "center"
+        (label :class "weather-humidity-icon"
+          :text ""
+        )
+        (label :class "weather-humidity-text"
+          :text "${weather_humidity}"
+        )
       )
     )
     (box :orientation "v"

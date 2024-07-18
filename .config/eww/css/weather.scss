@@ -64,10 +64,15 @@
   font-size: 2em;
 }
 
-
-.weather-extras,
-.weather-sun {
+.weather-sun,
+.weather-extras {
   margin: 0.5rem 0;
+}
+
+.weather-rise-icon,
+.weather-set-icon,
+.weather-humidity-icon {
+  font-size: 1.5em;
 }
 
 .weather-section {
