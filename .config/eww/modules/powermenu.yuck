@@ -1,26 +1,53 @@
+(defwidget powermenu_entry [icon label onclick]
+  (box :orientation "v"
+    :class "powermenu-entry"
+    (button :class "powermenu-button"
+      :onclick {onclick}
+      (box :orientation "h"
+        :space-evenly "false"
+        (label :class "powermenu-icon"
+          :text {icon}
+        )
+        (label :class "powermenu-text"
+          :text {label}
+        )
+      )
+    )
+  )
+)
+
 (defwidget powermenu []
-  (box :orientation "h"
-    :class "power-box"
+  (box :orientation "v"
     :space-evenly "true"
-    (button :class "power-button power-reboot"
-      :onclick "systemctl reboot"
-      (label :text "󰜉")
-    )
-    (button :class "power-button power-lock"
-      :onclick "loginctl lock-session && hyprlock &"
-      (label :text "󰌾")
-    )
-    (button :class "power-button power-hibernate"
-      :onclick "systemctl hibernate"
-      (label :text "󰤁")
-    )
-    (button :class "power-button power-logout"
-      :onclick "hyprctl dispatch exit &"
-      (label :text "󰍃")
-    )
-    (button :class "power-button power-shutdown"
+    :valign "center"
+    :halign "center"
+    :class "powermenu-box"
+    (powermenu_entry
+      :label "Shutdown"
+      :icon "󰐥"
       :onclick "systemctl poweroff"
-      (label :text "")
+    )
+    (powermenu_entry
+      :label "Restart"
+      :icon "󰜉"
+      :onclick "systemctl reboot"
+    )
+    (powermenu_entry
+      :label "Lock"
+      :icon "󰌾"
+      :onclick "eww close powermenu && loginctl lock-session && hyprlock &"
+    )
+    (powermenu_entry
+      :label "${EWW_BATTERY.BAT1.status == "Charging" ? "Sleep" : "Hibernate"}"
+      :icon "${EWW_BATTERY.BAT1.status == "Charging" ? "󰒲" : "󰤁"}"
+      :onclick "eww close powermenu && ${
+        EWW_BATTERY.BAT1.status == "Charging" ?
+                          "systemctl suspend" : "systemctl hibernate"}"
+    )
+    (powermenu_entry
+      :label "Log out"
+      :icon "󰍃"
+      :onclick "hyprctl dispatch exit &"
     )
   )
 )
@@ -28,8 +55,9 @@
 (defwindow powermenu
   :monitor 0
   :geometry (geometry
-    :x "2px"
+    :x "-20px"
     :y "2px"
+    :width "225px"
     :anchor "top right")
   :stacking "overlay"
   :exclusive "false"

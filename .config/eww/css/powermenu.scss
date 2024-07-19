@@ -1,20 +1,28 @@
-.power-box {
+.powermenu-box {
   background: $background-darker;
   border-radius: 1rem;
-  padding: 1rem;
   color: $foreground;
-  box-shadow: 0 0 4px 2px $background;
-  margin: 0.5rem;
 }
 
-.power-button {
-  background: $background;
+.powermenu-button {
   border-radius: 1rem;
-  padding: 1.5rem;
-  margin: 0.5rem;
-  font-size: 1.8em;
+  transition: 0.3s;
 }
 
-.power-button:hover {
+.powermenu-button:hover {
   background: $selection;
+}
+
+.powermenu-entry {
+  margin: 0.5rem;
+}
+
+.powermenu-button {
+  padding: 0.5rem 1rem;
+}
+
+.powermenu-icon,
+.powermenu-text {
+  font-size: 1.5rem;
+  margin: 0.5rem;
 }
