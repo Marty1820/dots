@@ -10,6 +10,9 @@
 # Shell Prompt Configuration
 # Configuration reference: https://starship.rs/config/
 
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Inserts a blank line between shell prompts
 add_newline = true
 
@@ -42,6 +45,7 @@ error_symbol = "[✗](bold #ff5555)"
 
 ## Command Duration Options
 [cmd_duration]
+min_time = 500
 format = "[ $duration]($style)"
 style = "bold #f1fa8c"
 
@@ -51,6 +55,7 @@ style = "bold #bd93f9"
 # The symbol indicating the current directory is read only.
 read_only = ""
 read_only_style = "#ff5555"
+truncation_symbol = '.../'
 # The symbol indicating home directory.
 home_symbol = "~"
 [directory.substitutions]
