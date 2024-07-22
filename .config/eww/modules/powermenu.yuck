@@ -5,7 +5,7 @@
       :onclick {onclick}
       (box :orientation "h"
         :space-evenly "false"
-        (label :class "powermenu-icon"
+        (label :class "powermenu-icon ${label}"
           :text {icon}
         )
         (label :class "powermenu-text"
@@ -45,7 +45,7 @@
                           "systemctl suspend" : "systemctl hibernate"}"
     )
     (powermenu_entry
-      :label "Log out"
+      :label "Logoff"
       :icon "󰍃"
       :onclick "hyprctl dispatch exit &"
     )

@@ -26,3 +26,26 @@
   font-size: 1.5rem;
   margin: 0.5rem;
 }
+
+.powermenu-icon {
+  &.Shutdown {
+    color: $red;
+  }
+
+  &.Restart {
+    color: $orange;
+  }
+
+  &.Lock {
+    color: $yellow;
+  }
+
+  &.Hibernate,
+  &.Sleep {
+    color: $cyan;
+  }
+
+  &.Logoff {
+    color: $green;
+  }
+}
