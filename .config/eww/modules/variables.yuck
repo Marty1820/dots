@@ -66,8 +66,9 @@
 
 (defpoll airplane :interval "5s" :run_while control_visible
   "rfkill | awk '/wlan/ {print $4}'")
-(defpoll vpn :interval "5s" :run_while control_visible
-  "nmcli device show | awk '/GENERAL.TYPE/ {print $2}' | head -n 1")
+(defpoll vpn_status :interval "5s"
+  "nmcli connection show --active | grep 'wireguard' || echo 'null'")
+
 
 ; LISTENS
 (deflisten network :initial '{"essid": "lo", "signal": ""}'

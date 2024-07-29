@@ -54,6 +54,11 @@
       (bluetooth)
       (network)
     )
+    (box :orientation "h"
+      :space-evenly "true"
+      (airplane)
+      (vpn)
+    )
   )
 )
 
@@ -99,6 +104,7 @@
     )
   )
 )
+
 (defwidget bluetooth []
   (action_settings_button :condition {bluetooth-icon == "󰂲"}
     :action "blueman-manager &"
@@ -115,12 +121,39 @@
       "nmcli connection down id '${network.essid}'"
     }
     :icon {
-      network.essid == "lo" ? "󰤭" : network.signal == "" ? "󰤩" :
-      network.signal < 25 ? "󰤟" : network.signal < 50 ? "󰤢" :
-      network.signal < 75 ? "󰤥" : "󰤨"
+      network.essid == "lo" ? "󰤭" :
+      network.signal == ""  ? "󰤩" :
+      network.signal < 25   ? "󰤟" :
+      network.signal < 50   ? "󰤢" :
+      network.signal < 75   ? "󰤥" :
+                              "󰤨"
     }
     :label {network.essid == "lo" ? "Not connected" : network.essid}
     :class "right-top-plite"
+  )
+)
+
+(defwidget airplane []
+  (action_settings_button :condition {airplane == "unblocked"}
+    :action "rfkill toggle all"
+    :icon {
+      airplane == "unblocked" ? "󰀞" :
+      airplane == "blocked"   ? "󰀝" :
+                                "󱡺"
+    }
+    :label "Airplane Mode"
+    :class "left-bottom-plite"
+  )
+)
+
+(defwidget vpn []
+  (action_settings_button :condition {vpn_status == "null"}
+    :action "nm-connection-editor &"
+    :icon "${
+      vpn_status == "null" ? "󰖂" : "󰌆"
+    }"
+    :label "VPN"
+    :class "right-bottom-plite"
   )
 )
 
