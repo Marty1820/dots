@@ -109,7 +109,7 @@
   (action_settings_button :condition {bluetooth-icon == "󰂲"}
     :action "blueman-manager &"
     :icon bluetooth-icon
-    :label "Bluetooth"
+    :label "Bluetooth ${bluetooth-bat}"
     :class "left-top-plite"
   )
 )
