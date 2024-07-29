@@ -33,7 +33,7 @@ w_ftemp=$(jq ".main.feels_like" <"$weather_file" | cut -d "." -f 1)
 w_stat=$(jq -r ".weather[].description" <"$weather_file" | head -n 1 | sed -e "s/\b\(.\)/\u\1/g")
 w_city=$(jq -r ".name" <"$weather_file")
 w_humid=$(jq -r ".main.humidity" <"$weather_file" | cut -d "." -f 1)
-w_wind=$(jq -r ".wind.speed" <"$weather_file" | cut -d "." -f 1)
+w_wind=$(jq -r ".wind.speed" <"$weather_file")
 w_srise=$(date -d @"$(jq -r ".sys.sunrise" < "$weather_file")" '+%I:%M %p')
 w_sset=$(date -d @"$(jq -r ".sys.sunset" < "$weather_file")" '+%I:%M %p')
 
@@ -48,19 +48,19 @@ set_aqi() {
   elif [ "$aqi_number" = "2" ]; then
     aqi="Fair"
     aqi_icon="󰡵"
-    aqi_color="#50fa7b"
+    aqi_color="#f1fa8c"
   elif [ "$aqi_number" = "3" ]; then
     aqi="Moderate"
     aqi_icon="󰊚"
-    aqi_color="#f1fa8c"
+    aqi_color="#ffb86c"
   elif [ "$aqi_number" = "4" ]; then
     aqi="Poor"
     aqi_icon="󰡴"
-    aqi_color="#ffb86c"
+    aqi_color="#ff5555"
   elif [ "$aqi_number" = "5" ]; then
     aqi="Very Poor"
     aqi_icon=""
-    aqi_color="#ff5555"
+    aqi_color="#bd93f9"
   fi  
 }
 
