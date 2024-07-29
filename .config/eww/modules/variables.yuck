@@ -26,6 +26,8 @@
   "$HOME/.config/scripts/weather.sh --srise")
 (defpoll weather_suns :interval "1h" :initial "0" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --sset")
+(defpoll weather_ccover :interval "5s" :initial "0" :run-while weather_visible
+  "jq -r '.clouds.all' < $HOME/.cache/weather/weatherdata")
 (defpoll weather_feels_like :interval "10m" :initial "0"
   :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --feel")
@@ -40,6 +42,20 @@
   "$HOME/.config/scripts/weather.sh --aqi")
 (defpoll aqi_icon :interval "5m" :initial ""
   "$HOME/.config/scripts/weather.sh --aqi_icon")
+(defpoll aqi_num :interval "5m" :initial "0" :run-while weather_visible
+  "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata")
+(defpoll pm25 :interval "5m" :initial "0" :run-while weather_visible
+  "jq -r '.list[].components.pm2_5' < $HOME/.cache/weather/aqidata")
+(defpoll pm10 :interval "5m" :initial "0" :run-while weather_visible
+  "jq -r '.list[].components.pm10' < $HOME/.cache/weather/aqidata")
+(defpoll o3 :interval "5m" :initial "0" :run-while weather_visible
+  "jq -r '.list[].components.o3' < $HOME/.cache/weather/aqidata")
+(defpoll no2 :interval "5m" :initial "0" :run-while weather_visible
+  "jq -r '.list[].components.no2' < $HOME/.cache/weather/aqidata")
+(defpoll so2 :interval "5m" :initial "0" :run-while weather_visible
+  "jq -r '.list[].components.so2' < $HOME/.cache/weather/aqidata")
+(defpoll co :interval "5m" :initial "0" :run-while weather_visible
+  "jq -r '.list[].components.co' < $HOME/.cache/weather/aqidata")
 
 (defpoll bluetooth-icon :interval "1s" :initial "󰂲"
   "scripts/bluetooth.sh --icon")
@@ -47,6 +63,11 @@
   "$HOME/.config/scripts/screen_brightness_info.sh --icon")
 (defpoll brightness :interval "1s" :run-while control_visible
   "xbacklight -get | cut -d '.' -f 1")
+
+(defpoll airplane :interval "5s" :run_while control_visible
+  "rfkill | awk '/wlan/ {print $4}'")
+(defpoll vpn :interval "5s" :run_while control_visible
+  "nmcli device show | awk '/GENERAL.TYPE/ {print $2}' | head -n 1")
 
 ; LISTENS
 (deflisten network :initial '{"essid": "lo", "signal": ""}'

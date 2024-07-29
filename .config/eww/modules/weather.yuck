@@ -1,58 +1,94 @@
-(defwidget refresh []
-  (button :class "weather-refresh"
-    :timeout "5s"
-    :onclick "$HOME/.config/scripts/weather.sh --getdata; eww reload"
-    (label :text "")
-  )
-)
-
 (defwidget w_city []
-  (label :class "weather-location"
-    :halign "center"
-    :text weather_city
-  )
-)
-
-(defwidget close []
-  (button :class "weather-close"
-    :onclick "eww close weather-closer & eww close weather"
-    (label :text "")
-  )
-)
-
-(defwidget w_temp [] 
   (box :orientation "h"
-    (label :class "weather-icon"
-      :halign "end"
-      :style "color: ${weather_color};"
-      :text weather_icon
+    :space-evenly "false"
+    :halign "start"
+    (label :class "weather-location"
+      :halign "center"
+      :text weather_city
     )
+  )
+)
+
+(defwidget w_sun []
+  (box :orientation "v"
+    :space-evenly "false"
+    :valign "center"
+    :halign "start"
+    :class "weather-sun"
+    (box :orientation "h"
+      :space-evenly "false"
+      :spacing 5
+      (label :class "weather-rise-icon"
+        :text "󰖜"
+      )
+      (label :class "weather-rise-text"
+        :text "${weather_sunr}"
+      )
+    )
+    (box :orientation "h"
+      :space-evenly "false"
+      :spacing 5
+      (label :class "weather-set-icon"
+        :text "󰖛"
+      )
+      (label :class "weather-set-text"
+        :text "${weather_suns}"
+      )
+    )
+  )
+)
+
+(defwidget w_temp []
+  (box :orientation "h"
+    :space-evenly "false"
+    :halign "center"
     (label
       :class "weather-temp ${
         weather_temp < 32 ? 'less' :
-        weather_temp < 90 ? 'normal' :
-                            'more'
+        weather_temp > 89 ? 'more' :
+                            ''
       }"
       :halign "start"
-      :text "${weather_temp}"
+      :text "${weather_temp}"
     )
-    (box  :class "weather-minmax"
-      :orientation "v"
-      (label :class "weather-temph ${
-        weather_temp < 32 ? 'less' :
-        weather_temp < 90 ? 'normal' :
-                            'more'
-      }"
-        :text "H:${weather_temph}"
-      )
-      (label :class "weather-templ ${
-        weather_temp < 32 ? 'less' :
-        weather_temp < 90 ? 'normal' :
-                            'more'
-      }"
-        :text "L:${weather_templ}"
-      )
+    (label :class "weather-degree"
+      :valign "start"
+      :text ""
     )
+  )
+)
+
+(defwidget w_minmax []
+  (box :class "weather-minmax"
+    :space-evenly "false"
+    :valign "center"
+    :halign "end"
+    :orientation "v"
+    (label
+      :class "weather-temph ${
+        weather_temp < 32 ? 'less' :
+        weather_temp > 90 ? 'more' :
+                            ''
+      }"
+      :text "H:${weather_temph}"
+    )
+    (label
+      :class "weather-templ ${
+        weather_temp < 32 ? 'less' :
+        weather_temp > 90 ? 'more' :
+                            ''
+      }"
+      :text "L:${weather_templ}"
+    )
+  )
+)
+
+(defwidget w_main []
+  (box :orientation "h"
+    :class "weather-main"
+    (w_sun)
+    (w_temp)
+    (w_minmax)
   )
 )
 
@@ -64,32 +100,80 @@
   )
 )
 
-(defwidget w_sun []
-  (box :orientation "h"
-    :class "weather-sun"
-    (box :spacing 8
-      :orientation "h"
-      :space-evenly "false"
-      :class "weather-rise"
-      :halign "center"
-      (label :class "weather-rise-icon"
-        :text "󰖜"
-      )
-      (label :class "weather-rise-text"
-        :text "${weather_sunr}"
-      )
+(defwidget w_feel []
+  (box :orientation "v"
+    :space-evenly "false"
+    :class "weather-section weather-feel"
+    (label 
+      :class "w-feel-icon ${
+        weather_feels_like < 32 ? 'less' :
+        weather_feels_like > 90 ? 'more' : 
+                                  ''
+      }"
+      :text "${
+        weather_feels_like < 32 ? '' :
+        weather_feels_like > 90 ? '' :
+                                  ''
+      }"
     )
-    (box :spacing 8
-      :orientation "h"
-      :space-evenly "false"
-      :class "weather-set"
-      :halign "center"
-      (label :class "weather-set-icon"
-        :text "󰖛"
-      )
-      (label :class "weather-set-text"
-        :text "${weather_suns}"
-      )
+    (label :class "w-feel-data"
+      :text "${weather_feels_like}"
+    )
+    (label :class "w-feel-text"
+      :text "Feels like"
+    )
+  )
+)
+
+(defwidget w_humidity []
+  (box :orientation "v"
+    :space-evenly "false"
+    :class "weather-section weather-humidity"
+    (label 
+      :class "w-humidity-icon ${
+        weather_humidity < 30 ? 'less' :
+        weather_humidity > 60 ? 'more' : 
+                                ''
+      }"
+      :text ""
+    )
+    (label :class "w-humidity-data"
+      :text "${weather_humidity}󰏰"
+    )
+    (label :class "w-humidity-text"
+      :text "Humidity"
+    )
+  )
+)
+
+(defwidget w_wind []
+  (box :orientation "v"
+    :space-evenly "false"
+    :class "weather-section weather-wind"
+    (label :class "w-wind-icon ${weather_wind > 32 ? 'more' : ''}"
+      :text "󰈐"
+    )
+    (label :class "w-wind-data"
+      :text "${round(weather_wind, 1)} mph"
+    )
+    (label :class "w-wind-text"
+      :text "Wind"
+    )
+  )
+)
+
+(defwidget w_cloud []
+  (box :orientation "v"
+    :space-evenly "false"
+    :class "weather-section weather-cloud"
+    (label :class "w-cloud-icon"
+      :text "󰅟"
+    )
+    (label :class "w-cloud-data"
+      :text "${weather_ccover}󰏰"
+    )
+    (label :class "w-cloud-text"
+      :text "Cover"
     )
   )
 )
@@ -99,55 +183,96 @@
     :class "weather-extras"
     :halign "center"
     :space-evenly "true"
+    (w_feel)
+    (w_humidity)
+    (w_wind)
+    (w_cloud)
+  )
+)
+
+(defwidget air_quality []
+  (box :orientation "h"
+    :class "aqi-box"
     (box :orientation "v"
-      :class "weather-section"
-      (label :class "weather-feel"
-        :text "Real Feel"
+      :class "aqi-main"
+      (label :yalign "0"
+        :class "aqi-label"
+        :text "Air Quality"
       )
-      (label
-        :class "weather-feel-data ${
-          weather_feels_like < 32 ? 'less' :
-          weather_feels_like < 85 ? 'normal' : 
-                                    'more'
+      (circular-progress
+        :value "${
+          aqi_num == 1 ? 16 :
+          aqi_num == 2 ? 32 :
+          aqi_num == 3 ? 48 :
+          aqi_num == 4 ? 64 :
+          aqi_num == 5 ? 80 :
+                         0
         }"
-        :text "󰔏 ${weather_feels_like}"
-      )
-    )
-    (box :orientation "v"
-      :class "weather-section"
-      (label :class "weather-wind"
-        :text "Wind "
-      )
-      (label :class "weather-wind-data ${weather_wind > 32 ? 'more' : ''}"
-        :text "${weather_wind}mph"
-      )
-    )
-    (box :orientation "v"
-      :class "weather-section"
-      (label :class "weather-humidity"
-        :text "Humidity"
-      )
-      (box :spacing 5
-        :orientation "h"
-        :space-evenly "false"
-        :class "weather-humidity"
-        :halign "center"
-        (label :class "weather-humidity-icon"
-          :text ""
-        )
-        (label :class "weather-humidity-text"
-          :text "${weather_humidity}"
+        :start-at "35"
+        :thickness "8"
+        :class "aqi-progress"
+        :style "color: ${aqi_color}"
+        (label :xalign "0.5" :yalign "0.5"
+          :class "aqi-text"
+          :text "${air_pollution}"
         )
       )
     )
     (box :orientation "v"
-      :class "weather-section"
-      (label :class "air-pollution"
-        :text "AQI ${aqi_icon}"
+      :class "aqi-data"
+      (box :orientation "v"
+        (label :xalign "0" :text "PM2.5")
+        (scale :min 0 :max 85
+          :active "false"
+          :value pm25
+          :class "aqi-bar pm25"
+        )
+        (label :xalign "1" :text "${pm25} µg/m³")
       )
-      (label :class "air-pollution"
-        :style "color: ${aqi_color};"
-        :text "${air_pollution}"
+      (box :orientation "v"
+        (label :xalign "0" :text "PM10")
+        (scale :min 0 :max 220
+          :active "false"
+          :value pm10
+          :class "aqi-bar pm10"
+        )
+        (label :xalign "1" :text "${pm10} µg/m³")
+      )
+      (box :orientation "v"
+        (label :xalign "0" :text "O3")
+        (scale :min 0 :max 240
+          :active "false"
+          :value o3
+          :class "aqi-bar o3"
+        )
+        (label :xalign "1" :text "${o3} µg/m³")
+      )
+      (box :orientation "v"
+        (label :xalign "0" :text "NO2")
+        (scale :min 0 :max 240
+          :active "false"
+          :value no2
+          :class "aqi-bar no2"
+        )
+        (label :xalign "1" :text "${no2} µg/m³")
+      )
+      (box :orientation "v"
+        (label :xalign "0" :text "SO2")
+        (scale :min 0 :max 370
+          :active "false"
+          :value so2
+          :class "aqi-bar so2"
+        )
+        (label :xalign "1" :text "${so2} µg/m³")
+      )
+      (box :orientation "v"
+        (label :xalign "0" :text "CO")
+        (scale :min 0 :max 16000
+          :active "false"
+          :value co
+          :class "aqi-bar co"
+        )
+        (label :xalign "1" :text "${co} mg/m³")
       )
     )
   )
@@ -157,17 +282,11 @@
   (box :class "weather-container"
     :orientation "v"
     :space-evenly "false"
-    (box :orientation "h"
-      :space-evenly "true"
-      :halign "center"
-      (refresh)
-      (w_city)
-      (close)
-    )
-    (w_temp)
+    (w_city)
+    (w_main)
     (w_desc)
-    (w_sun)
     (w_extras)
+    (air_quality)
   )
 )
 

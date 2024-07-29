@@ -1,5 +1,6 @@
 // Weather
 .weather-container {
+  font-family: Hack;
   background: $background-darker;
   border-radius: 1rem;
   padding: 1rem;
@@ -8,79 +9,67 @@
   margin: 0.5rem;
 }
 
-.weather-refresh,
-.weather-close {
-  background-color: $background;
-  border-radius: 3em;
-  padding: 0 1.2rem;
-  font-size: 3em;
-}
-
-.weather-refresh:hover,
-.weather-close:hover {
-  background: linear-gradient(180deg, $selection, $background);
-}
-
-.weather-refresh {
-  margin-right: 3rem;
-}
-
-.weather-close {
-  margin-left: 3rem;
-}
-
 .weather-location {
   font-size: 1.7em;
+  font-weight: bold;
   margin-top: 1rem;
 }
 
-.weather-icon {
-  font-size: 7em;
-  margin-right: 1.5rem;
+.weather-sun,
+.weather-minmax {
+  font-size: 1.1em;
 }
 
 .weather-temp {
-  font-size: 3em;
+  font-size: 4em;
   margin-left: 1.5rem;
-}
-
-.weather-minmax {
-  font-size: 1.5em;
-  margin: 1.5rem 0;
-}
-
-.weather-templ,
-.weather-temph {
-  &.less {
-    color: $cyan;
-  }
 
   &.more {
     color: $red;
   }
+
+  &.less {
+    color: $cyan;
+  }
+}
+
+.weather-degree {
+  font-size: 1.8em;
 }
 
 .weather-desc {
   font-size: 2em;
 }
 
-.weather-sun,
 .weather-extras {
   margin: 0.5rem 0;
-}
-
-.weather-rise-icon,
-.weather-set-icon,
-.weather-humidity-icon {
-  font-size: 1.5em;
 }
 
 .weather-section {
   padding: 0 0.5em;
 }
 
+.w-feel-icon,
+.w-wind-icon,
+.w-cloud-icon,
+.w-humidity-icon {
+  font-size: 1.3em;
+}
+
+.w-humidity-icon {
+  margin: -5.5px 0;
+  font-size: 2em;
+}
+
+.w-feel-data,
+.w-wind-data,
+.w-cloud-data,
+.w-humidity-data {
+  font-size: 1.1em;
+}
+
 .weather-temp,
-.weather-feel-data {
+.w-feel-icon {
   &.less {
     color: $cyan;
   }
@@ -90,8 +79,49 @@
   }
 }
 
-.weather-wind-data {
+.w-wind-icon {
   &.more {
     color: $red;
   }
+}
+
+.w-humidity-icon {
+  &.more {
+    color: $cyan;
+  }
+
+  &.less {
+    color: $red;
+  }
+}
+
+.aqi-box {
+  border-radius: 1em;
+  padding: 1em;
+  margin: 0.5em;
+  background-color: $background;
+}
+
+.aqi-main {
+  margin-right: 2em;
+}
+
+.aqi-label {
+  font-size: 1.5em;
+}
+
+.aqi-text {
+  font-size: 1em;
+}
+
+.aqi-bar trough {
+  background-color: $selection;
+  border-radius: 1rem;
+  min-height: 3px;
+}
+
+.aqi-bar trough highlight {
+  background-color: $red;
+  border-radius: 1rem;
+  min-height: 3px;
 }
