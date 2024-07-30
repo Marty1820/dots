@@ -113,7 +113,7 @@
     :action "blueman-manager &"
     :icon bluetooth-icon
     :label "${bluetooth-info == "" ? "Bluetooth" : "${bluetooth-info}"}"
-    :onoff "${bluetooth-bat == "" ? "" : "${bluetooth-bat}"}"
+    :onoff "${bluetooth-bat == "" ? "" : "${bluetooth-bat} battery"}"
     :class "left-top-plite"
   )
 )
