@@ -50,20 +50,23 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 <div align="center">
   <h3>Application launcher [rofi](https:/github.com/lbonn/rofi)</h3>
 </div>
-Application launcher [rofi](https:/github.com/lbonn/rofi)
+
 ![screenshot](.screenshots/apps-menu.png)
 
 <div align="center">
   <h3>Calendar</h3>
 </div>
+
 ![screenshot](.screenshots/calendar.png)
 
 <div align="center">
   <h3>Control center</h3>
 </div>
+
 ![screenshot](.screenshots/control_center.png)
 
 <div align="center">
   <h3>Weather widget</h3>
 </div>
+
 ![screenshot](.screenshots/weather_widget.png)
