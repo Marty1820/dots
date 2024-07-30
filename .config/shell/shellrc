@@ -71,9 +71,6 @@ alias mirror="sudo reflector --latest 10 --sort rate --protocol https --verbose 
 # get error messages from journalctl
 alias jctl="journalctl -p 3 -xb"
 
-# GitHub Dot Files
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-
 ### FUN STUFF ###
 # the terminal rickroll
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
