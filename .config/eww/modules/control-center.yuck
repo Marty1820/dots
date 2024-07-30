@@ -62,7 +62,7 @@
   )
 )
 
-(defwidget action_settings_button [condition action icon label class]
+(defwidget action_settings_button [condition action icon label class onoff]
   (button :onclick {action} 
     :class {
       condition ? "action_settings_button ${class}" :
@@ -97,7 +97,10 @@
               condition ? "action-settings-state" :
               "action-settings-state action-settings-state-enabled"
             } 
-            :text {condition ? "Off" : "On"}
+            :text {
+              onoff != "" ? onoff :
+              condition ? "Off" : "On"
+            }
           )
         )
       )
@@ -109,11 +112,8 @@
   (action_settings_button :condition {bluetooth-icon == "󰂲"}
     :action "blueman-manager &"
     :icon bluetooth-icon
-    :label "${
-      bluetooth-bat == "" ? "Bluetooth" :
-                           "${bluetooth-bat}"
-    }"
-    ;:label "Bluetooth ${bluetooth-bat}"
+    :label "${bluetooth-info == "" ? "Bluetooth" : "${bluetooth-info}"}"
+    :onoff "${bluetooth-bat == "" ? "" : "${bluetooth-bat}"}"
     :class "left-top-plite"
   )
 )
@@ -133,6 +133,7 @@
                               "󰤨"
     }
     :label {network.essid == "lo" ? "Not connected" : network.essid}
+    :onoff ""
     :class "right-top-plite"
   )
 )
@@ -146,6 +147,7 @@
                                 "󱡺"
     }
     :label "Airplane Mode"
+    :onoff ""
     :class "left-bottom-plite"
   )
 )
@@ -157,6 +159,7 @@
       vpn_status == "null" ? "󰖂" : "󰌆"
     }"
     :label "VPN"
+    :onoff ""
     :class "right-bottom-plite"
   )
 )

@@ -61,6 +61,8 @@
   "scripts/bluetooth.sh --icon")
 (defpoll bluetooth-bat :interval "1s" :initial "" :run-while control_visible
   "scripts/bluetooth.sh --bat")
+(defpoll bluetooth-info :interval "1s" :initial "" :run-while control_visible
+  "scripts/bluetooth.sh --info")
 (defpoll brightness-icon :interval "2s" :initial "󰳲"
   "$HOME/.config/scripts/screen_brightness_info.sh --icon")
 (defpoll brightness :interval "1s" :run-while control_visible

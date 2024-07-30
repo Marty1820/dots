@@ -18,15 +18,22 @@ _toggle() {
   fi
 }
 
+_get_device_info() {
+  INFO=$(echo "$1" |
+    grep -e "Alias" |
+    cut -f2- -d" ")
+
+  echo "$INFO"
+}
+
 _get_battery_percent() {
-  ALIAS=$(bluetoothctl info | grep -e "Alias" | cut -f2 -d" ")
   BATTERY_PERCENT=$(echo "$1" |
     grep -e "Battery Percentage" |
     cut -d "(" -f2 |
     cut -d ")" -f1)
 
   if [ -n "$BATTERY_PERCENT" ]; then
-    echo "$ALIAS $BATTERY_PERCENT"
+    echo "$BATTERY_PERCENT"
   fi
 }
 
@@ -101,4 +108,7 @@ elif [ "$1" = "--icon" ]; then
 elif [ "$1" = "--bat" ]; then
   BATTERY_PERCENT=$(_get_battery_percent "$DEVICE")
   echo "$BATTERY_PERCENT"
+elif [ "$1" = "--info" ]; then
+  INFO=$(_get_device_info "$DEVICE")
+  echo "$INFO"
 fi
