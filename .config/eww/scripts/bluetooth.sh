@@ -19,13 +19,14 @@ _toggle() {
 }
 
 _get_battery_percent() {
+  ALIAS=$(bluetoothctl info | grep -e "Alias" | cut -f2 -d" ")
   BATTERY_PERCENT=$(echo "$1" |
     grep -e "Battery Percentage" |
     cut -d "(" -f2 |
     cut -d ")" -f1)
 
   if [ -n "$BATTERY_PERCENT" ]; then
-    echo "$BATTERY_PERCENT"
+    echo "$ALIAS $BATTERY_PERCENT"
   fi
 }
 
