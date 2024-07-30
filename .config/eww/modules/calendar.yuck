@@ -9,7 +9,7 @@
       )
       (label :class "cal-time"
         :halign "end"
-        :text {formattime(EWW_TIME, "%T %p")}
+        :text {formattime(EWW_TIME, "%I:%M:%S %p")}
       )
     )
     (calendar :class "cal"
