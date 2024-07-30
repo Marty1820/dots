@@ -135,7 +135,7 @@
         weather_humidity > 60 ? 'more' : 
                                 ''
       }"
-      :text ""
+      :text "󰖎"
     )
     (label :class "w-humidity-data"
       :text "${weather_humidity}󰏰"

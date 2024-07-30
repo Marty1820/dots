@@ -56,11 +56,6 @@
   font-size: 1.3em;
 }
 
-.w-humidity-icon {
-  margin: -5.5px 0;
-  font-size: 2em;
-}
-
 .w-feel-data,
 .w-wind-data,
 .w-cloud-data,
@@ -69,17 +64,12 @@
 }
 
 .weather-temp,
-.w-feel-icon {
+.w-feel-icon,
+.w-wind-icon {
   &.less {
     color: $cyan;
   }
 
-  &.more {
-    color: $red;
-  }
-}
-
-.w-wind-icon {
   &.more {
     color: $red;
   }
