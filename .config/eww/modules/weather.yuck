@@ -1,10 +1,13 @@
 (defwidget w_city []
   (box :orientation "h"
-    :space-evenly "false"
-    :halign "start"
+    :space-evenly "true"
     (label :class "weather-location"
-      :halign "center"
+      :halign "start"
       :text weather_city
+    )
+    (label :class "weather-update"
+      :halign "end"
+      :text " ${weather_update}"
     )
   )
 )
