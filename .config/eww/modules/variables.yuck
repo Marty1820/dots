@@ -9,7 +9,7 @@
 
 ; POLLS
 (defpoll weather_update :interval "5m" :run-while weather_visible
-  "stat $HOME/.cache/weather/weatherdata | awk 'FNR==6 {print $3}' | cut --characters 1-5 | xargs -i date -d {} '+%I:%M %p'")
+  "expr $(expr $(date +%s) - $(stat -c %Y $HOME/.cache/weather/weatherdata)) / 60")
 (defpoll weather_city :interval "1h" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --city")
 (defpoll weather_color :interval "5m" :initial "#ffffff"

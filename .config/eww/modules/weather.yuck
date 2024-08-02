@@ -7,7 +7,7 @@
     )
     (label :class "weather-update"
       :halign "end"
-      :text " ${weather_update}"
+      :text " ${weather_update} min. ago"
     )
   )
 )
