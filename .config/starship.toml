@@ -65,6 +65,7 @@ home_symbol = "~"
 "Pictures" = ""
 "Videos" = "󰸬"
 ".config" = ""
+".dotfiles" = ""
 
 ## Git Options
 [git_branch]
