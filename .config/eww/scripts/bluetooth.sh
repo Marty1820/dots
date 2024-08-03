@@ -2,11 +2,12 @@
 
 set -eu -o pipefail
 
+# Get Bluetooth status and connected device UUID
 STATUS=$(bluetoothctl show | awk '/Powered/ {print $2}')
-UUID=$(bluetoothctl devices Connected | cut -f2 -d' ' | head -n1)
-if [ "$UUID" = "" ]; then
-  DEVICE=""
-else
+UUID=$(bluetoothctl devices Connected | awk '{print $2}' | head -n1)
+DEVICE=""
+
+if [ -n "$UUID" ]; then
   DEVICE=$(bluetoothctl info "$UUID")
 fi
 
@@ -19,34 +20,18 @@ _toggle() {
 }
 
 _get_device_info() {
-  INFO=$(echo "$1" |
-    grep -e "Alias" |
-    cut -f2- -d" ")
-
-  echo "$INFO"
+  echo "$1" | awk -F ': ' '/Alias/ {print $2}'
 }
 
 _get_battery_percent() {
-  BATTERY_PERCENT=$(echo "$1" |
-    grep -e "Battery Percentage" |
-    cut -d "(" -f2 |
-    cut -d ")" -f1)
-
-  if [ -n "$BATTERY_PERCENT" ]; then
-    echo "$BATTERY_PERCENT"
-  fi
+  echo "$1" | awk -F '[()]' '/Battery Percentage/ {print $2}'
 }
 
 _get_icon() {
-  ICON=$(echo "$1" |
-    grep -e "Icon" |
-    cut -f2- -d" ")
+  ICON=$(echo "$1" | awk -F ': ' '/Icon/ {print $2}')
 
   case $ICON in
-  audio-headphones)
-    echo "󰥰"
-    ;;
-  audio-headset)
+  audio-headphones|audio-headset)
     echo "󰥰"
     ;;
   input-gaming)
@@ -64,7 +49,7 @@ _get_icon() {
   phone)
     echo "󰏳"
     ;;
-  computer | video-display)
+  computer|video-display)
     echo "󰪫"
     ;;
   printer)
@@ -73,42 +58,44 @@ _get_icon() {
   scanner)
     echo "󰚫"
     ;;
-  camera-photo | camera-video)
+  camera-photo|camera-video)
     echo "󰄄"
     ;;
   network-wireless)
     echo "󰂴"
     ;;
-  audio-card | multimedia-player)
+  audio-card|multimedia-player)
     echo "󰗾"
     ;;
-  modem | unknown)
+  modem|unknown)
     echo "󰂱"
     ;;
-  *)
-    echo ""
-    ;;
+  *) echo "" ;;
   esac
 }
 
-if [ "$1" = "--toggle" ]; then
-  _toggle
-elif [ "$1" = "--icon" ]; then
-  ICON=$(_get_icon "$DEVICE")
-  if [ "$ICON" = "" ]; then
-    case $STATUS in
-      yes)
-        ICON="󰂯"
-        ;;
-      no | *)
-        ICON="󰂲"
-    esac
-  fi
-  echo "$ICON"
-elif [ "$1" = "--bat" ]; then
-  BATTERY_PERCENT=$(_get_battery_percent "$DEVICE")
-  echo "$BATTERY_PERCENT"
-elif [ "$1" = "--info" ]; then
-  INFO=$(_get_device_info "$DEVICE")
-  echo "$INFO"
-fi
+# Handle script arguments
+case $1 in
+  --toggle)
+    _toggle
+    ;;
+  --icon)
+    ICON=$(_get_icon "$DEVICE")
+    if [ -z "$ICON" ]; then
+      ICON=$([ "$STATUS" = "yes" ] && echo "󰂯" || echo "󰂲")
+    fi
+    echo "$ICON"
+    ;;
+  --bat)
+    BATTERY_PERCENT=$(_get_battery_percent "$DEVICE")
+    echo "$BATTERY_PERCENT"
+    ;;
+  --info)
+    INFO=$(_get_device_info "$DEVICE")
+    echo "$INFO"
+    ;;
+  *)
+    echo "Usage: $0 {--toggle|--icon|--bat|--info}"
+    exit 1
+    ;;
+esac
