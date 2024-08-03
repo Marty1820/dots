@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Dependancies 'pamixer' & 'dunst'
-# You can call this script like this:
+# Usage:
 # $./volume.sh up
 # $./volume.sh down
 # $./volume.sh mute
@@ -19,40 +19,56 @@ get_volume() {
 
 # Checks if volume is muted
 is_mute() {
-	pamixer --get-mute | grep true >/dev/null
+  pamixer --get-mute | grep -q 'true'
 }
 
 send_notification() {
+  local volume
 	volume=$(get_volume)
-	# Specialized bar
-	bar=$(seq -s "─" 0 $((volume / 5)) | sed 's/[0-9]//g')
+  local icon
+
+  # Select the appropriate icon and create the progress bar
+  if is_mute; then
+    icon="$vol_mute"
+    bar=""
+    notification_text="Mute"
+  elif [ "$volume" -eq 0 ]; then
+    icon="$vol_mute"
+    bar=""
+    notification_text="$volume"
+  elif [ "$volume" -lt 30 ]; then
+    icon="$vol_low"
+    notification_text="$volume"
+  elif [ "$volume" -lt 80 ]; then
+    icon="$vol_high"
+    notification_text="$volume"
+  else
+    icon="$vol_high"
+    notification_text="$volume"
+  fi
+
+  # Generate progress bar
+  local bar
+  bar=$(seq -s "─" 0 $((volume / 5)) | sed 's/[0-9]//g')
 	# Send the notification
-	if [ "$volume" = "0" ]; then
-		dunstify -i "$vol_mute" --timeout=1600 --replace=2593 --urgency=normal "$volume    $bar"
-	elif [ "$volume" -lt "30" ]; then
-		dunstify -i "$vol_low" --timeout=1600 --replace=2593 --urgency=normal "$volume    $bar"
-	elif [ "$volume" -lt "80" ]; then
-		dunstify -i "$vol_med" --timeout=1600 --replace=2593 --urgency=normal "$volume    $bar"
-	else
-		dunstify -i "$vol_high" --timeout=1600 --replace=2593 --urgency=normal "$volume    $bar"
-	fi
+  dunstify -i "$icon" --timeout=1600 --replace=2593 --urgency=normal "$notification_text $bar"
 }
 
-case $1 in
-up)
-	pamixer -u -i 1
-	send_notification
-	;;
-down)
-	pamixer -u -d 1
-	send_notification
-	;;
-mute)
-	pamixer -t
-	if is_mute; then
-		dunstify -i "$vol_mute" --timeout=1600 --replace=2593 --urgency=normal "Mute" -h string:x-dunst-stack-tage:volume
-	else
-		send_notification
-	fi
-	;;
+case "$1" in
+  up)
+    pamixer -u -i 1
+    send_notification
+    ;;
+  down)
+    pamixer -u -d 1
+    send_notification
+    ;;
+  mute)
+    pamixer -t
+    if is_mute; then
+      dunstify -i "$vol_mute" --timeout=1600 --replace=2593 --urgency=normal "Mute" -h string:x-dunst-stack-tag:volume
+    else
+      send_notification
+    fi
+    ;;
 esac
