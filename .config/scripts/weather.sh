@@ -3,6 +3,7 @@
 ## Data dir
 cache_dir="$HOME/.cache/weather"
 weather_file="$cache_dir/weatherdata"
+weather_forecast="$cache_dir/weatherforecast"
 aqi_file="$cache_dir/aqidata"
 
 ## Weather data | openweatherdata file first line key second line id
@@ -19,6 +20,10 @@ mkdir -p "$cache_dir"
 get_weather_data() {
 	weather=$(curl -sf "http://api.openweathermap.org/data/2.5/weather?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT")
 	echo "$weather" > "${weather_file}"
+
+	weatherforecast=$(curl -sf "http://api.openweathermap.org/data/2.5/forecast?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT")
+	echo "$weatherforecast" > "${weather_forecast}"
+  
   air_polution=$(curl -sf "http://api.openweathermap.org/data/2.5/air_pollution?lat=$LAT&lon=$LON&appid=$KEY")
 	echo "$air_polution" > "${aqi_file}"
 }
@@ -28,16 +33,21 @@ get_jq_value() {
   jq -r "$1" < "$weather_file"
 }
 
-w_temp=$(get_jq_value ".main.temp" | cut -d "." -f 1)
-w_temphigh=$(get_jq_value ".main.temp_max")
-w_templow=$(get_jq_value ".main.temp_min")
-w_ftemp=$(get_jq_value ".main.feels_like" | cut -d "." -f 1)
-w_stat=$(get_jq_value ".weather[].description" | head -n 1 | sed -e "s/\b\(.\)/\u\1/g")
-w_city=$(get_jq_value ".name")
-w_humid=$(get_jq_value ".main.humidity" | cut -d "." -f 1)
-w_wind=$(get_jq_value ".wind.speed")
-w_srise=$(date -d @"$(get_jq_value ".sys.sunrise")" '+%I:%M %p')
-w_sset=$(date -d @"$(get_jq_value ".sys.sunset")" '+%I:%M %p')
+current_weather() {
+  w_temp=$(get_jq_value ".main.temp" | cut -d "." -f 1)
+  w_ftemp=$(get_jq_value ".main.feels_like" | cut -d "." -f 1)
+  w_stat=$(get_jq_value ".weather[].description" | head -n 1 | sed -e "s/\b\(.\)/\u\1/g")
+  w_city=$(get_jq_value ".name")
+  w_humid=$(get_jq_value ".main.humidity" | cut -d "." -f 1)
+  w_wind=$(get_jq_value ".wind.speed")
+}
+
+forecast_weather() {
+  f_temphigh=$(get_jq_value ".main.temp_max" | sort -nr | head -n1)
+  f_templow=$(get_jq_value ".main.temp_min" | sort -n | head -n1)
+  f_srise=$(date -d @"$(get_jq_value ".sys.sunrise")" '+%I:%M %p')
+  f_sset=$(date -d @"$(get_jq_value ".sys.sunset")" '+%I:%M %p')
+}
 
 # Set air pollution condition
 set_aqi() {
@@ -79,26 +89,21 @@ case $1 in
   --getdata) get_weather_data ;;
   --icon)	set_icon; echo "$w_icon"	;;
   --hex) set_icon; echo "$w_hex" ;;
-  --temp) echo "$w_temp" ;;
-  --temphigh) echo "$w_temphigh" ;;
-  --templow) echo "$w_templow" ;;
-  --feel) echo "$w_ftemp" ;;
-  --stat) echo "$w_stat" ;;
-  --city) echo "$w_city" ;;
-  --humid) echo "$w_humid" ;;
-  --wind) echo "$w_wind" ;;
+  --temp) current_weather; echo "$w_temp" ;;
+  --temphigh) forecast_weather; echo "$f_temphigh" ;;
+  --templow) forecast_weather; echo "$f_templow" ;;
+  --feel) current_weather; echo "$w_ftemp" ;;
+  --stat) current_weather; echo "$w_stat" ;;
+  --city) current_weather; echo "$w_city" ;;
+  --humid) current_weather; echo "$w_humid" ;;
+  --wind) current_weather; echo "$w_wind" ;;
   --aqi) set_aqi; echo "$aqi" ;;
   --aqi_color) set_aqi; echo "$aqi_color" ;;
   --aqi_icon) set_aqi; echo "$aqi_icon" ;;
-  --srise) echo "$w_srise" ;;
-  --sset) echo "$w_sset" ;;
-  --waybar) 
-    set_icon
-    set_aqi
-    printf "{\"text\":\"<span foreground=\\\\\"%s\\\\\"><big>%s</big></span> %s | <span foreground=\\\\\"%s\\\\\">AQI: <big>%s</big></span>\"}\n" "$w_hex" "$w_icon" "$w_temp" "$aqi_color" "$aqi_icon"
-	  ;;
+  --srise) forecast_weather; echo "$f_srise" ;;
+  --sset) forecast_weather; echo "$f_sset" ;;
   *)
-    echo "Usage: $0 {--getdata|--icon|--temp|--temphigh|--templow|--feel|--stat|--city|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset|--waybar}"
+    echo "Usage: $0 {--getdata|--icon|--temp|--temphigh|--templow|--feel|--stat|--city|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
     exit 1
     ;;
 esac
