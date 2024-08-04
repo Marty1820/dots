@@ -14,7 +14,7 @@ network_available() {
 main_loop() {
   while network_available; do
     fetch_weather_data
-    sleep 300
+    sleep 600
   done
 
   # Once network is down, start the reconnect loop
