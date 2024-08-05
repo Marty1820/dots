@@ -8,62 +8,62 @@
   "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
 
 ; POLLS
-(defpoll weather_update :interval "5m" :run-while weather_visible
+(defpoll weather_update :interval "10m" :run-while weather_visible
   "expr $(expr $(date +%s) - $(stat -c %Y $HOME/.cache/weather/weatherdata)) / 60")
 (defpoll weather_city :interval "1h" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --city")
-(defpoll weather_color :interval "5m" :initial "#ffffff"
+(defpoll weather_color :interval "10m" :initial "#ffffff"
   "$HOME/.config/scripts/weather.sh --hex")
-(defpoll weather_icon :interval "5m" :initial ""
+(defpoll weather_icon :interval "10m" :initial ""
   "$HOME/.config/scripts/weather.sh --icon")
-(defpoll weather_temp :interval "5m" :initial "0"
+(defpoll weather_temp :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.sh --temp")
-(defpoll weather_temph :interval "5m" :initial "0" :run-while weather_visible
+(defpoll weather_temph :interval "10m" :initial "0" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --temphigh")
-(defpoll weather_templ :interval "5m" :initial "0" :run-while weather_visible
+(defpoll weather_templ :interval "10m" :initial "0" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --templow")
-(defpoll weather_desc :interval "5m" :run-while weather_visible
+(defpoll weather_desc :interval "10m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --stat")
 (defpoll weather_sunr :interval "1h" :initial "0" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --srise")
 (defpoll weather_suns :interval "1h" :initial "0" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --sset")
-(defpoll weather_ccover :interval "5s" :initial "0" :run-while weather_visible
+(defpoll weather_ccover :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.clouds.all' < $HOME/.cache/weather/weatherdata")
 (defpoll weather_feels_like :interval "10m" :initial "0"
   :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --feel")
-(defpoll weather_wind :interval "5m" :initial "0"
+(defpoll weather_wind :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.sh --wind")
-(defpoll weather_humidity :interval "5m"
+(defpoll weather_humidity :interval "10m"
   "$HOME/.config/scripts/weather.sh --humid")
-(defpoll aqi_color :interval "5m" :initial "#ffffff"
+(defpoll aqi_color :interval "10m" :initial "#ffffff"
   :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --aqi_color")
-(defpoll air_pollution :interval "5m" :run-while weather_visible
+(defpoll air_pollution :interval "10m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --aqi")
-(defpoll aqi_icon :interval "5m" :initial ""
+(defpoll aqi_icon :interval "10m" :initial ""
   "$HOME/.config/scripts/weather.sh --aqi_icon")
-(defpoll aqi_num :interval "5m" :initial "0" :run-while weather_visible
+(defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata")
-(defpoll pm25 :interval "5m" :initial "0" :run-while weather_visible
+(defpoll pm25 :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].components.pm2_5' < $HOME/.cache/weather/aqidata")
-(defpoll pm10 :interval "5m" :initial "0" :run-while weather_visible
+(defpoll pm10 :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].components.pm10' < $HOME/.cache/weather/aqidata")
-(defpoll o3 :interval "5m" :initial "0" :run-while weather_visible
+(defpoll o3 :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].components.o3' < $HOME/.cache/weather/aqidata")
-(defpoll no2 :interval "5m" :initial "0" :run-while weather_visible
+(defpoll no2 :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].components.no2' < $HOME/.cache/weather/aqidata")
-(defpoll so2 :interval "5m" :initial "0" :run-while weather_visible
+(defpoll so2 :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].components.so2' < $HOME/.cache/weather/aqidata")
-(defpoll co :interval "5m" :initial "0" :run-while weather_visible
+(defpoll co :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].components.co' < $HOME/.cache/weather/aqidata")
 
-(defpoll bluetooth-icon :interval "1s" :initial "󰂲"
+(defpoll bluetooth-icon :interval "2s" :initial "󰂲"
   "scripts/bluetooth.sh --icon")
-(defpoll bluetooth-bat :interval "1s" :initial "" :run-while control_visible
+(defpoll bluetooth-bat :interval "5s" :initial "" :run-while control_visible
   "scripts/bluetooth.sh --bat")
-(defpoll bluetooth-info :interval "1s" :initial "" :run-while control_visible
+(defpoll bluetooth-info :interval "5s" :initial "" :run-while control_visible
   "scripts/bluetooth.sh --info")
 (defpoll brightness-icon :interval "2s" :initial "󰳲"
   "$HOME/.config/scripts/screen_brightness_info.sh --icon")
