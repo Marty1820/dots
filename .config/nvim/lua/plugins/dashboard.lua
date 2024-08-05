@@ -19,7 +19,7 @@ return {
         shortcut = {
           {
             desc = '󰈔 > New file',
-            action = 'ene <BAR> startinsert',
+            action = 'enew',
             key = 'e',
           },
           {
