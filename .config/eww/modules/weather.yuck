@@ -1,12 +1,15 @@
 (defwidget w_city []
   (box :orientation "h"
     :space-evenly "true"
+    :class "weather-top"
     (label :class "weather-location"
       :halign "start"
+      :valign "start"
       :text weather_city
     )
     (label :class "weather-update"
       :halign "end"
+      :valign "start"
       :text " ${weather_update} min. ago"
     )
   )
@@ -73,7 +76,7 @@
         weather_temp > 90 ? 'more' :
                             ''
       }"
-      :text "H:${weather_temph}"
+      :text " ${weather_temph}"
     )
     (label
       :class "weather-templ ${
@@ -81,7 +84,7 @@
         weather_temp > 90 ? 'more' :
                             ''
       }"
-      :text "L:${weather_templ}"
+      :text " ${weather_templ}"
     )
   )
 )
