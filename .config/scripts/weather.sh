@@ -21,7 +21,7 @@ get_weather_data() {
 	weather=$(curl -sf "http://api.openweathermap.org/data/2.5/weather?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT")
 	echo "$weather" > "${weather_file}"
 
-	weatherforecast=$(curl -sf "http://api.openweathermap.org/data/2.5/forecast?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT")
+	weatherforecast=$(curl -sf "http://api.openweathermap.org/data/2.5/forecast/daily?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT&cnt=1")
 	echo "$weatherforecast" > "${weather_forecast}"
   
   air_polution=$(curl -sf "http://api.openweathermap.org/data/2.5/air_pollution?lat=$LAT&lon=$LON&appid=$KEY")
@@ -32,6 +32,9 @@ get_weather_data() {
 get_jq_value() {
   jq -r "$1" < "$weather_file"
 }
+get_jq_value_forcast() {
+  jq -r "$1" < "$weather_forecast"
+}
 
 current_weather() {
   w_temp=$(get_jq_value ".main.temp" | cut -d "." -f 1)
@@ -40,13 +43,14 @@ current_weather() {
   w_city=$(get_jq_value ".name")
   w_humid=$(get_jq_value ".main.humidity" | cut -d "." -f 1)
   w_wind=$(get_jq_value ".wind.speed")
+  w_clouds=$(get_jq_value ".clouds.all")
 }
 
 forecast_weather() {
-  f_temphigh=$(get_jq_value ".main.temp_max" | sort -nr | head -n1)
-  f_templow=$(get_jq_value ".main.temp_min" | sort -n | head -n1)
-  f_srise=$(date -d @"$(get_jq_value ".sys.sunrise")" '+%I:%M %p')
-  f_sset=$(date -d @"$(get_jq_value ".sys.sunset")" '+%I:%M %p')
+  f_temphigh=$(get_jq_value_forcast ".list[0].temp.max" | cut -d "." -f 1)
+  f_templow=$(get_jq_value_forcast ".list[0].temp.min" | cut -d "." -f 1)
+  f_srise=$(date -d @"$(get_jq_value_forcast ".list[0].sunrise")" '+%I:%M %p')
+  f_sset=$(date -d @"$(get_jq_value_forcast ".list[0].sunset")" '+%I:%M %p')
 }
 
 # Set air pollution condition
@@ -97,6 +101,7 @@ case $1 in
   --city) current_weather; echo "$w_city" ;;
   --humid) current_weather; echo "$w_humid" ;;
   --wind) current_weather; echo "$w_wind" ;;
+  --clouds) current_weather; echo "$w_clouds" ;;
   --aqi) set_aqi; echo "$aqi" ;;
   --aqi_color) set_aqi; echo "$aqi_color" ;;
   --aqi_icon) set_aqi; echo "$aqi_icon" ;;

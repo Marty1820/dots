@@ -29,7 +29,7 @@
 (defpoll weather_suns :interval "1h" :initial "0" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --sset")
 (defpoll weather_ccover :interval "10m" :initial "0" :run-while weather_visible
-  "jq -r '.clouds.all' < $HOME/.cache/weather/weatherdata")
+  "$HOME/.config/scripts/weather.sh --clouds")
 (defpoll weather_feels_like :interval "10m" :initial "0"
   :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --feel")
