@@ -19,9 +19,9 @@
 (defpoll weather_temp :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.sh --temp")
 (defpoll weather_temph :interval "10m" :initial "0" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --temphigh")
+  "$HOME/.config/scripts/weather.sh --temphigh 0")
 (defpoll weather_templ :interval "10m" :initial "0" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --templow")
+  "$HOME/.config/scripts/weather.sh --templow 0")
 (defpoll weather_desc :interval "10m" :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --stat")
 (defpoll weather_sunr :interval "1h" :initial "0" :run-while weather_visible
@@ -35,7 +35,7 @@
   "$HOME/.config/scripts/weather.sh --feel")
 (defpoll weather_wind :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.sh --wind")
-(defpoll weather_humidity :interval "10m"
+(defpoll weather_humidity :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.sh --humid")
 (defpoll aqi_color :interval "10m" :initial "#ffffff"
   :run-while weather_visible
