@@ -21,7 +21,7 @@ get_weather_data() {
 	weather=$(curl -sf "http://api.openweathermap.org/data/2.5/weather?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT")
 	echo "$weather" > "${weather_file}"
 
-	weatherforecast=$(curl -sf "http://api.openweathermap.org/data/2.5/forecast/daily?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT&cnt=1")
+	weatherforecast=$(curl -sf "http://api.openweathermap.org/data/2.5/forecast/daily?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT&cnt=4")
 	echo "$weatherforecast" > "${weather_forecast}"
   
   air_polution=$(curl -sf "http://api.openweathermap.org/data/2.5/air_pollution?lat=$LAT&lon=$LON&appid=$KEY")
@@ -47,8 +47,9 @@ current_weather() {
 }
 
 forecast_weather() {
-  f_temphigh=$(get_jq_value_forcast ".list[0].temp.max" | cut -d "." -f 1)
-  f_templow=$(get_jq_value_forcast ".list[0].temp.min" | cut -d "." -f 1)
+  day_index=$1
+  f_temphigh=$(get_jq_value_forcast ".list[$day_index].temp.max" | cut -d "." -f 1)
+  f_templow=$(get_jq_value_forcast ".list[$day_index].temp.min" | cut -d "." -f 1)
   f_srise=$(date -d @"$(get_jq_value_forcast ".list[0].sunrise")" '+%I:%M %p')
   f_sset=$(date -d @"$(get_jq_value_forcast ".list[0].sunset")" '+%I:%M %p')
 }
@@ -94,8 +95,8 @@ case $1 in
   --icon)	set_icon; echo "$w_icon"	;;
   --hex) set_icon; echo "$w_hex" ;;
   --temp) current_weather; echo "$w_temp" ;;
-  --temphigh) forecast_weather; echo "$f_temphigh" ;;
-  --templow) forecast_weather; echo "$f_templow" ;;
+  --temphigh) forecast_weather "$2"; echo "$f_temphigh" ;;
+  --templow) forecast_weather "$2"; echo "$f_templow" ;;
   --feel) current_weather; echo "$w_ftemp" ;;
   --stat) current_weather; echo "$w_stat" ;;
   --city) current_weather; echo "$w_city" ;;
@@ -108,7 +109,7 @@ case $1 in
   --srise) forecast_weather; echo "$f_srise" ;;
   --sset) forecast_weather; echo "$f_sset" ;;
   *)
-    echo "Usage: $0 {--getdata|--icon|--temp|--temphigh|--templow|--feel|--stat|--city|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
+    echo "Usage: $0 {--getdata|--icon|--temp|--temphigh index|--templow index|--feel|--stat|--city|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
     exit 1
     ;;
 esac
