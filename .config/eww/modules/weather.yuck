@@ -10,7 +10,7 @@
     (label :class "weather-update"
       :halign "end"
       :valign "start"
-      :text " ${weather_update} min. ago"
+      :text " ${weather_update ?: "0"} min. ago"
     )
   )
 )
@@ -93,16 +93,16 @@
   (box :orientation "h"
     :class "weather-main"
     (w_sun)
-    (w_temp)
+    (box :orientation "v"
+      :space-evenly "false"
+      (w_temp)
+      (label :class "weather-desc"
+        :halign "center"
+        :justify "center"
+        :text weather_desc
+      )
+    )
     (w_minmax)
-  )
-)
-
-(defwidget w_desc []
-  (label :class "weather-desc"
-    :halign "center"
-    :justify "center"
-    :text weather_desc
   )
 )
 
@@ -193,6 +193,48 @@
     (w_humidity)
     (w_wind)
     (w_cloud)
+  )
+)
+
+(defwidget weather_forecast_day [order]
+  (box :orientation "v"
+    :class "forecast-section"
+    :halign "center"
+    :space-evenly "false"
+    (label :class "forecast-day"
+      :text "${formattime('${jq(forecast_file, '.list[${order}].dt')}', '%A')}"
+    )
+    (label :class "forecast-high"
+      :text "${jq(forecast_file, '.list[${order}].temp.max')}"
+    )
+    (label :class "forecast-desc"
+      :text "${jq(forecast_file, '.list[${order}].weather[].main')}"
+    )
+    (label :class "forecast-low"
+      :text "${jq(forecast_file, '.list[${order}].temp.min')}"
+    )
+  )
+)
+
+(defpoll forecast_file :interval "10m" "cat $HOME/.cache/weather/weatherforecast")
+
+(defwidget w_forecast []
+  (box :orientation "h"
+    :class "forecast-box"
+    :halign "center"
+    :space-evenly "true"
+    (weather_forecast_day
+      :order "0"
+    )
+    (weather_forecast_day
+      :order "1"
+    )
+    (weather_forecast_day
+      :order "2"
+    )
+    (weather_forecast_day
+      :order "3"
+    )
   )
 )
 
@@ -290,8 +332,8 @@
     :space-evenly "false"
     (w_city)
     (w_main)
-    (w_desc)
     (w_extras)
+    (w_forecast)
     (air_quality)
   )
 )
