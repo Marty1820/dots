@@ -196,27 +196,37 @@
   )
 )
 
+(defvar day_name "date +%A")
+
 (defwidget weather_forecast_day [order]
   (box :orientation "v"
     :class "forecast-section"
     :halign "center"
-    :space-evenly "false"
-    (label :class "forecast-day"
-      :text "${formattime('${jq(forecast_file, '.list[${order}].dt')}', '%A')}"
+    (label :class "forecast-day f-day-${order}"
+      :text {
+        "${formattime('${jq(forecast_file, `.list[${order}].dt`)}', '%A')}" !=
+                                            "${formattime(EWW_TIME, '%A')}" ?
+        "${formattime('${jq(forecast_file, `.list[${order}].dt`)}', '%A')}" :
+                                                                    "Today"
+      }
     )
-    (label :class "forecast-high"
-      :text "${jq(forecast_file, '.list[${order}].temp.max')}"
+    (label :class "forecast-date f-date-${order}"
+      :text "${formattime('${jq(forecast_file, `.list[${order}].dt`)}', '%m/%d')}"
     )
-    (label :class "forecast-desc"
-      :text "${jq(forecast_file, '.list[${order}].weather[].main')}"
+    (label :class "forecast-high f-high-${order}"
+      :text " ${jq(forecast_file, '.list[${order}].temp.max')}"
     )
-    (label :class "forecast-low"
-      :text "${jq(forecast_file, '.list[${order}].temp.min')}"
+    (label :class "forecast-low f-low-${order}"
+      :text " ${jq(forecast_file, '.list[${order}].temp.min')}"
+    )
+    (label :class "forecast-desc f-high-${order}"
+      ; The replace is not working, it needs to remove the quotes
+      :text {replace("${jq(forecast_file, '.list[${order}].weather[].main')}", '/[Rain]/g', '')}
+      ; :text        "${jq(forecast_file, '.list[${order}].weather[].main')}"
     )
   )
 )
 
-(defpoll forecast_file :interval "10m" "cat $HOME/.cache/weather/weatherforecast")
 
 (defwidget w_forecast []
   (box :orientation "h"
@@ -235,6 +245,18 @@
     (weather_forecast_day
       :order "3"
     )
+  )
+)
+
+(defwidget aqi_breakdown [label max value]
+  (box :orientation "v"
+    (label :xalign "0" :text "${label}")
+    (scale :min 0 :max "${max}"
+      :active "false"
+      :value value
+      :class "aqi-bar ${label}"
+    )
+    (label :xalign "1" :text "${value} µg/m³")
   )
 )
 
@@ -268,59 +290,23 @@
     )
     (box :orientation "v"
       :class "aqi-data"
-      (box :orientation "v"
-        (label :xalign "0" :text "PM2.5")
-        (scale :min 0 :max 85
-          :active "false"
-          :value pm25
-          :class "aqi-bar pm25"
-        )
-        (label :xalign "1" :text "${pm25} µg/m³")
+      (aqi_breakdown :label "PM2.5"
+        :max 85 :value pm25
       )
-      (box :orientation "v"
-        (label :xalign "0" :text "PM10")
-        (scale :min 0 :max 220
-          :active "false"
-          :value pm10
-          :class "aqi-bar pm10"
-        )
-        (label :xalign "1" :text "${pm10} µg/m³")
+      (aqi_breakdown :label "PM10"
+        :max 220 :value pm10
       )
-      (box :orientation "v"
-        (label :xalign "0" :text "O3")
-        (scale :min 0 :max 240
-          :active "false"
-          :value o3
-          :class "aqi-bar o3"
-        )
-        (label :xalign "1" :text "${o3} µg/m³")
+      (aqi_breakdown :label "O3"
+        :max 240 :value o3
       )
-      (box :orientation "v"
-        (label :xalign "0" :text "NO2")
-        (scale :min 0 :max 240
-          :active "false"
-          :value no2
-          :class "aqi-bar no2"
-        )
-        (label :xalign "1" :text "${no2} µg/m³")
+      (aqi_breakdown :label "NO2"
+        :max 240 :value no2
       )
-      (box :orientation "v"
-        (label :xalign "0" :text "SO2")
-        (scale :min 0 :max 370
-          :active "false"
-          :value so2
-          :class "aqi-bar so2"
-        )
-        (label :xalign "1" :text "${so2} µg/m³")
+      (aqi_breakdown :label "SO2"
+        :max 370 :value so2
       )
-      (box :orientation "v"
-        (label :xalign "0" :text "CO")
-        (scale :min 0 :max 16000
-          :active "false"
-          :value co
-          :class "aqi-bar co"
-        )
-        (label :xalign "1" :text "${co} mg/m³")
+      (aqi_breakdown :label "CO"
+        :max 16000 :value co
       )
     )
   )

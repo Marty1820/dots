@@ -39,7 +39,7 @@ get_jq_value_forcast() {
 current_weather() {
   w_temp=$(get_jq_value ".main.temp" | cut -d "." -f 1)
   w_ftemp=$(get_jq_value ".main.feels_like" | cut -d "." -f 1)
-  w_stat=$(get_jq_value ".weather[].description" | head -n 1 | sed -e "s/\b\(.\)/\u\1/g")
+  w_stat=$(get_jq_value ".weather[].main" | head -n 1 | sed -e "s/\b\(.\)/\u\1/g")
   w_city=$(get_jq_value ".name")
   w_humid=$(get_jq_value ".main.humidity" | cut -d "." -f 1)
   w_wind=$(get_jq_value ".wind.speed")

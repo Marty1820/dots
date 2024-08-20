@@ -85,7 +85,24 @@
   }
 }
 
-.aqi-box {
+.forecast-day {
+  font-weight: bold;
+}
+
+.f-day-0 {
+  color: $red;
+}
+
+.forecast-high {
+  color: $red;
+}
+
+.forecast-low {
+  color: $cyan;
+}
+
+.aqi-box,
+.forecast-box {
   border-radius: 1em;
   padding: 1em;
   background-color: $background;

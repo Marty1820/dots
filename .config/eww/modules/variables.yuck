@@ -44,6 +44,8 @@
   "$HOME/.config/scripts/weather.sh --aqi")
 (defpoll aqi_icon :interval "10m" :initial ""
   "$HOME/.config/scripts/weather.sh --aqi_icon")
+(defpoll forecast_file :interval "10m"
+  "cat $HOME/.cache/weather/weatherforecast")
 (defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata")
 (defpoll pm25 :interval "10m" :initial "0" :run-while weather_visible
