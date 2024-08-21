@@ -6,4 +6,4 @@
 # ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░
 # ZSH PROFILE
 
-[[ -f ~/.config/shell/profile ]] && . ~/.config/shell/profile 
+[[ -f ~/.config/shell/profile ]] && . ~/.config/shell/profile

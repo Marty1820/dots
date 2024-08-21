@@ -23,7 +23,7 @@ get_weather_data() {
 
 	weatherforecast=$(curl -sf "http://api.openweathermap.org/data/2.5/forecast/daily?lat=$LAT&lon=$LON&appid=$KEY&units=$UNIT&cnt=4")
 	echo "$weatherforecast" > "${weather_forecast}"
-  
+
   air_polution=$(curl -sf "http://api.openweathermap.org/data/2.5/air_pollution?lat=$LAT&lon=$LON&appid=$KEY")
 	echo "$air_polution" > "${aqi_file}"
 }
