@@ -43,6 +43,7 @@ wk.add({
   -- See `:help telescope.builtin`
   { '<leader>fr', '<cmd>Telescope oldfiles<cr>',             desc = '[F]ind [R]ecent files' },
   { '<leader>fg', '<cmd>Telescope git_files<cr>',            desc = '[F]ind [G]it files' },
+  { '<leader>fw', '<cmd>%s/\\s\\+$//e<cr>',                  desc = '[F]ormat [W]hitespace' },
 
   -- Search
   { '<leader>s',  group = '+[S]earch' },
