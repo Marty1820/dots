@@ -11,7 +11,7 @@
         :halign "start"
         :text {
           EWW_BATTERY.BAT1.status == "Charging"
-                                         ? "󰂄 ${EWW_BATTERY.BAT1.capacity}" : 
+                                         ? "󰂄 ${EWW_BATTERY.BAT1.capacity}" :
           EWW_BATTERY.BAT1.capacity > 95 ? "󰁹 ${EWW_BATTERY.BAT1.capacity}" :
           EWW_BATTERY.BAT1.capacity > 90 ? "󰂂 ${EWW_BATTERY.BAT1.capacity}" :
           EWW_BATTERY.BAT1.capacity > 80 ? "󰂁 ${EWW_BATTERY.BAT1.capacity}" :
@@ -63,7 +63,7 @@
 )
 
 (defwidget action_settings_button [condition action icon label class onoff]
-  (button :onclick {action} 
+  (button :onclick {action}
     :class {
       condition ? "action_settings_button ${class}" :
       "action_settings_button action_settings_button_toggled ${class}"
@@ -96,7 +96,7 @@
             :class {
               condition ? "action-settings-state" :
               "action-settings-state action-settings-state-enabled"
-            } 
+            }
             :text {
               onoff != "" ? onoff :
               condition ? "Off" : "On"
@@ -193,7 +193,7 @@
 
 (defwidget volume_scale []
   (overlay :hexpand "true"
-    (scale :min 0 :max 100 
+    (scale :min 0 :max 100
       :round-digits 0
       :active {volume != "muted"}
       :value {volume == "muted" ? 0 : volume}

@@ -85,6 +85,6 @@
   "scripts/vol.sh")
 
 (deflisten workspaces :initial "[]" "$HOME/.config/eww/scripts/get-workspaces")
-(deflisten current_workspace 
+(deflisten current_workspace
   :initial "1" "$HOME/.config/eww/scripts/get-active-workspace")
 (deflisten window :initial "..." "$HOME/.config/eww/scripts/get-window-title")

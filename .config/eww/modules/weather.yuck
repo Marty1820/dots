@@ -221,8 +221,8 @@
     )
     (label :class "forecast-desc f-high-${order}"
       ; The replace is not working, it needs to remove the quotes
-      :text {replace("${jq(forecast_file, '.list[${order}].weather[].main')}", '/[Rain]/g', '')}
-      ; :text        "${jq(forecast_file, '.list[${order}].weather[].main')}"
+      ;:text {replace("${jq(forecast_file, '.list[${order}].weather[].main')}", '/[Rain]/g', '')}
+      :text "${jq(forecast_file, '.list[${order}].weather[].main')}"
     )
   )
 )

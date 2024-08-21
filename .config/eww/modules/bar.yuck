@@ -21,7 +21,7 @@
             } ${
               workspace.windows > 0 ? "occupied" : "empty"
             }"
-            (label 
+            (label
               :text "${
                 workspace.id == "1" ? "" :
                 workspace.id == "2" ? "" :
@@ -174,7 +174,7 @@
   (box :class "left-modules"
     :orientation "h"
     :space-evenly "false"
-    :halign "start" 
+    :halign "start"
     (app-launcher)
     (workspaces)
   )
