@@ -10,33 +10,15 @@
 ; POLLS
 (defpoll weather_update :interval "10m" :run-while weather_visible
   "expr $(expr $(date +%s) - $(stat -c %Y $HOME/.cache/weather/weatherdata)) / 60")
-(defpoll weather_city :interval "1h" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --city")
 (defpoll weather_color :interval "10m" :initial "#ffffff"
   "$HOME/.config/scripts/weather.sh --hex")
 (defpoll weather_icon :interval "10m" :initial ""
   "$HOME/.config/scripts/weather.sh --icon")
 (defpoll weather_temp :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.sh --temp")
-(defpoll weather_temph :interval "10m" :initial "0" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --temphigh 0")
-(defpoll weather_templ :interval "10m" :initial "0" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --templow 0")
-(defpoll weather_desc :interval "10m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --stat")
-(defpoll weather_sunr :interval "1h" :initial "0" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --srise")
-(defpoll weather_suns :interval "1h" :initial "0" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --sset")
-(defpoll weather_ccover :interval "10m" :initial "0" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --clouds")
 (defpoll weather_feels_like :interval "10m" :initial "0"
   :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --feel")
-(defpoll weather_wind :interval "10m" :initial "0"
-  "$HOME/.config/scripts/weather.sh --wind")
-(defpoll weather_humidity :interval "10m" :initial "0"
-  "$HOME/.config/scripts/weather.sh --humid")
 (defpoll aqi_color :interval "10m" :initial "#ffffff"
   :run-while weather_visible
   "$HOME/.config/scripts/weather.sh --aqi_color")
@@ -44,6 +26,8 @@
   "$HOME/.config/scripts/weather.sh --aqi")
 (defpoll aqi_icon :interval "10m" :initial ""
   "$HOME/.config/scripts/weather.sh --aqi_icon")
+(defpoll weather_file :interval "10m"
+  "cat $HOME/.cache/weather/weatherdata")
 (defpoll forecast_file :interval "10m"
   "cat $HOME/.cache/weather/weatherforecast")
 (defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible

@@ -5,7 +5,7 @@
     (label :class "weather-location"
       :halign "start"
       :valign "start"
-      :text weather_city
+      :text {replace("${jq(weather_file, '.name')}", '["]', '')}
     )
     (label :class "weather-update"
       :halign "end"
@@ -28,7 +28,9 @@
         :text "󰖜"
       )
       (label :class "weather-rise-text"
-        :text "${weather_sunr}"
+        :text "${formattime('${
+          jq(forecast_file, `.list[0].sunrise`)
+        }', '%I:%M %p')}"
       )
     )
     (box :orientation "h"
@@ -38,7 +40,9 @@
         :text "󰖛"
       )
       (label :class "weather-set-text"
-        :text "${weather_suns}"
+        :text "${formattime('${
+          jq(forecast_file, `.list[0].sunset`)
+        }', '%I:%M %p')}"
       )
     )
   )
@@ -76,7 +80,7 @@
         weather_temp > 90 ? 'more' :
                             ''
       }"
-      :text " ${weather_temph}"
+      :text " ${round("${jq(forecast_file, '.list[0].temp.max')}", 0)}"
     )
     (label
       :class "weather-templ ${
@@ -84,7 +88,7 @@
         weather_temp > 90 ? 'more' :
                             ''
       }"
-      :text " ${weather_templ}"
+      :text " ${round("${jq(forecast_file, '.list[0].temp.min')}", 0)}"
     )
   )
 )
@@ -99,7 +103,7 @@
       (label :class "weather-desc"
         :halign "center"
         :justify "center"
-        :text weather_desc
+        :text {replace("${jq(weather_file, '.weather[].main')}", '["]', '')}
       )
     )
     (w_minmax)
@@ -123,7 +127,7 @@
       }"
     )
     (label :class "w-feel-data"
-      :text "${weather_feels_like}"
+      :text "${jq(weather_file, '.main.feels_like')}"
     )
     (label :class "w-feel-text"
       :text "Feels like"
@@ -137,14 +141,14 @@
     :class "weather-section weather-humidity"
     (label
       :class "w-humidity-icon ${
-        weather_humidity < 30 ? 'less' :
-        weather_humidity > 60 ? 'more' :
-                                ''
+        "${jq(weather_file, '.main.humidity')}" < 30 ? 'less' :
+        "${jq(weather_file, '.main.humidity')}" > 60 ? 'more' :
+                                                       ''
       }"
       :text "󰖎"
     )
     (label :class "w-humidity-data"
-      :text "${weather_humidity}󰏰"
+      :text "${jq(weather_file, '.main.humidity')}󰏰"
     )
     (label :class "w-humidity-text"
       :text "Humidity"
@@ -156,11 +160,12 @@
   (box :orientation "v"
     :space-evenly "false"
     :class "weather-section weather-wind"
-    (label :class "w-wind-icon ${weather_wind > 32 ? 'more' : ''}"
+    (label :class "w-wind-icon ${jq(weather_file, '.wind.speed')} > 32 ? 'more' : ''}"
       :text "󰈐"
+      "${jq(weather_file, '.wind.speed')}"
     )
     (label :class "w-wind-data"
-      :text "${round(weather_wind, 1)} mph"
+      :text "${jq(weather_file, '.wind.speed')} mph"
     )
     (label :class "w-wind-text"
       :text "Wind"
@@ -176,7 +181,7 @@
       :text "󰅟"
     )
     (label :class "w-cloud-data"
-      :text "${weather_ccover}󰏰"
+      :text "${jq(weather_file, '.clouds.all')}󰏰"
     )
     (label :class "w-cloud-text"
       :text "Cover"
@@ -211,7 +216,7 @@
       }
     )
     (label :class "forecast-date f-date-${order}"
-      :text "${formattime('${jq(forecast_file, `.list[${order}].dt`)}', '%m/%d')}"
+      :text {formattime("${jq(forecast_file, '.list[${order}].dt')}", '%m/%d')}
     )
     (label :class "forecast-high f-high-${order}"
       :text " ${jq(forecast_file, '.list[${order}].temp.max')}"
