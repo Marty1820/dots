@@ -65,7 +65,7 @@ wk.add({
   -- Neotree
   { '<leader>n',  group = '+[N]eotree' },
   { '<leader>nn', '<cmd>Neotree filesystem reveal left<cr>', desc = 'Open Neotree' },
-  { '<leader>nb', '<cmd>Neotree bufferes reveal float<cr>',  desc = 'Neotree [b]uffers' },
+  { '<leader>nb', '<cmd>Neotree buffers reveal float<cr>',   desc = 'Neotree [b]uffers' },
 
   -- MISC
   { '<leader>xl', '<cmd>lopen<cr>',                          desc = 'Location List' },
