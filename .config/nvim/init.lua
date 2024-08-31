@@ -1,26 +1,44 @@
--- Default options for nvim
-require('vim-options')
-
--- [[ Install `lazy.nvim` plugin manager ]]
 -- https://github.com/folke/lazy.nvim
--- `:help lazy.nvim.txt` for more info
+-- Bootstrap Lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
+  local out = vim.fn.system({
     'git',
     'clone',
     '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
+    lazyrepo,
     '--branch=stable', -- latest stable release
     lazypath,
   })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { 'Failed to clone lazy.nvim:\n', 'ErrorMsg' },
+      { out, 'WarningMsg' },
+      { '\nPress any key to exit...' },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
+-- Loading Lazy.nvim so that mappingu are correct.
+-- This is also a good place to setup other settings (vim.opt)
+vim.g.mapleader = ' '
+vim.g.maplocalleader = '\\'
 
-require('lazy').setup('plugins')
+-- Setup Lazy.nvim
 require('lazy').setup({
+  spec = {
+    -- import your plugins
+    { import = 'plugins' },
+  },
+  -- automatically check for plugin updates
   checker = { enabled = true },
 })
+
+-- Default options for nvim
+require('vim-options')
 
 -- Keybindings for plugins
 require('keymaps')
