@@ -49,7 +49,6 @@ return {
       lspconfig.jsonls.setup({})
       lspconfig.lua_ls.setup({})
       lspconfig.marksman.setup({})
-      lspconfig.pyre.setup({})
       lspconfig.pyright.setup({})
       lspconfig.yamlls.setup({})
     end,
