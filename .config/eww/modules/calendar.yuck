@@ -3,8 +3,10 @@
     :space-evenly "false"
     (box :class "cal-header"
       :orientation "h"
+      :space-evenly "false"
       (label :class "cal-date"
         :halign "start"
+        :hexpand "true"
         :text {formattime(EWW_TIME, "%B %Y")}
       )
       (label :class "cal-time"
