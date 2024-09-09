@@ -8,7 +8,7 @@
 
 .cal-date {
   font-size: 1.7rem;
-  padding: 0.2rem;
+  padding: 0.1rem;
 }
 
 calendar {
@@ -18,13 +18,8 @@ calendar {
 }
 
 calendar:selected {
-  color: $foreground;
   background: $purple;
   border-radius: 2rem;
-}
-
-calendar.button {
-  color: $purple;
 }
 
 calendar.highlight {
