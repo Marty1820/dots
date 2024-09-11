@@ -47,10 +47,32 @@ return {
       lspconfig.cssls.setup({})
       lspconfig.html.setup({})
       lspconfig.jsonls.setup({})
-      lspconfig.lua_ls.setup({})
+      lspconfig.lua_ls.setup({
+        settings = {
+          Lua = {
+            runtime = {
+              version = 'LuaJIT',
+            },
+            diagnostics = {
+              globals = { 'vim' },
+            },
+            telementry = {
+              enable = false,
+            },
+          },
+        },
+      })
       lspconfig.marksman.setup({})
       lspconfig.pyright.setup({})
-      lspconfig.yamlls.setup({})
+      lspconfig.yamlls.setup({
+        settings = {
+          redhat = {
+            telementry = {
+              enabled = false,
+            },
+          },
+        },
+      })
     end,
   },
 }
