@@ -11,11 +11,11 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 
 ## Details
 
-- **Shell**: ZSH
+- **Shell**: [ZSH](https://www.zsh.org/)
 - **WM**: [Hyprland](https://hyprland.org/)
 - **Status Bar**: [EWW](https://elkowar.github.io/eww/eww.html)
 - **Application Launcher**: [rofi wayland fork](https://github.com/lbonn/rofi)
-- **Terminal**: Kitty
+- **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
 #### Keybound Apps
 
@@ -29,44 +29,38 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 |      `rofi`      |    `Super + d` = applications    |
 | `grim` & `slurp` | Print Screen key for screenshots |
 
-#### Bash & ZSH alias's
+#### Bash & ZSH changes
 
-|        Name         |                 Description                  |
-| :-----------------: | :------------------------------------------: |
-|        `exa`        |               `ls` replacement               |
-|        `bat`        |          Replacing `cat` with `bat`          |
-|      `mirror`       |    Updates mirrors with reflector on Arch    |
-|     `starship`      |         Changes the terminal prompt          |
-| Decompression Tools | `ex filename` extracts most compressed files |
+|        Name         |                Description                |
+| :-----------------: | :---------------------------------------: |
+|        `exa`        |             `ls` replacement              |
+|        `bat`        |             `cat` replacement             |
+|      `mirror`       |         Runs `reflector` on Arch          |
+|     `starship`      |              Terminal Prompt              |
+| Decompression Tools | `ex filename` to extract compressed files |
 
-# Hyprland Screenshot
+## Hyprland Screenshot
 
 <div align="center">
-  <h3>Desktop & status bar</h3>
-</div>
+
+### Desktop & status bar
 
 ![screenshot](.screenshots/hyprland.png)
 
-<div align="center">
-  <h3>Application launcher [rofi](https:/github.com/lbonn/rofi)</h3>
-</div>
+### Application launcher [rofi](https:/github.com/lbonn/rofi)
 
 ![screenshot](.screenshots/apps-menu.png)
 
-<div align="center">
-  <h3>Calendar</h3>
-</div>
+### Calendar
 
 ![screenshot](.screenshots/calendar.png)
 
-<div align="center">
-  <h3>Control center</h3>
-</div>
+### Control center
 
 ![screenshot](.screenshots/control_center.png)
 
-<div align="center">
-  <h3>Weather widget</h3>
-</div>
+### Weather widget
 
 ![screenshot](.screenshots/weather_widget.png)
+
+</div>
