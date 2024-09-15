@@ -11,25 +11,25 @@
 (defpoll weather_update :interval "10m" :run-while weather_visible
   "expr $(expr $(date +%s) - $(stat -c %Y $HOME/.cache/weather/weatherdata)) / 60")
 (defpoll weather_color :interval "10m" :initial "#ffffff"
-  "$HOME/.config/scripts/weather.sh --hex")
+  "$HOME/.config/scripts/weather.py --hex")
 (defpoll weather_icon :interval "10m" :initial ""
-  "$HOME/.config/scripts/weather.sh --icon")
+  "$HOME/.config/scripts/weather.py --icon")
 (defpoll weather_temp :interval "10m" :initial "0"
-  "$HOME/.config/scripts/weather.sh --temp")
+  "$HOME/.config/scripts/weather.py --temp")
 (defpoll weather_feels_like :interval "10m" :initial "0"
   :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --feel")
+  "$HOME/.config/scripts/weather.py --feel")
 (defpoll aqi_color :interval "10m" :initial "#ffffff"
   :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --aqi_color")
+  "$HOME/.config/scripts/weather.py --aqi_color")
 (defpoll air_pollution :interval "10m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.sh --aqi")
+  "$HOME/.config/scripts/weather.py --aqi")
 (defpoll aqi_icon :interval "10m" :initial ""
-  "$HOME/.config/scripts/weather.sh --aqi_icon")
+  "$HOME/.config/scripts/weather.py --aqi_icon")
 (defpoll weather_file :interval "10m"
-  "cat $HOME/.cache/weather/weatherdata")
+  "cat $HOME/.cache/weather/weatherdata.json")
 (defpoll forecast_file :interval "10m"
-  "cat $HOME/.cache/weather/weatherforecast")
+  "cat $HOME/.cache/weather/weatherforecast.json")
 (defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata")
 (defpoll pm25 :interval "10m" :initial "0" :run-while weather_visible

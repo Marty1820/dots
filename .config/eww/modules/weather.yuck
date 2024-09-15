@@ -59,7 +59,7 @@
                             ''
       }"
       :halign "start"
-      :text "${weather_temp}"
+      :text "${round(weather_temp, 0)}"
     )
     (label :class "weather-degree"
       :valign "start"
