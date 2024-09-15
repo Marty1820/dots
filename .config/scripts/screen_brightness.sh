@@ -17,7 +17,7 @@ LevelSteps=60
 AnimationDelay=0.016
 
 # Read the variable names
-MinimumBrightness=060
+MinimumBrightness=001
 
 # 2 : Default | 1 : Add Offset | 0 : Subtract Offset, Recommended to not change
 op=2
@@ -39,8 +39,8 @@ if [[ -f /dev/shm/AB.offset ]]; then
   OffSet=$(cat /dev/shm/AB.offset)
 else
   OffSet=0
-  eval "$(echo $OffSet | tee /dev/shm/AB.offset)"
-  eval "$(chmod 666 /dev/shm/AB.offset)"
+  $(echo $OffSet > /dev/shm/AB.offset)
+  $(chmod 666 /dev/shm/AB.offset)
 fi
 
 # If no offset or it's less than 0 make 0
@@ -56,7 +56,7 @@ if [[ $op -lt 2 ]]; then
 
   # Verify offset is not less than 0
   OffSet=$((OffSet < 0 ? 0 : OffSet))
-  eval "$(echo $OffSet | tee /dev/shm/AB.offset)"
+  $(echo $OffSet > /dev/shm/AB.offset)
   exit
 fi
 
@@ -86,8 +86,8 @@ do
     OffSet=$(cat /dev/shm/AB.offset)
   else
     OffSet=0
-    eval "$(echo $OffSet | tee /dev/shm/AB.offset)"
-    eval "$(chmod 666 /dev/shm/AB.offset)"
+    $(echo $OffSet >/dev/shm/AB.offset)
+    $(chmod 666 /dev/shm/AB.offset)
   fi
 
   Light=$(cat "$LSensorPath")
@@ -95,18 +95,18 @@ do
   Light=$((Light + OffSet))
 
   # Set allowed range for light
-  MaxOld=$((OldLight + OldLight/LightChange))
-  MinOld=$((OldLight - OldLight/LightChange))
+  MaxOld=$((OldLight + OldLight / LightChange))
+  MinOld=$((OldLight - OldLight / LightChange))
 
   if [[ $Light -gt $MaxOld ]] || [[ $Light -lt $MinOld ]]; then
     CurrentBrightness=$(cat "$BLightPath")
 
     # Add MinimumBrightness here to not effect comparison but the outcome
-    Light=$(( Light + MinimumBrightness ))
+    Light=$(LC_NUMERIC=C printf "%.0f" $(echo "scale=2; $Light + (($MaxScreenBrightness * ($MinimumBrightness / 100)) / $SensorToDiplayScale)" | bc))
 
     # Generate a TempLight value for the screen to be set to
     # Float math thanks Matthias_Wachter
-    TempLight=$(LC_NUMERIC=C printf "%.0f" "$(echo "scale=2; $Light * $SensorToDiplayScale" | bc)")
+    TempLight=$(LC_NUMERIC=C printf "%.0f" $(echo "scale=2; $Light * $SensorToDiplayScale" | bc))
 
     # Check we don't ask the screen to go brighter than it can
     if [[ $TempLight -gt $MaxScreenBrightness ]]; then
@@ -116,7 +116,7 @@ do
     fi
 
     # How different should each stop be
-    DiffCount=$(LC_NUMERIC=C printf "%.0f" "$(echo "scale=2; ( $NewLight - $CurrentBrightness ) / $LevelSteps" | bc )")
+    DiffCount=$(LC_NUMERIC=C printf "%.0f" $(echo "scale=2; ( $NewLight - $CurrentBrightness ) / $LevelSteps" | bc ))
 
     # Step once per screen HZ to make animation
     for i in $(eval echo {1..$LevelSteps})
@@ -124,15 +124,17 @@ do
 
       # Set new relative light value
       NewLight=$(( DiffCount ))
-      CurrentBrightness=$(cat "$BLightPath")
-      FakeLight=$(( NewLight + CurrentBrightness ))
 
-      if [[ $FakeLight -gt $MaxScreenBrightness ]]; then
-        NewLight=$MaxScreenBrightness
-        echo "ERROR"
-      else
-        echo $FakeLight > "$BLightPath"
-      fi
+        CurrentBrightness=$(cat "$BLightPath")
+        FakeLight=$(( $NewLight + $CurrentBrightness ))
+
+        if [[ $FakeLight -gt $MaxScreenBrightness ]]; then
+          NewLight=$MaxScreenBrightness
+          echo "ERROR"
+        else
+          echo $FakeLight > "$BLightPath"
+        fi
+
       # Sleep for the screen HZ time so the effect is visible
       sleep $AnimationDelay
     done
