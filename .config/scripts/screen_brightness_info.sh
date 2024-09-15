@@ -13,7 +13,7 @@ if [ -z "$bright_PID" ]; then
 fi
 
 # Status of process STOP/CONT
-bright_status=$(ps -o state= -p "$bright_PID")
+bright_status=$(ps -o state= -p "$bright_PID" | tr -d '[:space:]')
 
 # Get backlight percent
 cur_backlight=$(xbacklight -get | awk '{print int($1)}')
@@ -40,6 +40,7 @@ bright_icon() {
         echo "󰃠"
       fi
       ;;
+    *) echo "Unknown process state: $bright_status" ;;
   esac
 }
 

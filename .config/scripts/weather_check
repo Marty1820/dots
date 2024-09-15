@@ -7,7 +7,11 @@ fetch_weather_data() {
 
 # Function to check network availability
 network_available() {
-  ping -c 1 archlinux.org >/dev/null 2>&1
+  if ping -c 1 archlinux.org >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 # Main loop
