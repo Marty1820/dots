@@ -29,7 +29,7 @@
       )
       (label :class "weather-rise-text"
         :text "${formattime('${
-          jq(forecast_file, `.list[0].sunrise`)
+          jq(forecast_file, `.daily[0].sunrise`)
         }', '%I:%M %p')}"
       )
     )
@@ -41,7 +41,7 @@
       )
       (label :class "weather-set-text"
         :text "${formattime('${
-          jq(forecast_file, `.list[0].sunset`)
+          jq(forecast_file, `.daily[0].sunset`)
         }', '%I:%M %p')}"
       )
     )
@@ -80,7 +80,7 @@
         weather_temp > 90 ? 'more' :
                             ''
       }"
-      :text " ${round("${jq(forecast_file, '.list[0].temp.max')}", 0)}"
+      :text " ${round("${jq(forecast_file, '.daily[0].temp.max')}", 0)}"
     )
     (label
       :class "weather-templ ${
@@ -88,7 +88,7 @@
         weather_temp > 90 ? 'more' :
                             ''
       }"
-      :text " ${round("${jq(forecast_file, '.list[0].temp.min')}", 0)}"
+      :text " ${round("${jq(forecast_file, '.daily[0].temp.min')}", 0)}"
     )
   )
 )
@@ -209,23 +209,23 @@
     :halign "center"
     (label :class "forecast-day f-day-${order}"
       :text {
-        "${formattime('${jq(forecast_file, `.list[${order}].dt`)}', '%A')}" !=
+        "${formattime('${jq(forecast_file, `.daily[${order}].dt`)}', '%A')}" !=
                                             "${formattime(EWW_TIME, '%A')}" ?
-        "${formattime('${jq(forecast_file, `.list[${order}].dt`)}', '%A')}" :
+        "${formattime('${jq(forecast_file, `.daily[${order}].dt`)}', '%A')}" :
                                                                     "Today"
       }
     )
     (label :class "forecast-date f-date-${order}"
-      :text {formattime("${jq(forecast_file, '.list[${order}].dt')}", '%m/%d')}
+      :text {formattime("${jq(forecast_file, '.daily[${order}].dt')}", '%m/%d')}
     )
     (label :class "forecast-high f-high-${order}"
-      :text " ${jq(forecast_file, '.list[${order}].temp.max')}"
+      :text " ${jq(forecast_file, '.daily[${order}].temp.max')}"
     )
     (label :class "forecast-low f-low-${order}"
-      :text " ${jq(forecast_file, '.list[${order}].temp.min')}"
+      :text " ${jq(forecast_file, '.daily[${order}].temp.min')}"
     )
     (label :class "forecast-desc f-high-${order}"
-      :text {replace("${jq(forecast_file, '.list[${order}].weather[].main')}", '["]', '')}
+      :text {replace("${jq(forecast_file, '.daily[${order}].weather[].main')}", '["]', '')}
     )
   )
 )
