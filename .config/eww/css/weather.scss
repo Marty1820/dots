@@ -115,6 +115,10 @@
   font-size: 1em;
 }
 
+.aqi-progress {
+  background-color: $selection;
+}
+
 .aqi-bar trough {
   background-color: $selection;
   border-radius: 1rem;
