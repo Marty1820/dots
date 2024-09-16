@@ -192,9 +192,9 @@
     :halign "center"
     (label :class "forecast-day f-day-${order}"
       :text {
-        "${formattime('${jq(forecast_file, `.daily[${order}].dt`)}', '%A')}" !=
+        "${formattime('${jq(forecast_file, `.daily.[${order}].dt`)}', '%A')}" !=
                                             "${formattime(EWW_TIME, '%A')}" ?
-        "${formattime('${jq(forecast_file, `.daily[${order}].dt`)}', '%A')}" :
+        "${formattime('${jq(forecast_file, `.daily.[${order}].dt`)}', '%A')}" :
                                                                     "Today"
       }
     )
@@ -234,13 +234,19 @@
   )
 )
 
-(defwidget aqi_breakdown [label max value]
+(defwidget aqi_breakdown [label max value vpoor poor moderate fair]
   (box :orientation "v"
     (label :xalign "0" :text "${label}")
     (scale :min 0 :max "${max}"
       :active "false"
       :value value
-      :class "aqi-bar ${label}"
+      :class "aqi-bar ${label} ${
+        value < fair     ? 'good'     :
+        value < moderate ? 'fair'     :
+        value < poor     ? 'moderate' :
+        value < vpoor    ? 'poor'     :
+                           'vpoor'
+      }"
     )
     (label :xalign "1" :text "${value} µg/m³")
   )
@@ -276,23 +282,47 @@
     )
     (box :orientation "v"
       :class "aqi-data"
-      (aqi_breakdown :label "PM2.5"
+      (aqi_breakdown :label "PM₂.₅"
         :max 85 :value pm25
+        :vpoor 75
+        :poor 50
+        :moderate 25
+        :fair 10
       )
-      (aqi_breakdown :label "PM10"
+      (aqi_breakdown :label "PM₁₀"
         :max 220 :value pm10
+        :vpoor 200
+        :poor 150
+        :moderate 70
+        :fair 40
       )
-      (aqi_breakdown :label "O3"
+      (aqi_breakdown :label "O₃"
         :max 240 :value o3
+        :vpoor 180
+        :poor 140
+        :moderate 100
+        :fair 60
       )
-      (aqi_breakdown :label "NO2"
+      (aqi_breakdown :label "NO₂"
         :max 240 :value no2
+        :vpoor 200
+        :poor 150
+        :moderate 70
+        :fair 40
       )
-      (aqi_breakdown :label "SO2"
+      (aqi_breakdown :label "SO₂"
         :max 370 :value so2
+        :vpoor 350
+        :poor 250
+        :moderate 80
+        :fair 20
       )
       (aqi_breakdown :label "CO"
         :max 16000 :value co
+        :vpoor 15400
+        :poor 12400
+        :moderate 9400
+        :fair 4400
       )
     )
   )

@@ -122,7 +122,36 @@
 }
 
 .aqi-bar trough highlight {
-  background-color: $red;
   border-radius: 1rem;
   min-height: 3px;
+}
+
+.good {
+  &.aqi-bar trough highlight {
+    background-color: $green;
+  }
+}
+
+.fair {
+  &.aqi-bar trough highlight {
+    background-color: $yellow;
+  }
+}
+
+.moderate {
+  &.aqi-bar trough highlight {
+    background-color: $orange;
+  }
+}
+
+.poor {
+  &.aqi-bar trough highlight {
+    background-color: $red;
+  }
+}
+
+.vpoor {
+  &.aqi-bar trough highlight {
+    background-color: $purple;
+  }
 }
