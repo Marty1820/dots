@@ -18,13 +18,12 @@
   :run-while weather_visible
   "$HOME/.config/scripts/weather.py --feel")
 (defpoll aqi_color :interval "10m" :initial "#ffffff"
-  :run-while weather_visible
   "$HOME/.config/scripts/weather.py --aqi_color")
 (defpoll air_pollution :interval "10m" :run-while weather_visible
   "$HOME/.config/scripts/weather.py --aqi")
 (defpoll aqi_icon :interval "10m" :initial ""
   "$HOME/.config/scripts/weather.py --aqi_icon")
-(defpoll forecast_file :interval "10m"
+(defpoll forecast_file :interval "10m" :run-while weather_visible
   "cat $HOME/.cache/weather/onecall.json")
 (defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
