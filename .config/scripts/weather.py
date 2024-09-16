@@ -8,24 +8,41 @@ from datetime import datetime
 
 # Define paths
 home = os.path.expanduser("~")
+# openweatherdata file Example:
+# API_KEY='your_api_key_here'
+# LAT='latitude_value_here'
+# LON='longitude_value_here'
+# UNITS='units_value_here'  # e.g., 'metric' or 'imperial'
 api_file_path = os.path.join(home, ".config", "scripts", "openweatherdata")
 cache_dir = os.path.join(home, ".cache", "weather")
 onecall_file = os.path.join(cache_dir, "onecall.json")
 aqi_file = os.path.join(cache_dir, "aqidata.json")
 
-# Read API credentials and parameters
-with open(api_file_path, "r") as file:
-    api_key, lat, lon = [line.strip() for line in file]
 
-unit = "imperial"  # Available options: 'metric' or 'imperial'
+# Read API credentials and parameters from a key-value configuration file
+def load_api_config(file_path):
+    config = {}
+    with open(file_path, "r") as file:
+        for line in file:
+            key, value = line.strip().split("=", 1)
+            value = value.strip("'")  # Remove any surrounding quotes
+            config[key] = value
+    return config
+
+
+api_config = load_api_config(api_file_path)
+API_KEY = api_config.get("API_KEY")
+LAT = api_config.get("LAT")
+LON = api_config.get("LON")
+UNITS = api_config.get("UNITS", "imperial")  # Default to 'imperial' if not specified
 
 # Ensure cache directory exists
 os.makedirs(cache_dir, exist_ok=True)
 
 
-def fetch_data(url):
+def fetch_data(url, params):
     try:
-        response = requests.get(url)
+        response = requests.get(url, params=params)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
@@ -35,14 +52,18 @@ def fetch_data(url):
 
 def get_weather_data():
     base_url = "http://api.openweathermap.org/data/"
-    params = f"appid={api_key}&lat={lat}&lon={lon}&units={unit}"
-    excludes = f"&exlude=minutely,hourly"
     urls = {
-        "onecall": base_url + "3.0/onecall?" + params + excludes,
-        "air_pollution": base_url + "2.5/air_pollution?" + params,
+        "onecall": base_url + "3.0/onecall?",
+        "air_pollution": base_url + "2.5/air_pollution?",
+    }
+    params = {
+        "appid": API_KEY,
+        "lat": LAT,
+        "lon": LON,
+        "units": UNITS,
     }
 
-    data = {key: fetch_data(url) for key, url in urls.items()}
+    data = {key: fetch_data(url, params) for key, url in urls.items()}
 
     with open(onecall_file, "w") as f:
         json.dump(data["onecall"], f, indent=4)
@@ -78,18 +99,19 @@ def get_jq_value(data, query):
 
 def onecall_weather(day_index=0):
     data = load_json(onecall_file)
-
     # Format the day_index corrrectly in the strings
     temp_high_query = f".daily.{day_index}.temp.max"
     temp_low_query = f".daily.{day_index}.temp.min"
     sunrise_query = f".daily.{day_index}.sunrise"
     sunset_query = f".daily.{day_index}.sunset"
 
+    sunrise_timestamp = get_jq_value(data, sunrise_query)
+    sunset_timestamp = get_jq_value(data, sunset_query)
+
     return {
         "temp": get_jq_value(data, ".current.temp"),
         "feels_like": get_jq_value(data, ".current.feels_like"),
         "status": get_jq_value(data, ".current.weather.0.main"),
-        # "city": get_jq_value(data, f".current."),
         "humidity": get_jq_value(data, ".current.humidity"),
         "wind_speed": get_jq_value(data, ".current.wind_speed"),
         "clouds": get_jq_value(data, ".current.clouds"),
@@ -97,17 +119,13 @@ def onecall_weather(day_index=0):
         "temphigh": get_jq_value(data, temp_high_query),
         "templow": get_jq_value(data, temp_low_query),
         "sunrise": (
-            datetime.fromtimestamp(get_jq_value(data, sunrise_query)).strftime(
-                "%I:%M %p"
-            )
-            if get_jq_value(data, sunrise_query)
+            datetime.fromtimestamp(sunrise_timestamp).strftime("%I:%M %p")
+            if isinstance(sunrise_timestamp, (int, float))
             else None
         ),
         "sunset": (
-            datetime.fromtimestamp(get_jq_value(data, sunset_query)).strftime(
-                "%I:%M %p"
-            )
-            if get_jq_value(data, sunset_query)
+            datetime.fromtimestamp(sunset_timestamp).strftime("%I:%M %p")
+            if isinstance(sunset_timestamp, (int, float))
             else None
         ),
     }
@@ -116,6 +134,11 @@ def onecall_weather(day_index=0):
 def set_aqi():
     data = load_json(aqi_file)
     aqi_data = get_jq_value(data, ".list.0.main.aqi")
+
+    # Ensure aqi_data is a valid integer or use a default value if it's None
+    if aqi_data is None:
+        aqi_data = -1  # Use -1 or any other value not in aqi_dict
+
     aqi_dict = {
         1: ("Good", "󰡳", "#50fa7b"),
         2: ("Fair", "󰡵", "#f1fa8c"),
