@@ -86,7 +86,9 @@
       (label :class "weather-desc"
         :halign "center"
         :justify "center"
-        :text {replace("${jq(forecast_file, '.current.weather[].main')}", '["]', '')}
+        :text {replace("${
+          jq(forecast_file, '.current.weather[].main')}", '["]', '')
+        }
       )
     )
     (w_minmax)
@@ -126,7 +128,7 @@
       :class "w-humidity-icon ${
         "${jq(forecast_file, '.current.humidity')}" < 30 ? 'less' :
         "${jq(forecast_file, '.current.humidity')}" > 60 ? 'more' :
-                                                       ''
+                                                           ''
       }"
       :text "󰖎"
     )
@@ -143,9 +145,12 @@
   (box :orientation "v"
     :space-evenly "false"
     :class "weather-section weather-wind"
-    (label :class "w-wind-icon ${jq(forecast_file, '.current.wind_speed')} > 32 ? 'more' : ''}"
+    (label
+      :class "w-wind-icon ${
+        "${jq(forecast_file, '.current.wind_speed')}" > 32 ? 'more' : 
+                                                             ''
+      }"
       :text "󰈐"
-      "${jq(forecast_file, '.current.wind_speed')}"
     )
     (label :class "w-wind-data"
       :text "${jq(forecast_file, '.current.wind_speed')} mph"
@@ -184,8 +189,6 @@
   )
 )
 
-(defvar day_name "date +%A")
-
 (defwidget weather_forecast_day [order]
   (box :orientation "v"
     :class "forecast-section"
@@ -212,7 +215,6 @@
     )
   )
 )
-
 
 (defwidget w_forecast []
   (box :orientation "h"

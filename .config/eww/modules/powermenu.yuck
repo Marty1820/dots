@@ -41,8 +41,9 @@
       :label "${EWW_BATTERY.BAT1.status == "Charging" ? "Sleep" : "Hibernate"}"
       :icon "${EWW_BATTERY.BAT1.status == "Charging" ? "󰒲" : "󰤁"}"
       :onclick "eww close powermenu && ${
-        EWW_BATTERY.BAT1.status == "Charging" ?
-                          "systemctl suspend" : "systemctl hibernate"}"
+        EWW_BATTERY.BAT1.status == "Charging" ? "systemctl suspend" :
+                                                "systemctl hibernate"
+      }"
     )
     (powermenu_entry
       :label "Logoff"

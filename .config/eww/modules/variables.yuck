@@ -2,8 +2,7 @@
 (defvar weather_visible false)
 (defvar control_visible false)
 
-(defvar bluetooth-toggle
-  "scripts/bluetooth.sh --toggle")
+(defvar bluetooth-toggle "scripts/bluetooth.sh --toggle")
 (defvar brightness-toggle
   "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
 
@@ -58,10 +57,8 @@
 
 
 ; LISTENS
-(deflisten network :initial '{"essid": "lo", "signal": ""}'
-  "scripts/net.sh")
-(deflisten volume :initial "0"
-  "scripts/vol.sh")
+(deflisten network :initial '{"essid": "lo", "signal": ""}' "scripts/net.sh")
+(deflisten volume :initial "0" "scripts/vol.sh")
 
 (deflisten workspaces :initial "[]" "$HOME/.config/eww/scripts/get-workspaces")
 (deflisten current_workspace
