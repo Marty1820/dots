@@ -11,7 +11,6 @@ home = os.path.expanduser("~")
 api_file_path = os.path.join(home, ".config", "scripts", "openweatherdata")
 cache_dir = os.path.join(home, ".cache", "weather")
 onecall_file = os.path.join(cache_dir, "onecall.json")
-weather_file = os.path.join(cache_dir, "weatherdata.json")
 aqi_file = os.path.join(cache_dir, "aqidata.json")
 
 # Read API credentials and parameters
@@ -40,7 +39,6 @@ def get_weather_data():
     excludes = f"&exlude=minutely,hourly"
     urls = {
         "onecall": base_url + "3.0/onecall?" + params + excludes,
-        "weather": base_url + "2.5/weather?" + params,
         "air_pollution": base_url + "2.5/air_pollution?" + params,
     }
 
@@ -48,8 +46,6 @@ def get_weather_data():
 
     with open(onecall_file, "w") as f:
         json.dump(data["onecall"], f, indent=4)
-    with open(weather_file, "w") as f:
-        json.dump(data["weather"], f, indent=4)
     with open(aqi_file, "w") as f:
         json.dump(data["air_pollution"], f, indent=4)
 
@@ -117,13 +113,6 @@ def onecall_weather(day_index=0):
     }
 
 
-def current_weather():
-    data = load_json(weather_file)
-    return {
-        "city": get_jq_value(data, ".name"),
-    }
-
-
 def set_aqi():
     data = load_json(aqi_file)
     aqi_data = get_jq_value(data, ".list.0.main.aqi")
@@ -165,7 +154,7 @@ def set_icon():
 def main():
     if len(sys.argv) < 2:
         print(
-            "Usage: script.py {--getdata|--icon|--temp|--temphigh index|--templow index|--feel|--stat|--city|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
+            "Usage: script.py {--getdata|--icon|--temp|--temphigh index|--templow index|--feel|--stat|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
         )
         sys.exit(1)
 
@@ -193,8 +182,6 @@ def main():
         print(onecall_weather()["feels_like"])
     elif option == "--stat":
         print(onecall_weather()["status"])
-    elif option == "--city":
-        print(current_weather()["city"])
     elif option == "--humid":
         print(onecall_weather()["humidity"])
     elif option == "--wind":
@@ -219,7 +206,7 @@ def main():
         print(onecall_weather(day_index=int(sys.argv[2]))["sunset"])
     else:
         print(
-            "Usage: script.py {--getdata|--icon|--temp|--temphigh index|--templow index|--feel|--stat|--city|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
+            "Usage: script.py {--getdata|--icon|--temp|--temphigh index|--templow index|--feel|--stat|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
         )
         sys.exit(1)
 

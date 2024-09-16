@@ -1,20 +1,3 @@
-(defwidget w_city []
-  (box :orientation "h"
-    :space-evenly "true"
-    :class "weather-top"
-    (label :class "weather-location"
-      :halign "start"
-      :valign "start"
-      :text {replace("${jq(weather_file, '.name')}", '["]', '')}
-    )
-    (label :class "weather-update"
-      :halign "end"
-      :valign "start"
-      :text " ${weather_update ?: "0"} min. ago"
-    )
-  )
-)
-
 (defwidget w_sun []
   (box :orientation "v"
     :space-evenly "false"
@@ -103,7 +86,7 @@
       (label :class "weather-desc"
         :halign "center"
         :justify "center"
-        :text {replace("${jq(weather_file, '.weather[].main')}", '["]', '')}
+        :text {replace("${jq(forecast_file, '.current.weather[].main')}", '["]', '')}
       )
     )
     (w_minmax)
@@ -127,7 +110,7 @@
       }"
     )
     (label :class "w-feel-data"
-      :text "${jq(weather_file, '.main.feels_like')}"
+      :text "${jq(forecast_file, '.current.feels_like')}"
     )
     (label :class "w-feel-text"
       :text "Feels like"
@@ -141,14 +124,14 @@
     :class "weather-section weather-humidity"
     (label
       :class "w-humidity-icon ${
-        "${jq(weather_file, '.main.humidity')}" < 30 ? 'less' :
-        "${jq(weather_file, '.main.humidity')}" > 60 ? 'more' :
+        "${jq(forecast_file, '.current.humidity')}" < 30 ? 'less' :
+        "${jq(forecast_file, '.current.humidity')}" > 60 ? 'more' :
                                                        ''
       }"
       :text "󰖎"
     )
     (label :class "w-humidity-data"
-      :text "${jq(weather_file, '.main.humidity')}󰏰"
+      :text "${jq(forecast_file, '.current.humidity')}󰏰"
     )
     (label :class "w-humidity-text"
       :text "Humidity"
@@ -160,12 +143,12 @@
   (box :orientation "v"
     :space-evenly "false"
     :class "weather-section weather-wind"
-    (label :class "w-wind-icon ${jq(weather_file, '.wind.speed')} > 32 ? 'more' : ''}"
+    (label :class "w-wind-icon ${jq(forecast_file, '.current.wind_speed')} > 32 ? 'more' : ''}"
       :text "󰈐"
-      "${jq(weather_file, '.wind.speed')}"
+      "${jq(forecast_file, '.current.wind_speed')}"
     )
     (label :class "w-wind-data"
-      :text "${jq(weather_file, '.wind.speed')} mph"
+      :text "${jq(forecast_file, '.current.wind_speed')} mph"
     )
     (label :class "w-wind-text"
       :text "Wind"
@@ -181,7 +164,7 @@
       :text "󰅟"
     )
     (label :class "w-cloud-data"
-      :text "${jq(weather_file, '.clouds.all')}󰏰"
+      :text "${jq(forecast_file, '.current.clouds')}󰏰"
     )
     (label :class "w-cloud-text"
       :text "Cover"
@@ -319,7 +302,6 @@
   (box :class "weather-container"
     :orientation "v"
     :space-evenly "false"
-    (w_city)
     (w_main)
     (w_extras)
     (w_forecast)

@@ -8,8 +8,6 @@
   "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
 
 ; POLLS
-(defpoll weather_update :interval "10m" :run-while weather_visible
-  "expr $(expr $(date +%s) - $(stat -c %Y $HOME/.cache/weather/weatherdata)) / 60")
 (defpoll weather_color :interval "10m" :initial "#ffffff"
   "$HOME/.config/scripts/weather.py --hex")
 (defpoll weather_icon :interval "10m" :initial ""
@@ -26,8 +24,6 @@
   "$HOME/.config/scripts/weather.py --aqi")
 (defpoll aqi_icon :interval "10m" :initial ""
   "$HOME/.config/scripts/weather.py --aqi_icon")
-(defpoll weather_file :interval "10m"
-  "cat $HOME/.cache/weather/weatherdata.json")
 (defpoll forecast_file :interval "10m"
   "cat $HOME/.cache/weather/onecall.json")
 (defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible
