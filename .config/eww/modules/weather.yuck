@@ -95,84 +95,19 @@
   )
 )
 
-(defwidget w_feel []
+(defwidget w_section [name iconclass icon data label]
   (box :orientation "v"
     :space-evenly "false"
-    :class "weather-section weather-feel"
+    :class "weather-section weather-${name}"
     (label
-      :class "w-feel-icon ${
-        weather_feels_like < 32 ? 'less' :
-        weather_feels_like > 90 ? 'more' :
-                                  ''
-      }"
-      :text "${
-        weather_feels_like < 32 ? '' :
-        weather_feels_like > 90 ? '' :
-                                  ''
-      }"
+      :class "w-${name}-icon ${iconclass}"
+      :text "${icon}"
     )
-    (label :class "w-feel-data"
-      :text "${jq(forecast_file, '.current.feels_like')}"
+    (label :class "w-${name}-data"
+      :text "${data}"
     )
-    (label :class "w-feel-text"
-      :text "Feels like"
-    )
-  )
-)
-
-(defwidget w_humidity []
-  (box :orientation "v"
-    :space-evenly "false"
-    :class "weather-section weather-humidity"
-    (label
-      :class "w-humidity-icon ${
-        "${jq(forecast_file, '.current.humidity')}" < 30 ? 'less' :
-        "${jq(forecast_file, '.current.humidity')}" > 60 ? 'more' :
-                                                           ''
-      }"
-      :text "󰖎"
-    )
-    (label :class "w-humidity-data"
-      :text "${jq(forecast_file, '.current.humidity')}󰏰"
-    )
-    (label :class "w-humidity-text"
-      :text "Humidity"
-    )
-  )
-)
-
-(defwidget w_wind []
-  (box :orientation "v"
-    :space-evenly "false"
-    :class "weather-section weather-wind"
-    (label
-      :class "w-wind-icon ${
-        "${jq(forecast_file, '.current.wind_speed')}" > 32 ? 'more' : 
-                                                             ''
-      }"
-      :text "󰈐"
-    )
-    (label :class "w-wind-data"
-      :text "${jq(forecast_file, '.current.wind_speed')} mph"
-    )
-    (label :class "w-wind-text"
-      :text "Wind"
-    )
-  )
-)
-
-(defwidget w_cloud []
-  (box :orientation "v"
-    :space-evenly "false"
-    :class "weather-section weather-cloud"
-    (label :class "w-cloud-icon"
-      :text "󰅟"
-    )
-    (label :class "w-cloud-data"
-      :text "${jq(forecast_file, '.current.clouds')}󰏰"
-    )
-    (label :class "w-cloud-text"
-      :text "Cover"
+    (label :class "w-${name}-text"
+      :text "${label}"
     )
   )
 )
@@ -182,10 +117,47 @@
     :class "weather-extras"
     :halign "center"
     :space-evenly "true"
-    (w_feel)
-    (w_humidity)
-    (w_wind)
-    (w_cloud)
+    (w_section
+      :name "feel"
+      :iconclass "${
+        weather_feels_like < 32 ? 'less' :
+        weather_feels_like > 90 ? 'more' :
+                                  ''
+      }"
+      :icon "${
+        weather_feels_like < 32 ? '' :
+        weather_feels_like > 90 ? '' :
+                                  ''
+      }"
+      :data "${jq(forecast_file, '.current.feels_like')}"
+      :label "Feels like"
+    )
+    (w_section
+      :name "humidity"
+      :iconclass "${
+        "${jq(forecast_file, '.current.humidity')}" < 30 ? 'less' :
+        "${jq(forecast_file, '.current.humidity')}" > 60 ? 'more' :
+                                                           ''}"
+      :icon "󰖎"
+      :data "${jq(forecast_file, '.current.humidity')}󰏰"
+      :label "Humidity"
+    )
+    (w_section
+      :name "wind"
+      :iconclass "${
+        "${jq(forecast_file, '.current.wind_speed')}" > 32 ? 'more' :
+                                                             ''}"
+      :icon "󰈐"
+      :data "${jq(forecast_file, '.current.wind_speed')} mph"
+      :label "Wind"
+    )
+    (w_section
+      :name "cloud"
+      :iconclass ""
+      :icon "󰅟"
+      :data "${jq(forecast_file, '.current.clouds')}󰏰"
+      :label "Cover"
+    )
   )
 )
 
@@ -211,7 +183,9 @@
       :text " ${jq(forecast_file, '.daily.[${order}].temp.min')}"
     )
     (label :class "forecast-desc f-high-${order}"
-      :text {replace("${jq(forecast_file, '.daily.[${order}].weather[].main')}", '["]', '')}
+      :text {replace(
+        "${jq(forecast_file, '.daily.[${order}].weather[].main')}", '["]', '')
+      }
     )
   )
 )
