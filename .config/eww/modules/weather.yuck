@@ -253,76 +253,81 @@
 )
 
 (defwidget air_quality []
-  (box :orientation "h"
+  (box :orientation "v"
     :class "aqi-box"
-    (box :orientation "v"
-      :class "aqi-main"
-      (label :yalign "0"
-        :class "aqi-label"
-        :text "Air Quality"
-      )
-      (circular-progress
-        :value "${
-          aqi_num == 1 ? 16 :
-          aqi_num == 2 ? 32 :
-          aqi_num == 3 ? 48 :
-          aqi_num == 4 ? 64 :
-          aqi_num == 5 ? 80 :
-                         0
-        }"
-        :start-at "35"
-        :thickness "8"
-        :class "aqi-progress"
-        :style "color: ${aqi_color}"
-        (label :xalign "0.5" :yalign "0.5"
-          :class "aqi-text"
-          :text "${air_pollution}"
+    :space-evenly "false"
+    (label :yalign "0"
+      :class "aqi-label"
+      :halign "start"
+      :text "Air Quality"
+    )
+    (box :orientation "h"
+      :class "aqi-data"
+      (box :orientation "v"
+        :class "aqi-main"
+        (circular-progress
+          :value "${
+            aqi_num == 1 ? 16 :
+            aqi_num == 2 ? 32 :
+            aqi_num == 3 ? 48 :
+            aqi_num == 4 ? 64 :
+            aqi_num == 5 ? 80 :
+                           0
+          }"
+          :start-at "35"
+          :thickness "8"
+          :class "aqi-progress"
+          :style "color: ${aqi_color}"
+          (label :xalign "0.5" :yalign "0.5"
+            :class "aqi-text"
+            :text "${air_pollution}"
+          )
         )
       )
-    )
-    (box :orientation "v"
-      :class "aqi-data"
-      (aqi_breakdown :label "PM₂.₅"
-        :max 85 :value pm25
-        :vpoor 75
-        :poor 50
-        :moderate 25
-        :fair 10
-      )
-      (aqi_breakdown :label "PM₁₀"
-        :max 220 :value pm10
-        :vpoor 200
-        :poor 150
-        :moderate 70
-        :fair 40
-      )
-      (aqi_breakdown :label "O₃"
-        :max 240 :value o3
-        :vpoor 180
-        :poor 140
-        :moderate 100
-        :fair 60
-      )
-      (aqi_breakdown :label "NO₂"
-        :max 240 :value no2
-        :vpoor 200
-        :poor 150
-        :moderate 70
-        :fair 40
-      )
-      (aqi_breakdown :label "SO₂"
-        :max 370 :value so2
-        :vpoor 350
-        :poor 250
-        :moderate 80
-        :fair 20
-      )
-      (aqi_breakdown :label "CO"
-        :max 16000 :value co
-        :vpoor 15400
-        :poor 12400
-        :moderate 9400
-        :fair 4400
+      (box :orientation "v"
+        :class "aqi-data"
+        (aqi_breakdown :label "PM₂.₅"
+          :max 85 :value pm25
+          :vpoor 75
+          :poor 50
+          :moderate 25
+          :fair 10
+        )
+        (aqi_breakdown :label "PM₁₀"
+          :max 220 :value pm10
+          :vpoor 200
+          :poor 150
+          :moderate 70
+          :fair 40
+        )
+        (aqi_breakdown :label "O₃"
+          :max 240 :value o3
+          :vpoor 180
+          :poor 140
+          :moderate 100
+          :fair 60
+        )
+        (aqi_breakdown :label "NO₂"
+          :max 240 :value no2
+          :vpoor 200
+          :poor 150
+          :moderate 70
+          :fair 40
+        )
+        (aqi_breakdown :label "SO₂"
+          :max 370 :value so2
+          :vpoor 350
+          :poor 250
+          :moderate 80
+          :fair 20
+        )
+        (aqi_breakdown :label "CO"
+          :max 16000 :value co
+          :vpoor 15400
+          :poor 12400
+          :moderate 9400
+          :fair 4400
+        )
       )
     )
   )
