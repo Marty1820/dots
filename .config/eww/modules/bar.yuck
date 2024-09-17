@@ -44,32 +44,28 @@
 )
 
 (defwidget bar-weather []
-  (button :class "bar-weather-info"
-    :onclick "${eww} update weather_visible=true && \
-              ${eww} open --toggle weather-closer && \
-              ${eww} open --toggle weather"
-    (box :orientation "h"
-      :space-evenly "false"
-      (label :class "bar-weather-icon"
-        :style "color: ${weather_color};"
-        :text weather_icon
-      )
-      (label
-        :class "bar-weather-temp ${
-          weather_temp < 32 ? 'less' :
-          weather_temp < 90 ? 'normal' :
-                              'more'
-        }"
-        :text "${weather_temp}"
-      )
-      (label :class "bar-weather-separator" :text "|")
-      (label :class "bar-weather-text"
-        :text "AQI:"
-      )
-      (label :class "bar-weather-aqi"
-        :style "color: ${aqi_color};"
-        :text "${aqi_icon}"
-      )
+  (box :orientation "h"
+    :space-evenly "false"
+    :class "bar-weather-box"
+    (label :class "bar-weather-icon"
+      :style "color: ${weather_color};"
+      :text weather_icon
+    )
+    (label
+      :class "bar-weather-temp ${
+        weather_temp < 32 ? 'less' :
+        weather_temp < 90 ? 'normal' :
+                            'more'
+      }"
+      :text "${weather_temp}"
+    )
+    (label :class "bar-weather-separator" :text "|")
+    (label :class "bar-weather-text"
+      :text "AQI:"
+    )
+    (label :class "bar-weather-aqi"
+      :style "color: ${aqi_color};"
+      :text "${aqi_icon}"
     )
   )
 )
@@ -155,9 +151,7 @@
 )
 
 (defwidget clock []
-  (button :class "clock"
-    :onclick "${eww} open --toggle cal-info-closer && \
-              ${eww} open --toggle cal-info"
+  (box :class "clock-text"
     (label :text {formattime(EWW_TIME, "%I:%M%p")})
   )
 )
@@ -194,9 +188,19 @@
     :orientation "h"
     :space-evenly "false"
     :halign "end"
-    (bar-weather)
+    (eventbox :class "bar-weather-info"
+      :onhover "${eww} open weather && \
+        ${eww} update weather_visible=true"
+      :onhoverlost "${eww} close weather && \
+        ${eww} update weather_visible=false"
+      (bar-weather)
+    )
     (system-info)
-    (clock)
+    (eventbox :class "clock"
+      :onhover "${eww} open cal-info"
+      :onhoverlost "${eww} close cal-info"
+      (clock)
+    )
     (power-button)
   )
 )

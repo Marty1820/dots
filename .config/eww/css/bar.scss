@@ -44,6 +44,7 @@
 .window {
   background-color: transparent;
   color: transparent;
+
   &.occupied {
     background-color: $background-darker;
     color: $foreground;
@@ -53,16 +54,10 @@
   }
 }
 
-.bar-weather-icon,
-.bar-weather-temp,
-.bar-weather-separator,
-.bar-weather-text,
-.bar-weather-aqi {
-  margin: 0 0.25em;
-}
-
 .bar-weather-info,
-.system-info {
+.system-info,
+.clock,
+.bar-power-button {
   background-color: $background-darker;
   border-radius: 1em;
   padding: 0 0.5em;
@@ -74,6 +69,19 @@
 .system-info:hover,
 .clock:hover {
   background: linear-gradient(180deg, $background, $selection);
+}
+
+.bar-weather-box,
+.clock-text {
+  margin: 0 0.4em;
+}
+
+.bar-weather-icon,
+.bar-weather-temp,
+.bar-weather-separator,
+.bar-weather-text,
+.bar-weather-aqi {
+  margin: 0 0.25em;
 }
 
 .bar-weather-temp {
@@ -142,16 +150,6 @@
   }
 }
 
-.clock,
-.bar-power-button {
-  background-color: $background-darker;
-  border-radius: 1em;
-  padding: 0 0.7em;
-  margin: 0 0.25em;
-  transition: 0.3s;
-}
-
 .bar-power-button:hover {
   background: linear-gradient(180deg, $background, $red);
-  color: $foreground;
 }
