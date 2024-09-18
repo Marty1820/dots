@@ -8,20 +8,20 @@
 
 ; POLLS
 (defpoll weather_color :interval "10m" :initial "#ffffff"
-  "$HOME/.config/scripts/weather.py --hex")
+  "$HOME/.config/scripts/weather.py hex")
 (defpoll weather_icon :interval "10m" :initial ""
-  "$HOME/.config/scripts/weather.py --icon")
+  "$HOME/.config/scripts/weather.py icon")
 (defpoll weather_temp :interval "10m" :initial "0"
-  "$HOME/.config/scripts/weather.py --temp")
+  "$HOME/.config/scripts/weather.py temp")
 (defpoll weather_feels_like :interval "10m" :initial "0"
   :run-while weather_visible
-  "$HOME/.config/scripts/weather.py --feel")
+  "$HOME/.config/scripts/weather.py feel")
 (defpoll aqi_color :interval "10m" :initial "#ffffff"
-  "$HOME/.config/scripts/weather.py --aqi_color")
+  "$HOME/.config/scripts/weather.py aqi_color")
 (defpoll air_pollution :interval "10m" :run-while weather_visible
-  "$HOME/.config/scripts/weather.py --aqi")
+  "$HOME/.config/scripts/weather.py aqi")
 (defpoll aqi_icon :interval "10m" :initial ""
-  "$HOME/.config/scripts/weather.py --aqi_icon")
+  "$HOME/.config/scripts/weather.py aqi_icon")
 (defpoll forecast_file :interval "10m" :run-while weather_visible
   "cat $HOME/.cache/weather/onecall.json")
 (defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible
