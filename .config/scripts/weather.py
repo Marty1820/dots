@@ -4,6 +4,7 @@ import os
 import requests
 import json
 import sys
+import argparse
 from datetime import datetime
 
 # Define paths
@@ -175,63 +176,78 @@ def set_icon():
 
 
 def main():
-    if len(sys.argv) < 2:
-        print(
-            "Usage: script.py {--getdata|--icon|--temp|--temphigh index|--templow index|--feel|--stat|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
-        )
+    parser = argparse.ArgumentParser(description="Weather script.")
+    parser.add_argument(
+        "option",
+        choices=[
+            "getdata",
+            "icon",
+            "hex",
+            "temp",
+            "temphigh",
+            "templow",
+            "feel",
+            "stat",
+            "humid",
+            "wind",
+            "clouds",
+            "aqi",
+            "aqi_color",
+            "aqi_icon",
+            "srise",
+            "sset",
+        ],
+        help="Option to select",
+    )
+    parser.add_argument(
+        "index", type=int, nargs="?", default=None, help="Index for some options"
+    )
+
+    args = parser.parse_args()
+
+    # Map arguments to functions
+    actions = {
+        "getdata": get_weather_data,
+        "icon": lambda: print(set_icon()[0]),
+        "hex": lambda: print(set_icon()[1]),
+        "temp": lambda: print(onecall_weather()["temp"]),
+        "temphigh": lambda: (
+            print(onecall_weather(args.index)["temphigh"])
+            if args.index is not None
+            else print("Index required for --temphigh")
+        ),
+        "templow": lambda: (
+            print(onecall_weather(args.index)["templow"])
+            if args.index is not None
+            else print("Index required for --templow")
+        ),
+        "feel": lambda: print(onecall_weather()["feels_like"]),
+        "stat": lambda: print(onecall_weather()["status"]),
+        "humid": lambda: print(onecall_weather()["humidity"]),
+        "wind": lambda: print(onecall_weather()["wind_speed"]),
+        "clouds": lambda: print(onecall_weather()["clouds"]),
+        "aqi": lambda: print(set_aqi()[0]),
+        "aqi_color": lambda: print(set_aqi()[2]),
+        "aqi_icon": lambda: print(set_aqi()[1]),
+        "srise": lambda: (
+            print(onecall_weather(args.index)["sunrise"])
+            if args.index is not None
+            else print("Index required for --srise")
+        ),
+        "sset": lambda: (
+            print(onecall_weather(args.index)["sunset"])
+            if args.index is not None
+            else print("Index required for --sset")
+        ),
+    }
+
+    # Get the action function based on the option
+    action = actions.get(args.option)
+    if action is None:
+        print("Invalid option selected.")
         sys.exit(1)
 
-    option = sys.argv[1]
-
-    if option == "--getdata":
-        get_weather_data()
-    elif option == "--icon":
-        print(set_icon()[0])
-    elif option == "--hex":
-        print(set_icon()[1])
-    elif option == "--temp":
-        print(onecall_weather()["temp"])
-    elif option == "--temphigh":
-        if len(sys.argv) < 3:
-            print("Index required for --temphigh")
-            sys.exit(1)
-        print(onecall_weather(int(sys.argv[2]))["temphigh"])
-    elif option == "--templow":
-        if len(sys.argv) < 3:
-            print("Index required for --templow")
-            sys.exit(1)
-        print(onecall_weather(int(sys.argv[2]))["templow"])
-    elif option == "--feel":
-        print(onecall_weather()["feels_like"])
-    elif option == "--stat":
-        print(onecall_weather()["status"])
-    elif option == "--humid":
-        print(onecall_weather()["humidity"])
-    elif option == "--wind":
-        print(onecall_weather()["wind_speed"])
-    elif option == "--clouds":
-        print(onecall_weather()["clouds"])
-    elif option == "--aqi":
-        print(set_aqi()[0])
-    elif option == "--aqi_color":
-        print(set_aqi()[2])
-    elif option == "--aqi_icon":
-        print(set_aqi()[1])
-    elif option == "--srise":
-        if len(sys.argv) < 3:
-            print("Index required for --srise")
-            sys.exit(1)
-        print(onecall_weather(day_index=int(sys.argv[2]))["sunrise"])
-    elif option == "--sset":
-        if len(sys.argv) < 3:
-            print("Index required for --sset")
-            sys.exit(1)
-        print(onecall_weather(day_index=int(sys.argv[2]))["sunset"])
-    else:
-        print(
-            "Usage: script.py {--getdata|--icon|--temp|--temphigh index|--templow index|--feel|--stat|--humid|--wind|--aqi|--aqi_color|--aqi_icon|--srise|--sset}"
-        )
-        sys.exit(1)
+    action()
 
 
 if __name__ == "__main__":

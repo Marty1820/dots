@@ -2,7 +2,7 @@
 
 # Function to fetch weather data
 fetch_weather_data() {
-  ~/.config/scripts/weather.py --getdata
+  ~/.config/scripts/weather.py getdata
 }
 
 # Function to check network availability
