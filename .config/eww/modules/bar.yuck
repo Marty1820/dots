@@ -70,67 +70,10 @@
   )
 )
 
-(defwidget bluetooth_icon []
+(defwidget control-icons [name class icon]
   (label
-    :class "system-info-icon bluetooth_icon ${
-      bluetooth-icon == "󰂲" ? "off" : "on"
-    }"
-    :text bluetooth-icon
-  )
-)
-
-(defwidget network_icon []
-  (label
-    :class "system-info-icon network_icon ${
-      network.essid == "lo" ? "disconnected" : ""
-    }"
-    :text {
-      network.essid  == "lo" ? "󰤭" :
-      network.signal == ""   ? "󰤩" :
-      network.signal <   25  ? "󰤟" :
-      network.signal <   50  ? "󰤢" :
-      network.signal <   75  ? "󰤥" :
-                               "󰤨"
-    }
-  )
-)
-
-(defwidget volume_icon []
-  (label
-    :class "system-info-icon volume_icon ${volume == "muted" ? "muted" : ""}"
-    :text {
-      volume == "muted" ? "󰸈" :
-      volume <   33     ? "" :
-      volume <   67     ? "" :
-                          ""
-    }
-  )
-)
-
-(defwidget brightness_icon []
-  (label :class "system-info-icon brightness_icon"
-    :text brightness-icon
-  )
-)
-
-(defwidget battery_icon []
-  (box :visible {EWW_BATTERY == "" ? false : true}
-    (label
-      :class "system-info-icon battery_icon ${
-        EWW_BATTERY.BAT1.status == "Charging" ? "charging" : "discharging"
-      } ${
-        EWW_BATTERY.BAT1.capacity < 10 ? "critical" :
-        EWW_BATTERY.BAT1.capacity < 20 ? "low" : ""
-      }"
-      :text {
-        EWW_BATTERY.BAT1.status == "Charging" ? "" :
-        EWW_BATTERY.BAT1.capacity > 90 ? "" :
-        EWW_BATTERY.BAT1.capacity > 75 ? "" :
-        EWW_BATTERY.BAT1.capacity > 50 ? "" :
-        EWW_BATTERY.BAT1.capacity > 25 ? "" :
-                                         ""
-      }
-    )
+    :class "system-info-icon ${name}_icon ${class}"
+    :text "${icon}"
   )
 )
 
@@ -141,11 +84,46 @@
               ${eww} open --toggle action-center"
     (box :orientation "h"
       :space-evenly "false"
-      (bluetooth_icon)
-      (network_icon)
-      (volume_icon)
-      (brightness_icon)
-      (battery_icon)
+      (control-icons
+        :name "bluetooth"
+        :class "${bluetooth-icon == "󰂲" ? "off" : "on"}"
+        :icon bluetooth-icon
+      )
+      (control-icons
+        :name "network"
+        :class "${network.essid == "lo" ? "disconnected" : ""}"
+        :icon "${network.essid  == "lo" ? "󰤭" :
+                 network.signal == ""   ? "󰤩" :
+                 network.signal <   25  ? "󰤟" :
+                 network.signal <   50  ? "󰤢" :
+                 network.signal <   75  ? "󰤥" :
+                                          "󰤨"}"
+      )
+      (control-icons
+        :name "volume"
+        :class "${volume == "muted" ? "muted" : ""}"
+        :icon "${volume == "muted" ? "󰸈" :
+                 volume <   33     ? "" :
+                 volume <   67     ? "" :
+                                     ""}"
+      )
+      (control-icons
+        :name "brightness"
+        :class ""
+        :icon brightness-icon
+      )
+      (control-icons
+        :name "battery"
+        :class "${EWW_BATTERY.BAT1.status == "Charging" ? "charging" : "discharging"} 
+          ${EWW_BATTERY.BAT1.capacity < 10 ? "critical" :
+            EWW_BATTERY.BAT1.capacity < 20 ? "low"      : ""}"
+        :icon "${EWW_BATTERY.BAT1.status == "Charging" ? "" :
+                 EWW_BATTERY.BAT1.capacity > 90 ? "" :
+                 EWW_BATTERY.BAT1.capacity > 75 ? "" :
+                 EWW_BATTERY.BAT1.capacity > 50 ? "" :
+                 EWW_BATTERY.BAT1.capacity > 25 ? "" :
+                                                  ""}"
+      )
     )
   )
 )
