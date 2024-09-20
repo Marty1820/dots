@@ -70,10 +70,11 @@
   )
 )
 
-(defwidget control-icons [name class icon]
+(defwidget control-icons [name class icon tip]
   (label
     :class "system-info-icon ${name}_icon ${class}"
     :text "${icon}"
+    :tooltip "${tip}"
   )
 )
 
@@ -88,6 +89,7 @@
         :name "bluetooth"
         :class "${bluetooth-icon == "󰂲" ? "off" : "on"}"
         :icon bluetooth-icon
+        :tip "${bluetooth-info}"
       )
       (control-icons
         :name "network"
@@ -98,6 +100,7 @@
                  network.signal <   50  ? "󰤢" :
                  network.signal <   75  ? "󰤥" :
                                           "󰤨"}"
+        :tip "${network.essid == "lo" ? "Disconnected": network.essid}"
       )
       (control-icons
         :name "volume"
@@ -106,11 +109,13 @@
                  volume <   33     ? "" :
                  volume <   67     ? "" :
                                      ""}"
+        :tip "${volume}"
       )
       (control-icons
         :name "brightness"
         :class ""
         :icon brightness-icon
+        :tip "${brightness}"
       )
       (control-icons
         :name "battery"
@@ -123,6 +128,7 @@
                  EWW_BATTERY.BAT1.capacity > 50 ? "" :
                  EWW_BATTERY.BAT1.capacity > 25 ? "" :
                                                   ""}"
+        :tip "${EWW_BATTERY.BAT1.capacity}"
       )
     )
   )
