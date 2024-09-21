@@ -165,6 +165,7 @@
   (box :orientation "v"
     :class "forecast-section"
     :halign "center"
+    :valign "center"
     (label :class "forecast-day f-day-${order}"
       :text {
         "${formattime('${jq(forecast_file, `.daily.[${order}].dt`)}', '%A')}" !=
