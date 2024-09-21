@@ -129,7 +129,7 @@
         weather_feels_like > 90 ? '' :
                                   ''
       }"
-      :data "${jq(forecast_file, '.current.feels_like')}"
+      :data "${jq(forecast_file, '.current.feels_like')}°"
       :label "Feels like"
     )
     (w_section
@@ -148,7 +148,7 @@
         "${jq(forecast_file, '.current.wind_speed')}" > 32 ? 'more' :
                                                              ''}"
       :icon "󰈐"
-      :data "${jq(forecast_file, '.current.wind_speed')} mph"
+      :data "${jq(forecast_file, '.current.wind_speed')}MPH"
       :label "Wind"
     )
     (w_section
