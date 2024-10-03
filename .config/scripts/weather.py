@@ -67,9 +67,9 @@ def get_weather_data():
     data = {key: fetch_data(url, params) for key, url in urls.items()}
 
     with open(onecall_file, "w") as f:
-        json.dump(data["onecall"], f, indent=4)
+        json.dump(data["onecall"], f, indent=2)
     with open(aqi_file, "w") as f:
-        json.dump(data["air_pollution"], f, indent=4)
+        json.dump(data["air_pollution"], f, indent=2)
 
     print("Data successfully fetched and saved.")
 
