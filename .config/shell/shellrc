@@ -48,6 +48,7 @@ alias psgrep='ps aux | grep -v grep | grep -i -e VSZ -e'
 alias psmem='ps auxf | sort -nr -k 4'
 alias pscpu='ps auxf | sort -nr -k 3'
 alias wifikey="sudo grep -r '^psk=' /etc/NetworkManager/system-connections/"
+alias nslookup='getent hosts'
 # Keeping $HOME(~) clean
 alias vim='vim -u "$XDG_CONFIG_HOME/vim/vimrc"'
 alias wget='wget --hsts-file="$XDG_DATA_HOME"/wget-hsts'
