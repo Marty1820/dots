@@ -1,7 +1,8 @@
 .eww-bar {
   font-family: "Mononoki Nerd Font Mono";
   font-size: 16px;
-  background: linear-gradient(180deg, $background-darker, transparent);
+  background: $background-darker;
+  //background: linear-gradient(180deg, $background-darker, transparent);
   color: $foreground;
   padding: 0.4rem 1rem;
 }
@@ -11,7 +12,7 @@
   padding: 0 0.6rem;
   margin-right: 1rem;
   transition: 0.3s;
-  background-color: $background-darker;
+  background-color: $background;
 }
 
 .app-launcher:hover {
@@ -19,7 +20,6 @@
 }
 
 .workspaces {
-  background-color: $background-darker;
   border-radius: 1rem;
   padding: 0.5em;
   margin: 0 0.25em;
@@ -27,17 +27,17 @@
 
 .workspace {
   border-radius: 1rem;
-  background: linear-gradient(180deg, $background, $background-darker);
+  background: $background;
   margin: 0 0.2rem;
   padding: 0 0.6rem;
   transition: 0.3s;
 
   &.occupied {
-    background: linear-gradient(180deg, $green, $background);
+    background: linear-gradient(180deg, $green, $selection);
   }
 
   &.current {
-    background: linear-gradient(180deg, $purple, $background);
+    background: linear-gradient(180deg, $purple, $selection);
   }
 }
 
@@ -46,7 +46,6 @@
   color: transparent;
 
   &.occupied {
-    background-color: $background-darker;
     color: $foreground;
     border-radius: 1rem;
     padding: 0 0.5em;
@@ -58,7 +57,7 @@
 .system-info,
 .clock,
 .bar-power-button {
-  background-color: $background-darker;
+  background: linear-gradient(180deg, $background-darker, $background);
   border-radius: 1em;
   padding: 0 0.5em;
   margin: 0 0.25em;
