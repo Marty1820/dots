@@ -10,11 +10,11 @@ get_backlight() {
   xbacklight -get | awk '{print int($1)}'
 }
 
-# Changes percent increase/decrease depending on current brightness & direction
+# Determines the percent increase/decrease based on current brightness & direction
 set_curve() {
-  local backlight
+  local backlight direction percent
 	backlight=$(get_backlight)
-  local direction="$1"
+  direction="$1"
 
 	if [ "$direction" = up ]; then
 		if [ "$backlight" -lt 10 ]; then
@@ -33,28 +33,31 @@ set_curve() {
 			percent=10
 		fi
 	fi
+
+  echo "$percent"
 }
 
 # Sends notification with dunst and sets progress bar
 send_notification() {
-  local backlight
+  local backlight icon bar
   backlight=$(get_backlight)
-  local icon=/usr/share/icons/dracula-icons/16/panel/gpm-brightness-lcd.svg
+  icon="/usr/share/icons/dracula-icons/16/panel/gpm-brightness-lcd.svg"
 
-  # Specialized bar
-  local bar
+  # Generate progress bar
   bar=$(seq -s "─" 0 $((backlight / 5)) | sed 's/[0-9]//g')
+
+  # Send the notification
   dunstify -i "$icon" --timeout=1600 --replace=2593 --urgency=normal "$backlight    $bar"
 }
 
 case $1 in
 up)
-  set_curve "up"
+  percent=$(set_curve "up")
   xbacklight -inc "$percent" >/dev/null
   send_notification
   ;;
 down)
-  set_curve "down"
+  percent=$(set_curve "down")
   xbacklight -dec "$percent" >/dev/null
   send_notification
   ;;

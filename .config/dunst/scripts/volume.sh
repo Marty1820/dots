@@ -7,10 +7,10 @@
 # $./volume.sh mute
 
 # Icons
-vol_high=/usr/share/icons/dracula-icons/16/panel/audio-volume-high.svg
-vol_med=/usr/share/icons/dracula-icons/16/panel/audio-volume-medium.svg
-vol_low=/usr/share/icons/dracula-icons/16/panel/audio-volume-low.svg
-vol_mute=/usr/share/icons/dracula-icons/16/panel/audio-volume-muted.svg
+vol_high="/usr/share/icons/dracula-icons/16/panel/audio-volume-high.svg"
+vol_med="/usr/share/icons/dracula-icons/16/panel/audio-volume-medium.svg"
+vol_low="/usr/share/icons/dracula-icons/16/panel/audio-volume-low.svg"
+vol_mute="/usr/share/icons/dracula-icons/16/panel/audio-volume-muted.svg"
 
 # Gets volume percent without the '%' sign
 get_volume() {
@@ -22,10 +22,11 @@ is_mute() {
   pamixer --get-mute | grep -q 'true'
 }
 
+# Send notification based on the current volume
 send_notification() {
-  local volume
+  local volume icon notification_text bar
+
 	volume=$(get_volume)
-  local icon
 
   # Select the appropriate icon and create the progress bar
   if is_mute; then
@@ -48,8 +49,8 @@ send_notification() {
   fi
 
   # Generate progress bar
-  local bar
   bar=$(seq -s "─" 0 $((volume / 5)) | sed 's/[0-9]//g')
+
 	# Send the notification
   dunstify -i "$icon" --timeout=1600 --replace=2593 --urgency=normal "$notification_text $bar"
 }
