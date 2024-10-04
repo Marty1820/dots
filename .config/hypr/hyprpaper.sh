@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 directory=~/Pictures/wallpapers
-monitor=$(hyprctl monitors | grep Monitor | awk '{print $2}')
+monitor=$(hyprctl monitors | awk '/Monitor/ {print $2}')
 
 # Check if the directory exists and is a directory
 if [ -d "$directory" ]; then
