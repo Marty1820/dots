@@ -28,16 +28,16 @@ bright_toggle() {
 
 bright_icon() {
   case "$bright_status" in
-    S) echo "󰃡" ;;
+    S) echo "󰃡" ;; # Stopped icon
     T)
       if [ "$cur_backlight" -lt 25 ]; then
-        echo "󰃝"
+        echo "󰃝" # Low brightness icon
       elif [ "$cur_backlight" -lt 50 ]; then
-        echo "󰃞"
+        echo "󰃞" # Medium low brightness icon
       elif [ "$cur_backlight" -lt 75 ]; then
-        echo "󰃟"
+        echo "󰃟" # Medium high brightness icon
       else
-        echo "󰃠"
+        echo "󰃠" # High brightness icon
       fi
       ;;
     *) echo "Unknown process state: $bright_status" ;;
