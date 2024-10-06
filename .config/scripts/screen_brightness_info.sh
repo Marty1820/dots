@@ -47,5 +47,7 @@ bright_icon() {
 case "$1" in
   --toggle) bright_toggle ;;
   --icon)   bright_icon ;;
-  *) echo "Usage: $0 --toggle | --icon" ;;
+  *) echo "Usage: $0 --toggle | --icon"
+    exit 1
+    ;;
 esac
