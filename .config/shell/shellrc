@@ -6,9 +6,6 @@
 # ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░
 # BASH&ZSH ALIASES/FUNCTIONS
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
 # Terminal specific settings
 [ "$TERM" != wezterm ] && . "$HOME"/.config/shell/profile
 if [ "$TERM" = "xterm-kitty" ]; then

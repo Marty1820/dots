@@ -6,6 +6,9 @@
 # ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░
 # ZSH CONFIGUARATION
 
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 # EXPORT
 export HISTORY_IGNORE='(l[salt.]#( *)#|cd(|*)|~|pwd|exit|history(|*)|cls|nvim# *)'
 

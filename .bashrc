@@ -6,6 +6,9 @@
 # ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░
 # BASH CONFIGUARATION
 
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 ### EXPORTS
 export HISTCONTROL=ignoreboth:erasedups
 
