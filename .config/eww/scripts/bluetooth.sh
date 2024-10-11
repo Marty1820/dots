@@ -41,7 +41,7 @@ get_icon() {
   input-mouse) echo "󰦋" ;;
   input-tablet) echo "󰓷" ;;
   phone) echo "󰏳" ;;
-  computer|video-d y) echo "󰪫" ;;
+  computer|video-display) echo "󰪫" ;;
   pinter) echo "󰐪" ;;
   scanner) echo "󰚫" ;;
   camera-photo|camera-video) echo "󰄄" ;;
