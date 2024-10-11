@@ -1,6 +1,7 @@
 ; VARS
 (defvar weather_visible false)
 (defvar control_visible false)
+(defvar eww-bar-color "transparent")
 
 (defvar bluetooth-toggle "scripts/bluetooth.sh --toggle")
 (defvar brightness-toggle
