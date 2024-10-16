@@ -175,6 +175,18 @@ def set_icon():
     return icon_map.get(icon_code, ("󰼯", "#ff5555"))
 
 
+def waybar():
+    icon = set_icon()[0]
+    icon_color = set_icon()[1]
+    current_temp = onecall_weather()["temp"]
+    aqi_icon = set_aqi()[1]
+    aqi_color = set_aqi()[2]
+    output = {
+        "text": f"<span foreground='{icon_color}'>{icon}</span> {current_temp}℉ | AQI: <span foreground='{aqi_color}'>{aqi_icon}</span>"
+    }
+    print(json.dumps(output))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Weather script.")
     parser.add_argument(
@@ -196,6 +208,7 @@ def main():
             "aqi_icon",
             "srise",
             "sset",
+            "waybar",
         ],
         help="Option to select",
     )
@@ -239,6 +252,7 @@ def main():
             if args.index is not None
             else print("Index required for --sset")
         ),
+        "waybar": waybar,
     }
 
     # Get the action function based on the option

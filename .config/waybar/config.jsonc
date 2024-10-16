@@ -1,0 +1,166 @@
+// -*- mode: jsonc -*-
+{
+  "layer": "top", // Waybar at top layer
+  "position": "top", // Waybar position (top|bottom|left|right)
+  //"height": 30, // Waybar height (to be removed for auto height)
+  // "width": 1280, // Waybar width
+  "spacing": 4, // Gaps between modules (4px)
+  // Choose the order of the modules
+  "modules-left": [
+    "custom/apps",
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "hyprland/window"
+  ],
+  "modules-right": [
+    "custom/weather",
+    "group/control-center",
+    "clock",
+    "custom/power",
+  ],
+  // Modules configuration
+  // Left Section
+  "custom/apps": {
+    "format": "󰀻",
+    "interval": "once",
+    "on-click": "rofi -show drun -theme ~/.config/rofi/config.rasi &",
+    "tooltip": false,
+  },
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "warp-on-scroll": false,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "urgent": "",
+      "focused": "",
+      "default": "",
+    },
+    "persistent-workspaces": {
+      "*": 4,
+    },
+  },
+  // Middle Section
+  "hyprland/window": {
+    "format": "{}",
+    "rewrite": {
+      "(.*) — Mozilla Firefox": "$1",
+    },
+  },
+  // Right Section
+  "custom/weather": {
+    "exec": "${HOME}/.config/scripts/weather.py waybar",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": false,
+    "interval": 3600,
+    "on-click": "eww open --toggle weather",
+  },
+  "group/control-center": {
+    "orientation": "horizontal",
+    "modules": [
+      "idle_inhibitor",
+      "bluetooth",
+      "network",
+      "pulseaudio",
+      "backlight",
+      "battery",
+    ],
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰈈",
+      "deactivated": "󰈉",
+    },
+  },
+  "bluetooth": {
+    "format": "󰂳",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱",
+    "on-click": "blueman-manager &",
+    "tooltip-format": "{controller_alias}\t{controller_address}",
+    "tooltip-format-connected": "{device_alias}",
+  },
+  "network": {
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰈀",
+    "tooltip-format-wifi": "{essid} @ {ipaddr}",
+    "format-disconnected": "󰤭",
+    "format-icons": [
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "on-click": "nm-connection-editor &",
+  },
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{icon}",
+    "format-muted": "󰖁",
+    "format-icons": {
+      "headphone": "󰋋",
+      "headset": "󰋋",
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ],
+      "on-scroll-down": "pamixer --unmute --increase 1",
+      "on-scroll-up": "pamixer --unmute --decrease 1",
+    },
+    "tooltip-format": "{volume}",
+    "on-click": "pamixer -t",
+  },
+  "backlight": {
+    "format": "{icon}",
+    "format-icons": [
+      "󰃚",
+      "󰃛",
+      "󰃜",
+      "󰃝",
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
+    "tooltip-format": "{percent}",
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15,
+    },
+    "format": "{icon}",
+    "format-full": "󰁹",
+    "format-plugged": "󰚥",
+    "format-charging": "󰚥",
+    "tooltip-format": "{capacity} \n {time}",
+    "format-icons": [
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂"
+    ],
+  },
+  "clock": {
+    "format": "{:%I:%M%p}",
+    "tooltip": false,
+    "on-click": "eww open --toggle cal-info",
+  },
+  "custom/power": {
+    "format": "⏻",
+    "tooltip": false,
+    "on-click": "eww open --toggle powermenu-closer && eww open --toggle powermenu",
+  },
+}

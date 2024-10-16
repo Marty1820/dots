@@ -1,0 +1,152 @@
+@import url("./colors.css");
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "Mononoki Nerd Font Mono";
+  font-size: 16px;
+}
+
+window#waybar {
+  padding: 0.4rem 1rem;
+  background: @background-darker;
+  color: @foreground;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+  padding: 0px 5px;
+}
+
+tooltip {
+  opacity: 0.95;
+  border-radius: 20px;
+  border: 1px solid @selection;
+  background: @background;
+}
+
+/* Application Launcher */
+#custom-apps {
+  border-radius: 1rem;
+  padding: 0 0.6rem;
+  transition: 0.3s;
+  background-color: @background;
+}
+
+#custom-apps:hover {
+  background: linear-gradient(0deg, @selection, @background);
+}
+
+/* Workspace Buttons */
+#workspaces {
+  padding: 0 0.5em;
+  border-radius: 1rem;
+  background-color: @background-darker;
+}
+
+#workspaces button {
+  border-radius: 1rem;
+  padding: 0 0.3rem;
+  margin: 0 0.2rem;
+  transition: 0.3s;
+  background: linear-gradient(0deg, @green, @background);
+}
+
+#workspaces button.empty {
+  background: @background;
+}
+
+#workspaces button.active {
+  background: linear-gradient(0deg, @purple, @background);
+}
+
+#workspaces button:hover {
+  background: linear-gradient(0deg, @selection, @background);
+}
+
+/* Window Title */
+#window {
+  border-radius: 1rem;
+  padding: 0 0.5em;
+  margin: 0 0.5rem;
+  color: @foreground;
+  background: linear-gradient(0deg, @background, @background-darker);
+}
+
+window#waybar.empty #window {
+  background: transparent;
+  color: transparent;
+}
+
+/* Weather */
+#custom-weather,
+#control-center,
+#clock,
+#custom-power {
+  border-radius: 1em;
+  padding: 0 0.5em;
+  margin: 0 0.25em;
+  transition: 0.3s;
+  background: linear-gradient(0deg, @background, @background-darker);
+}
+
+#custom-weather:hover,
+#control-center:hover {
+  background: linear-gradient(0deg, @selection, @background);
+}
+
+#idle_inhibitor,
+#bluetooth,
+#network,
+#pulseaudio,
+#backlight,
+#battery {
+  padding: 0 0.2em;
+}
+
+#idle_inhibitor.deactivated {
+  color: @orange;
+}
+
+#idle_inhibitor.activated,
+#bluetooth.off,
+#bluetooth.disabled,
+#network.disabled,
+#network.disconnected,
+#pulseaudio.muted,
+#battery.critical {
+  color: @red;
+}
+
+#bluetooth {
+  color: @cyan;
+}
+
+#network {
+  color: @green;
+}
+
+#pulseaudio {
+  color: @purple;
+}
+
+#backlight {
+  color: @yellow;
+}
+
+#battery {
+  color: @cyan;
+}
+
+#battery.charging {
+  color: @green;
+}
+
+#battery.warning {
+  color: @orange;
+}
+
+#custom-power:hover {
+  background: linear-gradient(0deg, @red, @background);
+}
