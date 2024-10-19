@@ -42,7 +42,6 @@ tooltip {
 #workspaces {
   padding: 0 0.5em;
   border-radius: 1rem;
-  background-color: @background-darker;
 }
 
 #workspaces button {
@@ -70,7 +69,6 @@ tooltip {
   border-radius: 1rem;
   padding: 0 0.5em;
   margin: 0 0.5rem;
-  color: @foreground;
   background: linear-gradient(0deg, @background, @background-darker);
 }
 
@@ -96,6 +94,7 @@ window#waybar.empty #window {
   background: linear-gradient(0deg, @selection, @background);
 }
 
+#custom-settings,
 #idle_inhibitor,
 #bluetooth,
 #network,
@@ -105,7 +104,13 @@ window#waybar.empty #window {
   padding: 0 0.2em;
 }
 
-#idle_inhibitor.deactivated {
+#custom-settings,
+#backlight {
+  color: @yellow;
+}
+
+#idle_inhibitor.deactivated,
+#battery.warning {
   color: @orange;
 }
 
@@ -131,14 +136,6 @@ window#waybar.empty #window {
 
 #pulseaudio {
   color: @purple;
-}
-
-#backlight {
-  color: @yellow;
-}
-
-#battery.warning {
-  color: @orange;
 }
 
 #custom-power:hover {

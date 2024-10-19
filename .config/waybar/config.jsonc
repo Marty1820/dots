@@ -2,12 +2,14 @@
 {
   "layer": "top", // Waybar at top layer
   "position": "top", // Waybar position (top|bottom|left|right)
-  //"height": 30, // Waybar height (to be removed for auto height)
-  // "width": 1280, // Waybar width
   "spacing": 4, // Gaps between modules (4px)
-  // Choose the order of the modules
-  "modules-left": ["custom/apps", "hyprland/workspaces"],
-  "modules-center": ["hyprland/window"],
+  "modules-left": [
+    "custom/apps",
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "hyprland/window"
+  ],
   "modules-right": [
     "custom/weather",
     "group/control-center",
@@ -20,7 +22,7 @@
     "format": "󰀻",
     "interval": "once",
     "on-click": "rofi -show drun -theme ~/.config/rofi/config.rasi &",
-    "tooltip": false,
+    "tooltip-format": "Applications",
   },
   "hyprland/workspaces": {
     "disable-scroll": true,
@@ -59,6 +61,7 @@
   "group/control-center": {
     "orientation": "horizontal",
     "modules": [
+      "custom/settings",
       "idle_inhibitor",
       "bluetooth",
       "network",
@@ -66,6 +69,12 @@
       "backlight",
       "battery",
     ],
+  },
+  "custom/settings": {
+    "format": "",
+    "interval": "once",
+    "on-click": "eww open --toggle action-center &",
+    "tooltip-format": "Settings",
   },
   "idle_inhibitor": {
     "format": "{icon}",
@@ -87,7 +96,12 @@
     "format-ethernet": "󰈀",
     "tooltip-format-wifi": "{essid} @ {ipaddr}",
     "format-disconnected": "󰤭",
-    "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
+    "format-icons": [
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
     "on-click": "nm-connection-editor &",
   },
   "pulseaudio": {
@@ -97,7 +111,11 @@
     "format-icons": {
       "headphone": "󰋋",
       "headset": "󰋋",
-      "default": ["󰕿", "󰖀", "󰕾"],
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ],
       "on-scroll-down": "pamixer --unmute --increase 1",
       "on-scroll-up": "pamixer --unmute --decrease 1",
     },
@@ -106,7 +124,15 @@
   },
   "backlight": {
     "format": "{icon}",
-    "format-icons": ["󰃚", "󰃛", "󰃜", "󰃝", "󰃞", "󰃟", "󰃠"],
+    "format-icons": [
+      "󰃚",
+      "󰃛",
+      "󰃜",
+      "󰃝",
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
     "tooltip-format": "{percent}",
   },
   "battery": {
@@ -121,7 +147,17 @@
     "format-time": "{H}h{M}min",
     "full-at": "80",
     "tooltip-format": "{capacity}\n{time}",
-    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂"],
+    "format-icons": [
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂"
+    ],
   },
   "clock": {
     "format": "{:%I:%M%p}",
