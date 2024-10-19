@@ -250,14 +250,3 @@
   :focusable "false"
   (action-center)
 )
-
-(defwindow action-center-closer
-  :monitor 0
-  :geometry (geometry
-    :width "150%"
-    :height "150%")
-  :stacking "fg"
-  :exclusive "false"
-  :focusable "false"
-  (closer :window "action-center")
-)

@@ -1,67 +1,48 @@
 ; VARS
-(defvar weather_visible false)
-(defvar control_visible false)
-(defvar eww-bar-color "transparent")
-
-(defvar bluetooth-toggle "scripts/bluetooth.sh --toggle")
 (defvar brightness-toggle
   "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
 
 ; POLLS
-(defpoll weather_color :interval "10m" :initial "#ffffff"
-  "$HOME/.config/scripts/weather.py hex")
-(defpoll weather_icon :interval "10m" :initial ""
-  "$HOME/.config/scripts/weather.py icon")
 (defpoll weather_temp :interval "10m" :initial "0"
   "$HOME/.config/scripts/weather.py temp")
 (defpoll weather_feels_like :interval "10m" :initial "0"
-  :run-while weather_visible
   "$HOME/.config/scripts/weather.py feel")
 (defpoll aqi_color :interval "10m" :initial "#ffffff"
   "$HOME/.config/scripts/weather.py aqi_color")
-(defpoll air_pollution :interval "10m" :run-while weather_visible
+(defpoll air_pollution :interval "10m"
   "$HOME/.config/scripts/weather.py aqi")
-(defpoll aqi_icon :interval "10m" :initial ""
-  "$HOME/.config/scripts/weather.py aqi_icon")
-(defpoll forecast_file :interval "10m" :run-while weather_visible
+(defpoll forecast_file :interval "10m"
   "cat $HOME/.cache/weather/onecall.json")
-(defpoll aqi_num :interval "10m" :initial "0" :run-while weather_visible
+(defpoll aqi_num :interval "10m" :initial "0"
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
-(defpoll pm25 :interval "10m" :initial "0" :run-while weather_visible
+(defpoll pm25 :interval "10m" :initial "0"
   "jq -r '.list[].components.pm2_5' < $HOME/.cache/weather/aqidata.json")
-(defpoll pm10 :interval "10m" :initial "0" :run-while weather_visible
+(defpoll pm10 :interval "10m" :initial "0"
   "jq -r '.list[].components.pm10' < $HOME/.cache/weather/aqidata.json")
-(defpoll o3 :interval "10m" :initial "0" :run-while weather_visible
+(defpoll o3 :interval "10m" :initial "0"
   "jq -r '.list[].components.o3' < $HOME/.cache/weather/aqidata.json")
-(defpoll no2 :interval "10m" :initial "0" :run-while weather_visible
+(defpoll no2 :interval "10m" :initial "0"
   "jq -r '.list[].components.no2' < $HOME/.cache/weather/aqidata.json")
-(defpoll so2 :interval "10m" :initial "0" :run-while weather_visible
+(defpoll so2 :interval "10m" :initial "0"
   "jq -r '.list[].components.so2' < $HOME/.cache/weather/aqidata.json")
-(defpoll co :interval "10m" :initial "0" :run-while weather_visible
+(defpoll co :interval "10m" :initial "0"
   "jq -r '.list[].components.co' < $HOME/.cache/weather/aqidata.json")
 
 (defpoll bluetooth-icon :interval "2s" :initial "󰂲"
   "scripts/bluetooth.sh --icon")
-(defpoll bluetooth-bat :interval "5s" :initial "" :run-while control_visible
+(defpoll bluetooth-bat :interval "5s" :initial ""
   "scripts/bluetooth.sh --bat")
-(defpoll bluetooth-info :interval "5s" :initial "" :run-while control_visible
+(defpoll bluetooth-info :interval "5s" :initial ""
   "scripts/bluetooth.sh --info")
 (defpoll brightness-icon :interval "2s" :initial "󰳲"
   "$HOME/.config/scripts/screen_brightness_info.sh --icon")
-(defpoll brightness :interval "1s" :run-while control_visible
+(defpoll brightness :interval "1s"
   "xbacklight -get | cut -d '.' -f 1")
-
-(defpoll airplane :interval "5s" :run_while control_visible
+(defpoll airplane :interval "5s"
   "rfkill | awk '/wlan/ {print $4}'")
 (defpoll vpn_status :interval "5s"
   "nmcli connection show --active | grep 'wireguard' || echo 'null'")
 
-
 ; LISTENS
 (deflisten network :initial '{"essid": "lo", "signal": ""}' "scripts/net.sh")
 (deflisten volume :initial "0" "scripts/vol.sh")
-
-(deflisten workspaces :initial "[]" "$HOME/.config/eww/scripts/get-workspaces")
-(deflisten current_workspace
-  :initial "1" "$HOME/.config/eww/scripts/get-active-workspace")
-(deflisten window :initial "..." "$HOME/.config/eww/scripts/get-window-title")
