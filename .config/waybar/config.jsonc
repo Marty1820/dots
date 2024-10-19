@@ -6,13 +6,8 @@
   // "width": 1280, // Waybar width
   "spacing": 4, // Gaps between modules (4px)
   // Choose the order of the modules
-  "modules-left": [
-    "custom/apps",
-    "hyprland/workspaces"
-  ],
-  "modules-center": [
-    "hyprland/window"
-  ],
+  "modules-left": ["custom/apps", "hyprland/workspaces"],
+  "modules-center": ["hyprland/window"],
   "modules-right": [
     "custom/weather",
     "group/control-center",
@@ -59,7 +54,7 @@
     "format": "{}",
     "tooltip": false,
     "interval": 3600,
-    "on-click": "eww open --toggle weather",
+    "on-click": "eww open --toggle weather &",
   },
   "group/control-center": {
     "orientation": "horizontal",
@@ -92,12 +87,7 @@
     "format-ethernet": "󰈀",
     "tooltip-format-wifi": "{essid} @ {ipaddr}",
     "format-disconnected": "󰤭",
-    "format-icons": [
-      "󰤟",
-      "󰤢",
-      "󰤥",
-      "󰤨"
-    ],
+    "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
     "on-click": "nm-connection-editor &",
   },
   "pulseaudio": {
@@ -107,11 +97,7 @@
     "format-icons": {
       "headphone": "󰋋",
       "headset": "󰋋",
-      "default": [
-        "󰕿",
-        "󰖀",
-        "󰕾"
-      ],
+      "default": ["󰕿", "󰖀", "󰕾"],
       "on-scroll-down": "pamixer --unmute --increase 1",
       "on-scroll-up": "pamixer --unmute --decrease 1",
     },
@@ -120,15 +106,7 @@
   },
   "backlight": {
     "format": "{icon}",
-    "format-icons": [
-      "󰃚",
-      "󰃛",
-      "󰃜",
-      "󰃝",
-      "󰃞",
-      "󰃟",
-      "󰃠"
-    ],
+    "format-icons": ["󰃚", "󰃛", "󰃜", "󰃝", "󰃞", "󰃟", "󰃠"],
     "tooltip-format": "{percent}",
   },
   "battery": {
@@ -139,28 +117,20 @@
     "format": "{icon}",
     "format-full": "󰁹",
     "format-plugged": "󰚥",
-    "format-charging": "󰚥",
-    "tooltip-format": "{capacity} \n {time}",
-    "format-icons": [
-      "󰁺",
-      "󰁻",
-      "󰁼",
-      "󰁽",
-      "󰁾",
-      "󰁿",
-      "󰂀",
-      "󰂁",
-      "󰂂"
-    ],
+    "format-charging": "󰂄",
+    "format-time": "{H}h{M}min",
+    "full-at": "80",
+    "tooltip-format": "{capacity}\n{time}",
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂"],
   },
   "clock": {
     "format": "{:%I:%M%p}",
     "tooltip": false,
-    "on-click": "eww open --toggle cal-info",
+    "on-click": "eww open --toggle cal-info &",
   },
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "eww open --toggle powermenu-closer && eww open --toggle powermenu",
+    "on-click": "eww open --toggle powermenu &",
   },
 }

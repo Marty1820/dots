@@ -119,11 +119,13 @@ window#waybar.empty #window {
   color: @red;
 }
 
-#bluetooth {
+#bluetooth,
+#battery {
   color: @cyan;
 }
 
-#network {
+#network,
+#battery.charging {
   color: @green;
 }
 
@@ -133,14 +135,6 @@ window#waybar.empty #window {
 
 #backlight {
   color: @yellow;
-}
-
-#battery {
-  color: @cyan;
-}
-
-#battery.charging {
-  color: @green;
 }
 
 #battery.warning {
