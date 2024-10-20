@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # Check if a menu name was provided
 if [ $# -ne 1 ]; then
