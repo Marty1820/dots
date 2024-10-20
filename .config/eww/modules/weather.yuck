@@ -324,7 +324,7 @@
 (defwindow weather
   :monitor 0
   :geometry (geometry
-    :x "125px"
+    :x "165px"
     :y "2px"
     :width "370px"
     :anchor "top right")
