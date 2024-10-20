@@ -331,7 +331,11 @@
   :stacking "overlay"
   :exclusive "false"
   :focusable "false"
-  (box :class "weather"
-    (weather)
+  (revealer
+    :transition "slidedown"
+    :reveal weatherrev
+    (box :class "weather"
+      (weather)
+    )
   )
 )

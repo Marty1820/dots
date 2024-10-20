@@ -1,4 +1,9 @@
 ; VARS
+(defvar weatherrev false)
+(defvar action-centerrev false)
+(defvar cal-inforev false)
+(defvar powermenurev false)
+
 (defvar brightness-toggle
   "$HOME/.config/scripts/screen_brightness_info.sh --toggle")
 

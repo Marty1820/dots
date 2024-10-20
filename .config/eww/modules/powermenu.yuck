@@ -63,5 +63,9 @@
   :stacking "overlay"
   :exclusive "false"
   :focusable "false"
-  (powermenu)
+  (revealer
+    :transition "slidedown"
+    :reveal powermenurev
+    (powermenu)
+  )
 )

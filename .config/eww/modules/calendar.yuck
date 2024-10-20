@@ -29,7 +29,11 @@
   :stacking "overlay"
   :exclusive "false"
   :focusable "false"
-  (box :class "cal-box"
-    (cal-info)
+  (revealer
+    :transition "slidedown"
+    :reveal cal-inforev
+    (box :class "cal-box"
+      (cal-info)
+    )
   )
 )

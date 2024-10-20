@@ -248,5 +248,9 @@
   :stacking "overlay"
   :exclusive "false"
   :focusable "false"
-  (action-center)
+  (revealer
+    :transition "slidedown"
+    :reveal action-centerrev
+    (action-center)
+  )
 )

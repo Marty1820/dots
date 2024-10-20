@@ -3,13 +3,8 @@
   "layer": "top", // Waybar at top layer
   "position": "top", // Waybar position (top|bottom|left|right)
   "spacing": 4, // Gaps between modules (4px)
-  "modules-left": [
-    "custom/apps",
-    "hyprland/workspaces"
-  ],
-  "modules-center": [
-    "hyprland/window"
-  ],
+  "modules-left": ["custom/apps", "hyprland/workspaces"],
+  "modules-center": ["hyprland/window"],
   "modules-right": [
     "custom/weather",
     "group/control-center",
@@ -56,7 +51,7 @@
     "format": "{}",
     "tooltip": false,
     "interval": 3600,
-    "on-click": "eww open --toggle weather &",
+    "on-click": "${HOME}/.config/eww/scripts/revealer.sh weather",
   },
   "group/control-center": {
     "orientation": "horizontal",
@@ -73,7 +68,7 @@
   "custom/settings": {
     "format": "",
     "interval": "once",
-    "on-click": "eww open --toggle action-center &",
+    "on-click": "${HOME}/.config/eww/scripts/revealer.sh action-center",
     "tooltip-format": "Settings",
   },
   "idle_inhibitor": {
@@ -96,12 +91,7 @@
     "format-ethernet": "󰈀",
     "tooltip-format-wifi": "{essid} @ {ipaddr}",
     "format-disconnected": "󰤭",
-    "format-icons": [
-      "󰤟",
-      "󰤢",
-      "󰤥",
-      "󰤨"
-    ],
+    "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
     "on-click": "nm-connection-editor &",
   },
   "pulseaudio": {
@@ -111,11 +101,7 @@
     "format-icons": {
       "headphone": "󰋋",
       "headset": "󰋋",
-      "default": [
-        "󰕿",
-        "󰖀",
-        "󰕾"
-      ],
+      "default": ["󰕿", "󰖀", "󰕾"],
       "on-scroll-down": "pamixer --unmute --increase 1",
       "on-scroll-up": "pamixer --unmute --decrease 1",
     },
@@ -124,15 +110,7 @@
   },
   "backlight": {
     "format": "{icon}",
-    "format-icons": [
-      "󰃚",
-      "󰃛",
-      "󰃜",
-      "󰃝",
-      "󰃞",
-      "󰃟",
-      "󰃠"
-    ],
+    "format-icons": ["󰃚", "󰃛", "󰃜", "󰃝", "󰃞", "󰃟", "󰃠"],
     "tooltip-format": "{percent}",
   },
   "battery": {
@@ -147,26 +125,16 @@
     "format-time": "{H}h{M}min",
     "full-at": "80",
     "tooltip-format": "{capacity}\n{time}",
-    "format-icons": [
-      "󰁺",
-      "󰁻",
-      "󰁼",
-      "󰁽",
-      "󰁾",
-      "󰁿",
-      "󰂀",
-      "󰂁",
-      "󰂂"
-    ],
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂"],
   },
   "clock": {
     "format": "{:%I:%M%p}",
     "tooltip": false,
-    "on-click": "eww open --toggle cal-info &",
+    "on-click": "${HOME}/.config/eww/scripts/revealer.sh cal-info",
   },
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "eww open --toggle powermenu &",
+    "on-click": "${HOME}/.config/eww/scripts/revealer.sh powermenu",
   },
 }
