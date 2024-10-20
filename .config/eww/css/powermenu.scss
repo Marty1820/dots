@@ -1,7 +1,10 @@
 .powermenu-box {
-  background: $background-darker;
+  background-color: $background-darker;
   border-radius: 1rem;
+  padding: 1rem;
   color: $foreground;
+  box-shadow: 0 0 4px 2px $background;
+  margin: 0.5rem;
 }
 
 .powermenu-button {

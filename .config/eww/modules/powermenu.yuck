@@ -56,7 +56,7 @@
 (defwindow powermenu
   :monitor 0
   :geometry (geometry
-    :x "-20px"
+    :x "-10px"
     :y "2px"
     :width "225px"
     :anchor "top right")
