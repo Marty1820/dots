@@ -90,7 +90,8 @@ window#waybar.empty #window {
 }
 
 #custom-weather:hover,
-#control-center:hover {
+#control-center:hover,
+#clock:hover {
   background: linear-gradient(0deg, @selection, @background);
 }
 
