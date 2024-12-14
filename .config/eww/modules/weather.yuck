@@ -8,7 +8,7 @@
       :space-evenly "false"
       :spacing 5
       (label :class "weather-rise-icon"
-        :text "󰖜"
+        :text ""
       )
       (label :class "weather-rise-text"
         :text "${formattime('${
@@ -20,7 +20,7 @@
       :space-evenly "false"
       :spacing 5
       (label :class "weather-set-icon"
-        :text "󰖛"
+        :text "󰖚"
       )
       (label :class "weather-set-text"
         :text "${formattime('${
@@ -147,7 +147,7 @@
       :iconclass "${
         "${jq(forecast_file, '.current.wind_speed')}" > 32 ? 'more' :
                                                              ''}"
-      :icon "󰈐"
+      :icon ""
       :data "${jq(forecast_file, '.current.wind_speed')}MPH"
       :label "Wind"
     )
@@ -191,10 +191,9 @@
   )
 )
 
-(defwidget w_forecast []
+(defwidget w_forecast_info []
   (box :orientation "h"
-    :class "forecast-box"
-    :halign "center"
+    :halign "fill"
     :space-evenly "true"
     (weather_forecast_day
       :order "0"
@@ -208,6 +207,18 @@
     (weather_forecast_day
       :order "3"
     )
+  )
+)
+
+(defwidget w_forecast []
+  (box :orientation "v"
+    :class "forecast-box"
+    :space-evenly "false"
+    (label :xalign "0"
+      :class "forecast-label"
+      :text "󰨳 4 Day Forecast"
+    )
+    (w_forecast_info)
   )
 )
 
@@ -236,7 +247,7 @@
     (label :yalign "0"
       :class "aqi-label"
       :halign "start"
-      :text "Air Quality"
+      :text "󰵃 Air Quality"
     )
     (box :orientation "h"
       :class "aqi-data"
