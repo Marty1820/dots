@@ -42,6 +42,8 @@
     "format": "{}",
     "rewrite": {
       "(.*) — Mozilla Firefox": "$1",
+      "(.*) — Ablaze Floorp": "$1",
+      "(.*) - Chromium": "$1",
     },
   },
   // Right Section
