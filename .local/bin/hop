@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+SSH_CONFIG="$HOME/.ssh/config"
+
+# Ensure SSH config exists
+[[ -f "$SSH_CONFIG" ]] || { echo "SSH config not found at $SSH_CONFIG"; exit 1; }
+
+# Get list of hosts, excluding wildcards
+mapfile -t hosts < <(awk '/^Host / && $2 != "*" {for (i=2; i<=NF; i++) print $i}' "$SSH_CONFIG")
+
+[[ ${#hosts[@]} -gt 0 ]] || { echo "No hosts found."; exit 1; }
+
+echo "Available systems:"
+select host in "${hosts[@]}"; do
+    [[ -n "$host" ]] || { echo "Invalid choice."; continue; }
+    ssh "$host"
+    break
+done
