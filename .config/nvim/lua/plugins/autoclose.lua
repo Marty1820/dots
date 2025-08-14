@@ -1,11 +1,8 @@
 return {
-  'm4xshen/autoclose.nvim',
-  config = function()
-    require('autoclose').setup({
-      options = {
-        disable_when_touch = true,
-        pair_spaces = true,
-      },
-    })
-  end,
+  "m4xshen/autoclose.nvim",
+  opts = {
+    disabled_filetypes = { "text", "markdown" },
+    disable_when_touch = true,
+    pair_spaces = true,
+  },
 }

@@ -1,8 +1,10 @@
-#!/usr/bin/env sh
+#!/bin/sh
 # Taken from https://github.com/BrodieRobertson/scripts/blob/master/color10bit
 
+set -eu
+
 # Define the number of columns for the terminal width; default to 80 if tput fails
-term_cols="${width:-$(tput cols || echo 80)}"
+term_cols="${width:-$(tput cols 2>/dev/null || echo 80)}"
 
 # Generate a color gradient
 awk -v term_cols="$term_cols" '

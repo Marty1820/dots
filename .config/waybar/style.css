@@ -1,144 +1,210 @@
-@import url("./colors.css");
+@define-color background-darker rgba(30, 31, 41, 230);
+@define-color background rgb(40, 42, 54);
+@define-color selection rgb(68, 71, 90);
+@define-color foreground rgb(248, 248, 242);
+@define-color comment rgb(98, 114, 164);
+@define-color cyan rgb(139, 233, 253);
+@define-color green rgb(80, 250, 123);
+@define-color orange rgb(255, 184, 108);
+@define-color pink rgb(255, 121, 198);
+@define-color purple rgb(189, 147, 249);
+@define-color red rgb(255, 85, 85);
+@define-color yellow rgb(241, 250, 140);
 
 * {
-  border: none;
-  border-radius: 0;
-  font-family: "Mononoki Nerd Font Mono";
-  font-size: 16px;
+  font-family: Mononoki Nerd Font Mono;
+  font-size: 14px;
 }
 
 window#waybar {
-  padding: 0.4rem 1rem;
-  background: @background-darker;
+  background-image: linear-gradient(
+    to right,
+    black,
+    @background-darker,
+    @background
+  );
+  color: @foreground;
+}
+
+tooltip {
+  background: @background;
+  border: 1px solid @purple;
+  border-radius: 12px;
+}
+
+tooltip label {
   color: @foreground;
 }
 
 .modules-left,
 .modules-center,
 .modules-right {
-  padding: 0px 5px;
+  padding: 6px 0 6px 0;
 }
 
-tooltip {
-  opacity: 0.95;
-  border-radius: 20px;
-  border: 1px solid @selection;
-  background: @background;
+.modules-left {
+  border-radius: 0 12px 6px 6px;
 }
 
-/* Application Launcher */
-#custom-apps {
-  border-radius: 1rem;
-  padding: 0 0.6rem;
-  transition: 0.3s;
-  background-color: @background;
+.modules-center {
+  border-radius: 0 6px 6px 0;
 }
 
-#custom-apps:hover {
-  background: linear-gradient(0deg, @selection, @background);
+.modules-right {
+  border-radius: 6px 6px 12px 0;
 }
 
-/* Workspace Buttons */
-#workspaces {
-  padding: 0 0.5em;
-  border-radius: 1rem;
-}
-
-#workspaces button {
-  border-radius: 1rem;
-  padding: 0 0.3rem;
-  margin: 0 0.2rem;
-  transition: 0.3s;
-  background: linear-gradient(0deg, @green, @background);
-}
-
-#workspaces button.empty {
-  background: @background;
-}
-
-#workspaces button.active {
-  background: linear-gradient(0deg, @purple, @background);
-}
-
-#workspaces button:hover {
-  background: linear-gradient(0deg, @selection, @background);
-}
-
-/* Window Title */
-#window {
-  border-radius: 1rem;
-  padding: 0 0.5em;
-  margin: 0 0.5rem;
-  background: linear-gradient(0deg, @background, @background-darker);
-}
-
-window#waybar.empty #window {
-  background: transparent;
-  color: transparent;
-}
-
-/* Weather */
-#custom-weather,
-#control-center,
+#custom-power,
 #clock,
-#custom-power {
-  border-radius: 1em;
-  padding: 0 0.5em;
-  margin: 0 0.25em;
-  transition: 0.3s;
-  background: linear-gradient(0deg, @background, @background-darker);
-}
-
-#custom-weather:hover,
-#control-center:hover,
-#clock:hover {
-  background: linear-gradient(0deg, @selection, @background);
-}
-
-#custom-settings,
+#custom-weather,
+#window,
 #idle_inhibitor,
 #bluetooth,
+#wireplumber,
 #network,
-#pulseaudio,
 #backlight,
 #battery {
-  padding: 0 0.2em;
+  margin: 0 5px;
+  border-radius: 6px;
 }
 
-#custom-settings,
-#backlight {
-  color: @yellow;
+#custom-power,
+#clock,
+#custom-weather,
+#window {
+  padding: 5px 0;
 }
 
-#idle_inhibitor.deactivated,
-#battery.warning {
-  color: @orange;
-}
-
-#idle_inhibitor.activated,
-#bluetooth.off,
-#bluetooth.disabled,
-#network.disabled,
-#network.disconnected,
-#pulseaudio.muted,
-#battery.critical {
+#custom-power {
   color: @red;
 }
 
-#bluetooth,
-#battery {
+#custom-power:hover {
+  background: @red;
+  color: @background;
+}
+
+#custom-weather.hot {
+  color: @red;
+}
+
+#custom-weather.cold {
   color: @cyan;
 }
 
+#taskbar.empty {
+  background-color: transparent;
+}
+
+#taskbar button {
+  padding: 7px 0px 0px 0px;
+  border-radius: 6px;
+  margin: 3px 0px 3px 0px;
+}
+
+#taskbar button.active {
+  background-color: @purple;
+}
+
+#taskbar button:hover {
+  background-color: @selection;
+}
+
+#window {
+  border-radius: 0 12px 12px 0;
+  background-image: linear-gradient(to right, @black, @background-darker);
+}
+
+window#waybar.empty #window {
+  background-image: none;
+  background-color: transparent;
+}
+
+#idle_inhibitor,
+#bluetooth,
+#wireplumber,
 #network,
+#backlight,
+#battery {
+  font-size: 18px;
+  color: @background;
+}
+
+#idle_inhibitor {
+  background-image: linear-gradient(to right, @selection, @yellow, @yellow);
+}
+
+#idle_inhibitor.activated {
+  background-image: linear-gradient(to right, @red, @yellow);
+}
+
+#idle_inhibitor:hover {
+  background-image: linear-gradient(to right, @background, @selection, @yellow);
+}
+
+#bluetooth {
+  background-image: linear-gradient(to left, @cyan, @cyan, @selection);
+}
+
+#bluetooth:hover {
+  background-image: linear-gradient(to left, @cyan, @selection, @background);
+}
+
+#wireplumber {
+  background-image: linear-gradient(to left, @purple, @purple, @selection);
+}
+
+#wireplumber.muted {
+  background-image: linear-gradient(to left, @purple, @red);
+}
+
+#wireplumber:hover {
+  background-image: linear-gradient(to left, @purple, @selection, @background);
+}
+
+#network {
+  background-image: linear-gradient(to left, @green, @green, @selection);
+}
+
+#network.disconnected {
+  color: @red;
+}
+
+#network:hover {
+  background-image: linear-gradient(to left, @green, @selection, @background);
+}
+
+#backlight {
+  background-image: linear-gradient(to left, @yellow, @yellow, @selection);
+}
+
+#battery {
+  background-image: linear-gradient(to left, @cyan, @cyan, @selection);
+}
+
 #battery.charging {
+  background-image: linear-gradient(to left, @cyan, @selection, @selection);
   color: @green;
 }
 
-#pulseaudio {
-  color: @purple;
+#battery.warning:not(.charging) {
+  background-image: linear-gradient(to left, @cyan, @orange, @selection);
+  color: @red;
 }
 
-#custom-power:hover {
-  background: linear-gradient(0deg, @red, @background);
+#battery.critical:not(.charging) {
+  background-image: linear-gradient(to left, @cyan, @orange, @red);
+  color: @foreground;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes blink {
+  to {
+    background-color: @foreground;
+    color: @background;
+  }
 }

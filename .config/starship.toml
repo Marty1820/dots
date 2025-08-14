@@ -1,62 +1,48 @@
-###############################################
-# ███╗░░░███╗░█████╗░██████╗░████████╗██╗░░░██╗
-# ████╗░████║██╔══██╗██╔══██╗╚══██╔══╝╚██╗░██╔╝
-# ██╔████╔██║███████║██████╔╝░░░██║░░░░╚████╔╝░
-# ██║╚██╔╝██║██╔══██║██╔══██╗░░░██║░░░░░╚██╔╝░░
-# ██║░╚═╝░██║██║░░██║██║░░██║░░░██║░░░░░░██║░░░
-# ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░
-###############################################
+######################################
+# ███╗░░░███╗░█████╗░██████╗░████████╗
+# ████╗░████║██╔══██╗██╔══██╗╚══██╔══╝
+# ██╔████╔██║███████║██████╔╝░░░██║░░░
+# ██║╚██╔╝██║██╔══██║██╔══██╗░░░██║░░░
+# ██║░╚═╝░██║██║░░██║██║░░██║░░░██║░░░
+# ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░
+######################################
 
 # Shell Prompt Configuration
 # Configuration reference: https://starship.rs/config/
 
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
+palette = "dracula"
 
-# Inserts a blank line between shell prompts
 add_newline = true
 
-## Prompt options
-# Configure the format of the prompt.
-format = "$all"
-right_format = "$cmd_duration"
-continuation_prompt = "[➜➜](bold #bd93f9)"
-# Timeout for starship to scan files (in milliseconds).
-scan_timeout = 10
+format = """\
+[](fg:purple)\
+$directory\
+${custom.directory_separator_not_git}\
+${custom.directory_separator_git}\
+$symbol($git_branch[](fg:pink))\
+$symbol( $git_commit$git_status$git_metrics$git_state) $fill$cmd_duration$all\
+$character"""
 
-## Battery Options
-[battery]
-# The symbol shown when the batterys is charging.
-charging_symbol = ""
-# The symbol shown when the battery is discharging.
-discharging_symbol = "󰂃"
-[[battery.display]]
-# The upper bound for the display option.
-threshold = 20
-# The style used if the display option is in use.
-style = "bold #ff5555"
+continuation_prompt = "[➜➜](bold green)"
 
-## Character Options
+[fill]
+symbol = " "
+
 [character]
-# The format string used before the text input if the previous command succeeded.
-success_symbol = "[➜](bold #50fa7b)"
-# The format string used before the text input if the previous command failed.
-error_symbol = "[✗](bold #ff5555)"
+error_symbol = "[✗](bold red)"
 
-## Command Duration Options
-[cmd_duration]
-min_time = 500
-format = "[ $duration]($style)"
-style = "bold #f1fa8c"
+[line_break]
+disabled = false
 
-## Directory Options
 [directory]
-style = "bold #bd93f9"
-# The symbol indicating the current directory is read only.
+truncate_to_repo = true
+format = "[ $path ]($style)"
+style = "bold fg:background bg:purple"
 read_only = ""
-read_only_style = "#ff5555"
+read_only_style = "red"
 truncation_symbol = '.../'
-# The symbol indicating home directory.
 home_symbol = "~"
 [directory.substitutions]
 "Documents" = "󰈙"
@@ -65,18 +51,63 @@ home_symbol = "~"
 "Pictures" = ""
 "Videos" = "󰸬"
 ".config" = ""
-".dotfiles" = ""
+"dots" = ""
 
-## Git Options
 [git_branch]
-format = " [$symbol(:$remote_branch)]($style)"
-style = "bold #ff79c6"
-[git_status]
-style = "bold #ff5555"
+symbol = " "
+format = "[ $symbol$branch(:$remote_branch) ]($style)"
+style = "bold fg:background bg:pink"
 
-[line_break]
-# Disables the line_break module making the prompt a single line.
-disabled = true
+[git_metrics]
+disabled = false
+
+[git_status]
+style = "bold fg:background bg:red"
+
+[cmd_duration]
+min_time = 500
+format = "[  $duration ]($style)"
+style = "bold yellow"
+
+[battery]
+format = "[$symbol $percentage]($style)"
+charging_symbol = ""
+discharging_symbol = "󰂃"
+
+[[battery.display]]
+threshold = 15
+style = "red"
+
+[[battery.display]]
+threshold = 30
+style = "bold orange"
+
+[custom.directory_separator_git]
+description = "Output a styled separator right after the directory when inside a git repository."
+command = ""
+format = "[](fg:purple bg:pink)"
+# Only when inside git repository
+when = "git rev-parse --is-inside-work-tree >/dev/null 2>&1"
+[custom.directory_separator_not_git]
+description = "Output a styled separator right after the directory when NOT inside a git repository."
+command = ""
+format = "[](fg:purple)"
+# Only when NOT inside a git repository
+when = "! git rev-parse --is-inside-work-tree > /dev/null 2>&1"
 
 [python]
 symbol = "󰌠 "
+
+# Define Dracula color palette
+[palettes.dracula]
+background = "#282a36"
+current_line = "#44475a"
+foreground = "#f8f8f2"
+comment = "#6272a4"
+cyan = "#8be9fd"
+green = "#50fa7b"
+orange = "#ffb86c"
+pink = "#ff79c6"
+purple = "#bd93f9"
+red = "#ff5555"
+yellow = "#f1fa8c"

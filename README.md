@@ -1,66 +1,84 @@
 <div align="center">
 
-# Marty's Dotfiles
+# Marty's Dots
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/Marty1820/configs?style=for-the-badge&labelColor=44475a&color=bd93f9) ![GitHub repo size](https://img.shields.io/github/repo-size/Marty1820/configs?style=for-the-badge&labelColor=44475a&color=bd93f9)
 
 </div>
 
-**Warning:** Works on my machine doens't mean it'll work on yours. Use at your own risk.
+**Warning:** Works on my machine doesn't mean it'll work on yours. Use at your own risk.
 Lots of older configs in another repo [here](https://github.com/Marty1820/old-dotfiles)
 
 ## Details
 
 - **Shell**: [ZSH](https://www.zsh.org/)
-- **WM**: [Hyprland](https://hyprland.org/)
-- **Status Bar**: [EWW](https://elkowar.github.io/eww/eww.html)
-- **Application Launcher**: [rofi wayland fork](https://github.com/lbonn/rofi)
+- **WM**: [Niri](https://github.com/YaLTeR/niri)
+- **Status Bar**: [Waybar](https://github.com/Alexays/Waybar)
+- **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
-#### Keybound Apps
+|    Name    |        Description         |
+| :--------: | :------------------------: |
+|  `NeoVim`  |        `Super + a`         |
+|  `Thunar`  |        `Super + e`         |
+| `WaterFox` |        `Super + b`         |
+|  `Fuzzel`  | `Super + d` = applications |
 
-|       Name       |           Description            |
-| :--------------: | :------------------------------: |
-|      `nvim`      |           `Super + a`            |
-|     `gedit`      |       `Super + shift + a`        |
-|    `pcmanfm`     |           `Super + e`            |
-|    `firefox`     |           `Super + b`            |
-|    `chromium`    |       `Super + shift + b`        |
-|      `rofi`      |    `Super + d` = applications    |
-| `grim` & `slurp` | Print Screen key for screenshots |
-
-#### Bash & ZSH changes
+#### ZSH changes
 
 |        Name         |                Description                |
 | :-----------------: | :---------------------------------------: |
 |        `exa`        |             `ls` replacement              |
 |        `bat`        |             `cat` replacement             |
-|      `mirror`       |         Runs `reflector` on Arch          |
 |     `starship`      |              Terminal Prompt              |
 | Decompression Tools | `ex filename` to extract compressed files |
 
-## Hyprland Screenshot
+## Installation instructions
 
-<div align="center">
+### Prerequisites
 
-### Desktop & status bar
+Install [GNU stow](https://www.gnu.org/software/stow/):
 
-![screenshot](.screenshots/hyprland.png)
+```bash
+sudo apt install stow   # Debian/Ubuntu
+sudo pacman -S stow     # Arch
+```
 
-### Application launcher [rofi](https:/github.com/lbonn/rofi)
+Clone Repo
 
-![screenshot](.screenshots/apps-menu.png)
+```bash
+git clone https://github.com/Marty1820/configs.git ~/dots
+cd ~/dots
+```
 
-### Calendar
+Stow the files
 
-![screenshot](.screenshots/calendar.png)
+```bash
+stow .
+```
 
-### Control center
+#### Bootstrap
 
-![screenshot](.screenshots/control_center.png)
+```bash
+git clone https://github.com/Marty1820/configs.git ~/dots && cd ~/dots && stow .
+```
 
-### Weather widget
+No overwriting files:
 
-![screenshot](.screenshots/weather_widget.png)
+```bash
+git clone https://github.com/Marty1820/configs.git ~/dots && cd ~/dots && stow --adopt .
+```
 
-</div>
+#### Extra file needed for wlsunset and weather module in Waybar
+
+```bash
+nvim ~/.local/state/location.toml
+```
+
+Example contents:
+
+```toml
+API_KEY = "OPEN_WEATHER_API_KEY"
+LAT = "LATITUDE"
+LON = "LONGITUDE"
+```

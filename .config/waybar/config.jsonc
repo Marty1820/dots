@@ -1,142 +1,126 @@
-// -*- mode: jsonc -*-
 {
-  "layer": "top", // Waybar at top layer
-  "position": "top", // Waybar position (top|bottom|left|right)
-  "spacing": 4, // Gaps between modules (4px)
-  "modules-left": ["custom/apps", "hyprland/workspaces"],
-  "modules-center": ["hyprland/window"],
+  // Decide if the bar is displayed in front (top)
+  // of the windows or behind (bottom) them.
+  "layer": "top",
+  // Bar position, can be top,bottom,left,right.
+  "position": "left",
+  // Width to be used by the bar if possible,
+  // leave blank for a dynamic value.
+  "width": 34,
+  // Modules that will be displayed on the left.
+  "modules-left": ["custom/power", "clock", "custom/weather", "wlr/taskbar"],
+  // Modules that will be displayed in the center.
+  "modules-center": ["niri/window"],
+  // Modules that will be displayed on the right.
   "modules-right": [
-    "custom/weather",
-    "group/control-center",
-    "clock",
-    "custom/power",
+    "idle_inhibitor",
+    "bluetooth",
+    "wireplumber",
+    "network",
+    "backlight",
+    "battery",
   ],
-  // Modules configuration
+  // Size of gaps in between of the different modules.
+  "spacing": 4,
+  // Option to enable reloading the css style if a modification
+  // is detected on the style sheet file or any imported css files.
+  "reload_style_on_change": true,
+  // Modules Config
   // Left Section
-  "custom/apps": {
-    "format": "󰀻",
-    "interval": "once",
-    "on-click": "rofi -show drun -theme ~/.config/rofi/config.rasi &",
-    "tooltip-format": "Applications",
+  "custom/power": {
+    "format": "",
+    "tooltip-format": "Power Off",
+    "on-click": "systemctl poweroff",
   },
-  "hyprland/workspaces": {
-    "disable-scroll": true,
-    "all-outputs": true,
-    "warp-on-scroll": false,
-    "format": "{icon}",
-    "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "urgent": "",
-      "focused": "",
-      "default": "",
-    },
-    "persistent-workspaces": {
-      "*": 4,
+  "clock": {
+    "format": "{:%I\n%M}",
+    "tooltip-format": "{:%a, %b %d}",
+  },
+  "custom/weather": {
+    "rotate": 90,
+    "justify": "center",
+    "exec": "${HOME}/.local/bin/weather.py waybar",
+    "return-type": "json",
+    "tooltip": true,
+    "interval": 150,
+  },
+  "wlr/taskbar": {
+    "tooltip-format": "{app_id}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "on-click-right": "fullscreen",
+    "ignore-list": ["Alacritty", "kitty"],
+    "rewrite": {
+      "waterfox": "Waterfox",
+      "thunar": "Thunar",
     },
   },
   // Middle Section
-  "hyprland/window": {
-    "format": "{}",
+  "niri/window": {
+    "rotate": 90,
+    "tooltip": false,
     "rewrite": {
       "(.*) — Mozilla Firefox": "$1",
       "(.*) — Ablaze Floorp": "$1",
+      "(.*) — Waterfox": "$1",
       "(.*) - Chromium": "$1",
     },
   },
   // Right Section
-  "custom/weather": {
-    "exec": "${HOME}/.config/scripts/weather.py waybar",
-    "return-type": "json",
-    "format": "{}",
-    "tooltip": false,
-    "interval": 3600,
-    "on-click": "${HOME}/.config/eww/scripts/revealer.sh weather",
-  },
-  "group/control-center": {
-    "orientation": "horizontal",
-    "modules": [
-      "custom/settings",
-      "idle_inhibitor",
-      "bluetooth",
-      "network",
-      "pulseaudio",
-      "backlight",
-      "battery",
-    ],
-  },
-  "custom/settings": {
-    "format": "",
-    "interval": "once",
-    "on-click": "${HOME}/.config/eww/scripts/revealer.sh action-center",
-    "tooltip-format": "Settings",
-  },
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
-      "activated": "󰈈",
-      "deactivated": "󰈉",
+      "activated": "",
+      "deactivated": "",
     },
+    "tooltip-format-activated": "Activated",
+    "tooltip-format-deactivated": "Deactivated",
   },
   "bluetooth": {
     "format": "󰂳",
     "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "format-on": "󰂳",
     "format-connected": "󰂱",
     "on-click": "blueman-manager &",
-    "tooltip-format": "{controller_alias}\t{controller_address}",
+    "tooltip-format": "{controller_alias} | {controller_address}",
     "tooltip-format-connected": "{device_alias}",
   },
+  "wireplumber": {
+    "format": "{icon}",
+    "format-muted": "󰖁",
+    "format-icons": ["󰕿", "󰖀", "󰕾"],
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip-format": "Volume: {volume}%",
+    "reverse-scrolling": 1,
+  },
   "network": {
-    "format-wifi": "{icon}",
     "format-ethernet": "󰈀",
-    "tooltip-format-wifi": "{essid} @ {ipaddr}",
+    "format-wifi": "{icon}",
     "format-disconnected": "󰤭",
     "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
     "on-click": "nm-connection-editor &",
-  },
-  "pulseaudio": {
-    // "scroll-step": 1, // %, can be a float
-    "format": "{icon}",
-    "format-muted": "󰖁",
-    "format-icons": {
-      "headphone": "󰋋",
-      "headset": "󰋋",
-      "default": ["󰕿", "󰖀", "󰕾"],
-      "on-scroll-down": "pamixer --unmute --increase 1",
-      "on-scroll-up": "pamixer --unmute --decrease 1",
-    },
-    "tooltip-format": "{volume}",
-    "on-click": "pamixer -t",
+    "tooltip-format-ethernet": "{ipaddr}",
+    "tooltip-format-wifi": "{essid} | {ipaddr}",
   },
   "backlight": {
     "format": "{icon}",
-    "format-icons": ["󰃚", "󰃛", "󰃜", "󰃝", "󰃞", "󰃟", "󰃠"],
-    "tooltip-format": "{percent}",
+    "format-icons": ["󰃝", "󰃞", "󰃟", "󰃠"],
+    "on-click": "${HOME}/.local/bin/ABToggle.sh",
+    "tooltip-format": "Brightness: {percent}",
   },
   "battery": {
+    "full-at": 80,
     "states": {
-      "warning": 30,
-      "critical": 15,
+      "warning": 25,
+      "critical": 10,
     },
     "format": "{icon}",
+    "format-time": "{H}h{M}m",
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂"],
+    "tooltip-format": "{time}\n{capacity}%",
     "format-full": "󰁹",
     "format-plugged": "󰚥",
-    "format-charging": "󰂄",
-    "format-time": "{H}h{M}min",
-    "full-at": "80",
-    "tooltip-format": "{capacity}\n{time}",
-    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂"],
-  },
-  "clock": {
-    "format": "{:%I:%M%p}",
-    "tooltip": false,
-    "on-click": "${HOME}/.config/eww/scripts/revealer.sh cal-info",
-  },
-  "custom/power": {
-    "format": "⏻",
-    "tooltip": false,
-    "on-click": "${HOME}/.config/eww/scripts/revealer.sh powermenu",
+    "format-charging": "󱐋{icon}",
   },
 }
