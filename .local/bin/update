@@ -1,0 +1,106 @@
+#!/bin/bash
+
+set -e
+
+# Consistent shell print formatting
+print_header() {
+  printf '\n\033[1m%s\033[0m\n' "$1"
+}
+
+# Update mirrors if old
+check_mirrorlist() {
+  local mirrorlist="/etc/pacman.d/mirrorlist"
+  if [ ! -f "$mirrorlist" ] || [ "$(find "$mirrorlist" -mtime +7)" ]; then
+    print_header "Updating mirrorlist with reflector"
+    systemctl start reflector.service
+  fi
+}
+
+# Function to update packages
+pkg_update() {
+  print_header "Upgrading Packages"
+  if command -v paru &>/dev/null; then
+    paru -Syu
+  else
+    sudo pacman -Syu
+  fi
+}
+
+# Function to check for broken packages
+# pacman -S rebuild-checker
+rebuild() {
+  print_header "Checking for broken packages"
+  if ! checkrebuild -v &>/dev/null; then
+    echo -e "Rebuild needed for above packages\nPress enter to continue..."
+    read -r
+  else
+    echo "No rebuilds needed"
+  fi
+}
+
+# Function to update TLDR-pages
+# pacman -S tldr
+tldr_cache() {
+  print_header "Updating TLDR-pages"
+  tldr --update_cache
+}
+
+# Function to check and update firmware
+# pacman -S fwupd udisks2
+fwupd() {
+  print_header "Firmware check/update"
+  fwupdmgr refresh
+  fwupdmgr update
+}
+
+# Function to check for CPU vulnerabilities
+cpu_vulns() {
+  print_header "Checking CPU vulnerabilities"
+  if lscpu | grep -q 'Vulnerability:.*Vulnerable'; then
+    cat << EOF
+
+#####################
+##YOU'RE VULNERABLE##
+#####################
+
+Run 'lscpu' and look at the Vulnerability section
+Press enter to continue...
+EOF
+    read -r
+  else
+    echo "No vulnerabilities found"
+  fi
+}
+
+# Function to check for new kernel
+kern_chk() {
+  print_header "Checking for new Kernel"
+  local current running
+  current=$(pacman -Q linux | awk '{print $2}' | tr '-' '.')
+  running=$(uname -r | tr '-' '.')
+
+  if [[ "$current" == "$running" ]]; then
+    echo "Latest Kernel Running - No reboot required"
+  else
+    echo -e "\033[31;1mNewer kernel has been installed - Reboot required\033[0m"
+    read -rp "Reboot now? [y/N]?: " ans
+    [[ $ans =~ ^[Yy]$ ]] && reboot || echo "Please restart when convenient"
+  fi
+
+  orphan_pkgs
+}
+
+# Function to list orphaned packages
+orphan_pkgs() {
+  print_header "Orphaned Packages"
+  pacman -Qdt || echo "No orphaned packages"
+}
+
+# Main script execution
+check_mirrorlist
+pkg_update
+rebuild
+tldr_cache
+fwupd
+cpu_vulns
+kern_chk

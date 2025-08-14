@@ -1,0 +1,50 @@
+background-color=#282a36
+text-color=#f8f8f2
+border-color=#bd93f9
+progress-color=#44475a
+sort=-time
+layer=overlay
+width=300
+height=110
+border-size=2
+border-radius=15
+icons=0
+max-icon-size=64
+default-timeout=5000
+ignore-timeout=1
+font=Mononoki Nerd Font Mono 14
+anchor=top-left
+
+[urgency=low]
+border-color=#44475a
+
+[urgency=normal]
+border-color=#bd93f9
+
+[urgency=high]
+border-color=#ff5555
+default-timeout=0
+
+[app-name=wp-vol]
+anchor=bottom-left
+history=0
+#Group all volume notifications together
+group-by=app-name
+#Hide the group-index
+format=<b>%s</b>\n%b
+
+[app-name=bk-lit]
+anchor=bottom-left
+history=0
+#Group all backlight notifications together
+group-by=app-name
+#Hide the group-index
+format=<b>%s</b>\n%b
+
+[app-name=AB]
+anchor=bottom-left
+history=0
+#Group all backlight notifications together
+group-by=app-name
+#Hide the group-index
+format=<b>%s</b>\n%b
