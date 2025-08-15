@@ -82,3 +82,9 @@ API_KEY = "OPEN_WEATHER_API_KEY"
 LAT = "LATITUDE"
 LON = "LONGITUDE"
 ```
+
+#### Niri wants
+
+```bash
+systemctl --user add-wants niri.service AB.service swaybg.service swayidle.service waybar.service wlsunset.service weather.timer
+```

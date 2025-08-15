@@ -1,0 +1,7 @@
+[Unit]
+Description=Run weather data fetch
+ConditionNetworkOnline=true
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/weather.py getdata

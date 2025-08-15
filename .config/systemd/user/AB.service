@@ -1,0 +1,9 @@
+[Unit]
+Description=Mac-like-automatic-brightness as service
+
+[Service]
+Type=simple
+Restart=on-failure
+Restartsec=5s
+
+ExecStart=/home/marty/.local/bin/AutomaticBrightness.sh
