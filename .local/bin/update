@@ -1,28 +1,42 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-set -e
+INTERACTIVE=1 # set to 0 for unattended runs
 
-# Consistent shell print formatting
-print_header() {
-  printf '\n\033[1m%s\033[0m\n' "$1"
+# Colors
+BOLD="\033[1m"
+RESET="\033[0m"
+RED="\033[31;1m"
+
+# Print formatted header
+print_header() { 
+  echo -e "\n${BOLD}$1${RESET}"
 }
 
-# Update mirrors if old
+# Confirm prompt if interactive
+confirm() {
+  [[ $INTERACTIVE -eq 0 ]] && return 1
+  read -rp "$1 [y/N]: " ans
+  [[ "$ans" =~ ^[Yy]$ ]]
+}
+
+# Update mirrors if older than 7 days
 check_mirrorlist() {
   local mirrorlist="/etc/pacman.d/mirrorlist"
-  if [ ! -f "$mirrorlist" ] || [ "$(find "$mirrorlist" -mtime +7)" ]; then
+  if [ ! -f "$mirrorlist" ] || (( $(date +%s) - $(stat -c %Y "$mirrorlist") > 604800 )); then
     print_header "Updating mirrorlist with reflector"
     systemctl start reflector.service
+    sleep 5
   fi
 }
 
-# Function to update packages
+# Upgrade packages
 pkg_update() {
   print_header "Upgrading Packages"
   if command -v paru &>/dev/null; then
-    paru -Syu
+    paru -Syu --noconfirm
   else
-    sudo pacman -Syu
+    sudo pacman -Syu --noconfirm
   fi
 }
 
@@ -30,27 +44,33 @@ pkg_update() {
 # pacman -S rebuild-checker
 rebuild() {
   print_header "Checking for broken packages"
-  if ! checkrebuild -v &>/dev/null; then
-    echo -e "Rebuild needed for above packages\nPress enter to continue..."
-    read -r
-  else
-    echo "No rebuilds needed"
+  if command -v checkrebuild &>/dev/null; then
+    if ! checkrebuild -v; then
+      echo -e "Rebuild needed for above packages"
+      ((INTERACTIVE)) && read -rp "Press enter to continue..."
+    else
+      echo "No rebuilds needed"
+    fi
   fi
 }
 
 # Function to update TLDR-pages
 # pacman -S tldr
 tldr_cache() {
-  print_header "Updating TLDR-pages"
-  tldr --update_cache
+  if command -v tldr &>/dev/null; then
+    print_header "Updating TLDR-pages"
+    tldr --update_cache
+  fi
 }
 
 # Function to check and update firmware
 # pacman -S fwupd udisks2
 fwupd() {
-  print_header "Firmware check/update"
-  fwupdmgr refresh
-  fwupdmgr update
+  if command -v fwupdmgr &>/dev/null; then
+    print_header "Firmware check/update"
+    fwupdmgr refresh
+    fwupdmgr update
+  fi
 }
 
 # Function to check for CPU vulnerabilities
@@ -64,9 +84,8 @@ cpu_vulns() {
 #####################
 
 Run 'lscpu' and look at the Vulnerability section
-Press enter to continue...
 EOF
-    read -r
+    ((INTERACTIVE)) && read -rp "Press enter to continue..."
   else
     echo "No vulnerabilities found"
   fi
@@ -82,9 +101,8 @@ kern_chk() {
   if [[ "$current" == "$running" ]]; then
     echo "Latest Kernel Running - No reboot required"
   else
-    echo -e "\033[31;1mNewer kernel has been installed - Reboot required\033[0m"
-    read -rp "Reboot now? [y/N]?: " ans
-    [[ $ans =~ ^[Yy]$ ]] && reboot || echo "Please restart when convenient"
+    echo -e "${RED}Newer kernel has been installed - Reboot required${RESET}"
+    confirm "Reboot now?" && reboot || echo "Please restart when convenient"
   fi
 
   orphan_pkgs
@@ -96,7 +114,9 @@ orphan_pkgs() {
   pacman -Qdt || echo "No orphaned packages"
 }
 
-# Main script execution
+# ---------------------
+# Main Execution
+# ---------------------
 check_mirrorlist
 pkg_update
 rebuild
