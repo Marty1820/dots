@@ -97,21 +97,9 @@ window-rule {
 // Floating Applications
 window-rule {
   match title="[a-z|A-Z|0-9]( Properties)"
-  open-floating true
-}
-window-rule {
   match app-id="nm-connection-editor"
-  open-floating true
-}
-window-rule {
   match app-id="blueman-manager"
-  open-floating true
-}
-window-rule {
   match app-id="thunar" title="Confirm File Replacing"
-  open-floating true
-}
-window-rule {
   match app-id="thunar" title="File Operation Progress"
   open-floating true
 }
@@ -122,18 +110,25 @@ window-rule {
 }
 
 window-rule {
-  match app-id="waterfox"
+  match app-id="waterfox$"
   open-maximized true
 }
 
 // Coming in Next release
-//hotkey-overlay {
-//    hide-not-bound
-//}
+hotkey-overlay {
+  //hide-not-bound
+}
 
 // Keybindings
 binds {
-  Mod+Slash { show-hotkey-overlay; }
+  // TEMP until hide-not-bound is out
+  Mod+BracketLeft hotkey-overlay-title=null { consume-or-expel-window-left; }
+  Mod+BracketRight hotkey-overlay-title=null { consume-or-expel-window-right; }
+  Mod+Shift+V hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
+
+
+  // Application Launching
+  Mod+Slash hotkey-overlay-title=null { show-hotkey-overlay; }
   Mod+Q hotkey-overlay-title="Close Focused Window" { close-window; }
   Mod+Return hotkey-overlay-title="Open a Terminal: Kitty" { spawn "kitty"; }
   Mod+B hotkey-overlay-title="Open a WebBrowser: Waterfox" { spawn "waterfox"; }
@@ -191,11 +186,8 @@ binds {
 
   // Move the focused window between the floating and the tiling layout.
   Mod+V       { toggle-window-floating; }
-  Mod+Shift+V { switch-focus-between-floating-and-tiling; }
 
   // The following binds move the focused window in and out of a column.
-  Mod+BracketLeft { consume-or-expel-window-left; }
-  Mod+BracketRight { consume-or-expel-window-right; }
   Mod+Comma hotkey-overlay-title="Consume Window into Column" { consume-window-into-column; }
   Mod+Period hotkey-overlay-title="Expel Window from Column" { expel-window-from-column; }
 
