@@ -78,7 +78,7 @@
   },
   "bluetooth": {
     "format": "󰂳",
-    "format-disabled": "󰂲",
+    "format-disabled": "",
     "format-off": "󰂲",
     "format-on": "󰂳",
     "format-connected": "󰂱",
@@ -98,6 +98,7 @@
     "format-ethernet": "󰈀",
     "format-wifi": "{icon}",
     "format-disconnected": "󰤭",
+    "format-disabled": "󰀝",
     "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
     "on-click": "nm-connection-editor &",
     "tooltip-format-ethernet": "{ipaddr}",

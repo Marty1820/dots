@@ -131,69 +131,78 @@ window#waybar.empty #window {
 }
 
 #idle_inhibitor {
-  background-image: linear-gradient(to right, @selection, @yellow, @yellow);
+  background: @orange;
 }
 
 #idle_inhibitor.activated {
-  background-image: linear-gradient(to right, @red, @yellow);
+  background-image: linear-gradient(to right, @orange, @red);
 }
 
 #idle_inhibitor:hover {
-  background-image: linear-gradient(to right, @background, @selection, @yellow);
+  background-image: linear-gradient(to right, @selection, @orange);
 }
 
 #bluetooth {
-  background-image: linear-gradient(to left, @cyan, @cyan, @selection);
+  background: @cyan;
+}
+
+#bluetooth.off {
+  background: @red;
+  color: @foreground;
 }
 
 #bluetooth:hover {
-  background-image: linear-gradient(to left, @cyan, @selection, @background);
+  background-image: linear-gradient(to right, @selection, @cyan);
 }
 
 #wireplumber {
-  background-image: linear-gradient(to left, @purple, @purple, @selection);
+  background: @purple;
 }
 
 #wireplumber.muted {
-  background-image: linear-gradient(to left, @purple, @red);
+  background-image: linear-gradient(to right, @purple, @red);
 }
 
 #wireplumber:hover {
-  background-image: linear-gradient(to left, @purple, @selection, @background);
+  background-image: linear-gradient(to right, @selection, @purple);
 }
 
 #network {
-  background-image: linear-gradient(to left, @green, @green, @selection);
+  background: @green;
 }
 
-#network.disconnected {
-  color: @red;
+#network.disconnected,
+#network.disabled {
+  background-image: linear-gradient(to right, @background, @red);
+  color: @foreground;
 }
 
 #network:hover {
-  background-image: linear-gradient(to left, @green, @selection, @background);
+  background-image: linear-gradient(to right, @selection, @green);
 }
 
 #backlight {
-  background-image: linear-gradient(to left, @yellow, @yellow, @selection);
+  background: @yellow;
+}
+
+#backlight:hover {
+  background-image: linear-gradient(to right, @selection, @yellow);
 }
 
 #battery {
-  background-image: linear-gradient(to left, @cyan, @cyan, @selection);
+  background: @cyan;
 }
 
 #battery.charging {
-  background-image: linear-gradient(to left, @cyan, @selection, @selection);
-  color: @green;
+  background: @green;
 }
 
 #battery.warning:not(.charging) {
-  background-image: linear-gradient(to left, @cyan, @orange, @selection);
-  color: @red;
+  background: @orange;
 }
 
 #battery.critical:not(.charging) {
-  background-image: linear-gradient(to left, @cyan, @orange, @red);
+  background: @red;
   color: @foreground;
   animation-name: blink;
   animation-duration: 0.5s;
@@ -204,7 +213,7 @@ window#waybar.empty #window {
 
 @keyframes blink {
   to {
-    background-color: @foreground;
+    background-color: @cyan;
     color: @background;
   }
 }
