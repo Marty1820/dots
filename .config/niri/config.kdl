@@ -42,7 +42,7 @@ layout {
     proportion 0.5
     proportion 0.66667
   }
-  default-column-width { proportion 0.5; }
+  default-column-width {}
   focus-ring {
     width 1
     active-color "#bd93f9"
@@ -52,6 +52,7 @@ layout {
 }
 
 overview {
+  zoom 0.75
   backdrop-color "#282a36"
   workspace-shadow {
     off
@@ -125,129 +126,65 @@ window-rule {
   open-maximized true
 }
 
+// Coming in Next release
+//hotkey-overlay {
+//    hide-not-bound
+//}
+
 // Keybindings
 binds {
   Mod+Slash { show-hotkey-overlay; }
-  Mod+Return hotkey-overlay-title="Open a Terminal" { spawn "kitty"; }
-  Mod+B hotkey-overlay-title="Open a WebBrowser" { spawn "waterfox"; }
-  Mod+E hotkey-overlay-title="Open a FileBrowser" { spawn "thunar"; }
-  Mod+Q hotkey-overlay-title="Close Window" { close-window; }
-  Mod+D hotkey-overlay-title="Application Launcher" { spawn "fuzzel"; }
-
+  Mod+Q hotkey-overlay-title="Close Focused Window" { close-window; }
+  Mod+Return hotkey-overlay-title="Open a Terminal: Kitty" { spawn "kitty"; }
+  Mod+B hotkey-overlay-title="Open a WebBrowser: Waterfox" { spawn "waterfox"; }
+  Mod+E hotkey-overlay-title="Open a FileBrowser: Thunar" { spawn "thunar"; }
+  Mod+D hotkey-overlay-title="Application Launcher: Fuzzel" { spawn "fuzzel"; }
+  // Logoff
+  Ctrl+Alt+Delete { quit skip-confirmation=true; }
   Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "swaylock"; }
 
-  // Function (fn) keys
-  XF86AudioRaiseVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ && wp-vol.sh"; }
-  XF86AudioLowerVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01- && wp-vol.sh"; }
-  Shift+XF86AudioRaiseVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ && wp-vol.sh"; }
-  Shift+XF86AudioLowerVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1- && wp-vol.sh"; }
-  XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-  XF86MonBrightnessDown { spawn "bash" "-c" "brightnessctl set 10%- && bk-lit.sh"; }
-  XF86MonBrightnessUp { spawn "bash" "-c" "brightnessctl set +10% && bk-lit.sh"; }
-
-  Print { screenshot; }
-  Ctrl+Print { screenshot-screen; }
-  Alt+Print { screenshot-window; }
-
-  // You can also move the mouse into the top-left hot corner,
-  // or do a four-finger swipe up on a touchpad.
-  Mod+O repeat=false { toggle-overview; }
-
-  // Moving Window Focus
+  // Changing Window Focus
   Mod+Left  { focus-column-left; }
-  Mod+Down  { focus-window-down; }
-  Mod+Up    { focus-window-up; }
-  Mod+Right { focus-column-right; }
   Mod+H     { focus-column-left; }
+  Mod+Down  { focus-window-down; }
   Mod+J     { focus-window-down; }
+  Mod+Up    { focus-window-up; }
   Mod+K     { focus-window-up; }
+  Mod+Right { focus-column-right; }
   Mod+L     { focus-column-right; }
+
+  Mod+Page_Down      { focus-workspace-down; }
+  Mod+U              { focus-workspace-down; }
+  Mod+Page_Up        { focus-workspace-up; }
+  Mod+I              { focus-workspace-up; }
 
   Mod+Home { focus-column-first; }
   Mod+End  { focus-column-last; }
 
-  // Moving Windows
-  Mod+Ctrl+Left  { move-column-left; }
-  Mod+Ctrl+Down  { move-window-down; }
-  Mod+Ctrl+Up    { move-window-up; }
-  Mod+Ctrl+Right { move-column-right; }
-  Mod+Ctrl+H     { move-column-left; }
-  Mod+Ctrl+J     { move-window-down; }
-  Mod+Ctrl+K     { move-window-up; }
-  Mod+Ctrl+L     { move-column-right; }
-
-  Mod+Ctrl+Home { move-column-to-first; }
-  Mod+Ctrl+End  { move-column-to-last; }
-
-  Mod+Page_Down      { focus-workspace-down; }
-  Mod+Page_Up        { focus-workspace-up; }
-  Mod+U              { focus-workspace-down; }
-  Mod+I              { focus-workspace-up; }
-  Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
-  Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
-  Mod+Ctrl+U         { move-column-to-workspace-down; }
-  Mod+Ctrl+I         { move-column-to-workspace-up; }
-
-  // You can bind mouse wheel scroll ticks using the following syntax.
-  // These binds will change direction based on the natural-scroll setting.
-  //
-  // To avoid scrolling through workspaces really fast, you can use
-  // the cooldown-ms property. The bind will be rate-limited to this value.
-  // You can set a cooldown on any bind, but it's most useful for the wheel.
-  Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
-  Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
-  Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-  Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
-
-  Mod+WheelScrollRight      { focus-column-right; }
-  Mod+WheelScrollLeft       { focus-column-left; }
-  Mod+Ctrl+WheelScrollRight { move-column-right; }
-  Mod+Ctrl+WheelScrollLeft  { move-column-left; }
-
-  // Usually scrolling up and down with Shift in applications results in
-  // horizontal scrolling; these binds replicate that.
-  Mod+Shift+WheelScrollDown      { focus-column-right; }
-  Mod+Shift+WheelScrollUp        { focus-column-left; }
-  Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
-  Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
-
   Mod+1 { focus-workspace 1; }
   Mod+2 { focus-workspace 2; }
   Mod+3 { focus-workspace 3; }
-  Mod+4 { focus-workspace 4; }
-  Mod+5 { focus-workspace 5; }
   Mod+Ctrl+1 { move-column-to-workspace 1; }
   Mod+Ctrl+2 { move-column-to-workspace 2; }
   Mod+Ctrl+3 { move-column-to-workspace 3; }
-  Mod+Ctrl+4 { move-column-to-workspace 4; }
-  Mod+Ctrl+5 { move-column-to-workspace 5; }
 
-  // The following binds move the focused window in and out of a column.
-  // If the window is alone, they will consume it into the nearby column to the side.
-  // If the window is already in a column, they will expel it out.
-  Mod+BracketLeft { consume-or-expel-window-left; }
-  Mod+BracketRight { consume-or-expel-window-right; }
+  // Moving Windows
+  Mod+Ctrl+Left  { move-column-left; }
+  Mod+Ctrl+H     { move-column-left; }
+  Mod+Ctrl+Down  { move-window-down; }
+  Mod+Ctrl+J     { move-window-down; }
+  Mod+Ctrl+Up    { move-window-up; }
+  Mod+Ctrl+K     { move-window-up; }
+  Mod+Ctrl+Right { move-column-right; }
+  Mod+Ctrl+L     { move-column-right; }
 
-  // Consume one window from the right to the bottom of the focused column.
-  Mod+Comma hotkey-overlay-title="Consume Window into Column" { consume-window-into-column; }
-  // Expel the bottom window from the focused column to the right.
-  Mod+Period hotkey-overlay-title="Expel Window from Column" { expel-window-from-column; }
+  Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+  Mod+Ctrl+U         { move-column-to-workspace-down; }
+  Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+  Mod+Ctrl+I         { move-column-to-workspace-up; }
 
-  // Window Width
-  Mod+R { switch-preset-column-width; }
-  Mod+Ctrl+F { expand-column-to-available-width; }
-  Mod+Minus { set-column-width "-10%"; }
-  Mod+Equal { set-column-width "+10%"; }
-
-  // Window Height
-  Mod+Shift+R { switch-preset-window-height; }
-  Mod+Ctrl+R { reset-window-height; }
-  Mod+Shift+Minus { set-window-height "-10%"; }
-  Mod+Shift+Equal { set-window-height "+10%"; }
-
-  // Make Window Larger
-  Mod+F { maximize-column; }
-  Mod+Shift+F { fullscreen-window; }
+  Mod+Ctrl+Home { move-column-to-first; }
+  Mod+Ctrl+End  { move-column-to-last; }
 
   Mod+C { center-column; }
   Mod+Ctrl+C { center-visible-columns; }
@@ -256,19 +193,53 @@ binds {
   Mod+V       { toggle-window-floating; }
   Mod+Shift+V { switch-focus-between-floating-and-tiling; }
 
-  // Toggle tabbed column display mode.
-  // Windows in this column will appear as vertical tabs,
-  // rather than stacked on top of each other.
-    Mod+W { toggle-column-tabbed-display; }
+  // The following binds move the focused window in and out of a column.
+  Mod+BracketLeft { consume-or-expel-window-left; }
+  Mod+BracketRight { consume-or-expel-window-right; }
+  Mod+Comma hotkey-overlay-title="Consume Window into Column" { consume-window-into-column; }
+  Mod+Period hotkey-overlay-title="Expel Window from Column" { expel-window-from-column; }
+
+  // Change Window Sizing
+  // Width
+  Mod+R { switch-preset-column-width; }
+  Mod+Ctrl+F { expand-column-to-available-width; }
+  Mod+Minus { set-column-width "-10%"; }
+  Mod+Equal { set-column-width "+10%"; }
+  // Height
+  Mod+Shift+R { switch-preset-window-height; }
+  Mod+Ctrl+R { reset-window-height; }
+  Mod+Shift+Minus { set-window-height "-10%"; }
+  Mod+Shift+Equal { set-window-height "+10%"; }
+
+  Mod+M { maximize-column; }
+  Mod+F { fullscreen-window; }
+
+  // Function (fn) keys
+  XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+
+  XF86AudioLowerVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01- && wp-vol.sh"; }
+  Shift+XF86AudioLowerVolume { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1- && wp-vol.sh"; }
+
+  XF86AudioRaiseVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ && wp-vol.sh"; }
+  Shift+XF86AudioRaiseVolume { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ && wp-vol.sh"; }
+
+  XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
+  XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
+  XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
+
+  XF86MonBrightnessDown { spawn "bash" "-c" "brightnessctl set 10%- && bk-lit.sh"; }
+  XF86MonBrightnessUp { spawn "bash" "-c" "brightnessctl set +10% && bk-lit.sh"; }
+
+  Super+p { power-off-monitors; } //fn F9
+  // rfkill - fn F10
+
+  Print { screenshot-screen; } // fn F11
+  Mod+Print { screenshot; }
+  Alt+Print { screenshot-window; }
+
+  XF86AudioMedia repeat=false { toggle-overview; }
 
   Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-
-  // Logoff
-  Ctrl+Alt+Delete { quit skip-confirmation=true; }
-
-  // Powers off the monitors.
-  // This is the F9 fn key on FrameWork Laptops
-  Super+p { power-off-monitors; }
 }
 
 prefer-no-csd
