@@ -1,125 +1,36 @@
+// https://variety4me.github.io/niri_docs/
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
 
 // Input device configuration
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Input
 input {
   keyboard {
     xkb {
 	    layout "us"
     }
-    numlock
   }
   touchpad {
     tap
     dwt
+    drag true
+    drag-lock
     natural-scroll
     disabled-on-external-mouse
   }
-  warp-mouse-to-focus
-  // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
+  warp-mouse-to-focus mode="center-xy"
   focus-follows-mouse max-scroll-amount="10%"
+
+  mod-key "Super"
 }
 
-// Run `niri msg output` while inside a niri instance for output info.
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
+// Run `niri msg outputs` while inside a niri instance for output info.
 output "eDP-1" {
   mode "2256x1504@59.999"
+  //mode "2256x1504@47.998"
   scale 1.5
   transform "normal"
   position x=1280 y=0
 }
 
-// Settings that influence how windows are positioned and sized.
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
-layout {
-  background-color "transparent"
-  gaps 4
-  center-focused-column "never"
-  always-center-single-column
-  // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
-  preset-column-widths {
-    proportion 0.33333
-    proportion 0.5
-    proportion 0.66667
-  }
-  default-column-width {}
-  focus-ring {
-    width 1
-    active-color "#bd93f9"
-    inactive-color "#282a36"
-    urgent-color "#ff5555"
-  }
-}
-
-overview {
-  zoom 0.75
-  backdrop-color "#282a36"
-  workspace-shadow {
-    off
-  }
-}
-
-gestures {
-  hot-corners {
-    off
-  }
-}
-
-layer-rule {
-  match namespace="^wallpaper$"
-  place-within-backdrop true
-}
-
-cursor {
-  //xcursor-theme "breeze_cursors"
-  //xcursor-size 48
-  hide-when-typing
-  hide-after-inactive-ms 5000
-}
-
-environment {
-  GDK_BACKEND "wayland,x11,*"
-  QT_QPA_PLATFORM "wayland"
-  SDL_VIDEODRIVER "wayland"
-  CLUTTER_BACKEND "wayland"
-  QT_AUTO_SCREEN_SCALE_FACTOR "1"
-  QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
-  DISPLAY ":0"
-}
-
-// Window rules let you adjust behavior for individual windows.
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
-window-rule {
-  geometry-corner-radius 12
-  clip-to-geometry true
-}
-
-// Floating Applications
-window-rule {
-  match title="[a-z|A-Z|0-9]( Properties)"
-  match app-id="nm-connection-editor"
-  match app-id="blueman-manager"
-  match app-id="thunar" title="Confirm File Replacing"
-  match app-id="thunar" title="File Operation Progress"
-  open-floating true
-}
-window-rule {
-  match is-floating=true
-  default-column-width { fixed 480; }
-  default-window-height { fixed 470; }
-}
-
-window-rule {
-  match app-id="waterfox$"
-  open-maximized true
-}
-
-// Coming in Next release
-hotkey-overlay {
-  //hide-not-bound
-}
-
-// Keybindings
 binds {
   // TEMP until hide-not-bound is out
   Mod+BracketLeft hotkey-overlay-title=null { consume-or-expel-window-left; }
@@ -234,10 +145,126 @@ binds {
   Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
+switch-events {    
+  lid-close { spawn "notify-send" "The laptop lid is closed!"; }
+  lid-open { spawn "notify-send" "The laptop lid is open!"; }
+}
+
+layout {
+  gaps 4
+  center-focused-column "never"
+  always-center-single-column
+  background-color "transparent"
+
+  preset-column-widths {
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+  }
+
+  default-column-width {}
+
+  preset-window-heights {
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+  }
+
+  focus-ring {
+    width 1
+    active-color "#bd93f9"
+    inactive-color "#282a36"
+    urgent-color "#ff5555"
+  }
+
+  border {
+    off
+  }
+
+  insert-hint {
+    color "#6272a480"
+  }
+}
+
+// Add systemd services with
+// systemctl --user add-wants niri.service SERVICE_NAME.service
+spawn-at-startup "xwayland-satellite"
+
 prefer-no-csd
+
 screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
 
-// Add systemd service with
-// systemctl --user add-wants niri.service SERVICE_NAME.service
-//spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
-spawn-at-startup "/usr/bin/xwayland-satellite"
+environment {
+  GDK_BACKEND "wayland,x11,*"
+  QT_QPA_PLATFORM "wayland"
+  SDL_VIDEODRIVER "wayland"
+  CLUTTER_BACKEND "wayland"
+  QT_AUTO_SCREEN_SCALE_FACTOR "1"
+  QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+  ELECTRON_OZONE_PLATFORM_HINT "auto"
+  DISPLAY ":0"
+}
+
+cursor {
+  //xcursor-theme "breeze_cursors"
+  //xcursor-size 48
+
+  hide-when-typing
+  hide-after-inactive-ms 5000
+}
+
+overview {
+  zoom 0.75
+  backdrop-color "#282a36"
+
+  workspace-shadow {
+    off
+  }
+}
+
+hotkey-overlay {
+  skip-at-startup
+  // Coming in Next release
+  //hide-not-bound
+}
+
+window-rule {
+  geometry-corner-radius 12
+  clip-to-geometry true
+}
+window-rule {
+  match app-id="waterfox$"
+  open-maximized true
+}
+window-rule {
+  match title="[a-z|A-Z|0-9]( Properties)"
+  match app-id="nm-connection-editor"
+  match app-id="blueman-manager"
+  match app-id="thunar" title="Confirm File Replacing"
+  match app-id="thunar" title="File Operation Progress"
+  open-floating true
+}
+window-rule {
+  match is-floating=true
+  default-column-width { fixed 480; }
+  default-window-height { fixed 470; }
+}
+
+layer-rule {
+  match namespace="^wallpaper$"
+  place-within-backdrop true
+}
+layer-rule {
+  match namespace="^notifications$"
+  block-out-from "screencast"
+}
+layer-rule {
+  match namespace="^launcher$"
+  baba-is-float true
+}
+
+gestures {
+  hot-corners {
+    off
+  }
+}
