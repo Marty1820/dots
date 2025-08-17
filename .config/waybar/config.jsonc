@@ -8,7 +8,12 @@
   // leave blank for a dynamic value.
   "width": 34,
   // Modules that will be displayed on the left.
-  "modules-left": ["custom/power", "clock", "custom/weather", "wlr/taskbar"],
+  "modules-left": [
+    "group/group-power",
+    "clock",
+    "custom/weather",
+    "wlr/taskbar",
+  ],
   // Modules that will be displayed in the center.
   "modules-center": ["niri/window"],
   // Modules that will be displayed on the right.
@@ -27,10 +32,39 @@
   "reload_style_on_change": true,
   // Modules Config
   // Left Section
+  "group/group-power": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "power-drawer",
+      "transition-left-to-right": true,
+    },
+    "modules": [
+      "custom/power",
+      "custom/restart",
+      "custom/sleep",
+      "custom/logoff",
+    ],
+  },
   "custom/power": {
     "format": "",
-    "tooltip-format": "Power Off",
+    "tooltip-format": "Shut down",
     "on-click": "systemctl poweroff",
+  },
+  "custom/restart": {
+    "format": "󰜉",
+    "tooltip-format": "Restart",
+    "on-click": "systemctl reboot",
+  },
+  "custom/sleep": {
+    "format": "󰒲",
+    "tooltip-format": "Sleep",
+    "on-click": "systemctl sleep",
+  },
+  "custom/logoff": {
+    "format": "󰍃",
+    "tooltip-format": "Sign out",
+    "on-click": "niri msg action quit --skip-confirmation",
   },
   "clock": {
     "format": "{:%I\n%M}",

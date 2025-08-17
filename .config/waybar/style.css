@@ -55,6 +55,9 @@ tooltip label {
 }
 
 #custom-power,
+#custom-restart,
+#custom-sleep,
+#custom-logoff,
 #clock,
 #custom-weather,
 #window,
@@ -69,6 +72,9 @@ tooltip label {
 }
 
 #custom-power,
+#custom-restart,
+#custom-sleep,
+#custom-logoff,
 #clock,
 #custom-weather,
 #window {
@@ -81,6 +87,33 @@ tooltip label {
 
 #custom-power:hover {
   background: @red;
+  color: @background;
+}
+
+#custom-restart {
+  color: @yellow;
+}
+
+#custom-restart:hover {
+  background: @yellow;
+  color: @background;
+}
+
+#custom-sleep {
+  color: @purple;
+}
+
+#custom-sleep:hover {
+  background: @purple;
+  color: @background;
+}
+
+#custom-logoff {
+  color: @orange;
+}
+
+#custom-logoff:hover {
+  background: @orange;
   color: @background;
 }
 
