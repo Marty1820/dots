@@ -30,6 +30,7 @@ export EXA_COLORS="uu=36:gu=37:sn=32:sb=32:da=34:ur=34:uw=35:ux=36:ue=36:gr=34:g
 
 
 # --- Aliases ---
+alias v='nvim'
 alias ..='cd ..'
 alias mkdir='mkdir -p'
 alias psa='ps auxf'
@@ -47,14 +48,13 @@ alias egrep='grep -F --color=auto'
 alias fgrep='grep -F --color=auto'
 alias ip='ip --color=auto'
 alias cat='bat'
-alias ls='exa --icons --color=always --group-directories-first'
-alias la='exa -a --icons --color=always --group-directories-first'
-alias ll='exa -al --icons --color=always --group-directories-first'
-alias lt='exa -aT --icons --color=always --group-directories-first'
-alias l='exa -a --icons --color=always --group-directories-first'
-alias l.='exa -a grep -E "^\."'
+alias ls='eza --icons --color=always --group-directories-first'
+alias la='eza -a --icons --color=always --group-directories-first'
+alias ll='eza -al --icons --color=always --group-directories-first'
+alias lt='eza -aT --icons --color=always --group-directories-first'
+alias l='eza -a --icons --color=always --group-directories-first'
+alias l.='eza -a | grep -E "^\."'
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
-
 
 # --- Zsh Options ---
 # Directories
