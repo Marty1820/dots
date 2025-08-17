@@ -9,6 +9,10 @@
 **Warning:** Works on my machine doesn't mean it'll work on yours. Use at your own risk.
 Lots of older configs in another repo [here](https://github.com/Marty1820/old-dotfiles)
 
+## Screenshot
+
+![niri fetch](/.screenshots/niri.png?raw=true "Niri Screenshot")
+
 ## Details
 
 - **Shell**: [ZSH](https://www.zsh.org/)
