@@ -97,32 +97,38 @@ export LESS_TERMCAP_ue=$'\e[0m'
 
 
 # --- Extract Function ---
-function ex {
-  if [ -z "$1" ]; then
-    echo "Usage: ex <file>..."
+ex() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: ex <archive> [more archives...]"
     return 1
   fi
+
   for n in "$@"; do
-    [[ ! -f "$n" ]] && echo "'$n' is not a valid file" && return 1
-    case "${n##*.}" in
-      *.cbt|*.txz)        tar xvf ./"$n"      ;;
-      *.7z|*.arj|*.cab|*.cb7|*.chm|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
-                          7z x ./"$n" ;;
-      *.lzma)             unlzma ./"$n" ;;
-      *.bz2)              bunzip2 ./"$n" ;;
-      *.cbr|*.rar)        unrar x -ad ./"$n" ;;
-      *.gz)               gunzip ./"$n" ;;
-      *.cbz|*.epub|*.zip) unzip ./"$n" ;;
-      *.z)                uncompress ./"$n";;
-      *.xz)               unxz ./"$n" ;;
-      *.tbz2)             tar xjf ./"$n" ;;
-      *.tgz)              tar xzf ./"$n" ;;
-      *.tar)              tar xf ./"$n" ;;
-      *.deb)              ar x ./"$n" ;;
-      *.tar.zst)          unzstd ./"$n" ;;
-      *)                  echo "ex: '$n' - unknown archive method"
-                          return 1 ;;
-    esac
+    if [[ -f $n ]]; then
+      case $n in
+        *.tar.bz2|*.tbz2|*.cbt) tar xvjf "$n" ;;
+        *.tar.gz|*.tgz)         tar xvzf "$n" ;;
+        *.tar.xz|*.txz)         tar xvJf "$n" ;;
+        *.tar.zst)              unzstd ./"$n" ;;
+        *.tar)                  tar xvf "$n" ;;
+        *.lzma)                 unlxma "$n" ;;
+        *.bz2)                  bunzip2 "$n" ;;
+        *.gz)                   gunzip "$n" ;;
+        *.xz)                   unxz "$n" ;;
+        *.zip|*.cbz|*.epub)     unzip "$n" ;;
+        *.rar|*.cbr)            unrar x -ad "$n" ;;
+        *.7z|*.arj|*.cab|*.cb7|*.chm|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
+                                7z x "$n" ;;
+        *.deb)                  ar x ./"$n" ;;
+        *.z)                    uncompress "$n" ;;
+        *.cpio)                 cpio -id < "$n" ;;
+        *.ace|*.cba)            unace x "$n" ;;
+        *.exe)                  cabextract "$n" ;;
+        *) echo "ex: '$n' - unknown format" ;;
+      esac
+    else
+      echo "ex: '$n' - file not found"
+    fi
   done
 }
 
