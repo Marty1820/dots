@@ -104,28 +104,40 @@ ex() {
   fi
 
   for n in "$@"; do
-    if [[ -f $n ]]; then
+    if [[ -f $n ]]; then      
+      # Remove ALL extensions (archive.tar.gz > archive)
+      dirname="${n%%.*}"
+      dirname="${n%%.*}"
+      dirname="${n%.*}"
+      while [[ $dirname != "${dirname%.*}" ]]; do
+        dirname="${dirname%.*}"
+      done
+
+      mkdir -p "$dirname" && cd "$dirname" || continue
+
       case $n in
-        *.tar.bz2|*.tbz2|*.cbt) tar xvjf "$n" ;;
-        *.tar.gz|*.tgz)         tar xvzf "$n" ;;
-        *.tar.xz|*.txz)         tar xvJf "$n" ;;
-        *.tar.zst)              unzstd ./"$n" ;;
-        *.tar)                  tar xvf "$n" ;;
-        *.lzma)                 unlxma "$n" ;;
-        *.bz2)                  bunzip2 "$n" ;;
-        *.gz)                   gunzip "$n" ;;
-        *.xz)                   unxz "$n" ;;
-        *.zip|*.cbz|*.epub)     unzip "$n" ;;
-        *.rar|*.cbr)            unrar x -ad "$n" ;;
+        *.tar.bz2|*.tbz2|*.cbt) tar xvjf "../$n" ;;
+        *.tar.gz|*.tgz)         tar xvzf "../$n" ;;
+        *.tar.xz|*.txz)         tar xvJf "../$n" ;;
+        *.tar.zst)              unzstd -c "../$n" | tar xvf - ;;
+        *.tar)                  tar xvf "../$n" ;;
+        *.lzma)                 unlxma "../$n" ;;
+        *.bz2)                  bunzip2 "../$n" ;;
+        *.gz)                   gunzip "../$n" ;;
+        *.xz)                   unxz "../$n" ;;
+        *.zip|*.cbz|*.epub)     unzip "../$n" ;;
+        *.rar|*.cbr)            unrar x -ad "../$n" ;;
         *.7z|*.arj|*.cab|*.cb7|*.chm|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
-                                7z x "$n" ;;
-        *.deb)                  ar x ./"$n" ;;
-        *.z)                    uncompress "$n" ;;
-        *.cpio)                 cpio -id < "$n" ;;
-        *.ace|*.cba)            unace x "$n" ;;
-        *.exe)                  cabextract "$n" ;;
+                                7z x "../$n" ;;
+        *.deb)                  dpkg-deb -x "../$n" ./ ;;
+        *.z)                    uncompress "../$n" ;;
+        *.cpio)                 cpio -id < "../$n" ;;
+        *.ace|*.cba)            unace x "../$n" ;;
+        *.exe)                  cabextract "../$n" ;;
         *) echo "ex: '$n' - unknown format" ;;
       esac
+
+      cd - >dev/null || true
     else
       echo "ex: '$n' - file not found"
     fi
