@@ -8,6 +8,7 @@ input {
 	    layout "us"
     }
   }
+
   touchpad {
     tap
     dwt
@@ -16,6 +17,7 @@ input {
     natural-scroll
     disabled-on-external-mouse
   }
+
   warp-mouse-to-focus mode="center-xy"
   focus-follows-mouse max-scroll-amount="10%"
 
@@ -33,17 +35,16 @@ output "eDP-1" {
 
 binds {
   // TEMP until hide-not-bound is out
-  Mod+BracketLeft hotkey-overlay-title=null { consume-or-expel-window-left; }
+  Mod+BracketLeft hotkey-overlay-title=null  { consume-or-expel-window-left; }
   Mod+BracketRight hotkey-overlay-title=null { consume-or-expel-window-right; }
-  Mod+Shift+V hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
-
+  Mod+Shift+V hotkey-overlay-title=null      { switch-focus-between-floating-and-tiling; }
 
   // Application Launching
-  Mod+Slash hotkey-overlay-title=null { show-hotkey-overlay; }
-  Mod+Q hotkey-overlay-title="Close Focused Window" { close-window; }
-  Mod+Return hotkey-overlay-title="Open a Terminal: Kitty" { spawn "kitty"; }
-  Mod+B hotkey-overlay-title="Open a WebBrowser: Waterfox" { spawn "waterfox"; }
-  Mod+E hotkey-overlay-title="Open a FileBrowser: Thunar" { spawn "thunar"; }
+  Mod+Slash hotkey-overlay-title=null                       { show-hotkey-overlay; }
+  Mod+Q hotkey-overlay-title="Close Focused Window"         { close-window; }
+  Mod+Return hotkey-overlay-title="Open a Terminal: Kitty"  { spawn "kitty"; }
+  Mod+B hotkey-overlay-title="Open a WebBrowser: Waterfox"  { spawn "waterfox"; }
+  Mod+E hotkey-overlay-title="Open a FileBrowser: Thunar"   { spawn "thunar"; }
   Mod+D hotkey-overlay-title="Application Launcher: Fuzzel" { spawn "fuzzel"; }
   // Logoff
   Ctrl+Alt+Delete { quit skip-confirmation=true; }
@@ -59,10 +60,10 @@ binds {
   Mod+Right { focus-column-right; }
   Mod+L     { focus-column-right; }
 
-  Mod+Page_Down      { focus-workspace-down; }
-  Mod+U              { focus-workspace-down; }
-  Mod+Page_Up        { focus-workspace-up; }
-  Mod+I              { focus-workspace-up; }
+  Mod+Page_Down { focus-workspace-down; }
+  Mod+U         { focus-workspace-down; }
+  Mod+Page_Up   { focus-workspace-up; }
+  Mod+I         { focus-workspace-up; }
 
   Mod+Home { focus-column-first; }
   Mod+End  { focus-column-last; }
@@ -70,9 +71,6 @@ binds {
   Mod+1 { focus-workspace 1; }
   Mod+2 { focus-workspace 2; }
   Mod+3 { focus-workspace 3; }
-  Mod+Ctrl+1 { move-column-to-workspace 1; }
-  Mod+Ctrl+2 { move-column-to-workspace 2; }
-  Mod+Ctrl+3 { move-column-to-workspace 3; }
 
   // Moving Windows
   Mod+Ctrl+Left  { move-column-left; }
@@ -92,25 +90,29 @@ binds {
   Mod+Ctrl+Home { move-column-to-first; }
   Mod+Ctrl+End  { move-column-to-last; }
 
-  Mod+C { center-column; }
+  Mod+Ctrl+1 { move-column-to-workspace 1; }
+  Mod+Ctrl+2 { move-column-to-workspace 2; }
+  Mod+Ctrl+3 { move-column-to-workspace 3; }
+
+  Mod+C      { center-column; }
   Mod+Ctrl+C { center-visible-columns; }
 
   // Move the focused window between the floating and the tiling layout.
-  Mod+V       { toggle-window-floating; }
+  Mod+V { toggle-window-floating; }
 
   // The following binds move the focused window in and out of a column.
   Mod+Comma hotkey-overlay-title="Consume Window into Column" { consume-window-into-column; }
-  Mod+Period hotkey-overlay-title="Expel Window from Column" { expel-window-from-column; }
+  Mod+Period hotkey-overlay-title="Expel Window from Column"  { expel-window-from-column; }
 
   // Change Window Sizing
   // Width
-  Mod+R { switch-preset-column-width; }
+  Mod+R      { switch-preset-column-width; }
   Mod+Ctrl+F { expand-column-to-available-width; }
-  Mod+Minus { set-column-width "-10%"; }
-  Mod+Equal { set-column-width "+10%"; }
+  Mod+Minus  { set-column-width "-10%"; }
+  Mod+Equal  { set-column-width "+10%"; }
   // Height
-  Mod+Shift+R { switch-preset-window-height; }
-  Mod+Ctrl+R { reset-window-height; }
+  Mod+Shift+R     { switch-preset-window-height; }
+  Mod+Ctrl+R      { reset-window-height; }
   Mod+Shift+Minus { set-window-height "-10%"; }
   Mod+Shift+Equal { set-window-height "+10%"; }
 
@@ -134,9 +136,9 @@ binds {
   XF86MonBrightnessUp { spawn "bash" "-c" "brightnessctl set +10% && bk-lit.sh"; }
 
   Super+p { power-off-monitors; } //fn F9
-  // rfkill - fn F10
+  // XF86rfkill - fn F10
 
-  Print { screenshot-screen; } // fn F11
+  Print     { screenshot-screen; } // fn F11
   Mod+Print { screenshot; }
   Alt+Print { screenshot-window; }
 
@@ -147,7 +149,7 @@ binds {
 
 switch-events {    
   lid-close { spawn "notify-send" "The laptop lid is closed!"; }
-  lid-open { spawn "notify-send" "The laptop lid is open!"; }
+  lid-open  { spawn "notify-send" "The laptop lid is open!"; }
 }
 
 layout {
@@ -240,14 +242,9 @@ window-rule {
   match title="[a-z|A-Z|0-9]( Properties)"
   match app-id="nm-connection-editor"
   match app-id="blueman-manager"
-  match app-id="thunar" title="Confirm File Replacing"
+  match app-id="thunar" title="Confirm to replace files"
   match app-id="thunar" title="File Operation Progress"
   open-floating true
-}
-window-rule {
-  match is-floating=true
-  default-column-width { fixed 480; }
-  default-window-height { fixed 470; }
 }
 
 layer-rule {
