@@ -5,7 +5,7 @@ import argparse
 import requests
 import tomllib
 import json
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, Literal
 
 
 # Define paths
@@ -18,9 +18,9 @@ CONFIG_FILE = os.path.join(HOME, ".local/share/location.toml")
 with open(CONFIG_FILE, "rb") as f:
     config: Dict[str, Any] = tomllib.load(f)
 
-API_KEY = config["API_KEY"]
-LAT = config["LAT"]
-LON = config["LON"]
+API_KEY: str = config["API_KEY"]
+LAT: float = config["LAT"]
+LON: float = config["LON"]
 
 # Ensure cache directory exists
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -36,7 +36,7 @@ def fetch_data(url: str, params: Dict[str, Any]) -> Dict[str, Any]:
         raise SystemExit(1)
 
 
-def get_weather_data(units: str) -> None:
+def get_weather_data(units: Literal["imperial", "metric"]) -> None:
     base_url: str = "http://api.openweathermap.org/data/"
     urls: Dict[str, str] = {
         "onecall": base_url + "3.0/onecall?",
@@ -122,7 +122,7 @@ def set_icon(code: str) -> Tuple[str, str]:
     return icon_map.get(code, ("󰼯", "#ff5555"))
 
 
-def waybar(units: str) -> None:
+def waybar(units: Literal["imperial", "metric"]) -> None:
     weather = onecall_weather()
     icon, color = set_icon(weather["icon"])
     temp = round(weather["temp"])
