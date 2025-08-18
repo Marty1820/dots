@@ -5,7 +5,31 @@ import argparse
 import requests
 import tomllib
 import json
-from typing import Any, Dict, Tuple, Literal
+from typing import Any, Dict, Tuple, Literal, Optional, Union, TypedDict, NamedTuple
+
+
+# TypedDicts
+class WeatherData(TypedDict):
+    temp: Union[int, float, None]
+    feels_like: Union[int, float, None]
+    icon: Optional[str]
+
+
+class WaybarOutput(TypedDict):
+    text: str
+    tooltip: str
+    class_: str  # use 'class_' since 'class' is reserved in Python
+
+
+# NamedTuples
+class AQIResult(NamedTuple):
+    icon: str
+    color: str
+
+
+class IconResult(NamedTuple):
+    icon: str
+    color: str
 
 
 # Define paths
@@ -64,12 +88,12 @@ def load_json(file_path: str) -> Any:
         return json.load(f)
 
 
-def get_jq_value(data: Any, query: str) -> Any:
+def get_jq_value(data: Any, query: str) -> Optional[Union[str, int, float, dict, list]]:
     keys = query.strip(".").split(".")
     for key in keys:
         if isinstance(data, list):
-            key = int(key)
-            data = data[key] if key < len(data) else None
+            idx = int(key)
+            data = data[idx] if idx < len(data) else None
         elif isinstance(data, dict):
             data = data.get(key)
             if data is None:
@@ -77,7 +101,7 @@ def get_jq_value(data: Any, query: str) -> Any:
     return data
 
 
-def onecall_weather() -> Dict[str, Any]:
+def onecall_weather() -> WeatherData:
     data = load_json(ONECALL_FILE)
     return {
         "temp": get_jq_value(data, ".current.temp"),
@@ -86,63 +110,69 @@ def onecall_weather() -> Dict[str, Any]:
     }
 
 
-def set_aqi() -> Tuple[str, str]:
+def set_aqi() -> AQIResult:
     aqi = get_jq_value(load_json(AQI_FILE), ".list.0.main.aqi") or -1
-    aqi_map: Dict[int, Tuple[str, str]] = {
-        1: ("󰡳", "#50fa7b"),
-        2: ("󰡵", "#f1fa8c"),
-        3: ("󰊚", "#ffb86c"),
-        4: ("󰡴", "#ff5555"),
-        5: ("", "#bd93f9"),
+    aqi_map: Dict[int, AQIResult] = {
+        1: AQIResult("󰡳", "#50fa7b"),
+        2: AQIResult("󰡵", "#f1fa8c"),
+        3: AQIResult("󰊚", "#ffb86c"),
+        4: AQIResult("󰡴", "#ff5555"),
+        5: AQIResult("", "#bd93f9"),
     }
-    return aqi_map.get(aqi, ("󰻝", "#ff5555"))
+    return aqi_map.get(aqi, AQIResult("󰻝", "#ff5555"))
 
 
-def set_icon(code: str) -> Tuple[str, str]:
-    icon_map: Dict[str, Tuple[str, str]] = {
-        "01d": ("󰖙", "#ffb86c"),
-        "01n": ("󰖔", "#bd93f9"),
-        "02d": ("󰖕", "#f1fa8c"),
-        "02n": ("󰼱", "#6272a4"),
-        "03d": ("󰖐", "#bd93f9"),
-        "03n": ("󰖐", "#bd93f9"),
-        "04d": ("󰖐", "#bd93f9"),
-        "04n": ("󰖐", "#bd93f9"),
-        "09d": ("󰖖", "#8be9fd"),
-        "09n": ("󰖖", "#8be9fd"),
-        "10d": ("󰼳", "#8be9fd"),
-        "10n": ("󰼳", "#8be9fd"),
-        "11d": ("󰼲", "#ffb86c"),
-        "11n": ("󰖓", "#ffb86c"),
-        "13d": ("󰼴", "#8be9fd"),
-        "13n": ("󰼶", "#8be9fd"),
-        "50d": ("󰼰", "#6272a4"),
-        "50n": ("󰖑", "#6272a4"),
+def set_icon(code: str) -> IconResult:
+    icon_map: Dict[str, IconResult] = {
+        "01d": IconResult("󰖙", "#ffb86c"),
+        "01n": IconResult("󰖔", "#bd93f9"),
+        "02d": IconResult("󰖕", "#f1fa8c"),
+        "02n": IconResult("󰼱", "#6272a4"),
+        "03d": IconResult("󰖐", "#bd93f9"),
+        "03n": IconResult("󰖐", "#bd93f9"),
+        "04d": IconResult("󰖐", "#bd93f9"),
+        "04n": IconResult("󰖐", "#bd93f9"),
+        "09d": IconResult("󰖖", "#8be9fd"),
+        "09n": IconResult("󰖖", "#8be9fd"),
+        "10d": IconResult("󰼳", "#8be9fd"),
+        "10n": IconResult("󰼳", "#8be9fd"),
+        "11d": IconResult("󰼲", "#ffb86c"),
+        "11n": IconResult("󰖓", "#ffb86c"),
+        "13d": IconResult("󰼴", "#8be9fd"),
+        "13n": IconResult("󰼶", "#8be9fd"),
+        "50d": IconResult("󰼰", "#6272a4"),
+        "50n": IconResult("󰖑", "#6272a4"),
     }
-    return icon_map.get(code, ("󰼯", "#ff5555"))
+    return icon_map.get(code, IconResult("󰼯", "#ff5555"))
 
 
 def waybar(units: Literal["imperial", "metric"]) -> None:
     weather = onecall_weather()
-    icon, color = set_icon(weather["icon"])
+    icon_result: IconResult = set_icon(weather["icon"])
     temp = round(weather["temp"])
     feel = weather["feels_like"]
-    aqi_icon, aqi_color = set_aqi()
+    aqi_result: AQIResult = set_aqi()
     unit_icon = "" if units == "imperial" else ""
 
     text: str = (
-        f"<span size='18000'><span foreground='{color}'>{icon}</span></span> "
+        f"<span size='18000'><span foreground='{icon_result.color}'>{icon_result.icon}</span></span> "
         f"{temp}{unit_icon}"
     )
 
     tooltip: str = (
         f"Real Feel: {feel:.1f}{unit_icon}\n"
-        f"AQI: <span foreground='{aqi_color}'>{aqi_icon}</span>"
+        f"AQI: <span foreground='{aqi_result.color}'>{aqi_result.icon}</span>"
     )
 
-    css_class: str = "hot" if temp > 90 else "cold" if temp < 32 else ""
+    css_class: str = "hot" if temp >= 90 else "cold" if temp <= 32 else ""
 
-    print(json.dumps({"text": text, "tooltip": tooltip, "class": css_class}))
+    result: WaybarOutput = {
+        "text": text,
+        "tooltip": tooltip,
+        "class_": css_class,
+    }
+
+    print(json.dumps(result).replace("class_", "class"))
 
 
 if __name__ == "__main__":
