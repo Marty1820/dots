@@ -1,12 +1,10 @@
 #!/bin/python
 
 import os
-import sys
-import tomllib
-import requests
-import json
 import argparse
-from datetime import datetime
+import requests
+import tomllib
+import json
 
 # Define paths
 HOME = os.path.expanduser("~")
@@ -33,7 +31,7 @@ def fetch_data(url, params):
         return response.json()
     except requests.RequestException as e:
         print(f"Error fetching data: {e}")
-        sys.exit(1)
+        raise SystemExit(1)
 
 
 def get_weather_data(units):
@@ -68,7 +66,7 @@ def get_jq_value(data, query):
     keys = query.strip(".").split(".")
     for key in keys:
         if isinstance(data, list):
-            key = int(key) if key.isdigit() else key
+            key = int(key)
             data = data[key] if key < len(data) else None
         elif isinstance(data, dict):
             data = data.get(key)
@@ -79,18 +77,10 @@ def get_jq_value(data, query):
 
 def onecall_weather():
     data = load_json(ONECALL_FILE)
-    sunrise = get_jq_value(data, ".daily.0.sunrise")
-    sunset = get_jq_value(data, ".daily.0.sunset")
     return {
         "temp": get_jq_value(data, ".current.temp"),
         "feels_like": get_jq_value(data, ".current.feels_like"),
         "icon": get_jq_value(data, ".current.weather.0.icon"),
-        "sunrise": (
-            datetime.fromtimestamp(sunrise).strftime("%I:%M %p") if sunrise else None
-        ),
-        "sunset": (
-            datetime.fromtimestamp(sunset).strftime("%I:%M %p") if sunset else None
-        ),
     }
 
 
@@ -103,7 +93,7 @@ def set_aqi():
         4: ("󰡴", "#ff5555"),
         5: ("", "#bd93f9"),
     }
-    return aqi_map.get(aqi, ("Unknown", "󰻝", "#ff5555"))
+    return aqi_map.get(aqi, ("󰻝", "#ff5555"))
 
 
 def set_icon(code):
