@@ -1,266 +1,371 @@
 #!/bin/sh
-#
-#    fet.sh
-#  a fetch in pure POSIX shell
-# https://github.com/eepykate/fet.sh
 
-# supress errors
-exec 2>/dev/null
-set --
-eq() {  # equals  |  [ a = b ] with globbing
-	case $1 in
-		$2) ;;
-		*) return 1;;
-	esac
-}
+# https://github.com/ThatOneCalculator/NerdFetch
+## OS/ENVIRONMENT INFO DETECTION
 
-## DE
-wm=$XDG_CURRENT_DESKTOP
-[ "$wm" ] || wm=$DESKTOP_SESSION
+ostype="$(uname)"
 
-## Distro
-# freedesktop.org/software/systemd/man/os-release.html
-# a common file that has variables about the distro
-for os in /etc/os-release /usr/lib/os-release; do
-	# some POSIX shells exit when trying to source a file that doesn't exist
-	[ -f $os ] && . $os && break
-done
+version=8.4.1
+font=nerd
+distrotype=none
+osi=""
+ki=""
+ri="󰍛"
+pi="󰏔"
+ui="󰅶"
+ci=""
 
-if [ -e /proc/$$/comm ]; then
-	## Terminal
-	while [ ! "$term" ]; do
-		# loop over lines in /proc/pid/status until it reaches PPid
-		# then save that to a variable and exit the file
-		while read -r line; do
-			eq "$line" 'PPid*' && ppid=${line##*:?} && break
-		done < "/proc/${ppid:-$PPID}/status"
-
-		# Make sure not to do an infinite loop
-		[ "$pppid" = "$ppid" ] && break
-		pppid=$ppid
-
-		# get name of binary
-		read -r name < "/proc/$ppid/comm"
-
-		case $name in
-			*sh|"${0##*/}") ;;  # skip shells
-			*[Ll]ogin*|*init|*systemd*) break;;  # exit when the top is reached
-			# anything else can be assumed to be the terminal
-			# this has the side affect of catching tmux, but tmux
-			# detaches from the terminal and therefore ignoring that
-			# will just make the init the term
-			*) term=$name
-		esac
-	done
-
-	## WM/DE
-	[ "$wm" ] ||
-		# loop over all processes and check the binary name
-		for i in /proc/*/comm; do
-			read -r c < "$i"
-			case $c in
-				*bar*|*rc) ;;
-				awesome|xmonad*|qtile|sway|i3|[bfo]*box|*wm*) wm=${c%%-*}; break;;
-			esac
-		done
-
-	## Memory
-	# loop over lines in /proc/meminfo until it reaches MemTotal,
-	# then convert the amount (second word) from KB to MB
-	while read -r line; do
-		eq "$line" 'MemTotal*' && set -- $line && break
-	done < /proc/meminfo
-	mem="$(( $2 / 1000 ))MB"
-
-	## Processor
-	while read -r line; do
-		case $line in
-			vendor_id*) vendor="${line##*: } ";;
-			model\ name*) cpu=${line##*: }; break;;
-		esac
-	done < /proc/cpuinfo
-
-	## Uptime
-	# the simple math is shamefully stolen from aosync
-	IFS=. read -r uptime _ < /proc/uptime
-	d=$((uptime / 60 / 60 / 24))
-	up=$(printf %02d:%02d $((uptime / 60 / 60 % 24)) $((uptime / 60 % 60)))
-	[ "$d" -gt 0 ] && up="${d}d $up"
-
-	## Kernel
-	read -r _ _ version _ < /proc/version
-	kernel=${version%%-*}
-	eq "$version" '*Microsoft*' && ID="fake $ID"
-
-	## Motherboard // laptop
-	read -r model < /sys/devices/virtual/dmi/id/product_name
-	# invalid model handling
-	case $model in
-		# alternate file with slightly different info
-		# on my laptop it has the device model (instead of 'hp notebook')
-		# on my desktop it has the extended motherboard model
-		'System '*|'Default '*|'To Be Filled'*)
-			read -r model < /sys/devices/virtual/dmi/id/board_name
-	esac
-
-	## Packages
-	# clean environment, then make every file in the dir an argument,
-	# then save the argument count to $pkgs
-	set --
-	# kiss, arch, debian, void, gentoo
-	for i in '/var/db/kiss/installed/*'  '/var/lib/pacman/local/[0-9a-z]*' \
-	'/var/lib/dpkg/info/*.list'  '/var/db/xbps/.*'  '/var/db/pkg/*/*'; do
-		set -- $i
-		[ $# -gt 1 ] && pkgs=$# && break
-	done
-
-	read -r host < /proc/sys/kernel/hostname
-elif [ -f /var/run/dmesg.boot ]; then
-	# Both OpenBSD and FreeBSD use this file, however they're formatted differently
-	read -r bsd < /var/run/dmesg.boot
-	case $bsd in
-	Open*)
-		## OpenBSD cpu/mem/name
-		while read -r line; do
-			case $line in
-				'real mem'*)
-					# use the pre-formatted value which is in brackets
-					mem=${line##*\(}
-					mem=${mem%\)*}
-				;;
-				# set $cpu to everything before a comma and after the field name
-				cpu0:*)
-					cpu=${line#cpu0: }
-					# Remove excess info after the actual CPU name
-					cpu=${cpu%%,*}
-					# Set the CPU Manufacturer to the first word of the cpu
-					# variable [separated by '(' or ' ']
-					vendor=${cpu%%[\( ]*}
-					# We got all the info we want, stop reading
-					break
-				;;
-				# First 2 words in the file are OpenBSD <version>
-				*) [ "$ID" ] || { set -- $line; ID="$1 $2"; }
-			esac
-		done < /var/run/dmesg.boot
-		[ -d /var/db/pkg ] && set -- /var/db/pkg/* && pkgs=$#
-		read -r host < /etc/myname
-		host=${host%.*}
+case $1 in
+"-p")
+	font=phosphor
+	osi=""
+	ki=""
+	ri=""
+	pi=""
+	ui=""
+	ci=""
 	;;
-	# Everything else, assume FreeBSD (first line is ---<<BOOT>> or something)
+"-c")
+	font=cozette
+	ki="♥"
+	ri=""
+	pi=""
+	ui=""
+	ci=""
+	;;
+"-e")
+	font=emoji
+	osi="🐧"
+	ki="💓"
+	ri="🐐"
+	pi="📦"
+	ui="☕"
+	ci="🎨"
+	;;
+"-v")
+	echo "NerdFetch $version"
+	exit
+	;;
+"-h"|"--help")
+	echo "Flags:
+-c: Cozette font
+-p: Phosphor font
+-e: Emoji font
+-v: Version"
+	exit
+	;;
+esac
+
+if command -v getprop 1>/dev/null 2>&1; then
+	distrotype=android
+fi
+kernel=$(uname -r)
+kernel=${kernel%%-*}
+case $ostype in
+*"Linux"*)
+	if [ $distrotype = android ]; then
+		host="$(hostname)"
+		USER="$(whoami)"
+		os="Android $(getprop ro.build.version.release)"
+		case $font in
+		phosphor) osi="" ;;
+		emoji) osi="🤖" ;;
+		*) osi="󰀲" ;;
+		esac
+	else
+		host="$(cat /proc/sys/kernel/hostname)"
+		. /etc/os-release
+		if [ -f /bedrock/etc/bedrock-release ]; then
+			os="$(brl version)"
+		else
+			os="${PRETTY_NAME}"
+			if [ $font = nerd ]; then
+				case ${ID%% *} in
+				debian) osi="" ;;
+				arch) osi="󰣇" ;;
+				endeavouros) osi="" ;;
+				fedora) osi="" ;;
+				gentoo) osi="" ;;
+				rhel) osi="" ;;
+				slackware) osi="" ;;
+				void) osi="" ;;
+				alpine) osi="" ;;
+				nixos) osi="󱄅" ;;
+				artix) osi="" ;;
+				exherbo) osi="󰆚" ;;
+				mageia) osi="" ;;
+				manjaro) osi="" ;;
+				opensuse) osi="" ;;
+				solus) osi="" ;;
+				ubuntu) osi="" ;;
+				linuxmint) osi="󰣭" ;;
+				trisquel) osi="" ;;
+				puppy) osi="" ;;
+				coreos) osi="" ;;
+				mx) osi="" ;;
+				vanilla) osi="" ;;
+				pop_os) osi="" ;;
+				raspbian) osi="" ;;
+				deepin) osi="" ;;
+				almalinux) osi="" ;;
+				garuda) osi="" ;;
+				centos) osi="" ;;
+				rocky) osi="" ;;
+				esac
+			elif [ $font = cozette ]; then
+				case ${ID%% *} in
+				debian) osi="" ;;
+				arch) osi="" ;;
+				fedora) osi="" ;;
+				gentoo) osi="" ;;
+				slackware) osi="" ;;
+				void) osi="" ;;
+				alpine) osi="" ;;
+				nixos) osi="" ;;
+				mageia) osi="" ;;
+				manjaro) osi="" ;;
+				opensuse) osi="" ;;
+				ubuntu) osi="" ;;
+				linuxmint) osi="" ;;
+				coreos) osi="" ;;
+				centos) osi="" ;;
+				esac
+			fi
+		fi
+	fi
+	;;
+*"Darwin"*)
+	host="$(hostname -f | sed -e 's/^[^.]*\.//')"
+	mac_product="$(/usr/libexec/PlistBuddy -c "Print:ProductName" /System/Library/CoreServices/SystemVersion.plist)"
+	mac_version="$(/usr/libexec/PlistBuddy -c "Print:ProductVersion" /System/Library/CoreServices/SystemVersion.plist)"
+	os="${mac_product} ${mac_version}"
+	case $font in
+	nerd) osi="" ;;
+	phosphor) osi="" ;;
+	cozette) osi="" ;;
+	emoji) osi="🍎" ;;
+	esac
+	;;
+*"FreeBSD"*)
+	host="$(hostname)"
+	distrotype=bsd
+	os="FreeBSD $(freebsd-version | sed 's/-.*//')"
+	case $font in
+	nerd) osi="" ;;
+	phosphor) osi="" ;;
+	cozette) osi="" ;;
+	emoji) osi="😈" ;;
+	esac
+	;;
+*"OpenBSD"*)
+	host="$(hostname)"
+	distrotype=bsd
+	os="OpenBSD $(uname -r)"
+	case $font in
+	nerd) osi="" ;;
+	phosphor) osi="" ;;
+	cozette) osi="⌘" ;;
+	emoji) osi="🐡" ;;
+	esac
+	;;
+*"NetBSD"*)
+	host="$(hostname)"
+	distrotype=netbsd
+	os="NetBSD $(uname -r)"
+	case $font in
+	nerd) osi="󰉀" ;;
+	phosphor) osi="" ;;
+	cozette) osi="" ;;
+	emoji) osi="🚩" ;;
+	esac
+	;;
+*)
+	os="Unix-like"
+	host="host"
+	;;
+esac
+
+## PACKAGE MANAGER AND PACKAGES DETECTION
+
+MANAGER=$(for x in nix-env pkg flatpak yum zypper dnf rpm dpkg-query brew port pacman xbps-query emerge cave apk kiss pmm /usr/sbin/slackpkg bulge birb yay paru pacstall cpm pmm opkg eopkg getprop; do command -v $x; done 2>/dev/null)
+manager=${MANAGER##*/}
+if [ $distrotype = netbsd ]; then
+	manager="pkg_info-netbsd"
+fi
+case $manager in
+cpm) packages="$(cpm C)" ;;
+flatpak) packages="$(flatpak list --app | wc -l)" ;;
+brew) packages="$(printf '%s\n' "$(brew --cellar)/"* | wc -l)" ;;
+port) packages="$(($(port installed | wc -l) - 1))" ;;
+dpkg-query) packages="$(dpkg-query -f '${binary:Package}\n' -W | wc -l)" ;;
+rpm) packages="$(rpm -qa --last | wc -l)" ;;
+yum) packages="$(yum list installed | wc -l)" ;;
+dnf) packages="$(dnf list installed | wc -l)" ;;
+zypper) packages="$(zypper se | wc -l)" ;;
+pacman) packages="$(pacman -Q | wc -l)" ;;
+yay) packages="$(yay -Q | wc -l)" ;;
+paru) packages="$(paru -Q | wc -l)" ;;
+pacstall) packages="$(pacstall -L | wc -l)" ;;
+kiss) packages="$(kiss list | wc -l)" ;;
+emerge) packages="$(qlist -I | wc -l)" ;;
+pkg) packages="$(pkg info | wc -l | tr -d ' ')" ;;
+cave) packages="$(cave show installed-slots | wc -l)" ;;
+xbps-query) packages="$(xbps-query -l | wc -l)" ;;
+nix-env) packages="$(nix-store -q --requisites /run/current-system/sw | wc -l)" ;;
+apk) packages="$(apk list --installed | wc -l)" ;;
+pmm) packages="$(/bedrock/libexec/pmm pacman pmm -Q 2>/dev/null | wc -l)" ;;
+opkg) packages="$(opkg list-installed | wc -l)" ;;
+eopkg) packages="$(eopkg li | wc -l)" ;;
+slackpkg) packages="$(printf '%s\n' /var/log/packages/* | wc -l)" ;;
+bulge) packages="$(bulge list | wc -l)" ;;
+birb) packages="$(birb --list-installed | wc -l)" ;;
+pkg_info)
+	packages="$(pkg_info -A | wc -l)"
+	manager="pkg"
+	;;
+pkg_info-netbsd)
+	packages="$(pkg_info -a | wc -l)"
+	manager="pkg"
+	;;
+*)
+	if [ $distrotype = android ]; then
+		packages="$(pkg list-installed 2>/dev/null | wc -l)"
+		manager="pkg"
+	else
+		packages="$(printf '%s\n' /usr/bin/* | wc -l)"
+		manager="bin"
+	fi
+	;;
+esac
+
+packages="${packages#"${packages%%[![:space:]]*}"}"
+manager=${manager%-query}
+
+## UPTIME DETECTION
+
+if [ $distrotype = android ]; then
+	uptime="$(uptime -p | cut -c 4-)"
+elif [ $distrotype = bsd ] || [ $distrotype = netbsd ]; then
+	uptime="$(uptime | sed -e 's/.* up //; s/, [0-9]* user.*//')"
+else
+	case $ostype in
+	*"Linux"*)
+		IFS=. read -r s _ </proc/uptime
+		;;
 	*)
-		# shellcheck source=/dev/null
-		. /etc/rc.conf
-		# shut shellcheck up without disabling the warning
-		host=${hostname:-}
-
-		while read -r line; do
-			case $line in
-				# os version
-				FreeBSD*)
-					# If the OS is already set, no need to set it again
-					[ "$ID" ] && continue
-					ID=${line%%-R*}
-				;;
-
-				CPU:*)
-					cpu=${cpu#CPU: }
-					# Remove excess info from after the actual CPU name
-					cpu=${line%\(*}
-				;;
-				*Origin=*)
-					# CPU Manufacturer
-					vendor=${line#*Origin=\"}
-					vendor="${vendor%%\"*} "
-				;;
-
-				'real memory'*)
-					# Get the pre-formatted amount which is inside brackets
-					mem=${line##*\(}
-					mem=${mem%\)*}
-					# This appears to be the final thing we need from the file,
-					# no need to read it more.
-					break
-			esac
-		done < /var/run/dmesg.boot
-	;;
+		s=$(sysctl -n kern.boottime)
+		s=${s#*=}
+		s=${s%,*}
+		s=$(($(date +%s) - s))
+		;;
 	esac
-elif v=/System/Library/CoreServices/SystemVersion.plist; [ -f "$v" ]; then
-	## Macos
-	# make sure this variable is empty as to not break the following loop
-	temp=
-	while read -r line; do
-		case $line in
-			# set a variable so the script knows it's on the correct line
-			# (the line after this one is the important one)
-			*ProductVersion*) temp=.;;
-			*)
-				# check if the script is reading the derired line, if not
-				# don't do anything
-				[ "$temp" ] || continue
-				# Remove everything before and including the first '>'
-				ID=${line#*>}
-				# Remove the other side of the XML tag, and insert the actual OS name
-				ID="MacOS ${ID%<*}"
-				# We got the info we want, end the loop.
-				break
-		esac
-	done < "$v"
+	d="$((s / 60 / 60 / 24))"
+	h="$((s / 60 / 60 % 24))"
+	m="$((s / 60 % 60))"
+	# Plurals
+	[ "$d" -gt 1 ] && dp=s
+	[ "$h" -gt 1 ] && hp=s
+	[ "$m" -gt 1 ] && mp=s
+	[ "$s" -gt 1 ] && sp=s
+	# Hide empty fields.
+	[ "$d" = 0 ] && d=
+	[ "$h" = 0 ] && h=
+	[ "$m" = 0 ] && m=
+	[ "$d$h$m" != "" ] && s=
+	# Make the output of uptime smaller.
+	[ "$d" ] && uptime="$d day$dp, "
+	[ "$h" ] && uptime="$uptime$h hour$hp, "
+	[ "$m" ] && uptime="$uptime$m min$mp"
+	[ "$s" ] && uptime="$uptime$s sec$sp"
+	uptime=${uptime%, }
 fi
 
-eq "$0" '*fetish' && printf 'Step on me daddy\n' && exit
+## RAM DETECTION
 
-# help i dont know if it's a capital consistently
-eq "$wm" '*[Gg][Nn][Oo][Mm][Ee]*' && wm='foot DE'
+case $ostype in
+*"Linux"*)
+	while IFS=':k ' read -r key val _; do
+		case $key in
+		MemTotal)
+			mem_used=$((mem_used + val))
+			mem_full=$val
+			;;
+		Shmem) mem_used=$((mem_used + val)) ;;
+		MemFree | Buffers | Cached | SReclaimable) mem_used=$((mem_used - val)) ;;
+		esac
+	done </proc/meminfo
+	mem_used=$((mem_used / 1024))
+	mem_full=$((mem_full / 1024))
+	;;
+*"Darwin"*)
+	mem_full=$(($(sysctl -n hw.memsize) / 1024 / 1024))
+  [ "${mem_full}" -gt 0 ] || mem_full=$(( $(sysctl -n hw.memsize) / 1024 / 1024))
+	while IFS=:. read -r key val _; do
+		case $key in
+		'Anonymous '*|*' wired'* | *' occupied'*)
+			mem_used=$((mem_used + ${val:-0}))
+			;;
+		*' purgeable'*)
+			mem_used=$((mem_used - ${val:-0}))
+			;;
+		esac
+	done <<-EOF
+		$(vm_stat)
+	EOF
 
-## GTK
-while read -r line; do
-	eq "$line" 'gtk-theme*' && gtk=${line##*=} && break
-done < "${XDG_CONFIG_HOME:=$HOME/.config}/gtk-3.0/settings.ini"
+	mem_used=$((mem_used * ( $(sysctl -n vm.pagesize) / 1024 ) / 1024))
+	;;
+*"BSD"*)
+	mem_full=$(($(sysctl -n hw.physmem) / 1024 / 1024))
+  [ "${mem_full:-0}" -gt 0 ] || mem_full=$(( $(sysctl -n hw.physmem) / 1024 / 1024))
+	if [ $distrotype = netbsd ]; then
+		mem_free=$(($(vmstat | awk 'NR==3 {print $4}') / 1024))
+	else
+		mem_free=$(($(sysctl -n vm.stats.vm.v_free_count) * ( $(sysctl -n vm.stats.vm.v_page_size) / 1024 ) / 1024))
+	fi
+	mem_used=$((mem_full - mem_free))
+	;;
+*)
+	mem_full=1
+	mem_used=0
+	;;
+esac
+memstat="${mem_used}/${mem_full} MiB"
+mempercent='('$((mem_used * 100 / mem_full))'%)'
 
-# Shorten $cpu and $vendor
-# this is so messy due to so many inconsistencies in the model names
-vendor=${vendor##*Authentic}
-vendor=${vendor##*Genuine}
-cpu=${cpu##*) }
-cpu=${cpu%% @*}
-cpu=${cpu%% CPU}
-cpu=${cpu##CPU }
-cpu=${cpu##*AMD }
-cpu=${cpu%% with*}
-cpu=${cpu% *-Core*}
+## DEFINE COLORS
 
-col() {
-	printf '  '
-	for i in 1 2 3 4 5 6; do
-		printf '\033[9%sm%s' "$i" "${colourblocks:-▅▅}"
-	done
-	printf '\033[0m\n'
-}
+bold='[1m'
+black='[30m'
+red='[31m'
+green='[32m'
+yellow='[33m'
+blue='[34m'
+magenta='[35m'
+cyan='[36m'
+white='[37m'
+grey='[90m'
+reset='[0m'
 
-print() {
-	[ "$2" ] && printf '\033[9%sm%6s\033[0m%b%s\n' \
-		"${accent:-4}" "$1" "${separator:- ~ }" "$2"
-}
+## USER VARIABLES -- YOU CAN CHANGE THESE
 
-# default value
-: "${info:=n user os sh wm up gtk cpu mem host kern pkgs term col n}"
+lc="${reset}${bold}${magenta}" # labels
+nc="${reset}${bold}${yellow}"  # user
+hn="${reset}${bold}${blue}"    # hostname
+ic="${reset}${green}"          # info
+c0="${reset}${grey}"           # first color
+c1="${reset}${white}"          # second color
+c2="${reset}${yellow}"         # third color
 
-for i in $info; do
-	case $i in
-		n) echo;;
-		os) print os "$ID";;
-		sh) print sh "${SHELL##*/}";;
-		wm) print wm "${wm##*/}";;
-		up) print up "$up";;
-		gtk) print gtk "${gtk# }";;
-		cpu) print cpu "$vendor$cpu";;
-		mem) print mem "$mem";;
-		host) print host "$model";;
-		kern) print kern "$kernel";;
-		pkgs) print pkgs "$pkgs";;
-		term) print term "$term";;
-		user) printf '%7s@%s\n' "$USER" "$host";;
-		col) col;;
-	esac
-done
+## OUTPUT
+
+cat <<EOF
+
+${c0}      ___     ${nc}${USER}${red}@${reset}${hn}${host}${reset} 
+${c0}     (${c1}.. ${c0}\    ${lc}${osi}  ${ic}${os}${reset}
+${c0}     (${c2}<> ${c0}|    ${lc}${ki}  ${ic}${kernel}${reset}
+${c0}    /${c1}/  \\ ${c0}\\   ${lc}${ri}  ${ic}${RAM}${memstat} ${mempercent}
+${c0}   ( ${c1}|  | ${c0}/|  ${lc}${pi}  ${ic}${packages} (${manager})${reset}
+${c2}  _${c0}/\\ ${c1}__)${c0}/${c2}_${c0})  ${lc}${ui}  ${ic}${uptime}${reset}
+${c2}  \/${c0}-____${c2}\/${reset}   ${lc}${ci}  ${red}███${green}███${yellow}███${blue}███${magenta}███${cyan}███${reset}
+EOF
