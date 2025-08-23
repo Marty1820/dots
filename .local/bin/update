@@ -69,6 +69,7 @@ fwupd() {
   if command -v fwupdmgr &>/dev/null; then
     print_header "Firmware check/update"
     fwupdmgr refresh
+    fwupdmgr get-updates
     fwupdmgr update
   fi
 }
