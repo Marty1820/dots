@@ -53,17 +53,17 @@
   },
   "custom/restart": {
     "format": "󰜉",
-    "tooltip-format": "Restart",
+    "tooltip-format": "Reboot",
     "on-click": "systemctl reboot",
   },
   "custom/sleep": {
     "format": "󰒲",
-    "tooltip-format": "Sleep",
-    "on-click": "systemctl sleep",
+    "tooltip-format": "Suspend-then-Hibernate",
+    "on-click": "systemctl suspend-then-hibernate",
   },
   "custom/logoff": {
     "format": "󰍃",
-    "tooltip-format": "Sign out",
+    "tooltip-format": "Logoff",
     "on-click": "niri msg action quit --skip-confirmation",
   },
   "clock": {
