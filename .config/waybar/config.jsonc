@@ -85,7 +85,7 @@
     "on-click-right": "fullscreen",
     "ignore-list": ["Alacritty", "kitty"],
     "rewrite": {
-      "waterfox": "Waterfox",
+      "waterfox-default": "Waterfox",
       "thunar": "Thunar",
     },
   },
