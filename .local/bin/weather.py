@@ -22,11 +22,6 @@ class WaybarOutput(TypedDict):
 
 
 # NamedTuples
-class AQIResult(NamedTuple):
-    icon: str
-    color: str
-
-
 class IconResult(NamedTuple):
     icon: str
     color: str
@@ -71,6 +66,7 @@ def get_weather_data(units: Literal["imperial", "metric"]) -> None:
         "lat": LAT,
         "lon": LON,
         "units": units,
+        "exclude": "minutely,hourly",
     }
 
     data: Dict[str, Any] = {key: fetch_data(url, params) for key, url in urls.items()}
@@ -110,18 +106,6 @@ def onecall_weather() -> WeatherData:
     }
 
 
-def set_aqi() -> AQIResult:
-    aqi = get_jq_value(load_json(AQI_FILE), ".list.0.main.aqi") or -1
-    aqi_map: Dict[int, AQIResult] = {
-        1: AQIResult("󰡳", "#50fa7b"),
-        2: AQIResult("󰡵", "#f1fa8c"),
-        3: AQIResult("󰊚", "#ffb86c"),
-        4: AQIResult("󰡴", "#ff5555"),
-        5: AQIResult("", "#bd93f9"),
-    }
-    return aqi_map.get(aqi, AQIResult("󰻝", "#ff5555"))
-
-
 def set_icon(code: str) -> IconResult:
     icon_map: Dict[str, IconResult] = {
         "01d": IconResult("󰖙", "#ffb86c"),
@@ -151,7 +135,6 @@ def waybar(units: Literal["imperial", "metric"]) -> None:
     icon_result: IconResult = set_icon(weather["icon"])
     temp = round(weather["temp"])
     feel = weather["feels_like"]
-    aqi_result: AQIResult = set_aqi()
     unit_icon = "" if units == "imperial" else ""
 
     text: str = (
@@ -159,16 +142,10 @@ def waybar(units: Literal["imperial", "metric"]) -> None:
         f"{temp}{unit_icon}"
     )
 
-    tooltip: str = (
-        f"Real Feel: {feel:.1f}{unit_icon}\n"
-        f"AQI: <span foreground='{aqi_result.color}'>{aqi_result.icon}</span>"
-    )
-
     css_class: str = "hot" if temp >= 90 else "cold" if temp <= 32 else ""
 
     result: WaybarOutput = {
         "text": text,
-        "tooltip": tooltip,
         "class_": css_class,
     }
 
