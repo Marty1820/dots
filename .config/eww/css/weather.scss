@@ -1,0 +1,60 @@
+.weather {
+  background: $background-darker;
+  padding: 1rem;
+  color: $foreground;
+  margin: 0.5rem;
+}
+
+.w_main {
+  background: transparent;
+}
+
+.w_desc {
+  font-size: 1.5em;
+}
+
+.w_temp {
+  font-size: 4em;
+}
+
+.w_feeltemp {
+  font-size: 1.3em;
+}
+
+.w_day,
+.w_spacer,
+.w_night {
+  font-size: 0.8em;
+}
+
+.w_aqi {
+  margin-top: 1rem;
+  border-radius: 9999px;
+  padding: 1em;
+  background-color: $background;
+}
+
+.aqi-progress {
+  background-color: $selection;
+  color: $yellow;
+}
+
+.aqi-info {
+  color: $foreground;
+  font-size: 1em;
+  margin: 2.3em;
+}
+
+.aqi-label,
+.aqi-num,
+.aqi-desc {
+  padding: 5px;
+}
+
+.aqi-label {
+  font-size: 0.9em;
+}
+
+.aqi-desc {
+  font-size: 1.4em;
+}

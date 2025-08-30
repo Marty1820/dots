@@ -1,0 +1,94 @@
+;; Files
+(defvar onecall "$HOME/.cache/weather/onecall.json")
+(defvar aqidata "$HOME/.cache/weather/aqidata.json")
+
+;; Data
+(defpoll w_desc :interval "5m" :initial "0"
+  "jq -r '.current.weather[].description' < $HOME/.cache/weather/onecall.json")
+(defpoll w_temp :interval "5m" :initial "0"
+  "jq -r '.current.temp' < $HOME/.cache/weather/onecall.json")
+(defpoll w_feeltemp :interval "5m" :initial "0"
+  "jq -r '.current.feels_like' < $HOME/.cache/weather/onecall.json")
+(defpoll w_day :interval "5m" :initial "0"
+  "jq -r '.daily[0].temp.day' < $HOME/.cache/weather/onecall.json")
+(defpoll w_night :interval "5m" :initial "0"
+  "jq -r '.daily[1].temp.night' < $HOME/.cache/weather/onecall.json")
+
+(defpoll aqi_num :interval "5m" :initial "0"
+  "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
+
+(defwidget w_main []
+  (box :class "w_main"
+    :orientation "v"
+    :space-evenly "false"
+    (label :class "w_desc"
+      :text w_desc)
+    (label :class "w_temp"
+      :text "${round(w_temp, 0)}")
+    (label :class "w_feeltemp"
+      :text "Feels like ${round(w_feeltemp, 0)}")
+    (box :class "w_hilo"
+      :orientation "h"
+      :space-evenly "false"
+      :halign "center"
+      (label :class "w_day"
+        :text "Day: ${ceil(w_day)}")
+      (label :class "w_spacer"
+        :text "  ")
+      (label :class "w_night"
+        :text "Night: ${floor(w_night)}")
+    )
+  )
+)
+
+(defwidget w_airquality []
+  (box :class "w_aqi"
+    :orientation "v"
+    (circular-progress :class "aqi-progress"
+      :value "${
+        aqi_num == 1 ? 16 :
+        aqi_num == 2 ? 32 :
+        aqi_num == 3 ? 48 :
+        aqi_num == 4 ? 64 :
+        aqi_num == 5 ? 80 :
+                       0
+      }"
+      :start-at "35"
+      :thickness "8"
+      (box :class "aqi-info"
+        :orientation "v"
+        :space-evenly "false"
+        (label :class "aqi-label"
+          :text "Air quality")
+        (label :class "aqi-desc"
+          :text "${
+            aqi_num == 1 ? "Good" :
+            aqi_num == 2 ? "Fair" :
+            aqi_num == 3 ? "Moderate" :
+            aqi_num == 4 ? "Poor" :
+            aqi_num == 5 ? "Very Poor" :
+                           "Unknown"
+          }")
+      )
+    )
+  )
+)
+  
+(defwindow weather
+  :monitor 0
+  :geometry 
+    (geometry
+      :x "4px"
+      :y "4px"
+      :anchor "top left"
+    )
+  :stacking "fg"
+  :exlusive "false"
+  :focusable "none"
+  (box :class "weather"
+    :orientation "v"
+    :space-evenly "false"
+    (w_main)
+    (w_airquality)
+  )
+)
