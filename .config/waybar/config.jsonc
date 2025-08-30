@@ -25,6 +25,9 @@
     "backlight",
     "battery",
   ],
+  // Margins value using the css format without units
+  "margin-top": 4,
+  "margin-bottom": 4,
   // Size of gaps in between of the different modules.
   "spacing": 4,
   // Option to enable reloading the css style if a modification

@@ -17,6 +17,8 @@
 }
 
 window#waybar {
+  border-radius: 0px 12px 12px 0px;
+  background: rgba(1, 1, 1, 0.99); /*Setting alpha below 1 for GTK fix*/
   background-image: linear-gradient(
     to right,
     black,
@@ -43,7 +45,7 @@ tooltip label {
 }
 
 .modules-left {
-  border-radius: 0 12px 6px 6px;
+  border-radius: 0 12px 0 0;
 }
 
 .modules-center {
@@ -51,7 +53,7 @@ tooltip label {
 }
 
 .modules-right {
-  border-radius: 6px 6px 12px 0;
+  border-radius: 0 0 12px 0;
 }
 
 #custom-power,
