@@ -186,7 +186,7 @@ layout {
 // Add systemd services with
 // systemctl --user add-wants niri.service SERVICE_NAME.service
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "eww daemon"
+spawn-at-startup "eww" "daemon"
 
 prefer-no-csd
 
