@@ -17,6 +17,11 @@
 (defpoll aqi_num :interval "5m" :initial "0"
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
 
+(defpoll w_hum :interval "5m" :initial "0"
+  "jq -r '.current.humidity' < $HOME/.cache/weather/onecall.json")
+(defpoll w_dew :interval "5m" :initial "0"
+  "jq -r '.current.dew_point' < $HOME/.cache/weather/onecall.json")
+
 (defwidget w_main []
   (box :class "w_main"
     :orientation "v"
@@ -24,7 +29,7 @@
     (label :class "w_desc"
       :text w_desc)
     (label :class "w_temp"
-      :text "${round(w_temp, 0)}")
+      :text "${round(w_temp, 0)}")
     (label :class "w_feeltemp"
       :text "Feels like ${round(w_feeltemp, 0)}")
     (box :class "w_hilo"
@@ -74,12 +79,35 @@
   )
 )
   
+(defwidget w_humidity []
+  (box :class "w_hum"
+    :orientation "v"
+    :style "background-image: linear-gradient(to bottom, rgb(40, 42, 54) ${100 - w_hum}%, rgb(189, 147, 249) ${100 - w_hum}%)"
+    (label :class "w_hum_label"
+      :xalign 0
+      :text "  Humidity")
+    (label :class "w_hum_perc"
+      :xalign 0
+      :text "${w_hum}󱉸")
+    (label :class "w_hum_dew"
+      :xalign 0
+      :text "${round(w_dew, 0)} dew point")
+  )
+)
+
+(defwidget w_data []
+  (box :orientation "h"
+    (w_airquality)
+    (w_humidity)
+  )
+)
+
 (defwindow weather
   :monitor 0
   :geometry 
     (geometry
-      :x "4px"
-      :y "4px"
+      :x "3px"
+      :y "3px"
       :anchor "top left"
     )
   :stacking "fg"
@@ -89,6 +117,6 @@
     :orientation "v"
     :space-evenly "false"
     (w_main)
-    (w_airquality)
+    (w_data)
   )
 )

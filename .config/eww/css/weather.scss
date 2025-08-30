@@ -1,8 +1,9 @@
 .weather {
-  background: $background-darker;
+  border-radius: 12px;
+  background: rgba($background-darker, 0.99);
+  border: 1px solid $purple;
   padding: 1rem;
   color: $foreground;
-  margin: 0.5rem;
 }
 
 .w_main {
@@ -28,7 +29,7 @@
 }
 
 .w_aqi {
-  margin-top: 1rem;
+  margin: 1rem;
   border-radius: 9999px;
   padding: 1em;
   background-color: $background;
@@ -57,4 +58,28 @@
 
 .aqi-desc {
   font-size: 1.4em;
+}
+
+.w_hum {
+  margin: 1rem;
+  border-radius: 12px;
+  padding: 1em;
+}
+
+.w_hum_label,
+.w_hum_perc,
+.w_hum_dew {
+  padding: 5px;
+}
+
+.w_hum_label {
+  font-weight: bold;
+}
+
+.w_hum_perc {
+  font-size: 1.8em;
+}
+
+.w_hum_dew {
+  font-size: 0.8em;
 }
