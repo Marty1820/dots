@@ -102,7 +102,7 @@
 (defwidget w_humidity []
   (box :class "w_hum"
     :orientation "v"
-    :style "background-image: 
+    :style "background-image:
       linear-gradient(
         to bottom,
         rgb(40, 42, 54) ${100 - w_hum}%,
@@ -173,7 +173,14 @@
       :text "${formattime(w_moonr, "%H:%M")} - ${formattime(w_moons, "%H:%M")}")
     (label :class "w_moon_info"
       :yalign 1
-      :text "${w_moonphase}")
+      :text "${
+        w_moonphase == 0    ? " New Moon" :
+        w_moonphase == 1    ? " New Moon" :
+        w_moonphase == 0.25 ? " First Quarter" :
+        w_moonphase == 0.5  ? " Full Moon" :
+        w_moonphase == 0.75 ? " Last Quarter" :
+                              "Unknown"
+      }")
   )
 )
 

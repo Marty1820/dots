@@ -1,8 +1,4 @@
 (defvar eww "/usr/in/eww -c $HOME/.config/eww")
 
-;; Close widget's on clickoff
-(defwidget close [window]
-  (eventbox :onclick "${eww} close ${window} && ${eww} close ${window}-closer"))
-
 ;; Widgets
 (include "./widgets/weather.yuck")
