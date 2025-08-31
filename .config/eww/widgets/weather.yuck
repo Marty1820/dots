@@ -22,12 +22,25 @@
 (defpoll w_dew :interval "5m" :initial "0"
   "jq -r '.current.dew_point' < $HOME/.cache/weather/onecall.json")
 
+(defpoll w_sunr :interval "5m" :initial "0"
+  "jq -r '.daily[0].sunrise' < $HOME/.cache/weather/onecall.json")
+(defpoll w_suns :interval "5m" :initial "0"
+  "jq -r '.daily[0].sunset' < $HOME/.cache/weather/onecall.json")
+(defpoll w_uvi :interval "5m" :initial "0"
+  "jq -r '.current.uvi' < $HOME/.cache/weather/onecall.json")
+(defpoll w_moonr :interval "5m" :initial "0"
+  "jq -r '.daily[0].moonrise' < $HOME/.cache/weather/onecall.json")
+(defpoll w_moons :interval "5m" :initial "0"
+  "jq -r '.daily[0].moonset' < $HOME/.cache/weather/onecall.json")
+(defpoll w_moonphase :interval "5m" :initial "0"
+  "jq -r '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
+
 (defwidget w_main []
   (box :class "w_main"
     :orientation "v"
     :space-evenly "false"
     (label :class "w_desc"
-      :text w_desc)
+      :text "${w_desc}")
     (label :class "w_temp"
       :text "${round(w_temp, 0)}")
     (label :class "w_feeltemp"
@@ -49,7 +62,14 @@
 (defwidget w_airquality []
   (box :class "w_aqi"
     :orientation "v"
-    (circular-progress :class "aqi-progress"
+    (circular-progress :class "aqi-progress ${
+        aqi_num == 1 ? "aqi-good" :
+        aqi_num == 2 ? "aqi-fair" :
+        aqi_num == 3 ? "aqi-moderate" :
+        aqi_num == 4 ? "aqi-poor" :
+        aqi_num == 5 ? "aqi-very-poor" :
+                       ""
+        }"
       :value "${
         aqi_num == 1 ? 16 :
         aqi_num == 2 ? 32 :
@@ -82,23 +102,91 @@
 (defwidget w_humidity []
   (box :class "w_hum"
     :orientation "v"
-    :style "background-image: linear-gradient(to bottom, rgb(40, 42, 54) ${100 - w_hum}%, rgb(189, 147, 249) ${100 - w_hum}%)"
+    :style "background-image: 
+      linear-gradient(
+        to bottom,
+        rgb(40, 42, 54) ${100 - w_hum}%,
+        rgb(189, 147, 249) ${100 - w_hum}%)"
     (label :class "w_hum_label"
       :xalign 0
+      :yalign 0
       :text "  Humidity")
     (label :class "w_hum_perc"
       :xalign 0
       :text "${w_hum}󱉸")
     (label :class "w_hum_dew"
       :xalign 0
+      :yalign 1
       :text "${round(w_dew, 0)} dew point")
   )
 )
 
+(defwidget w_sun []
+  (box :class "w_sun"
+    :orientation "v"
+    :style "background-image:
+      radial-gradient(rgb(255, 184, 108) ${
+        EWW_TIME < w_sunr || EWW_TIME > w_suns ? 0 :
+        (EWW_TIME - w_sunr <= (w_suns - w_sunr)/2 ?
+          (EWW_TIME - w_sunr)/((w_suns - w_sunr)/2)*100 :
+        (w_suns - EWW_TIME)/((w_suns - w_sunr)/2)*100)
+      }%, rgb(40, 42, 54) ${
+        EWW_TIME < w_sunr || EWW_TIME > w_suns ? 0 :
+        (EWW_TIME - w_sunr <= (w_suns - w_sunr)/2 ?
+          (EWW_TIME - w_sunr)/((w_suns - w_sunr)/2)*100 :
+        (w_suns - EWW_TIME)/((w_suns - w_sunr)/2)*100)
+      }%, rgb(30, 31, 41, 230));"
+    (label :class "w_sun_label"
+      :xalign 0
+      :yalign 0
+      :text "  Sun")
+    (label :class "w_sun_data"
+      :yalign 1
+      :text "${formattime(w_sunr, "%H:%M")} - ${formattime(w_suns, "%H:%M")}")
+    (label :class "w_sun_info"
+      :yalign 1
+      :text "󰛨  UV index ${round(w_uvi, 0)}")
+  )
+)
+
+(defwidget w_moon []
+  (box :class "w_moon"
+    :orientation "v"
+    :style "background-image:
+      radial-gradient(rgb(98, 114, 164) ${
+        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
+        (EWW_TIME - w_moonr <= (w_suns - w_moonr)/2 ?
+          (EWW_TIME - w_moonr)/((w_suns - w_moonr)/2)*100 :
+        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
+      }%, rgb(40, 42, 54) ${
+        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
+        (EWW_TIME - w_moonr <= (w_suns - w_moonr)/2 ?
+          (EWW_TIME - w_moonr)/((w_suns - w_moonr)/2)*100 :
+        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
+      }%, rgb(30, 31, 41, 230));"
+    (label :class "w_moon_label"
+      :xalign 0
+      :yalign 0
+      :text "󰖔  Moon")
+    (label :class "w_moon_data"
+      :yalign 1
+      :text "${formattime(w_moonr, "%H:%M")} - ${formattime(w_moons, "%H:%M")}")
+    (label :class "w_moon_info"
+      :yalign 1
+      :text "${w_moonphase}")
+  )
+)
+
 (defwidget w_data []
-  (box :orientation "h"
-    (w_airquality)
-    (w_humidity)
+  (box :orientation "v"
+    (box :orientation "h"
+      (w_airquality)
+      (w_humidity)
+    )
+    (box :orientation "h"
+      (w_sun)
+      (w_moon)
+    )
   )
 )
 

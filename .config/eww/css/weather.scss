@@ -37,7 +37,21 @@
 
 .aqi-progress {
   background-color: $selection;
+}
+.aqi-good {
+  color: $green;
+}
+.aqi-fair {
   color: $yellow;
+}
+.aqi-moderate {
+  color: $orange;
+}
+.aqi-poor {
+  color: $red;
+}
+.aqi-very-poor {
+  color: $purple;
 }
 
 .aqi-info {
@@ -60,7 +74,9 @@
   font-size: 1.4em;
 }
 
-.w_hum {
+.w_hum,
+.w_sun,
+.w_moon {
   margin: 1rem;
   border-radius: 12px;
   padding: 1em;
@@ -68,7 +84,9 @@
 
 .w_hum_label,
 .w_hum_perc,
-.w_hum_dew {
+.w_hum_dew,
+.w_sun_label,
+.w_moon_label {
   padding: 5px;
 }
 
@@ -82,4 +100,9 @@
 
 .w_hum_dew {
   font-size: 0.8em;
+}
+
+.w_sun,
+.w_moon {
+  background: $background;
 }
