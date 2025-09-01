@@ -1,4 +1,7 @@
-(defvar eww "/usr/in/eww -c $HOME/.config/eww")
+(defvar eww "/usr/bin/eww -c $HOME/.config/eww")
+
+;; Bar
+(include "./widgets/bar.yuck")
 
 ;; Widgets
 (include "./widgets/weather.yuck")
