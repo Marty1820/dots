@@ -78,7 +78,7 @@
   (box :class "b_volume"
     :tooltip "${volume}"
     (button :class "b_vol_icon"
-      :onclick "lower-vol" "${
+      :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" "${
         volume >= 50 ? "" :
                        ""
       }")
@@ -103,7 +103,7 @@
   (box :class "b_backlight"
     :tooltip "${brightness}"
     (button :class "b_brit_icon"
-      :onclick "toggle auto bright" "${
+      :onclick "$HOME/.local/bin/ABToggle.sh" "${
         brightness >= 75 ? "󰃠" :
         brightness >= 50 ? "󰃟" :
         brightness >= 25 ? "󰃞" :
