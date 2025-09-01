@@ -11,8 +11,8 @@
 # Configuration reference: https://starship.rs/config/
 
 # Get editor completions based on the config schema
-"$schema" = 'https://starship.rs/config-schema.json'
-palette = "dracula"
+'$schema' = 'https://starship.rs/config-schema.json'
+palette = 'dracula'
 
 add_newline = true
 
@@ -25,89 +25,91 @@ $symbol($git_branch[](fg:pink))\
 $symbol( $git_commit$git_status$git_metrics$git_state) $fill$cmd_duration$all\
 $character"""
 
-continuation_prompt = "[➜➜](bold green)"
+continuation_prompt = '[❯❯](bold green)'
 
 [fill]
-symbol = " "
+symbol = ' '
 
 [character]
-error_symbol = "[✗](bold red)"
+format = '$symbol '
+success_symbol = '[ ❯](bold green)'
+error_symbol = '[ ❯](bold red)'
 
 [line_break]
 disabled = false
 
 [directory]
 truncate_to_repo = true
-format = "[ $path ]($style)"
-style = "bold fg:background bg:purple"
-read_only = ""
-read_only_style = "red"
+format = '[ $path ]($style)'
+style = 'bold fg:background bg:purple'
+read_only = ''
+read_only_style = 'red'
 truncation_symbol = '.../'
-home_symbol = "~"
+home_symbol = '~'
 [directory.substitutions]
-"Documents" = "󰈙"
-"Downloads" = ""
-"Music" = "󱍙"
-"Pictures" = ""
-"Videos" = "󰸬"
-".config" = ""
-"dots" = ""
+"Documents" = '󰈙'
+"Downloads" = ''
+"Music" = ''
+"Pictures" = ''
+"Videos" = ''
+".config" = ''
+"dots" = ''
 
 [git_branch]
-symbol = " "
-format = "[ $symbol$branch(:$remote_branch) ]($style)"
-style = "bold fg:background bg:pink"
+symbol = ''
+format = '[ $symbol$branch(:$remote_branch) ]($style)'
+style = 'fg:background bg:pink'
 
 [git_metrics]
 disabled = false
 
 [git_status]
-style = "bold fg:background bg:red"
+style = 'fg:background bg:red'
 
 [cmd_duration]
 min_time = 500
-format = "[  $duration ]($style)"
-style = "bold yellow"
+format = '[  $duration ]($style)'
+style = 'yellow'
 
 [battery]
-format = "[$symbol $percentage]($style)"
-charging_symbol = ""
-discharging_symbol = "󰂃"
+format = '[$symbol $percentage]($style)'
+charging_symbol = ''
+discharging_symbol = '󰂃'
 
 [[battery.display]]
 threshold = 15
-style = "red"
+style = 'red'
 
 [[battery.display]]
 threshold = 30
-style = "bold orange"
+style = 'orange'
 
 [custom.directory_separator_git]
-description = "Output a styled separator right after the directory when inside a git repository."
-command = ""
-format = "[](fg:purple bg:pink)"
+description = 'Output a styled separator right after the directory when inside a git repository.'
+command = ''
+format = '[](fg:purple bg:pink)'
 # Only when inside git repository
-when = "git rev-parse --is-inside-work-tree >/dev/null 2>&1"
+when = 'git rev-parse --is-inside-work-tree >/dev/null 2>&1'
 [custom.directory_separator_not_git]
-description = "Output a styled separator right after the directory when NOT inside a git repository."
-command = ""
-format = "[](fg:purple)"
+description = 'Output a styled separator right after the directory when NOT inside a git repository.'
+command = ''
+format = '[](fg:purple)'
 # Only when NOT inside a git repository
-when = "! git rev-parse --is-inside-work-tree > /dev/null 2>&1"
+when = '! git rev-parse --is-inside-work-tree > /dev/null 2>&1'
 
 [python]
-symbol = "󰌠 "
+symbol = '󰌠 '
 
 # Define Dracula color palette
 [palettes.dracula]
-background = "#282a36"
-current_line = "#44475a"
-foreground = "#f8f8f2"
-comment = "#6272a4"
-cyan = "#8be9fd"
-green = "#50fa7b"
-orange = "#ffb86c"
-pink = "#ff79c6"
-purple = "#bd93f9"
-red = "#ff5555"
-yellow = "#f1fa8c"
+background = '#282a36'
+current_line = '#44475a'
+foreground = '#f8f8f2'
+comment = '#6272a4'
+cyan = '#8be9fd'
+green = '#50fa7b'
+orange = '#ffb86c'
+pink = '#ff79c6'
+purple = '#bd93f9'
+red = '#ff5555'
+yellow = '#f1fa8c'
