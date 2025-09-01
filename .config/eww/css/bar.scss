@@ -1,0 +1,79 @@
+.eww_bar {
+  font-family: Mononoki Nerd Font Mono;
+  font-size: 14px;
+  margin: 4px 0 4px 0;
+  border-radius: 0 12px 12px 0;
+  background-image: linear-gradient(
+    to right,
+    black,
+    $background-darker,
+    $background
+  );
+  color: $foreground;
+}
+
+.b_top,
+.b_center,
+.b_bottom {
+  padding: 6px 0 6px 0;
+}
+
+tooltip {
+  font-family: Mononoki Nerd Font Mono;
+  border-radius: 12px;
+  border: 1px solid $purple;
+  background: rgba($background, 0.99); /*Set alpha below 1 for GTK fix*/
+  color: $foreground;
+}
+
+.b_power,
+.b_but_shutdown,
+.b_but_reboot,
+.b_but_sleep,
+.b_but_logoff,
+.b_clock {
+  padding: 5px 0;
+}
+
+.b_but_shutdown {
+  color: $red;
+}
+
+.b_but_reboot {
+  color: $yellow;
+}
+
+.b_but_sleep {
+  color: $purple;
+}
+
+.b_but_logoff {
+  color: $orange;
+}
+
+.b_volume,
+.b_network,
+.b_backlight,
+.b_battery {
+  border-radius: 6px;
+  padding: 2px;
+  margin: 4px;
+  color: $background;
+  font-size: 16px;
+}
+
+.b_volume {
+  background: $purple;
+}
+
+.b_network {
+  background: $green;
+}
+
+.b_backlight {
+  background: $yellow;
+}
+
+.b_battery {
+  background: $cyan;
+}

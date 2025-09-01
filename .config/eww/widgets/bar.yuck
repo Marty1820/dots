@@ -1,0 +1,170 @@
+;; Power Menu
+(defvar power false)
+(defwidget power []
+  (eventbox
+    :onhover "${eww} update power=true"
+    :onhoverlost "${eww} update power=false"
+    (box :class "b_power"
+      :space-evenly "false"
+      :orientation "v"
+      (button :class "b_but_shutdown"
+        :tooltip "Shut down"
+        :onclick "systemctl poweroff" "")
+        (revealer :transition "slideup"
+          :reveal power
+          (box :orientation "v"
+            :space-evenly "false"
+            (button :class "b_but_reboot"
+              :tooltip "Reboot"
+              :onclick "systemctl reboot" "󰜉")
+            (button :class "b_but_sleep"
+              :tooltip "Suspend"
+              :onclick "systemctl suspend-then-hibernate" "󰒲")
+            (button :class "b_but_logoff"
+              :tooltip "Logoff"
+              :onclick "niri msg action quit --skip-confirmation" "󰍃")
+        )
+      )
+    )
+  )
+)
+
+;; Clock
+(defwidget clock []
+  (box :class "b_clock"
+    :orientation "v"
+    :space-evenly "false"
+    :tooltip "${formattime(EWW_TIME, "%a, %b %d")}"
+    (label :class "b_clock_hr"
+      :text "${formattime(EWW_TIME, "%H")}")
+    (label :class "b_clock_min"
+      :text "${formattime(EWW_TIME, "%M")}")
+  )
+)
+
+;; Weather
+(defwidget weather []
+  (box :class "b_weather"
+    :orientation "v"
+    (button :onclick "${eww} open --toggle weather"
+      (label :class "b_weather_temp"
+        :text "${round(w_temp, 0)}")
+    )
+  )
+)
+
+(defwidget top []
+  (box :class "b_top"
+    :orientation "v"
+    :space-evenly "false"
+    :valign "start"
+    (power)
+    (clock)
+    (weather)
+  )
+)
+
+(defwidget center []
+  (box :class "b_center"
+    :orientation "v"
+    :valign "end"
+  )
+)
+
+;; Volume Icon
+(defpoll volume :interval "1s"
+  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d\", $2 * 100}'")
+(defwidget volume []
+  (box :class "b_volume"
+    :tooltip "${volume}"
+    (button :class "b_vol_icon"
+      :onclick "lower-vol" "${
+        volume >= 50 ? "" :
+                       ""
+      }")
+  )
+)
+
+;; Network Icon
+(defpoll net-icon :interval "1s" "scripts/wifi icon")
+(defpoll net-name :interval "1s" "scripts/wifi name")
+(defwidget network []
+  (box :class "b_network"
+    :tooltip "${net-name}"
+    (button :class "b_net_icon"
+      :onclick "nm-connection-editor &" "${net-icon}")
+  )
+)
+
+;; Backlight Brightness
+(defpoll brightness :interval "1s"
+  "brightnessctl info | awk -F '[()%]' '/Current/ {print $2}'")
+(defwidget backlight []
+  (box :class "b_backlight"
+    :tooltip "${brightness}"
+    (button :class "b_brit_icon"
+      :onclick "toggle auto bright" "${
+        brightness >= 75 ? "󰃠" :
+        brightness >= 50 ? "󰃟" :
+        brightness >= 25 ? "󰃞" :
+                           "󰃝"
+      }")
+  )
+)
+;; Battery Icon
+(defwidget battery []
+  (box :class "b_battery"
+    :orientation "v"
+    :tooltip "${EWW_BATTERY.BAT1.capacity}"
+    (label :class "b_bat_icon"
+      :text "${
+        EWW_BATTERY.BAT1.status == "Charging" ? "󰚥" : 
+        EWW_BATTERY.BAT1.capacity == 100 ? "󰁹" :
+        EWW_BATTERY.BAT1.capacity >= 90 ? "󰂂" :
+        EWW_BATTERY.BAT1.capacity >= 80 ? "󰂁" :
+        EWW_BATTERY.BAT1.capacity >= 70 ? "󰂀" :
+        EWW_BATTERY.BAT1.capacity >= 60 ? "󰁿" :
+        EWW_BATTERY.BAT1.capacity >= 50 ? "󰁾" :
+        EWW_BATTERY.BAT1.capacity >= 40 ? "󰁽" :
+        EWW_BATTERY.BAT1.capacity >= 30 ? "󰁽" :
+        EWW_BATTERY.BAT1.capacity >= 20 ? "󰁽" :
+        EWW_BATTERY.BAT1.capacity >= 10 ? "󰁺" :
+                                          "󰂃"
+      }")
+  )
+)
+
+(defwidget bottom []
+  (box :class "b_bottom"
+    :orientation "v"
+    :valign "end"
+    ;;(idle_inhibitor)
+    ;;(bluetooth)
+    (volume)
+    (network)
+    (backlight)
+    (battery)
+  )
+)
+
+(defwidget bar []
+  (centerbox :class "eww_bar"
+    :orientation "v"
+    (top)
+    (center)
+    (bottom)
+  )
+)
+
+(defwindow bar
+  :monitor 0
+  :geometry (geometry
+              :x "0"
+              :y "0"
+              :width "34px"
+              :height "100%"
+              :anchor "center left")
+  :stacking "overlay"
+  :exclusive "true"
+  (bar)
+)
