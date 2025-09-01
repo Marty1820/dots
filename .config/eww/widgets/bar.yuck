@@ -44,7 +44,9 @@
 
 ;; Weather
 (defwidget weather []
-  (box :class "b_weather"
+  (box :class "b_weather ${
+    w_temp >= 90 ? "hot":
+    w_temp <= 32 ? "cold" : ""}"
     :orientation "v"
     (button :onclick "${eww} open --toggle weather"
       (label :class "b_weather_temp"
@@ -67,14 +69,15 @@
 (defwidget center []
   (box :class "b_center"
     :orientation "v"
-    :valign "end"
+    (label :angle 90
+      :text "FUTURE HOME OF WINDOW TITLE'S")
   )
 )
 
 ;; Volume Icon
-(defpoll volume :interval "1s"
+(defpoll volume :interval "1s" :initial "0"
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d\", $2 * 100}'")
-(defpoll mute :interval "1s"
+(defpoll mute :interval "1s" :initial ""
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}'")
 (defwidget volume []
   (box :class "b_volume ${mute == "[MUTED]" ? "b_vol_mute" : ""}"
@@ -114,9 +117,15 @@
       }")
   )
 )
+
 ;; Battery Icon
 (defwidget battery []
-  (box :class "b_battery"
+  (box :class "b_battery ${
+    EWW_BATTERY.BAT1.status   == "Charging" ? "charging" :
+    EWW_BATTERY.BAT1.capacity <=   15       ? "critical" :
+    EWW_BATTERY.BAT1.capacity <=   20       ? "low" :
+                                             ""
+    }"
     :orientation "v"
     :tooltip "${EWW_BATTERY.BAT1.capacity}"
     (label :class "b_bat_icon"

@@ -31,7 +31,8 @@ tooltip {
 .b_but_reboot,
 .b_but_sleep,
 .b_but_logoff,
-.b_clock {
+.b_clock,
+.b_weather {
   padding: 5px 0;
 }
 
@@ -49,6 +50,15 @@ tooltip {
 
 .b_but_logoff {
   color: $orange;
+}
+
+.b_weather {
+  &.hot {
+    color: $red;
+  }
+  &.cold {
+    color: $cyan;
+  }
 }
 
 .b_volume,
@@ -79,4 +89,13 @@ tooltip {
 
 .b_battery {
   background: $cyan;
+  &.charging {
+    background: $green;
+  }
+  &.low {
+    background: $orange;
+  }
+  &.critical {
+    background: $red;
+  }
 }
