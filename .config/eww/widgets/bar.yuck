@@ -74,13 +74,16 @@
 ;; Volume Icon
 (defpoll volume :interval "1s"
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d\", $2 * 100}'")
+(defpoll mute :interval "1s"
+  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}'")
 (defwidget volume []
-  (box :class "b_volume"
+  (box :class "b_volume ${mute == "[MUTED]" ? "b_vol_mute" : ""}"
     :tooltip "${volume}"
     (button :class "b_vol_icon"
       :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" "${
-        volume >= 50 ? "" :
-                       ""
+        mute   == "[MUTED]" ? "" :
+        volume >= 50        ? "" :
+                              ""
       }")
   )
 )
@@ -97,7 +100,7 @@
 )
 
 ;; Backlight Brightness
-(defpoll brightness :interval "1s"
+(defpoll brightness :interval "1s" :initial "0"
   "brightnessctl info | awk -F '[()%]' '/Current/ {print $2}'")
 (defwidget backlight []
   (box :class "b_backlight"

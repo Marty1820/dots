@@ -64,6 +64,9 @@ tooltip {
 
 .b_volume {
   background: $purple;
+  &.b_vol_mute {
+    background: linear-gradient(to right, $background, $red);
+  }
 }
 
 .b_network {
