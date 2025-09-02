@@ -176,7 +176,7 @@
               :width "34px"
               :height "100%"
               :anchor "center left")
-  :stacking "overlay"
+  :stacking "fg"
   :exclusive "true"
   (bar)
 )
