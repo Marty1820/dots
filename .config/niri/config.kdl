@@ -34,13 +34,8 @@ output "eDP-1" {
 }
 
 binds {
-  // TEMP until hide-not-bound is out
-  Mod+BracketLeft hotkey-overlay-title=null  { consume-or-expel-window-left; }
-  Mod+BracketRight hotkey-overlay-title=null { consume-or-expel-window-right; }
-  Mod+Shift+V hotkey-overlay-title=null      { switch-focus-between-floating-and-tiling; }
-
   // Application Launching
-  Mod+Slash hotkey-overlay-title=null                       { show-hotkey-overlay; }
+  Mod+Shift+Slash { show-hotkey-overlay; }
   Mod+Q hotkey-overlay-title="Close Focused Window"         { close-window; }
   Mod+Return hotkey-overlay-title="Open a Terminal: Kitty"  { spawn "kitty"; }
   Mod+B hotkey-overlay-title="Open a WebBrowser: Waterfox"  { spawn "waterfox"; }
@@ -123,17 +118,17 @@ binds {
   XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
 
   XF86AudioLowerVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01- && wp-vol.sh"; }
-  Shift+XF86AudioLowerVolume { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1- && wp-vol.sh"; }
+  Shift+XF86AudioLowerVolume                  { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1- && wp-vol.sh"; }
 
   XF86AudioRaiseVolume allow-when-locked=true { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ && wp-vol.sh"; }
-  Shift+XF86AudioRaiseVolume { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ && wp-vol.sh"; }
+  Shift+XF86AudioRaiseVolume                  { spawn "bash"  "-c" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ && wp-vol.sh"; }
 
   XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
   XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
   XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
 
   XF86MonBrightnessDown { spawn "bash" "-c" "brightnessctl set 10%- && bk-lit.sh"; }
-  XF86MonBrightnessUp { spawn "bash" "-c" "brightnessctl set +10% && bk-lit.sh"; }
+  XF86MonBrightnessUp   { spawn "bash" "-c" "brightnessctl set +10% && bk-lit.sh"; }
 
   Super+p { power-off-monitors; } //fn F9
   // XF86rfkill - fn F10
@@ -205,9 +200,6 @@ environment {
 }
 
 cursor {
-  //xcursor-theme "breeze_cursors"
-  //xcursor-size 48
-
   hide-when-typing
   hide-after-inactive-ms 5000
 }
@@ -223,8 +215,7 @@ overview {
 
 hotkey-overlay {
   skip-at-startup
-  // Coming in Next release
-  //hide-not-bound
+  hide-not-bound
 }
 
 window-rule {
