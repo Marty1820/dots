@@ -17,7 +17,7 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 
 - **Shell**: [ZSH](https://www.zsh.org/)
 - **WM**: [Niri](https://github.com/YaLTeR/niri)
-- **Status Bar**: [Waybar](https://github.com/Alexays/Waybar)
+- **Status Bar**: [EWW](https://elkowar.github.io/eww/eww.html)
 - **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
@@ -90,5 +90,5 @@ LON = "LONGITUDE"
 #### Niri wants
 
 ```bash
-systemctl --user add-wants niri.service AB.service swaybg.service swayidle.service waybar.service wlsunset.service weather.timer
+systemctl --user add-wants niri.service AB.service swaybg.service swayidle.service wlsunset.service weather.timer
 ```
