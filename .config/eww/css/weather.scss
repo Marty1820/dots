@@ -91,6 +91,24 @@
   padding: 5px;
 }
 
+.w_sun_label {
+  &.day {
+    color: $yellow;
+  }
+  &.night {
+    color: $foreground;
+  }
+}
+
+.w_moon_label {
+  &.day {
+    color: $selection;
+  }
+  &.night {
+    color: $foreground;
+  }
+}
+
 .w_hum_label {
   font-weight: bold;
 }
@@ -106,4 +124,22 @@
 .w_sun,
 .w_moon {
   background: $background;
+}
+
+.w_sun_info {
+  &.low {
+    color: $green;
+  }
+  &.moderate {
+    color: $yellow;
+  }
+  &.high {
+    color: $orange;
+  }
+  &.veryhigh {
+    color: $red;
+  }
+  &.extreem {
+    color: $purple;
+  }
 }

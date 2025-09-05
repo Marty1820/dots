@@ -135,17 +135,39 @@
         (EWW_TIME - w_sunr <= (w_suns - w_sunr)/2 ?
           (EWW_TIME - w_sunr)/((w_suns - w_sunr)/2)*100 :
         (w_suns - EWW_TIME)/((w_suns - w_sunr)/2)*100)
-      }%, rgb(30, 31, 41, 230));"
-    (label :class "w_sun_label"
-      :xalign 0
-      :yalign 0
-      :text "  Sun")
+      }%, rgba(30, 31, 41, 230));"
+    (box :orientation "h"
+      :space-evenly "false"
+      (label :class "w_sun_label ${
+        EWW_TIME > w_sunr || EWW_TIME < w_suns ? "day"  :
+                                                 "night"}"
+        :xalign 0
+        :yalign 0
+        :text "")
+      (label :class "w_sun_label"
+        :xalign 0
+        :yalign 0
+        :text "Sun")
+    )
     (label :class "w_sun_data"
       :yalign 1
       :text "${formattime(w_sunr, "%H:%M")} - ${formattime(w_suns, "%H:%M")}")
-    (label :class "w_sun_info"
-      :yalign 1
-      :text "󰛨  UV index ${round(w_uvi, 0)}")
+    (box :orientation "h"
+      :space-evenly "false"
+      (label :class "w_sun_info ${
+        w_uvi <= 2  ? "low" :
+        w_uvi <= 5  ? "moderate" :
+        w_uvi <= 7  ? "high" :
+        w_uvi <= 10 ? "veryhigh" :
+                      "extreme"
+
+        }"
+        :yalign 1
+        :text "󰛨 ")
+      (label :class "w_sun_info"
+        :yalign 1
+        :text "UV index ${round(w_uvi, 0)}")
+    )
   )
 )
 
@@ -154,32 +176,83 @@
     :orientation "v"
     :style "background-image:
       radial-gradient(rgb(98, 114, 164) ${
-        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
-        (EWW_TIME - w_moonr <= (w_suns - w_moonr)/2 ?
-          (EWW_TIME - w_moonr)/((w_suns - w_moonr)/2)*100 :
-        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
+        (((((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400)) <= 0.5 ? 1 : 0) *
+        (200 * ((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400))) +
+        (((((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400)) > 0.5 ? 1 : 0) *
+        (200 * (1 - ((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400))))
       }%, rgb(40, 42, 54) ${
-        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
-        (EWW_TIME - w_moonr <= (w_suns - w_moonr)/2 ?
-          (EWW_TIME - w_moonr)/((w_suns - w_moonr)/2)*100 :
-        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
-      }%, rgb(30, 31, 41, 230));"
-    (label :class "w_moon_label"
-      :xalign 0
-      :yalign 0
-      :text "󰖔  Moon")
+        (((((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400)) <= 0.5 ? 1 : 0) *
+        (200 * ((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400))) +
+        (((((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400)) > 0.5 ? 1 : 0) *
+        (200 * (1 - ((EWW_TIME - w_moonr + 86400) % 86400) /
+        ((w_moons - w_moonr + 86400) % 86400))))
+      }%, rgba(30, 31, 41, 230));"
+    (box :orientation "h"
+      :space-evenly "false"
+      (label :class "w_moon_label ${
+        EWW_TIME > w_moonr || EWW_TIME < w_moons ? "night" :
+                                                   "day"   }"
+        :xalign 0
+        :yalign 0
+        :text "${
+          w_moonphase == 0    ? "" :
+          w_moonphase < 0.04  ? "" :
+          w_moonphase < 0.08  ? "" :
+          w_moonphase < 0.12  ? "" :
+          w_moonphase < 0.16  ? "" :
+          w_moonphase < 0.20  ? "" :
+          w_moonphase < 0.25  ? "" :
+          w_moonphase == 0.25 ? "" :
+          w_moonphase < 0.29  ? "" :
+          w_moonphase < 0.33  ? "" :
+          w_moonphase < 0.37  ? "" :
+          w_moonphase < 0.41  ? "" :
+          w_moonphase < 0.45  ? "" :
+          w_moonphase < 0.5   ? "" :
+          w_moonphase == 0.5  ? "" :
+          w_moonphase < 0.54  ? "" :
+          w_moonphase < 0.58  ? "" :
+          w_moonphase < 0.61  ? "" :
+          w_moonphase < 0.66  ? "" :
+          w_moonphase < 0.70  ? "" :
+          w_moonphase < 0.75  ? "" :
+          w_moonphase == 0.75 ? "" :
+          w_moonphase < 0.79  ? "" :
+          w_moonphase < 0.83  ? "" :
+          w_moonphase < 0.87  ? "" :
+          w_moonphase < 0.91  ? "" :
+          w_moonphase < 0.95  ? "" :
+          w_moonphase < 1     ? "" :
+          w_moonphase == 1    ? "" :
+                            w_moonphase
+        }")
+      (label :class "w_moon_label"
+        :xalign 0
+        :yalign 0
+        :text "Moon")
+    )
     (label :class "w_moon_data"
       :yalign 1
       :text "${formattime(w_moonr, "%H:%M")} - ${formattime(w_moons, "%H:%M")}")
     (label :class "w_moon_info"
       :yalign 1
       :text "${
-        w_moonphase == 0    ? " New Moon" :
-        w_moonphase == 1    ? " New Moon" :
-        w_moonphase == 0.25 ? " First Quarter" :
-        w_moonphase == 0.5  ? " Full Moon" :
-        w_moonphase == 0.75 ? " Last Quarter" :
-                              "Unknown"
+      w_moonphase == 0    ? "New Moon" :
+      w_moonphase < 0.25  ? "Waxing Crescent" :
+      w_moonphase == 0.25 ? "First Quarter" :
+      w_moonphase < 0.5   ? "Waxing Gibbous" :
+      w_moonphase == 0.5  ? "Full Moon" :
+      w_moonphase < 0.75  ? "Waning Gibbous" :
+      w_moonphase == 0.75 ? "Last Quarter" :
+      w_moonphase < 1     ? "Waning Crescent" :
+                            "Moon Phase"
       }")
   )
 )
