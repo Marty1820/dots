@@ -121,7 +121,7 @@ ex() {
         *.tar.xz|*.txz)         tar xvJf "../$n" ;;
         *.tar.zst)              unzstd -c "../$n" | tar xvf - ;;
         *.tar)                  tar xvf "../$n" ;;
-        *.lzma)                 unlxma "../$n" ;;
+        *.lzma)                 unlzma "../$n" ;;
         *.bz2)                  bunzip2 "../$n" ;;
         *.gz)                   gunzip "../$n" ;;
         *.xz)                   unxz "../$n" ;;
