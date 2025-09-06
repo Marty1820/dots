@@ -12,7 +12,14 @@
 (defpoll w_day :interval "5m" :initial "0"
   "jq -r '.daily[0].temp.day' < $HOME/.cache/weather/onecall.json")
 (defpoll w_night :interval "5m" :initial "0"
-  "jq -r '.daily[1].temp.night' < $HOME/.cache/weather/onecall.json")
+  "jq -r '.daily[0].temp.night' < $HOME/.cache/weather/onecall.json")
+
+(defpoll w_alert :interval "5m" :initial ""
+  "jq -r '.alerts[0].event' < $HOME/.cache/weather/onecall.json")
+(defpoll w_alert_start :interval "5m" :initial ""
+  "jq -r '.alerts[0].start' < $HOME/.cache/weather/onecall.json")
+(defpoll w_alert_end :interval "5m" :initial ""
+  "jq -r '.alerts[0].end' < $HOME/.cache/weather/onecall.json")
 
 (defpoll aqi_num :interval "5m" :initial "0"
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
@@ -31,7 +38,7 @@
 (defpoll w_moonr :interval "5m" :initial "0"
   "jq -r '.daily[0].moonrise' < $HOME/.cache/weather/onecall.json")
 (defpoll w_moons :interval "5m" :initial "0"
-  "jq -r '.daily[0].moonset' < $HOME/.cache/weather/onecall.json")
+  "jq -r '.daily[1].moonset' < $HOME/.cache/weather/onecall.json")
 (defpoll w_moonphase :interval "5m" :initial "0"
   "jq -r '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
 
@@ -55,6 +62,26 @@
         :text "  ")
       (label :class "w_night"
         :text "Night: ${floor(w_night)}")
+    )
+  )
+)
+
+(defwidget w_alert []
+  (box :class "w_alert ${w_alert == "null" ? "empty" : "alert"}"
+    :orientation "h"
+    :space-evenly "false"
+    (label :class "w_alert_icon"
+      :text "${w_alert == "null" ? "" : " "}")
+    (box :orientation "v"
+      (label :class "w_alert_name"
+        :xalign 0
+        :text "${w_alert == "null" ? "" : w_alert}")
+      (label :class "w_alert_time"
+        :xalign 0
+        :text "${
+          w_alert_start == "null" ? "" :
+            formattime(w_alert_start, "%b %d, %I:%M %p")
+        }")
     )
   )
 )
@@ -285,6 +312,7 @@
     :orientation "v"
     :space-evenly "false"
     (w_main)
+    (w_alert)
     (w_data)
   )
 )

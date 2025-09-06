@@ -29,6 +29,25 @@
   font-size: 0.8em;
 }
 
+.w_alert {
+  margin: 1rem;
+  border-radius: 12px;
+  padding: 1em;
+  background-color: $background;
+  &.empty {
+    all: unset;
+  }
+}
+
+.w_alert_icon {
+  color: $purple;
+  font-size: 24px;
+}
+
+.w_alert_name {
+  font-weight: bold;
+}
+
 .w_aqi {
   margin: 1rem;
   border-radius: 9999px;
