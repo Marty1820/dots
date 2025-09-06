@@ -48,7 +48,8 @@
   font-weight: bold;
 }
 
-.w_aqi {
+.w_aqi,
+.w_wind {
   margin: 1rem;
   border-radius: 9999px;
   padding: 1em;
@@ -96,7 +97,8 @@
 
 .w_hum,
 .w_sun,
-.w_moon {
+.w_moon,
+.w_rain {
   margin: 1rem;
   border-radius: 12px;
   padding: 1em;
@@ -106,7 +108,8 @@
 .w_hum_perc,
 .w_hum_dew,
 .w_sun_label,
-.w_moon_label {
+.w_moon_label,
+.w_rain_label {
   padding: 5px;
 }
 
@@ -128,20 +131,27 @@
   }
 }
 
-.w_hum_label {
+.w_hum_label,
+.w_sun_label,
+.w_moon_label,
+.w_wind_label,
+.w_rain_label {
   font-weight: bold;
 }
 
-.w_hum_perc {
+.w_hum_perc,
+.w_rain_speed {
   font-size: 1.8em;
 }
 
-.w_hum_dew {
+.w_hum_dew,
+.w_rain_daily {
   font-size: 0.8em;
 }
 
 .w_sun,
-.w_moon {
+.w_moon,
+.w_rain {
   background: $background;
 }
 

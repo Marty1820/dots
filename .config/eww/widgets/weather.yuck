@@ -42,6 +42,16 @@
 (defpoll w_moonphase :interval "5m" :initial "0"
   "jq -r '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
 
+(defpoll w_wind :interval "5m" :initial "0"
+  "jq -r '.current.wind_speed' < $HOME/.cache/weather/onecall.json")
+(defpoll w_winddeg :interval "5m" :initial "0"
+  "jq -r '.current.wind_deg' < $HOME/.cache/weather/onecall.json")
+(defpoll w_windg :interval "5m" :initial "0"
+  "jq -r '.current.wind_gust' < $HOME/.cache/weather/onecall.json")
+
+(defpoll w_rain :interval "5m" :initial "0"
+  "jq -r '.daily[0].rain' < $HOME/.cache/weather/onecall.json")
+
 (defwidget w_main []
   (box :class "w_main"
     :orientation "v"
@@ -284,6 +294,41 @@
   )
 )
 
+(defwidget w_wind []
+  (box :class "w_wind"
+    :orientation "v"
+    :style "background:
+      linear-gradient(${w_winddeg + 180 + 60}deg,
+        rgb(98, 114, 164) 50%, transparent 50%) top left,
+      linear-gradient(${w_winddeg + 180 - 60}deg,
+        rgb(98, 114, 164) 50%, transparent 50%) top right;"
+    (label :class "w_wind_label"
+      :text " Wind")
+    (label :class "w_wind_speed"
+      :text "${round(w_wind, 0)}mph")
+    (label :class "w_wind_gust"
+      :text "Gusts: ${round(w_windg, 0)}mph")
+  )
+)
+
+(defwidget w_rain []
+  (box :class "w_rain"
+    :orientation "v"
+    (label :class "w_rain_label"
+      :xalign 0
+      :yalign 0
+      :text "󰖗 Rain")
+    (label :class "w_rain_speed"
+      :xalign 0
+      :text "${w_rain}mm")
+    (label :class "w_rain_daily"
+      :xalign 0
+      :yalign 1
+      :text "Daily Rain")
+  )
+)
+
+
 (defwidget w_data []
   (box :orientation "v"
     (box :orientation "h"
@@ -293,6 +338,10 @@
     (box :orientation "h"
       (w_sun)
       (w_moon)
+    )
+    (box :orientation "h"
+      (w_wind)
+      (w_rain)
     )
   )
 )
