@@ -21,12 +21,12 @@ fi
 
 
 # --- Environment Variables ---
-export HISTORY_IGNORE='(l[salt.]#( *)#|cd(|*)|~|pwd|exit|history(|*)|cls|nvim# *)'
+export HISTORY_IGNORE='(l[salt.]#( *)#|pwd|exit|history(|*)|cls)'
 export HISTFILE="$XDG_CACHE_HOME/sh_hist"
 export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILESIZE=10000
-export EXA_COLORS="uu=36:gu=37:sn=32:sb=32:da=34:ur=34:uw=35:ux=36:ue=36:gr=34:gw=35:gx=36:tr=34:tw=35:tx=36:"
+export EZA_COLORS="uu=36:uR=31:un=35:gu=37:da=2;34:ur=34:uw=95:ux=36:ue=36:gr=34:gw=35:gx=36:tr=34:tw=35:tx=36:xx=95:"
 
 
 # --- Aliases ---
@@ -48,12 +48,12 @@ alias egrep='grep -F --color=auto'
 alias fgrep='grep -F --color=auto'
 alias ip='ip --color=auto'
 alias cat='bat'
-alias ls='eza --icons --color=always --group-directories-first'
-alias la='eza -a --icons --color=always --group-directories-first'
-alias ll='eza -al --icons --color=always --group-directories-first'
-alias lt='eza -aT --icons --color=always --group-directories-first'
-alias l='eza -a --icons --color=always --group-directories-first'
-alias l.='eza -a | grep -E "^\."'
+alias ls='eza --icons=always --color=always --group-directories-first'
+alias la='eza --all --icons=always --color=always --group-directories-first'
+alias ll='eza --all --long --smart-group --icons=always --color=always --group-directories-first'
+alias lt='eza --all --tree --icons=always --color=always --group-directories-first'
+alias l='eza --all --icons=always --color=always --group-directories-first'
+alias l.='eza --all | grep -E "^\."'
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 
 # --- Zsh Options ---
