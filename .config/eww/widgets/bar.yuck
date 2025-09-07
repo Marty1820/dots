@@ -2,8 +2,8 @@
 (defvar power false)
 (defwidget power []
   (eventbox
-    :onhover "${eww} update power=true"
-    :onhoverlost "${eww} update power=false"
+    :onhover "${EWW_CMD} update power=true"
+    :onhoverlost "${EWW_CMD} update power=false"
     (box :class "b_power"
       :space-evenly "false"
       :orientation "v"
@@ -48,7 +48,10 @@
     w_temp >= 90 ? "hot":
     w_temp <= 32 ? "cold" : ""}"
     :orientation "v"
-    (button :onclick "${eww} open --toggle weather"
+    (button :onclick "${weather == "true" ?
+      "sh -c '${EWW_CMD} update weather=false;
+        (sleep 0.4 && ${EWW_CMD} close weather) &'" :
+      "${EWW_CMD} open weather && ${EWW_CMD} update weather=true"}"
       (label :class "b_weather_temp"
         :text "${round(w_temp, 0)}")
     )

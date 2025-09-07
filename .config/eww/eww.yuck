@@ -1,5 +1,3 @@
-(defvar eww "/usr/bin/eww -c $HOME/.config/eww")
-
 ;; Bar
 (include "./widgets/bar.yuck")
 
