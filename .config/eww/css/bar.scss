@@ -80,7 +80,10 @@ tooltip {
 }
 
 .b_network {
-  background: $green;
+  background: linear-gradient(to right, $background, $red);
+  &.up {
+    background: $green;
+  }
 }
 
 .b_backlight {

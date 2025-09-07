@@ -73,7 +73,7 @@
   (box :class "b_center"
     :orientation "v"
     (label :angle 90
-      :text "FUTURE HOME OF WINDOW TITLE'S")
+      :text "PLACEHOLDER")
   )
 )
 
@@ -95,13 +95,13 @@
 )
 
 ;; Network Icon
-(defpoll net-icon :interval "1s" "scripts/wifi icon")
-(defpoll net-name :interval "1s" "scripts/wifi name")
+(defpoll net :interval "3s" :initial "{}" "scripts/wifi")
 (defwidget network []
-  (box :class "b_network"
-    :tooltip "${net-name}"
+  (box :class "b_network ${net.class}"
+    :tooltip "${net.name}"
     (button :class "b_net_icon"
-      :onclick "nm-connection-editor &" "${net-icon}")
+      :onclick "nm-connection-editor &" 
+      "${net.icon}")
   )
 )
 
