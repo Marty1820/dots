@@ -33,7 +33,7 @@
 (defpoll w_moonr :interval "5m" :initial "0"
   "jq -r '.daily[0].moonrise' < $HOME/.cache/weather/onecall.json")
 (defpoll w_moons :interval "5m" :initial "0"
-  "jq -r '.daily[1].moonset' < $HOME/.cache/weather/onecall.json")
+  "jq -r '.daily[0].moonset' < $HOME/.cache/weather/onecall.json")
 (defpoll w_moonphase :interval "5m" :initial "0"
   "jq -r '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
 
@@ -208,23 +208,15 @@
     :orientation "v"
     :style "background-image:
       radial-gradient(rgb(98, 114, 164) ${
-        (((((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400)) <= 0.5 ? 1 : 0) *
-        (200 * ((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400))) +
-        (((((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400)) > 0.5 ? 1 : 0) *
-        (200 * (1 - ((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400))))
+        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
+        (EWW_TIME - w_moonr <= (w_moons - w_moonr)/2 ?
+          (EWW_TIME - w_moonr)/((w_moons - w_moonr)/2)*100 :
+        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
       }%, rgb(40, 42, 54) ${
-        (((((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400)) <= 0.5 ? 1 : 0) *
-        (200 * ((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400))) +
-        (((((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400)) > 0.5 ? 1 : 0) *
-        (200 * (1 - ((EWW_TIME - w_moonr + 86400) % 86400) /
-        ((w_moons - w_moonr + 86400) % 86400))))
+        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
+        (EWW_TIME - w_moonr <= (w_moons - w_moonr)/2 ?
+          (EWW_TIME - w_moonr)/((w_moons - w_moonr)/2)*100 :
+        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
       }%, rgba(30, 31, 41, 230));"
     (box :orientation "h"
       :space-evenly "false"
@@ -315,7 +307,7 @@
       :text "󰖗 Rain")
     (label :class "w_rain_speed"
       :xalign 0
-      :text "${w_rain}mm")
+      :text "${w_rain == "null" ? "0" : w_rain * (1 / 25.4)}in")
     (label :class "w_rain_daily"
       :xalign 0
       :yalign 1
