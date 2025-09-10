@@ -85,8 +85,7 @@
         :xalign 0
         :text "${
           w_alert_start == "null" ? "" :
-            formattime(w_alert_start, "%b %d, %I:%M %p")
-        }")
+            formattime(w_alert_start, "%b %d, %I:%M %p")}")
     )
   )
 )
@@ -100,16 +99,14 @@
         aqi_num == 3 ? "aqi-moderate" :
         aqi_num == 4 ? "aqi-poor" :
         aqi_num == 5 ? "aqi-very-poor" :
-                       ""
-        }"
+                       ""}"
       :value "${
         aqi_num == 1 ? 16 :
         aqi_num == 2 ? 32 :
         aqi_num == 3 ? 48 :
         aqi_num == 4 ? 64 :
         aqi_num == 5 ? 80 :
-                       0
-      }"
+                       0}"
       :start-at "35"
       :thickness "8"
       (box :class "aqi-info"
@@ -124,8 +121,7 @@
             aqi_num == 3 ? "Moderate" :
             aqi_num == 4 ? "Poor" :
             aqi_num == 5 ? "Very Poor" :
-                           "Unknown"
-          }")
+                           "Unknown"}")
       )
     )
   )
@@ -171,8 +167,7 @@
     (box :orientation "h"
       :space-evenly "false"
       (label :class "w_sun_label ${
-        EWW_TIME > w_sunr || EWW_TIME < w_suns ? "day"  :
-                                                 "night"}"
+        EWW_TIME < w_sunr || EWW_TIME > w_suns ? "night" : "day"}"
         :xalign 0
         :yalign 0
         :text "")
@@ -187,15 +182,14 @@
     (box :orientation "h"
       :space-evenly "false"
       (label :class "w_sun_info ${
+        EWW_TIME < w_sunr || EWW_TIME > w_suns ? "night" :
         w_uvi <= 2  ? "low" :
         w_uvi <= 5  ? "moderate" :
         w_uvi <= 7  ? "high" :
         w_uvi <= 10 ? "veryhigh" :
-                      "extreme"
-
-        }"
+                      "extreme"}"
         :yalign 1
-        :text "󰛨 ")
+        :text "${EWW_TIME < w_sunr || EWW_TIME > w_suns ? "󰌵 " : "󰛨 "}")
       (label :class "w_sun_info"
         :yalign 1
         :text "UV index ${round(w_uvi, 0)}")
@@ -220,9 +214,8 @@
       }%, rgba(30, 31, 41, 230));"
     (box :orientation "h"
       :space-evenly "false"
-      (label :class "w_moon_label ${
-        EWW_TIME > w_moonr || EWW_TIME < w_moons ? "night" :
-                                                   "day"   }"
+      (label :class "w_moon_label icon ${
+        EWW_TIME < w_moonr || EWW_TIME > w_moons ? "day" : "night"}"
         :xalign 0
         :yalign 0
         :text "${
@@ -255,8 +248,7 @@
           w_moonphase < 0.95  ? "" :
           w_moonphase < 1     ? "" :
           w_moonphase == 1    ? "" :
-                            w_moonphase
-        }")
+                            w_moonphase}")
       (label :class "w_moon_label"
         :xalign 0
         :yalign 0
@@ -276,8 +268,7 @@
       w_moonphase < 0.75  ? "Waning Gibbous" :
       w_moonphase == 0.75 ? "Last Quarter" :
       w_moonphase < 1     ? "Waning Crescent" :
-                            "Moon Phase"
-      }")
+                            "Moon Phase"}")
   )
 )
 
@@ -340,8 +331,7 @@
     (geometry
       :x "3px"
       :y "3px"
-      :anchor "top left"
-    )
+      :anchor "top left")
   :stacking "fg"
   :exlusive "false"
   :focusable "none"
