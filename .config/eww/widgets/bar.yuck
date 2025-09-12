@@ -149,7 +149,6 @@
   (box :class "b_container b_battery"
     :orientation "h"
     :space-evenly "false"
-    :tooltip "Battery: ${EWW_BATTERY.BAT1.capacity}"
     (label :class "b_cont_icon b_bat_icon ${
       EWW_BATTERY.BAT1.status   == "Charging" ? "charging" :
       EWW_BATTERY.BAT1.capacity <=   15       ? "critical" :
