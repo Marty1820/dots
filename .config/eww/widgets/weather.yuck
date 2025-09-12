@@ -1,52 +1,3 @@
-(defpoll w_desc :interval "5m" :initial "0"
-  "jq -r '.current.weather[].description' < $HOME/.cache/weather/onecall.json")
-(defpoll w_temp :interval "5m" :initial "0"
-  "jq -r '.current.temp' < $HOME/.cache/weather/onecall.json")
-(defpoll w_feeltemp :interval "5m" :initial "0"
-  "jq -r '.current.feels_like' < $HOME/.cache/weather/onecall.json")
-(defpoll w_day :interval "5m" :initial "0"
-  "jq -r '.daily[0].temp.day' < $HOME/.cache/weather/onecall.json")
-(defpoll w_night :interval "5m" :initial "0"
-  "jq -r '.daily[0].temp.night' < $HOME/.cache/weather/onecall.json")
-
-(defpoll w_alert :interval "5m" :initial ""
-  "jq -r '.alerts[0].event' < $HOME/.cache/weather/onecall.json")
-(defpoll w_alert_start :interval "5m" :initial "0"
-  "jq -r '.alerts[0].start' < $HOME/.cache/weather/onecall.json")
-(defpoll w_alert_end :interval "5m" :initial "0"
-  "jq -r '.alerts[0].end' < $HOME/.cache/weather/onecall.json")
-
-(defpoll aqi_num :interval "5m" :initial "0"
-  "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
-
-(defpoll w_hum :interval "5m" :initial "0"
-  "jq -r '.current.humidity' < $HOME/.cache/weather/onecall.json")
-(defpoll w_dew :interval "5m" :initial "0"
-  "jq -r '.current.dew_point' < $HOME/.cache/weather/onecall.json")
-
-(defpoll w_sunr :interval "5m" :initial "0"
-  "jq -r '.daily[0].sunrise' < $HOME/.cache/weather/onecall.json")
-(defpoll w_suns :interval "5m" :initial "0"
-  "jq -r '.daily[0].sunset' < $HOME/.cache/weather/onecall.json")
-(defpoll w_uvi :interval "5m" :initial "0"
-  "jq -r '.current.uvi' < $HOME/.cache/weather/onecall.json")
-(defpoll w_moonr :interval "5m" :initial "0"
-  "jq -r '.daily[0].moonrise' < $HOME/.cache/weather/onecall.json")
-(defpoll w_moons :interval "5m" :initial "0"
-  "jq -r '.daily[0].moonset' < $HOME/.cache/weather/onecall.json")
-(defpoll w_moonphase :interval "5m" :initial "0"
-  "jq -r '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
-
-(defpoll w_wind :interval "5m" :initial "0"
-  "jq -r '.current.wind_speed' < $HOME/.cache/weather/onecall.json")
-(defpoll w_winddeg :interval "5m" :initial "0"
-  "jq -r '.current.wind_deg' < $HOME/.cache/weather/onecall.json")
-(defpoll w_windg :interval "5m" :initial "0"
-  "jq -r '.current.wind_gust' < $HOME/.cache/weather/onecall.json")
-
-(defpoll w_rain :interval "5m" :initial "0"
-  "jq -r '.daily[0].rain' < $HOME/.cache/weather/onecall.json")
-
 (defwidget w_main []
   (box :class "w_main"
     :orientation "v"
@@ -178,7 +129,7 @@
     )
     (label :class "w_sun_data"
       :yalign 1
-      :text "${formattime(w_sunr, "%H:%M")} - ${formattime(w_suns, "%H:%M")}")
+      :text "${formattime(w_sunr, "%I:%M%p")}-${formattime(w_suns, "%I:%M%p")}")
     (box :orientation "h"
       :space-evenly "false"
       (label :class "w_sun_info ${
@@ -256,7 +207,7 @@
     )
     (label :class "w_moon_data"
       :yalign 1
-      :text "${formattime(w_moonr, "%H:%M")} - ${formattime(w_moons, "%H:%M")}")
+      :text "${formattime(w_moonr, "%I:%M%p")}-${formattime(w_moons, "%I:%M%p")}")
     (label :class "w_moon_info"
       :yalign 1
       :text "${
@@ -298,7 +249,7 @@
       :text "󰖗 Rain")
     (label :class "w_rain_speed"
       :xalign 0
-      :text "${w_rain == "null" ? "0" : w_rain * (1 / 25.4)}in")
+      :text "${w_rain == "null" ? "0" : round(w_rain * (1 / 25.4), 2)}in")
     (label :class "w_rain_daily"
       :xalign 0
       :yalign 1
@@ -324,7 +275,6 @@
   )
 )
 
-(defvar weather false)
 (defwindow weather
   :monitor 0
   :geometry 
@@ -335,7 +285,7 @@
   :stacking "fg"
   :exlusive "false"
   :focusable "none"
-  (revealer :transition "slideleft"
+  (revealer :transition "slidedown"
     :reveal weather
     :class "weather"
     (box
