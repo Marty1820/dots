@@ -1,3 +1,6 @@
+; Variables
+(include "./variables.yuck")
+
 ;; Bar
 (include "./widgets/bar.yuck")
 

@@ -1,0 +1,69 @@
+; Bar
+(defvar power false)
+
+; Volume
+(defpoll volume :interval "1s" :initial "0"
+  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d\", $2 * 100}'")
+(defpoll mute :interval "1s" :initial ""
+  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}'")
+
+; Networking
+(defpoll net :interval "3s" :initial "{}" "scripts/wifi")
+
+; Brightness
+(defpoll brightness :interval "1s" :initial "0"
+  "brightnessctl info | awk -F '[()%]' '/Current/ {print $2}'")
+
+; Weather
+(defvar weather false)
+
+(defpoll w_desc :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.weather[].description' < $HOME/.cache/weather/onecall.json")
+(defpoll w_icon :interval "5m" :initial ""
+  "jq -r '.current.weather[].icon' < $HOME/.cache/weather/onecall.json")
+(defpoll w_temp :interval "5m" :initial "0"
+  "jq -r '.current.temp' < $HOME/.cache/weather/onecall.json")
+(defpoll w_feeltemp :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.feels_like' < $HOME/.cache/weather/onecall.json")
+(defpoll w_day :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].temp.day' < $HOME/.cache/weather/onecall.json")
+(defpoll w_night :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].temp.night' < $HOME/.cache/weather/onecall.json")
+
+(defpoll w_alert :interval "5m" :initial "" :run-while weather
+  "jq -r '.alerts[0].event' < $HOME/.cache/weather/onecall.json")
+(defpoll w_alert_start :interval "5m" :initial "0" :run-while weather
+  "jq -r '.alerts[0].start' < $HOME/.cache/weather/onecall.json")
+(defpoll w_alert_end :interval "5m" :initial "0" :run-while weather
+  "jq -r '.alerts[0].end' < $HOME/.cache/weather/onecall.json")
+
+(defpoll aqi_num :interval "5m" :initial "0" :run-while weather
+  "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
+
+(defpoll w_hum :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.humidity' < $HOME/.cache/weather/onecall.json")
+(defpoll w_dew :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.dew_point' < $HOME/.cache/weather/onecall.json")
+
+(defpoll w_sunr :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].sunrise' < $HOME/.cache/weather/onecall.json")
+(defpoll w_suns :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].sunset' < $HOME/.cache/weather/onecall.json")
+(defpoll w_uvi :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.uvi' < $HOME/.cache/weather/onecall.json")
+(defpoll w_moonr :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].moonrise' < $HOME/.cache/weather/onecall.json")
+(defpoll w_moons :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].moonset' < $HOME/.cache/weather/onecall.json")
+(defpoll w_moonphase :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
+
+(defpoll w_wind :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.wind_speed' < $HOME/.cache/weather/onecall.json")
+(defpoll w_winddeg :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.wind_deg' < $HOME/.cache/weather/onecall.json")
+(defpoll w_windg :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.wind_gust' < $HOME/.cache/weather/onecall.json")
+
+(defpoll w_rain :interval "5m" :initial "0" :run-while weather
+  "jq -r '.daily[0].rain' < $HOME/.cache/weather/onecall.json")

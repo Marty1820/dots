@@ -1,9 +1,10 @@
-// Global
-@import "css/colors";
-
 * {
   all: unset;
 }
 
+// Global
+@import "css/colors";
+
+// Widget's CSS
 @import "css/bar";
 @import "css/weather";

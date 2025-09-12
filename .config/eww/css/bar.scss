@@ -1,26 +1,21 @@
 .eww_bar {
   font-family: Mononoki Nerd Font Mono;
   font-size: 14px;
-  margin: 4px 0 4px 0;
-  border-radius: 0 12px 12px 0;
-  background-image: linear-gradient(
-    to right,
-    black,
-    $background-darker,
-    $background
-  );
+  margin: 1px 3px 0 3px;
+  border-radius: 6px;
+  background: rgba($background-darker, 0.4);
   color: $foreground;
 }
 
-.b_top,
+.b_left,
 .b_center,
-.b_bottom {
-  padding: 6px 0 6px 0;
+.b_right {
+  padding: 3px 6px 3px 6px;
 }
 
 tooltip {
   font-family: Mononoki Nerd Font Mono;
-  border-radius: 12px;
+  border-radius: 6px;
   border: 1px solid $purple;
   background: rgba($background, 0.99); /*Set alpha below 1 for GTK fix*/
   color: $foreground;
@@ -30,10 +25,10 @@ tooltip {
 .b_but_shutdown,
 .b_but_reboot,
 .b_but_sleep,
-.b_but_logoff,
-.b_clock,
-.b_weather {
-  padding: 5px 0;
+.b_but_logoff {
+  padding: 0 6px;
+  border-radius: 6px;
+  background: $background-darker;
 }
 
 .b_but_shutdown {
@@ -52,7 +47,27 @@ tooltip {
   color: $orange;
 }
 
+.b_clock {
+  padding: 0 6px;
+}
+
+.b_clock_icon {
+  border-radius: 6px 0 0 6px;
+  padding: 0 12px;
+  background: $yellow;
+  color: $background;
+  font-size: 18px;
+}
+
+.b_clock_time {
+  border-radius: 0 6px 6px 0;
+  padding: 0 6px;
+  background: $background-darker;
+  color: $foreground;
+}
+
 .b_weather {
+  padding: 0 6px;
   &.hot {
     color: $red;
   }
@@ -61,44 +76,67 @@ tooltip {
   }
 }
 
-.b_volume,
-.b_network,
-.b_backlight,
-.b_battery {
-  border-radius: 6px;
-  padding: 2px;
-  margin: 4px;
-  color: $background;
-  font-size: 16px;
-}
-
-.b_volume {
-  background: $purple;
-  &.b_vol_mute {
-    background: linear-gradient(to right, $background, $red);
-  }
-}
-
-.b_network {
-  background: linear-gradient(to right, $background, $red);
-  &.up {
-    background: $green;
-  }
-}
-
-.b_backlight {
+.b_weather_icon {
+  border-radius: 6px 0 0 6px;
+  padding: 0 12px;
   background: $yellow;
+  color: $background;
+  font-size: 18px;
 }
 
-.b_battery {
-  background: $cyan;
+.b_weather_temp {
+  border-radius: 0 6px 6px 0;
+  padding: 0 6px;
+  background: $background-darker;
+  color: $foreground;
+}
+
+.b_container {
+  margin: 0 6px;
+  color: $background;
+}
+
+.b_cont_icon {
+  font-size: 18px;
+  border-radius: 6px 0 0 6px;
+  padding: 0 6px;
+  color: $background;
+}
+
+.b_cont_info {
+  border-radius: 0 6px 6px 0;
+  padding: 0 6px;
+  background: $background;
+  color: $foreground;
+}
+
+.b_vol_icon {
+  background: linear-gradient(to bottom, $selection, $purple);
+  &.mute {
+    background: linear-gradient(to bottom, $background, $red);
+  }
+}
+
+.b_net_icon {
+  background: linear-gradient(to bottom, $background, $red);
+  &.up {
+    background: linear-gradient(to bottom, $selection, $green);
+  }
+}
+
+.b_brit_icon {
+  background: linear-gradient(to bottom, $selection, $yellow);
+}
+
+.b_bat_icon {
+  background: linear-gradient(to bottom, $selection, $cyan);
   &.charging {
-    background: $green;
+    background: linear-gradient(to bottom, $selection, $green);
   }
   &.low {
-    background: $orange;
+    background: linear-gradient(to bottom, $selection, $orange);
   }
   &.critical {
-    background: $red;
+    background: linear-gradient(to bottom, $selection, $red);
   }
 }

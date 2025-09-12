@@ -1,18 +1,19 @@
-;; Power Menu
-(defvar power false)
+;; Left Modules
+
+; Power Menu
 (defwidget power []
   (eventbox
     :onhover "${EWW_CMD} update power=true"
     :onhoverlost "${EWW_CMD} update power=false"
     (box :class "b_power"
       :space-evenly "false"
-      :orientation "v"
+      :orientation "h"
       (button :class "b_but_shutdown"
         :tooltip "Shut down"
         :onclick "systemctl poweroff" "")
-        (revealer :transition "slideup"
+        (revealer :transition "slideright"
           :reveal power
-          (box :orientation "v"
+          (box :orientation "h"
             :space-evenly "false"
             (button :class "b_but_reboot"
               :tooltip "Reboot"
@@ -29,131 +30,147 @@
   )
 )
 
-;; Clock
+; Clock
 (defwidget clock []
   (box :class "b_clock"
-    :orientation "v"
+    :orientation "h"
     :space-evenly "false"
     :tooltip "${formattime(EWW_TIME, "%a, %b %d")}"
-    (label :class "b_clock_hr"
-      :text "${formattime(EWW_TIME, "%H")}")
-    (label :class "b_clock_min"
-      :text "${formattime(EWW_TIME, "%M")}")
+    (label :class "b_clock_icon"
+      :text "")
+    (label :class "b_clock_time"
+      :text "${formattime(EWW_TIME, "%I:%M %p")}")
   )
 )
 
-;; Weather
+; Weather
 (defwidget weather []
-  (box :class "b_weather ${
-    w_temp >= 90 ? "hot":
-    w_temp <= 32 ? "cold" : ""}"
-    :orientation "v"
-    (button :onclick "${weather == "true" ?
-      "sh -c '${EWW_CMD} update weather=false;
-        (sleep 0.4 && ${EWW_CMD} close weather) &'" :
-      "${EWW_CMD} open weather && ${EWW_CMD} update weather=true"}"
+  (button :onclick "${weather == "true" ?
+    "sh -c '${EWW_CMD} update weather=false;
+      (sleep 0.4 && ${EWW_CMD} close weather) &'" :
+    "${EWW_CMD} open weather && ${EWW_CMD} update weather=true"}"
+    (box :class "b_weather ${
+      w_temp >= 90 ? "hot":
+      w_temp <= 32 ? "cold" : ""}"
+      :tooltip "Weather Info"
+      (label :class "b_weather_icon"
+        :text "${
+          w_icon == "01d" ? "󰖙" :
+          w_icon == "01n" ? "󰖔" :
+          w_icon == "02d" ? "󰖕" :
+          w_icon == "02n" ? "󰼱" :
+          w_icon == "03d" || w_icon == "03n" ||
+          w_icon == "04n" || w_icon == "04d" ? "󰖐" :
+          w_icon == "09d" || w_icon == "09n" ||
+          w_icon == "10d" || w_icon == "10n" ? "󰖗" :
+          w_icon == "11d" || w_icon == "11n" ? "󰖓" :
+          w_icon == "13d" || w_icon == "13n" ? "󰖘" :
+          w_icon == "50d" || w_icon == "50n" ? "󰖑" :
+                                               "" }")
       (label :class "b_weather_temp"
         :text "${round(w_temp, 0)}")
     )
   )
 )
 
-(defwidget top []
-  (box :class "b_top"
-    :orientation "v"
+(defwidget left []
+  (box :class "b_left"
+    :orientation "h"
     :space-evenly "false"
-    :valign "start"
+    :halign "start"
     (power)
     (clock)
     (weather)
   )
 )
 
+;; Center Modules
 (defwidget center []
   (box :class "b_center"
-    :orientation "v"
-    (label :angle 90
-      :text "PLACEHOLDER")
+    :orientation "h"
+    :halign "center"
+    (label :text "")
   )
 )
 
-;; Volume Icon
-(defpoll volume :interval "1s" :initial "0"
-  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d\", $2 * 100}'")
-(defpoll mute :interval "1s" :initial ""
-  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}'")
+;; Rigth Modules
+
+; Volume Icon
 (defwidget volume []
-  (box :class "b_volume ${mute == "[MUTED]" ? "b_vol_mute" : ""}"
-    :tooltip "${volume}"
-    (button :class "b_vol_icon"
-      :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" "${
-        mute   == "[MUTED]" ? "" :
-        volume >= 50        ? "" :
-                              ""
-      }")
+  (button :class "b_container b_volume"
+    :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    (box :orientation "h"
+      :space-evenly "false"
+      (label :class "b_cont_icon b_vol_icon ${
+          mute == "[MUTED]" ? "mute" : ""}"
+        :text "${
+          mute   == "[MUTED]" ? "" :
+          volume >= 50        ? "" :
+                                "" }")
+      (label :class "b_cont_info b_vol_info"
+        :text "${volume}")
+    )
   )
 )
 
-;; Network Icon
-(defpoll net :interval "3s" :initial "{}" "scripts/wifi")
+; Network Icon
 (defwidget network []
-  (box :class "b_network ${net.class}"
-    :tooltip "${net.name}"
-    (button :class "b_net_icon"
-      :onclick "nm-connection-editor &" 
-      "${net.icon}")
+  (button :class "b_container b_network"
+    :onclick "nm-connection-editor &"
+    (box :orientation "h"
+      :space-evenly "false"
+      (label :class "b_cont_icon b_net_icon ${net.class}"
+        :text "${net.icon}")
+      (label :class "b_cont_info b_net_info"
+        :text "${net.name}")
+    )
   )
 )
 
-;; Backlight Brightness
-(defpoll brightness :interval "1s" :initial "0"
-  "brightnessctl info | awk -F '[()%]' '/Current/ {print $2}'")
+; Backlight Brightness
 (defwidget backlight []
-  (box :class "b_backlight"
-    :tooltip "${brightness}"
-    (button :class "b_brit_icon"
-      :onclick "$HOME/.local/bin/ABToggle.sh" "${
-        brightness >= 75 ? "󰃠" :
-        brightness >= 50 ? "󰃟" :
-        brightness >= 25 ? "󰃞" :
-                           "󰃝"
-      }")
+  (button :class "b_container b_backlight"
+    (box :orientation "h"
+      :space-evenly "false"
+      (label :class "b_cont_icon b_brit_icon"
+        :text "${
+          brightness >= 75 ? "󰃠" :
+          brightness >= 50 ? "󰃟" :
+          brightness >= 25 ? "󰃞" :
+                             "󰃝" }")
+      (label :class "b_cont_info b_brit_info"
+        :text "${brightness}")
+    )
   )
 )
 
-;; Battery Icon
+; Battery Icon
 (defwidget battery []
-  (box :class "b_battery ${
-    EWW_BATTERY.BAT1.status   == "Charging" ? "charging" :
-    EWW_BATTERY.BAT1.capacity <=   15       ? "critical" :
-    EWW_BATTERY.BAT1.capacity <=   20       ? "low" :
-                                             ""
-    }"
-    :orientation "v"
-    :tooltip "${EWW_BATTERY.BAT1.capacity}"
-    (label :class "b_bat_icon"
+  (box :class "b_container b_battery"
+    :orientation "h"
+    :space-evenly "false"
+    :tooltip "Battery: ${EWW_BATTERY.BAT1.capacity}"
+    (label :class "b_cont_icon b_bat_icon ${
+      EWW_BATTERY.BAT1.status   == "Charging" ? "charging" :
+      EWW_BATTERY.BAT1.capacity <=   15       ? "critical" :
+      EWW_BATTERY.BAT1.capacity <=   20       ? "low" : "" }"
       :text "${
         EWW_BATTERY.BAT1.status == "Charging" ? "󰚥" : 
-        EWW_BATTERY.BAT1.capacity == 100 ? "󰁹" :
-        EWW_BATTERY.BAT1.capacity >= 90 ? "󰂂" :
-        EWW_BATTERY.BAT1.capacity >= 80 ? "󰂁" :
-        EWW_BATTERY.BAT1.capacity >= 70 ? "󰂀" :
-        EWW_BATTERY.BAT1.capacity >= 60 ? "󰁿" :
-        EWW_BATTERY.BAT1.capacity >= 50 ? "󰁾" :
-        EWW_BATTERY.BAT1.capacity >= 40 ? "󰁽" :
-        EWW_BATTERY.BAT1.capacity >= 30 ? "󰁽" :
-        EWW_BATTERY.BAT1.capacity >= 20 ? "󰁽" :
-        EWW_BATTERY.BAT1.capacity >= 10 ? "󰁺" :
-                                          "󰂃"
-      }")
+        EWW_BATTERY.BAT1.capacity >= 80 ? "" :
+        EWW_BATTERY.BAT1.capacity >= 60 ? "" :
+        EWW_BATTERY.BAT1.capacity >= 40 ? "" :
+        EWW_BATTERY.BAT1.capacity >= 20 ? "" :
+                                          "" }")
+    (label :class "b_cont_info b_bat_info"
+      :text "${EWW_BATTERY.BAT1.capacity}")
   )
 )
 
-(defwidget bottom []
-  (box :class "b_bottom"
-    :orientation "v"
-    :valign "end"
-    ;;(idle_inhibitor)
+(defwidget right []
+  (box :class "b_right"
+    :orientation "h"
+    :halign "end"
+    :space-evenly "false"
     ;;(bluetooth)
     (volume)
     (network)
@@ -162,24 +179,19 @@
   )
 )
 
-(defwidget bar []
-  (centerbox :class "eww_bar"
-    :orientation "v"
-    (top)
-    (center)
-    (bottom)
-  )
-)
-
 (defwindow bar
   :monitor 0
   :geometry (geometry
               :x "0"
               :y "0"
-              :width "34px"
-              :height "100%"
-              :anchor "center left")
+              :width "100%"
+              :anchor "top center")
   :stacking "fg"
   :exclusive "true"
-  (bar)
+  (centerbox :class "eww_bar"
+    :orientation "h"
+    (left)
+    (center)
+    (right)
+  )
 )
