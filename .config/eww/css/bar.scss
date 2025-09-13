@@ -22,10 +22,7 @@ tooltip {
 }
 
 .b_power,
-.b_but_shutdown,
-.b_but_reboot,
-.b_but_sleep,
-.b_but_logoff {
+.b_button {
   padding: 0 6px;
   border-radius: 6px;
   background: $background-darker;
@@ -47,53 +44,8 @@ tooltip {
   color: $orange;
 }
 
-.b_clock {
-  padding: 0 6px;
-}
-
-.b_clock_icon {
-  border-radius: 6px 0 0 6px;
-  padding: 0 12px;
-  background: $yellow;
-  color: $background;
-  font-size: 18px;
-}
-
-.b_clock_time {
-  border-radius: 0 6px 6px 0;
-  padding: 0 6px;
-  background: $background-darker;
-  color: $foreground;
-}
-
-.b_weather {
-  padding: 0 6px;
-  &.hot {
-    color: $red;
-  }
-  &.cold {
-    color: $cyan;
-  }
-}
-
-.b_weather_icon {
-  border-radius: 6px 0 0 6px;
-  padding: 0 12px;
-  background: $yellow;
-  color: $background;
-  font-size: 18px;
-}
-
-.b_weather_temp {
-  border-radius: 0 6px 6px 0;
-  padding: 0 6px;
-  background: $background-darker;
-  color: $foreground;
-}
-
 .b_container {
   margin: 0 6px;
-  color: $background;
 }
 
 .b_cont_icon {
@@ -107,28 +59,41 @@ tooltip {
   border-radius: 0 6px 6px 0;
   padding: 0 6px;
   background: $background;
-  color: $foreground;
 }
 
-.b_vol_icon {
+.b_clock_icon {
+  background: linear-gradient(to bottom, $selection, $yellow, $yellow);
+}
+
+.b_weather_icon {
+  background: linear-gradient(to bottom, $selection, $orange);
+  &.hot {
+    background: linear-gradient(to bottom, $selection, $red);
+  }
+  &.cold {
+    background: linear-gradient(to bottom, $selection, $cyan);
+  }
+}
+
+.b_volume_icon {
   background: linear-gradient(to bottom, $selection, $purple);
   &.mute {
     background: linear-gradient(to bottom, $background, $red);
   }
 }
 
-.b_net_icon {
+.b_network_icon {
   background: linear-gradient(to bottom, $background, $red);
   &.up {
     background: linear-gradient(to bottom, $selection, $green);
   }
 }
 
-.b_brit_icon {
+.b_brightness_icon {
   background: linear-gradient(to bottom, $selection, $yellow);
 }
 
-.b_bat_icon {
+.b_battery_icon {
   background: linear-gradient(to bottom, $selection, $cyan);
   &.charging {
     background: linear-gradient(to bottom, $selection, $green);
