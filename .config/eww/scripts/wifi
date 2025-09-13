@@ -3,35 +3,43 @@
 status() {
   # Grab wifi name
   iface=$(basename /sys/class/net/wl* 2>/dev/null)
+  wifi_state=""
+  name=""
+  icon=""
+  cls=""
 
   if [ -z "$iface" ]; then
     name="No Wi-Fi Device"
     icon=""
     cls="blocked"
-
   elif rfkill list wifi | grep -q "Soft blocked: yes"; then
     name="Airplane Mode"
     icon=""
     cls="blocked"
-
-  elif [ "$(cat /sys/class/net/"$iface"/operstate 2>/dev/null)" = "down" ]; then
-    # Check Wired Connection
-    eth_iface=$(basename /sys/class/net/e* 2>/dev/null)
-    if [ -n "$eth_iface" ] && [ "$(cat /sys/class/net/"$iface"/operstate 2>/dev/null)" = "up" ]; then
-      name="Wired"
-      icon="󰈀"
-      cls="wired"
-    else
-      name="Disconnected"
-      icon="󰤭"
-      cls="down"
-    fi
-
   else
-    name=$(nmcli -t -f NAME,DEVICE connection show --active \
-      | awk -F: -v dev="$iface" '$2==dev{print $1; exit}')
-    icon="󰤨"
-    cls="up"
+    wifi_state=$(cat /sys/class/net/"$iface"/operstate 2>/dev/null)
+    if [ "$wifi_state" != "up" ]; then
+      # Check Wired Connection
+      eth_iface=$(basename /sys/class/net/e* 2>dev/null)
+      eth_state=$(cat /sys/class/net/"$eth_iface"/operstate 2>/dev/null)
+      if [ -n "$eth_iface" ] && [ "$eth_state" = "up" ]; then
+        name="Wired"
+        icon="󰈀"
+        cls="wired"
+      else
+        name="Disconnected"
+        icon="󰤭"
+        cls="down"
+      fi
+    else
+      while IFS=: read -r con dev; do
+        [ "$dev" = "$iface" ] && { name=$con; break; }
+      done <<-EOF
+$(nmcli -t -f NAME,DEVICE connection show --active)
+EOF
+      icon="󰤨"
+      cls="up"
+    fi
   fi
 
   printf '{"icon":"%s","class":"%s","name":"%s"}\n' \
