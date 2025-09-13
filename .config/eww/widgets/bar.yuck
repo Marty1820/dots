@@ -1,4 +1,4 @@
-(defwidget container [name click tooltip class icon info]
+(defwidget container [name ?click ?tooltip ?class icon info]
   (button :class "b_container b_${name}"
     :onclick "${click}"
     :tooltip "${tooltip}"
@@ -44,13 +44,19 @@
   )
 )
 
+; Date
+(defwidget date []
+  (container
+    :name "date"
+    :icon "󰃶"
+    :info "${formattime(EWW_TIME, "%a, %b %d")}"
+  )
+)
+
 ; Clock
 (defwidget clock []
   (container
     :name "clock"
-    :click ""
-    :tooltip "${formattime(EWW_TIME, "%a, %b %d")}"
-    :class ""
     :icon "${formattime(EWW_TIME, "%I") == 1 ? "󱐿" :
              formattime(EWW_TIME, "%I") == 2 ? "󱑀" :
              formattime(EWW_TIME, "%I") == 3 ? "󱑁" :
@@ -94,17 +100,21 @@
     :space-evenly "false"
     :halign "start"
     (power)
+    (date)
     (clock)
     (weather)
   )
 )
 
 ;; Center Modules
+(deflisten b_window :initial ""
+  `niri msg event-stream | while IFS= read -r _; do niri msg focused-window | awk -F': ' '/App ID:/ { gsub(/"/,"",$2); print $2; exit }'; done`)
 (defwidget center []
   (box :class "b_center"
     :orientation "h"
     :halign "center"
-    (label :text "")
+    (label :class "b_window_name"
+      :text "${b_window}")
   )
 )
 
@@ -115,7 +125,6 @@
   (container
     :name "volume"
     :click "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-    :tooltip ""
     :class "${mute == "[MUTED]" ? "mute" : ""}"
     :icon "${mute == "[MUTED]" ? "" : volume >= 50 ? "" : ""}"
     :info "${volume}"
@@ -127,7 +136,6 @@
   (container
     :name "network"
     :click "nm-connection-editor &"
-    :tooltip ""
     :class "${net.class}"
     :icon "${net.icon}"
     :info "${net.name}"
@@ -139,8 +147,6 @@
   (container
     :name "brightness"
     :click "$HOME/.local/bin/ABToggle.sh"
-    :tooltip ""
-    :class ""
     :icon "${brightness >= 75 ? "󰃠" : brightness >= 50 ? "󰃟"
            : brightness >= 25 ? "󰃞" : "󰃝"}"
     :info "${brightness}"
@@ -151,8 +157,6 @@
 (defwidget battery []
   (container
     :name "battery"
-    :click ""
-    :tooltip ""
     :class "${EWW_BATTERY.BAT1.status   == "Charging" ? "charging" :
               EWW_BATTERY.BAT1.capacity <=   15       ? "critical" :
               EWW_BATTERY.BAT1.capacity <=   20       ? "low" : ""}"
@@ -170,7 +174,6 @@
     :orientation "h"
     :halign "end"
     :space-evenly "false"
-    ;;(bluetooth)
     (volume)
     (network)
     (brightness)

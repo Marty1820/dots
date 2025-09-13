@@ -61,6 +61,7 @@ tooltip {
   background: $background;
 }
 
+.b_date_icon,
 .b_clock_icon {
   background: linear-gradient(to bottom, $selection, $yellow, $yellow);
 }
@@ -73,6 +74,14 @@ tooltip {
   &.cold {
     background: linear-gradient(to bottom, $selection, $cyan);
   }
+}
+
+.b_window_name {
+  margin: 0 6px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: $background;
+  font-weight: bold;
 }
 
 .b_volume_icon {
