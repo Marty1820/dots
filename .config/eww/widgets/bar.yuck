@@ -51,7 +51,18 @@
     :click ""
     :tooltip "${formattime(EWW_TIME, "%a, %b %d")}"
     :class ""
-    :icon ""
+    :icon "${formattime(EWW_TIME, "%I") == 1 ? "󱐿" :
+             formattime(EWW_TIME, "%I") == 2 ? "󱑀" :
+             formattime(EWW_TIME, "%I") == 3 ? "󱑁" :
+             formattime(EWW_TIME, "%I") == 4 ? "󱑂" :
+             formattime(EWW_TIME, "%I") == 5 ? "󱑃" :
+             formattime(EWW_TIME, "%I") == 6 ? "󱑄" :
+             formattime(EWW_TIME, "%I") == 7 ? "󱑅" :
+             formattime(EWW_TIME, "%I") == 8 ? "󱑆" :
+             formattime(EWW_TIME, "%I") == 9 ? "󱑇" :
+             formattime(EWW_TIME, "%I") == 10 ? "󱑈" :
+             formattime(EWW_TIME, "%I") == 11 ? "󱑉" :
+             formattime(EWW_TIME, "%I") == 12 ? "󱑊" : "󰥕"}"
     :info "${formattime(EWW_TIME, "%I:%M %p")}"
   )
 )
