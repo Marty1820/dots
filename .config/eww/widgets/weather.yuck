@@ -49,15 +49,12 @@
         aqi_num == 2 ? "aqi-fair" :
         aqi_num == 3 ? "aqi-moderate" :
         aqi_num == 4 ? "aqi-poor" :
-        aqi_num == 5 ? "aqi-very-poor" :
-                       ""}"
-      :value "${
-        aqi_num == 1 ? 16 :
-        aqi_num == 2 ? 32 :
-        aqi_num == 3 ? 48 :
-        aqi_num == 4 ? 64 :
-        aqi_num == 5 ? 80 :
-                       0}"
+        aqi_num == 5 ? "aqi-very-poor" : ""}"
+      :value "${aqi_num == 1 ? 16 :
+                aqi_num == 2 ? 32 :
+                aqi_num == 3 ? 48 :
+                aqi_num == 4 ? 64 :
+                aqi_num == 5 ? 80 : 0}"
       :start-at "35"
       :thickness "8"
       (box :class "aqi-info"
@@ -66,13 +63,11 @@
         (label :class "aqi-label"
           :text "Air quality")
         (label :class "aqi-desc"
-          :text "${
-            aqi_num == 1 ? "Good" :
-            aqi_num == 2 ? "Fair" :
-            aqi_num == 3 ? "Moderate" :
-            aqi_num == 4 ? "Poor" :
-            aqi_num == 5 ? "Very Poor" :
-                           "Unknown"}")
+          :text "${aqi_num == 1 ? "Good" :
+                   aqi_num == 2 ? "Fair" :
+                   aqi_num == 3 ? "Moderate" :
+                   aqi_num == 4 ? "Poor" :
+                   aqi_num == 5 ? "Very Poor" : "Unknown"}")
       )
     )
   )
@@ -129,16 +124,17 @@
     )
     (label :class "w_sun_data"
       :yalign 1
-      :text "${formattime(w_sunr, "%I:%M%p")}-${formattime(w_suns, "%I:%M%p")}")
+      :text "${
+        formattime(w_sunr, "%I:%M%p")
+        }-${
+        formattime(w_suns, "%I:%M%p")
+        }")
     (box :orientation "h"
       :space-evenly "false"
       (label :class "w_sun_info ${
         EWW_TIME < w_sunr || EWW_TIME > w_suns ? "night" :
-        w_uvi <= 2  ? "low" :
-        w_uvi <= 5  ? "moderate" :
-        w_uvi <= 7  ? "high" :
-        w_uvi <= 10 ? "veryhigh" :
-                      "extreme"}"
+        w_uvi <= 2  ? "low" : w_uvi <= 5  ? "moderate" :
+        w_uvi <= 7  ? "high" : w_uvi <= 10 ? "veryhigh" : "extreme"}"
         :yalign 1
         :text "${EWW_TIME < w_sunr || EWW_TIME > w_suns ? "󰌵 " : "󰛨 "}")
       (label :class "w_sun_info"
@@ -169,37 +165,21 @@
         EWW_TIME < w_moonr || EWW_TIME > w_moons ? "day" : "night"}"
         :xalign 0
         :yalign 0
-        :text "${
-          w_moonphase == 0    ? "" :
-          w_moonphase < 0.04  ? "" :
-          w_moonphase < 0.08  ? "" :
-          w_moonphase < 0.12  ? "" :
-          w_moonphase < 0.16  ? "" :
-          w_moonphase < 0.20  ? "" :
-          w_moonphase < 0.25  ? "" :
-          w_moonphase == 0.25 ? "" :
-          w_moonphase < 0.29  ? "" :
-          w_moonphase < 0.33  ? "" :
-          w_moonphase < 0.37  ? "" :
-          w_moonphase < 0.41  ? "" :
-          w_moonphase < 0.45  ? "" :
-          w_moonphase < 0.5   ? "" :
-          w_moonphase == 0.5  ? "" :
-          w_moonphase < 0.54  ? "" :
-          w_moonphase < 0.58  ? "" :
-          w_moonphase < 0.61  ? "" :
-          w_moonphase < 0.66  ? "" :
-          w_moonphase < 0.70  ? "" :
-          w_moonphase < 0.75  ? "" :
-          w_moonphase == 0.75 ? "" :
-          w_moonphase < 0.79  ? "" :
-          w_moonphase < 0.83  ? "" :
-          w_moonphase < 0.87  ? "" :
-          w_moonphase < 0.91  ? "" :
-          w_moonphase < 0.95  ? "" :
-          w_moonphase < 1     ? "" :
-          w_moonphase == 1    ? "" :
-                            w_moonphase}")
+        :text "${w_moonphase == 0 ? "" : w_moonphase < 0.04  ? "" :
+          w_moonphase < 0.08  ? "" : w_moonphase < 0.12  ? "" :
+          w_moonphase < 0.16  ? "" : w_moonphase < 0.20  ? "" :
+          w_moonphase < 0.25  ? "" : w_moonphase == 0.25 ? "" :
+          w_moonphase < 0.29  ? "" : w_moonphase < 0.33  ? "" :
+          w_moonphase < 0.37  ? "" : w_moonphase < 0.41  ? "" :
+          w_moonphase < 0.45  ? "" : w_moonphase < 0.5   ? "" :
+          w_moonphase == 0.5  ? "" : w_moonphase < 0.54  ? "" :
+          w_moonphase < 0.58  ? "" : w_moonphase < 0.61  ? "" :
+          w_moonphase < 0.66  ? "" : w_moonphase < 0.70  ? "" :
+          w_moonphase < 0.75  ? "" : w_moonphase == 0.75 ? "" :
+          w_moonphase < 0.79  ? "" : w_moonphase < 0.83  ? "" :
+          w_moonphase < 0.87  ? "" : w_moonphase < 0.91  ? "" :
+          w_moonphase < 0.95  ? "" : w_moonphase < 1     ? "" :
+          w_moonphase == 1    ? "" : w_moonphase}")
       (label :class "w_moon_label"
         :xalign 0
         :yalign 0
@@ -207,19 +187,21 @@
     )
     (label :class "w_moon_data"
       :yalign 1
-      :text "${formattime(w_moonr, "%I:%M%p")}-${formattime(w_moons, "%I:%M%p")}")
+      :text "${
+        formattime(w_moonr, "%I:%M%p")
+        }-${
+        formattime(w_moons, "%I:%M%p")
+        }")
     (label :class "w_moon_info"
       :yalign 1
-      :text "${
-      w_moonphase == 0    ? "New Moon" :
-      w_moonphase < 0.25  ? "Waxing Crescent" :
-      w_moonphase == 0.25 ? "First Quarter" :
-      w_moonphase < 0.5   ? "Waxing Gibbous" :
-      w_moonphase == 0.5  ? "Full Moon" :
-      w_moonphase < 0.75  ? "Waning Gibbous" :
-      w_moonphase == 0.75 ? "Last Quarter" :
-      w_moonphase < 1     ? "Waning Crescent" :
-                            "Moon Phase"}")
+      :text "${w_moonphase == 0 ? "New Moon" :
+        w_moonphase < 0.25  ? "Waxing Crescent" :
+        w_moonphase == 0.25 ? "First Quarter" :
+        w_moonphase < 0.5   ? "Waxing Gibbous" :
+        w_moonphase == 0.5  ? "Full Moon" :
+        w_moonphase < 0.75  ? "Waning Gibbous" :
+        w_moonphase == 0.75 ? "Last Quarter" :
+        w_moonphase < 1     ? "Waning Crescent" : "Moon Phase"}")
   )
 )
 
@@ -236,7 +218,8 @@
     (label :class "w_wind_speed"
       :text "${round(w_wind, 0)}mph")
     (label :class "w_wind_gust"
-      :text "Gusts: ${w_windg == "null" ? round(w_wind, 0) : round(w_windg, 0)}mph")
+      :text "Gusts: ${w_windg == "null" ? round(w_wind, 0) :
+                                          round(w_windg, 0)}mph")
   )
 )
 
@@ -249,7 +232,8 @@
       :text "󰖗 Rain")
     (label :class "w_rain_speed"
       :xalign 0
-      :text "${w_rain == "null" ? "0" : round(w_rain * (1 / 25.4), 2)}in")
+      :text "${w_rain == "null" ? "0" :
+               round(w_rain * (1 / 25.4), 2)}in")
     (label :class "w_rain_daily"
       :xalign 0
       :yalign 1
