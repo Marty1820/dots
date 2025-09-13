@@ -124,7 +124,7 @@
 (defwidget brightness []
   (container
     :name "brightness"
-    :click ""
+    :click "$HOME/.local/bin/ABToggle.sh"
     :tooltip ""
     :class ""
     :icon "${brightness >= 75 ? "󰃠" : brightness >= 50 ? "󰃟"

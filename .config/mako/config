@@ -17,7 +17,7 @@ icons=1
 max-icon-size=64
 default-timeout=5000
 layer=overlay
-anchor=top-left
+anchor=top-right
 
 [urgency=low]
 border-color=#44475a
@@ -27,15 +27,11 @@ border-color=#ff5555
 default-timeout=0
 
 [app-name=wp-vol]
-margin=0
-anchor=bottom-left
 history=0
 group-by=app-name
 format=<b>%s</b>\n%b
 
 [app-name=bk-lit]
-margin=0
-anchor=bottom-left
 history=0
 group-by=app-name
 format=<b>%s</b>\n%b
