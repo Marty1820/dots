@@ -13,5 +13,5 @@ FPS=60
 swww img "$WALLPAPER" \
   --transition-type "$TYPE" \
   --transition-step "$STEPS" \
-  --transition-duration "$DURATION"
+  --transition-duration "$DURATION" \
   --transition-fps "$FPS"
