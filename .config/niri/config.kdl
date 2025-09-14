@@ -99,7 +99,7 @@ binds {
   Mod+Minus  { set-column-width "-10%"; }
   Mod+Equal  { set-column-width "+10%"; }
   // Height
-  Mod+Shift+R     { switch-preset-window-height; }
+  Mod+Shift+R hotkey-overlay-title="Switch Preset Window Heights" { switch-preset-window-height; }
   Mod+Ctrl+R      { reset-window-height; }
   Mod+Shift+Minus { set-window-height "-10%"; }
   Mod+Shift+Equal { set-window-height "+10%"; }
@@ -123,14 +123,14 @@ binds {
   XF86MonBrightnessDown { spawn-sh "brightnessctl set 10%- && bk-lit.sh"; }
   XF86MonBrightnessUp   { spawn-sh "brightnessctl set +10% && bk-lit.sh"; }
 
-  Super+p { spawn-sh "swww.sh"; } //fn F9
+  Super+p hotkey-overlay-title=null { spawn-sh "swww.sh"; } //fn F9
   // XF86rfkill - fn F10
 
   Print     { screenshot-screen; } // fn F11
   Mod+Print { screenshot; }
   Alt+Print { screenshot-window; }
 
-  XF86AudioMedia repeat=false { toggle-overview; }
+  XF86AudioMedia hotkey-overlay-title=null repeat=false { toggle-overview; }
 
   Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
@@ -240,6 +240,10 @@ layer-rule {
 }
 layer-rule {
   match namespace="^launcher$"
+  shadow {
+    on
+  }
+  geometry-corner-radius 10
   baba-is-float true
 }
 
