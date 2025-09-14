@@ -109,28 +109,27 @@ binds {
 
   // Function (fn) keys
   XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-
-  XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01- && wp-vol.sh"; }
-  Shift+XF86AudioLowerVolume                  { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1- && wp-vol.sh"; }
-
-  XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ && wp-vol.sh"; }
-  Shift+XF86AudioRaiseVolume                  { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ && wp-vol.sh"; }
+  XF86AudioLowerVolume       { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01- && wp-vol.sh"; }
+  Shift+XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1- && wp-vol.sh"; }
+  XF86AudioRaiseVolume       { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ && wp-vol.sh"; }
+  Shift+XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ && wp-vol.sh"; }
 
   XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
   XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
   XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
 
-  XF86MonBrightnessDown { spawn-sh "brightnessctl set 10%- && bk-lit.sh"; }
-  XF86MonBrightnessUp   { spawn-sh "brightnessctl set +10% && bk-lit.sh"; }
+  XF86MonBrightnessDown { spawn-sh "brightnessctl set 5%- && bk-lit.sh"; }
+  XF86MonBrightnessUp   { spawn-sh "brightnessctl set +5% && bk-lit.sh"; }
 
-  Super+p hotkey-overlay-title=null { spawn-sh "swww.sh"; } //fn F9
-  // XF86rfkill - fn F10
+  Super+p hotkey-overlay-title=null { spawn-sh "swww.sh"; } //fn F9 - Projector key
+  //XF86rfkill // fn F10 - Airplane
 
-  Print     { screenshot-screen; } // fn F11
-  Mod+Print { screenshot; }
-  Alt+Print { screenshot-window; }
+  // fn F11 - Print Screen
+  Print     { screenshot-screen; } // Full screen
+  Mod+Print { screenshot; } // Selection
+  Alt+Print { screenshot-window; } // Focused window
 
-  XF86AudioMedia hotkey-overlay-title=null repeat=false { toggle-overview; }
+  XF86AudioMedia hotkey-overlay-title=null repeat=false { toggle-overview; } // fn F12 - Gear Key
 
   Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
@@ -200,10 +199,6 @@ cursor {
 overview {
   zoom 0.75
   backdrop-color "#282a36"
-
-  workspace-shadow {
-    off
-  }
 }
 
 hotkey-overlay {
