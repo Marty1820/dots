@@ -3,7 +3,7 @@
   font-size: 14px;
   margin: 1px 3px 0 3px;
   border-radius: 6px;
-  background: rgba($background-darker, 0.4);
+  background: rgba($background-darker, 0.8);
   color: $foreground;
 }
 
@@ -52,13 +52,13 @@ tooltip {
   font-size: 18px;
   border-radius: 6px 0 0 6px;
   padding: 0 6px;
-  color: $background;
+  color: $background-darker;
 }
 
 .b_cont_info {
   border-radius: 0 6px 6px 0;
   padding: 0 6px;
-  background: $background;
+  background: $background-darker;
 }
 
 .b_date_icon,
@@ -80,7 +80,7 @@ tooltip {
   margin: 0 6px;
   padding: 0 6px;
   border-radius: 6px;
-  background: $background;
+  background: $background-darker;
   font-weight: bold;
 }
 
