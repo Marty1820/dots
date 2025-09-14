@@ -21,12 +21,13 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 - **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
-|    Name    |        Description         |
-| :--------: | :------------------------: |
-|  `NeoVim`  |        `Super + a`         |
-|  `Thunar`  |        `Super + e`         |
-| `WaterFox` |        `Super + b`         |
-|  `Fuzzel`  | `Super + d` = applications |
+|    Name    |            Description            |
+| :--------: | :-------------------------------: |
+|  `NeoVim`  |      `Super + a` Text Editor      |
+|  `Thunar`  |      `Super + e` Filebroswer      |
+| `WaterFox` |      `Super + b` Web Browser      |
+|  `Fuzzel`  | `Super + d` Applications Launcher |
+|   `swww`   |         Wallpaper setting         |
 
 #### ZSH changes
 
@@ -90,5 +91,5 @@ LON = "LONGITUDE"
 #### Niri wants
 
 ```bash
-systemctl --user add-wants niri.service AB.service swaybg.service swayidle.service wlsunset.service weather.timer
+systemctl --user add-wants niri.service AB.service swayidle.service wlsunset.service weather.timer
 ```

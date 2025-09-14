@@ -123,7 +123,7 @@ binds {
   XF86MonBrightnessDown { spawn-sh "brightnessctl set 10%- && bk-lit.sh"; }
   XF86MonBrightnessUp   { spawn-sh "brightnessctl set +10% && bk-lit.sh"; }
 
-  Super+p { power-off-monitors; } //fn F9
+  Super+p { spawn-sh "swww.sh"; } //fn F9
   // XF86rfkill - fn F10
 
   Print     { screenshot-screen; } // fn F11
@@ -173,6 +173,8 @@ layout {
 
 // Add systemd services with
 // systemctl --user add-wants niri.service SERVICE_NAME.service
+spawn-at-startup "swww-daemon"
+spawn-sh-at-startup "~/.local/bin/swww.sh"
 spawn-at-startup "eww" "daemon"
 spawn-at-startup "eww" "open" "bar"
 
@@ -229,6 +231,7 @@ window-rule {
 
 layer-rule {
   match namespace="^wallpaper$"
+  match namespace="swww-daemon"
   place-within-backdrop true
 }
 layer-rule {
