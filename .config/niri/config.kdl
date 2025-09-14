@@ -1,13 +1,15 @@
 // https://yalter.github.io/niri/
 
-// Input device configuration
+//--- Input ---
 input {
   touchpad {
+    natural-scroll
+    scroll-method "two-finger"
+
     tap
     dwt
     drag true
     drag-lock
-    natural-scroll
     disabled-on-external-mouse
   }
 
@@ -17,15 +19,15 @@ input {
   mod-key "Super"
 }
 
+//--- Output ---
 // Run `niri msg outputs` while inside a niri instance for output info.
 output "eDP-1" {
   mode "2256x1504@59.999"
-  //mode "2256x1504@47.998"
   scale 1.5
   transform "normal"
-  position x=1280 y=0
 }
 
+//--- Key Bindings ---
 binds {
   // Application Launching
   Mod+Shift+Slash { show-hotkey-overlay; }
@@ -134,11 +136,13 @@ binds {
   Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
+//--- Layout ---
 layout {
   gaps 4
   center-focused-column "never"
   always-center-single-column
   background-color "transparent"
+  default-column-display "normal"
 
   preset-column-widths {
     proportion 0.33333
@@ -161,17 +165,11 @@ layout {
     urgent-color "#ff5555"
   }
 
-  border {
-    off
-  }
-
-  insert-hint {
-    color "#6272a480"
-  }
+  border { off; }
+  insert-hint { color "#6272a480"; }
 }
 
-// Add systemd services with
-// systemctl --user add-wants niri.service SERVICE_NAME.service
+//--- Miscellaneous ---
 spawn-at-startup "swww-daemon"
 spawn-sh-at-startup "~/.local/bin/swww.sh"
 spawn-at-startup "eww" "daemon"
@@ -206,6 +204,7 @@ hotkey-overlay {
   hide-not-bound
 }
 
+//--- Window Rules ---
 window-rule {
   geometry-corner-radius 12
   clip-to-geometry true
@@ -224,6 +223,7 @@ window-rule {
   open-floating true
 }
 
+//--- Layer Rules ---
 layer-rule {
   match namespace="^wallpaper$"
   match namespace="swww-daemon"
@@ -242,7 +242,16 @@ layer-rule {
   baba-is-float true
 }
 
+//--- Gestures ---
 gestures {
+  dnd-edge-view-scroll {
+    trigger-width 100
+    max-speed 3000
+  }
+  dnd-edge-workspace-switch {
+    trigger-height 100
+    max-speed 3000
+  }
   hot-corners {
     off
   }

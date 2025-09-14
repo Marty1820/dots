@@ -182,6 +182,7 @@
 )
 
 (defwindow bar
+  :namespace "eww-bar"
   :monitor 0
   :geometry (geometry
               :x "0"
