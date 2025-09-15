@@ -94,9 +94,16 @@ tooltip {
   }
 }
 
+/* Available extra's for network
+  blocked, up, wired, down */
 .b_network_icon {
-  background: linear-gradient(to bottom, $background, $red);
-  &.up {
+  background: linear-gradient(to bottom, $background, $orange);
+  &.blocked,
+  &.down {
+    background: linear-gradient(to bottom, $background, $red);
+  }
+  &.up,
+  &.wired {
     background: linear-gradient(to bottom, $selection, $green);
   }
 }
