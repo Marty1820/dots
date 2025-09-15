@@ -82,6 +82,9 @@ tooltip {
   border-radius: 6px;
   background: $background-darker;
   font-weight: bold;
+  &.empty {
+    background: transparent;
+  }
 }
 
 .b_volume_icon {

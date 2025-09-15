@@ -108,13 +108,15 @@
 
 ;; Center Modules
 (deflisten b_window :initial ""
-  `niri msg event-stream | while IFS= read -r _; do niri msg focused-window | awk -F': ' '/App ID:/ { gsub(/"/,"",$2); print $2; exit }'; done`)
+  `niri msg event-stream | while IFS= read -r _; do
+    niri msg -j focused-window | jq -r '.title'
+  done`)
 (defwidget center []
   (box :class "b_center"
     :orientation "h"
     :halign "center"
-    (label :class "b_window_name"
-      :text "${b_window}")
+    (label :class "b_window_name ${b_window == "null" ? "empty" : ""}"
+      :text "${b_window == "null" ? "" : b_window}")
   )
 )
 
