@@ -8,7 +8,8 @@
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}'")
 
 ; Networking
-(defpoll net :interval "3s" :initial "{}" "scripts/wifi")
+(deflisten net :initial '{"icon":"󰤭","class":"down","name":"Disconnected"}' 
+  "scripts/wifi")
 
 ; Brightness
 (defpoll brightness :interval "1s" :initial "0"

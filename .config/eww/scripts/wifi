@@ -1,9 +1,15 @@
 #!/bin/sh
 
-status() {
-  # Grab wifi name
-  iface=$(basename /sys/class/net/wl* 2>/dev/null)
-  wifi_state=""
+status() {  
+  # Check if Wi-Fi is blocked (airplane mode)
+  if rfkill list wifi 2>/dev/null | grep -q "Soft blocked: yes"; then
+    printf '{"icon":"","class":"blocked","name":"Airplane Mode"}\n'
+    return
+  fi
+
+  # Find fist Wi-Fi device
+  iface=$(nmcli -t -f DEVICE,TYPE device status | \
+    awk -F: '$2=="wifi"{print $1; exit}')
   name=""
   icon=""
   cls=""
@@ -12,17 +18,26 @@ status() {
     name="No Wi-Fi Device"
     icon=""
     cls="blocked"
-  elif rfkill list wifi | grep -q "Soft blocked: yes"; then
-    name="Airplane Mode"
-    icon=""
-    cls="blocked"
   else
-    wifi_state=$(cat /sys/class/net/"$iface"/operstate 2>/dev/null)
-    if [ "$wifi_state" != "up" ]; then
-      # Check Wired Connection
-      eth_iface=$(basename /sys/class/net/e* 2>dev/null)
-      eth_state=$(cat /sys/class/net/"$eth_iface"/operstate 2>/dev/null)
-      if [ -n "$eth_iface" ] && [ "$eth_state" = "up" ]; then
+    # Get active Wi-Fi connection
+    name=$(nmcli -t -f NAME,DEVICE connection show --active | \
+      awk -F: -v dev="$iface" '$2==dev{print $1; exit}')
+    if [ -n "$name" ]; then
+      # Get Wi-Fi strength (0–100)
+      strength=$(nmcli -t -f IN-USE,SIGNAL device wifi list | awk -F: '/^\*/ {print $2; exit}')
+      case $strength in
+        8[0-9]|9[0-9]|100)    icon="󰤨" ;;  # strong
+        6[0-9]|7[0-9])        icon="󰤥" ;;  # good
+        3[0-9]|4[0-9]|5[0-9]) icon="󰤢" ;; # weak
+        [1-9]|[1-2][0-9])     icon="󰤟" ;;  # very weak
+        *)                    icon="󰤯" ;;  # unknown
+      esac
+      cls="up"
+    else
+      # Check wired before declaring disconnected
+      eth_iface=$(nmcli -t -f DEVICE,TYPE device status | \
+        awk -F: '$2=="ethernet"{print $1; exit}')
+      if [ -n "$eth_iface" ] && nmcli -t -f DEVICE,STATE device status | grep -q "^$eth_iface:connected"; then
         name="Wired"
         icon="󰈀"
         cls="wired"
@@ -31,14 +46,6 @@ status() {
         icon="󰤭"
         cls="down"
       fi
-    else
-      while IFS=: read -r con dev; do
-        [ "$dev" = "$iface" ] && { name=$con; break; }
-      done <<-EOF
-$(nmcli -t -f NAME,DEVICE connection show --active)
-EOF
-      icon="󰤨"
-      cls="up"
     fi
   fi
 
@@ -46,4 +53,7 @@ EOF
     "$icon" "$cls" "$name"
 }
 
-status
+# Update on changes
+nmcli -t monitor | while read -r _; do
+  status
+done
