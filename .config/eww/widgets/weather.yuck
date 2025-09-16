@@ -34,9 +34,8 @@
         :text "${w_alert == "null" ? "" : w_alert}")
       (label :class "w_alert_time"
         :xalign 0
-        :text "${
-          w_alert_start == "null" ? "" :
-            formattime(w_alert_start, "%b %d, %I:%M %p")}")
+        :text "${w_alert_start == "null" ? "" :
+          formattime(w_alert_start, "%b %d, %I:%M %p")}")
     )
   )
 )
@@ -72,13 +71,12 @@
     )
   )
 )
-  
+
 (defwidget w_humidity []
   (box :class "w_hum"
     :orientation "v"
     :style "background-image:
-      linear-gradient(
-        to bottom,
+      linear-gradient(to bottom,
         rgb(40, 42, 54) ${100 - w_hum}%,
         rgb(189, 147, 249) ${100 - w_hum}%)"
     (label :class "w_hum_label"
@@ -124,11 +122,8 @@
     )
     (label :class "w_sun_data"
       :yalign 1
-      :text "${
-        formattime(w_sunr, "%I:%M%p")
-        }-${
-        formattime(w_suns, "%I:%M%p")
-        }")
+      :text "${formattime(w_sunr, "%I:%M%p")
+        }-${formattime(w_suns, "%I:%M%p")}")
     (box :orientation "h"
       :space-evenly "false"
       (label :class "w_sun_info ${
@@ -187,11 +182,8 @@
     )
     (label :class "w_moon_data"
       :yalign 1
-      :text "${
-        formattime(w_moonr, "%I:%M%p")
-        }-${
-        formattime(w_moons, "%I:%M%p")
-        }")
+      :text "${formattime(w_moonr, "%I:%M%p")
+        }-${formattime(w_moons, "%I:%M%p")}")
     (label :class "w_moon_info"
       :yalign 1
       :text "${w_moonphase == 0 ? "New Moon" :
@@ -241,7 +233,6 @@
   )
 )
 
-
 (defwidget w_data []
   (box :orientation "v"
     (box :orientation "h"
@@ -262,7 +253,7 @@
 (defwindow weather
   :namespace "eww-weather"
   :monitor 0
-  :geometry 
+  :geometry
     (geometry
       :x "3px"
       :y "3px"
@@ -273,8 +264,7 @@
   (revealer :transition "slidedown"
     :reveal weather
     :class "weather"
-    (box
-      :orientation "v"
+    (box :orientation "v"
       :space-evenly "false"
       (w_main)
       (w_alert)

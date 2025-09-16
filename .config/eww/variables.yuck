@@ -8,7 +8,7 @@
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}'")
 
 ; Networking
-(deflisten net :initial '{"icon":"󰤭","class":"down","name":"Disconnected"}' 
+(deflisten net :initial '{"icon":"󰤭","class":"down","name":"Disconnected"}'
   "scripts/wifi")
 
 ; Brightness
