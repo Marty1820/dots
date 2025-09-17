@@ -18,33 +18,22 @@
 ; Weather
 (defvar weather false)
 
-(defpoll w_desc :interval "5m" :initial "0" :run-while weather
-  "jq -r '.current.weather[].description' < $HOME/.cache/weather/onecall.json")
+(defpoll w_onecall :interval "5m"
+  "cat $HOME/.cache/weather/onecall.json")
+
+; Keeping these as they are used multiple times
 (defpoll w_icon :interval "5m" :initial ""
   "jq -r '.current.weather[].icon' < $HOME/.cache/weather/onecall.json")
 (defpoll w_temp :interval "5m" :initial "0"
   "jq -r '.current.temp' < $HOME/.cache/weather/onecall.json")
-(defpoll w_feeltemp :interval "5m" :initial "0" :run-while weather
-  "jq -r '.current.feels_like' < $HOME/.cache/weather/onecall.json")
-(defpoll w_day :interval "5m" :initial "0" :run-while weather
-  "jq -r '.daily[0].temp.day' < $HOME/.cache/weather/onecall.json")
-(defpoll w_night :interval "5m" :initial "0" :run-while weather
-  "jq -r '.daily[0].temp.night' < $HOME/.cache/weather/onecall.json")
 
 (defpoll w_alert :interval "5m" :initial "" :run-while weather
   "jq -r '.alerts[0].event' < $HOME/.cache/weather/onecall.json")
 (defpoll w_alert_start :interval "5m" :initial "0" :run-while weather
   "jq -r '.alerts[0].start' < $HOME/.cache/weather/onecall.json")
-(defpoll w_alert_end :interval "5m" :initial "0" :run-while weather
-  "jq -r '.alerts[0].end' < $HOME/.cache/weather/onecall.json")
 
 (defpoll aqi_num :interval "5m" :initial "0" :run-while weather
   "jq -r '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
-
-(defpoll w_hum :interval "5m" :initial "0" :run-while weather
-  "jq -r '.current.humidity' < $HOME/.cache/weather/onecall.json")
-(defpoll w_dew :interval "5m" :initial "0" :run-while weather
-  "jq -r '.current.dew_point' < $HOME/.cache/weather/onecall.json")
 
 (defpoll w_sunr :interval "5m" :initial "0" :run-while weather
   "jq -r '.daily[0].sunrise' < $HOME/.cache/weather/onecall.json")
@@ -65,6 +54,3 @@
   "jq -r '.current.wind_deg' < $HOME/.cache/weather/onecall.json")
 (defpoll w_windg :interval "5m" :initial "0" :run-while weather
   "jq -r '.current.wind_gust' < $HOME/.cache/weather/onecall.json")
-
-(defpoll w_rain :interval "5m" :initial "0" :run-while weather
-  "jq -r '.daily[0].rain' < $HOME/.cache/weather/onecall.json")

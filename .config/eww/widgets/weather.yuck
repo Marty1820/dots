@@ -3,21 +3,21 @@
     :orientation "v"
     :space-evenly "false"
     (label :class "w_desc"
-      :text "${w_desc}")
+      :text "${jq(w_onecall, '.current.weather[].description', "r")}")
     (label :class "w_temp"
       :text "${round(w_temp, 0)}")
     (label :class "w_feeltemp"
-      :text "Feels like ${round(w_feeltemp, 0)}")
+      :text "Feels like ${round(jq(w_onecall, '.current.feels_like'), 0)}")
     (box :class "w_hilo"
       :orientation "h"
       :space-evenly "false"
       :halign "center"
       (label :class "w_day"
-        :text "Day: ${ceil(w_day)}")
+        :text "Day: ${ceil(jq(w_onecall, '.daily[0].temp.day'))}")
       (label :class "w_spacer"
         :text "  ")
       (label :class "w_night"
-        :text "Night: ${floor(w_night)}")
+        :text "Night: ${floor(jq(w_onecall, '.daily[0].temp.day'))}")
     )
   )
 )
@@ -77,19 +77,19 @@
     :orientation "v"
     :style "background-image:
       linear-gradient(to bottom,
-        rgb(40, 42, 54) ${100 - w_hum}%,
-        rgb(189, 147, 249) ${100 - w_hum}%)"
+        rgb(40, 42, 54) ${100 - jq(w_onecall, '.current.humidity')}%,
+        rgb(189, 147, 249) ${100 - jq(w_onecall, '.current.humidity')}%)"
     (label :class "w_hum_label"
       :xalign 0
       :yalign 0
       :text "  Humidity")
     (label :class "w_hum_perc"
       :xalign 0
-      :text "${w_hum}󱉸")
+      :text "${jq(w_onecall, '.current.humidity')}󱉸")
     (label :class "w_hum_dew"
       :xalign 0
       :yalign 1
-      :text "${round(w_dew, 0)} dew point")
+      :text "${round(jq(w_onecall, '.current.dew_point'), 0)} dew point")
   )
 )
 
@@ -224,8 +224,8 @@
       :text "󰖗 Rain")
     (label :class "w_rain_speed"
       :xalign 0
-      :text "${w_rain == "null" ? "0" :
-               round(w_rain * (1 / 25.4), 2)}in")
+      :text "${jq(w_onecall, '.daily[0].rain') == "null" ? "0" :
+         round(jq(w_onecall, '.daily[0].rain') * (1 / 25.4), 2)}in")
     (label :class "w_rain_daily"
       :xalign 0
       :yalign 1
