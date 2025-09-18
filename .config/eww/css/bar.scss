@@ -94,8 +94,6 @@ tooltip {
   }
 }
 
-/* Available extra's for network
-  blocked, up, wired, down */
 .b_network_icon {
   background: linear-gradient(to bottom, $background, $orange);
   &.blocked,

@@ -107,16 +107,15 @@
 )
 
 ;; Center Modules
-(deflisten b_window :initial ""
+(deflisten b_window :initial '{"title":"","app_id":""}'
   `niri msg event-stream | while IFS= read -r _; do
-    niri msg -j focused-window | jq -r '.title'
-  done`)
+    niri msg -j focused-window; done`)
 (defwidget center []
   (box :class "b_center"
     :orientation "h"
     :halign "center"
     (label :class "b_window_name ${b_window == "null" ? "empty" : ""}"
-      :text "${b_window == "null" ? "" : b_window}")
+      :text "${b_window == "null" ? "" : substring(b_window.title, 0, 75)}")
   )
 )
 
