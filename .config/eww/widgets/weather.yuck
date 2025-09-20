@@ -95,7 +95,7 @@
       (label :class "w_sun_label"
         :xalign 0
         :yalign 0
-        :text "Sun ${sun_progress}")
+        :text "Sun")
     )
     (label :class "w_sun_data"
       :yalign 1
@@ -145,7 +145,7 @@
       (label :class "w_moon_label"
         :xalign 0
         :yalign 0
-        :text "Moon ${moon_progress}")
+        :text "Moon")
     )
     (label :class "w_moon_data"
       :yalign 1
