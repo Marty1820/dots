@@ -3,21 +3,21 @@
     :orientation "v"
     :space-evenly "false"
     (label :class "w_desc"
-      :text "${jq(w_onecall, '.current.weather[].description', "r")}")
+      :text "${w_desc}")
     (label :class "w_temp"
       :text "${round(w_temp, 0)}")
     (label :class "w_feeltemp"
-      :text "Feels like ${round(jq(w_onecall, '.current.feels_like'), 0)}")
+      :text "Feels like ${round(w_feeltemp, 1)}")
     (box :class "w_hilo"
       :orientation "h"
       :space-evenly "false"
       :halign "center"
       (label :class "w_day"
-        :text "Day: ${ceil(jq(w_onecall, '.daily[0].temp.day'))}")
+        :text "Day: ${ceil(w_daytemp)}")
       (label :class "w_spacer"
         :text "  ")
       (label :class "w_night"
-        :text "Night: ${floor(jq(w_onecall, '.daily[0].temp.day'))}")
+        :text "Night: ${floor(w_nighttemp)}")
     )
   )
 )
@@ -43,17 +43,8 @@
 (defwidget w_airquality []
   (box :class "w_aqi"
     :orientation "v"
-    (circular-progress :class "aqi-progress ${
-        aqi_num == 1 ? "aqi-good" :
-        aqi_num == 2 ? "aqi-fair" :
-        aqi_num == 3 ? "aqi-moderate" :
-        aqi_num == 4 ? "aqi-poor" :
-        aqi_num == 5 ? "aqi-very-poor" : ""}"
-      :value "${aqi_num == 1 ? 16 :
-                aqi_num == 2 ? 32 :
-                aqi_num == 3 ? 48 :
-                aqi_num == 4 ? 64 :
-                aqi_num == 5 ? 80 : 0}"
+    (circular-progress :class "aqi-progress aqi-${aqi_num}"
+      :value "${aqi_num * 16}"
       :start-at "35"
       :thickness "8"
       (box :class "aqi-info"
@@ -62,11 +53,7 @@
         (label :class "aqi-label"
           :text "Air quality")
         (label :class "aqi-desc"
-          :text "${aqi_num == 1 ? "Good" :
-                   aqi_num == 2 ? "Fair" :
-                   aqi_num == 3 ? "Moderate" :
-                   aqi_num == 4 ? "Poor" :
-                   aqi_num == 5 ? "Very Poor" : "Unknown"}")
+          :text "${aqi_map[aqi_num]}")
       )
     )
   )
@@ -77,19 +64,19 @@
     :orientation "v"
     :style "background-image:
       linear-gradient(to bottom,
-        rgb(40, 42, 54) ${100 - jq(w_onecall, '.current.humidity')}%,
-        rgb(189, 147, 249) ${100 - jq(w_onecall, '.current.humidity')}%)"
+        rgb(40, 42, 54) ${100 - w_humidity}%,
+        rgb(189, 147, 249) ${100 - w_humidity}%)"
     (label :class "w_hum_label"
       :xalign 0
       :yalign 0
       :text "  Humidity")
     (label :class "w_hum_perc"
       :xalign 0
-      :text "${jq(w_onecall, '.current.humidity')}󱉸")
+      :text "${w_humidity}󱉸")
     (label :class "w_hum_dew"
       :xalign 0
       :yalign 1
-      :text "${round(jq(w_onecall, '.current.dew_point'), 0)} dew point")
+      :text "${round(w_dew, 0)} dew point")
   )
 )
 
@@ -224,8 +211,8 @@
       :text "󰖗 Rain")
     (label :class "w_rain_speed"
       :xalign 0
-      :text "${jq(w_onecall, '.daily[0].rain') == "null" ? "0" :
-         round(jq(w_onecall, '.daily[0].rain') * (1 / 25.4), 2)}in")
+      :text "${w_rainamt == "null" ? "0" :
+         round(w_rainamt * (1 / 25.4), 2)}in")
     (label :class "w_rain_daily"
       :xalign 0
       :yalign 1
