@@ -24,7 +24,11 @@ check_mirrorlist() {
   if [[ ! -f "$mirrorlist" || $(( $(date +%s) - $(stat -c %Y "$mirrorlist") )) -gt 604800 ]]; then
     print_header "Updating mirrorlist with reflector"
     systemctl start reflector.service
-    sleep 5
+
+    # Wait until recletor.service has stopped
+    while systemctl is-active --quiet reflector.service; do
+      sleep 1
+    done
   fi
 }
 
