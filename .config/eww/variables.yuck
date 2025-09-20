@@ -2,7 +2,7 @@
 (defvar power false)
 
 ; Volume
-(defpoll volume :interval "1s" :initial "0"
+(defpoll volume :interval "3s" :initial "0"
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d\", $2 * 100}'")
 (defpoll mute :interval "1s" :initial ""
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}'")
@@ -12,18 +12,21 @@
   "scripts/wifi")
 
 ; Brightness
-(defpoll brightness :interval "1s" :initial "0"
+(defpoll brightness :interval "10s" :initial "0"
   "brightnessctl info | awk -F '[()%]' '/Current/ {print $2}'")
 
 ; Weather
 (defvar weather false)
-
 (defpoll w_onecall :interval "5m"
   "cat $HOME/.cache/weather/onecall.json")
+(defvar weather_icons
+  '{"01d":"󰖙", "01n":"󰖔", "02d":"󰖕", "02n":"󰼱",
+    "03d":"󰖐", "03n":"󰖐", "04d":"󰖐", "04n":"󰖐",
+    "09d":"󰖗", "09n":"󰖗", "10d":"󰖗", "10n":"󰖗",
+    "11d":"󰖓", "11n":"󰖓", "13d":"󰖘", "13n":"󰖘",
+    "50d":"󰖑", "50n":"󰖑"}')
 
-; Keeping these as they are used multiple times
-(defpoll w_icon :interval "5m" :initial ""
-  "jq -r '.current.weather[].icon' < $HOME/.cache/weather/onecall.json")
+; Keeping these as they are used multiple times/used in equations
 (defpoll w_temp :interval "5m" :initial "0"
   "jq -r '.current.temp' < $HOME/.cache/weather/onecall.json")
 

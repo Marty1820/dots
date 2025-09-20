@@ -82,14 +82,7 @@
            "${EWW_CMD} open weather && ${EWW_CMD} update weather=true"}"
     :tooltip "Weather Info"
     :class "${w_temp >= 90 ? "hot": w_temp <= 32 ? "cold" : ""}"
-    :icon "${w_icon == "01d" ? "󰖙" : w_icon == "01n" ? "󰖔" :
-             w_icon == "02d" ? "󰖕" : w_icon == "02n" ? "󰼱" :
-             w_icon == "03d" || w_icon == "03n" || w_icon == "04n" ||
-             w_icon == "04d" ? "󰖐" : w_icon == "09d" || w_icon == "09n" ||
-             w_icon == "10d" || w_icon == "10n" ? "󰖗" : w_icon == "11d" ||
-             w_icon == "11n" ? "󰖓" : w_icon == "13d" ||
-             w_icon == "13n" ? "󰖘" : w_icon == "50d" ||
-             w_icon == "50n" ? "󰖑" : ""}"
+    :icon "${weather_icons[jq(w_onecall, '.current.weather[].icon', 'r')]}"
     :info "${round(w_temp, 0)}"
   )
 )
