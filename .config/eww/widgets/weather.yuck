@@ -83,18 +83,8 @@
 (defwidget w_sun []
   (box :class "w_sun"
     :orientation "v"
-    :style "background-image:
-      radial-gradient(rgb(255, 184, 108) ${
-        EWW_TIME < w_sunr || EWW_TIME > w_suns ? 0 :
-        (EWW_TIME - w_sunr <= (w_suns - w_sunr)/2 ?
-          (EWW_TIME - w_sunr)/((w_suns - w_sunr)/2)*100 :
-        (w_suns - EWW_TIME)/((w_suns - w_sunr)/2)*100)
-      }%, rgb(40, 42, 54) ${
-        EWW_TIME < w_sunr || EWW_TIME > w_suns ? 0 :
-        (EWW_TIME - w_sunr <= (w_suns - w_sunr)/2 ?
-          (EWW_TIME - w_sunr)/((w_suns - w_sunr)/2)*100 :
-        (w_suns - EWW_TIME)/((w_suns - w_sunr)/2)*100)
-      }%, rgba(30, 31, 41, 230));"
+    :style "background-image: radial-gradient(rgb(255,184,108)
+      ${sun_progress}%, rgb(40,42,54) ${100 - (sun_progress)}%);"
     (box :orientation "h"
       :space-evenly "false"
       (label :class "w_sun_label ${
@@ -105,7 +95,7 @@
       (label :class "w_sun_label"
         :xalign 0
         :yalign 0
-        :text "Sun")
+        :text "Sun ${sun_progress}")
     )
     (label :class "w_sun_data"
       :yalign 1
@@ -129,18 +119,8 @@
 (defwidget w_moon []
   (box :class "w_moon"
     :orientation "v"
-    :style "background-image:
-      radial-gradient(rgb(98, 114, 164) ${
-        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
-        (EWW_TIME - w_moonr <= (w_moons - w_moonr)/2 ?
-          (EWW_TIME - w_moonr)/((w_moons - w_moonr)/2)*100 :
-        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
-      }%, rgb(40, 42, 54) ${
-        EWW_TIME < w_moonr || EWW_TIME > w_moons ? 0 :
-        (EWW_TIME - w_moonr <= (w_moons - w_moonr)/2 ?
-          (EWW_TIME - w_moonr)/((w_moons - w_moonr)/2)*100 :
-        (w_moons - EWW_TIME)/((w_moons - w_moonr)/2)*100)
-      }%, rgba(30, 31, 41, 230));"
+    :style "background-image: radial-gradient(rgb(98, 114, 164)
+      ${moon_progress}%, rgb(40, 42, 54) ${100 - (moon_progress)}%);"
     (box :orientation "h"
       :space-evenly "false"
       (label :class "w_moon_label icon ${
@@ -165,7 +145,7 @@
       (label :class "w_moon_label"
         :xalign 0
         :yalign 0
-        :text "Moon")
+        :text "Moon ${moon_progress}")
     )
     (label :class "w_moon_data"
       :yalign 1

@@ -82,7 +82,7 @@
            "${EWW_CMD} open weather && ${EWW_CMD} update weather=true"}"
     :tooltip "Weather Info"
     :class "${w_temp >= 90 ? "hot": w_temp <= 32 ? "cold" : ""}"
-    :icon "${weather_icons[jq(w_onecall, '.current.weather[].icon', 'r')]}"
+    :icon "${weather_icons[w_icon]}"
     :info "${round(w_temp, 0)}"
   )
 )

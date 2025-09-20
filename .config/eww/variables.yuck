@@ -18,15 +18,14 @@
 ; Weather
 (defvar weather false)
 
-(defpoll w_onecall :interval "5m" :initial "{}"
-  "cat $HOME/.cache/weather/onecall.json")
-
 (defvar weather_icons
   '{"01d":"󰖙", "01n":"󰖔", "02d":"󰖕", "02n":"󰼱",
     "03d":"󰖐", "03n":"󰖐", "04d":"󰖐", "04n":"󰖐",
     "09d":"󰖗", "09n":"󰖗", "10d":"󰖗", "10n":"󰖗",
     "11d":"󰖓", "11n":"󰖓", "13d":"󰖘", "13n":"󰖘",
     "50d":"󰖑", "50n":"󰖑"}')
+(defpoll w_icon :interval "5m" :initial ""
+  "jq -r '.current.weather[0].icon' < $HOME/.cache/weather/onecall.json")
 
 (defpoll w_temp :interval "5m" :initial "0"
   "jq '.current.temp' < $HOME/.cache/weather/onecall.json")
@@ -71,6 +70,25 @@
   "jq '.daily[0].moonset' < $HOME/.cache/weather/onecall.json")
 (defpoll w_moonphase :interval "5m" :initial "0" :run-while weather
   "jq '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
+
+; Solar/Lunar Noon calculation
+(defpoll sun_progress :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.dt as $now
+    | .daily[0] as $d
+    | ($d.sunrise + $d.sunset) / 2 as $mid
+    | if $now < $d.sunrise or $now > $d.sunset then 0
+    elif $now <= $mid then (($now - $d.sunrise) / ($mid - $d.sunrise) * 100)
+    else (($d.sunset - $now) / ($d.sunset - $mid) * 100)
+    end' $HOME/.cache/weather/onecall.json")
+(defpoll moon_progress :interval "5m" :initial "0" :run-while weather
+  "jq -r '.current.dt as $now
+    | .daily[0] as $d
+    | ($d.moonrise + $d.moonset) / 2 as $mid
+    | if ($d.moonrise == 0 or $d.moonset == 0) then 0
+    elif $now < $d.moonrise or $now > $d.moonset then 0
+    elif $now <= $mid then (($now - $d.moonrise) / ($mid - $d.moonrise) * 100)
+    else (($d.moonset - $now) / ($d.moonset - $mid) * 100)
+    end' $HOME/.cache/weather/onecall.json")
 
 (defpoll w_wind :interval "5m" :initial "0" :run-while weather
   "jq '.current.wind_speed' < $HOME/.cache/weather/onecall.json")
