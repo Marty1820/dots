@@ -127,21 +127,7 @@
         EWW_TIME < w_moonr || EWW_TIME > w_moons ? "day" : "night"}"
         :xalign 0
         :yalign 0
-        :text "${w_moonphase == 0 ? "" : w_moonphase < 0.04  ? "" :
-          w_moonphase < 0.08  ? "" : w_moonphase < 0.12  ? "" :
-          w_moonphase < 0.16  ? "" : w_moonphase < 0.20  ? "" :
-          w_moonphase < 0.25  ? "" : w_moonphase == 0.25 ? "" :
-          w_moonphase < 0.29  ? "" : w_moonphase < 0.33  ? "" :
-          w_moonphase < 0.37  ? "" : w_moonphase < 0.41  ? "" :
-          w_moonphase < 0.45  ? "" : w_moonphase < 0.5   ? "" :
-          w_moonphase == 0.5  ? "" : w_moonphase < 0.54  ? "" :
-          w_moonphase < 0.58  ? "" : w_moonphase < 0.61  ? "" :
-          w_moonphase < 0.66  ? "" : w_moonphase < 0.70  ? "" :
-          w_moonphase < 0.75  ? "" : w_moonphase == 0.75 ? "" :
-          w_moonphase < 0.79  ? "" : w_moonphase < 0.83  ? "" :
-          w_moonphase < 0.87  ? "" : w_moonphase < 0.91  ? "" :
-          w_moonphase < 0.95  ? "" : w_moonphase < 1     ? "" :
-          w_moonphase == 1    ? "" : w_moonphase}")
+        :text "${moon_icon}")
       (label :class "w_moon_label"
         :xalign 0
         :yalign 0

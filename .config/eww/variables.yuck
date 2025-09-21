@@ -70,6 +70,15 @@
   "jq '.daily[0].moonset' < $HOME/.cache/weather/onecall.json")
 (defpoll w_moonphase :interval "5m" :initial "0" :run-while weather
   "jq '.daily[0].moon_phase' < $HOME/.cache/weather/onecall.json")
+(defpoll moon_icon :interval "1h"
+  "jq -r '
+    def icons: [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
+      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
+      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"];
+    .daily[0].moon_phase
+    | (.*27 | round) as $i
+    | icons[$i]
+  ' $HOME/.cache/weather/onecall.json")
 
 ; Solar/Lunar Noon calculation
 (defpoll sun_progress :interval "5m" :initial "0" :run-while weather
