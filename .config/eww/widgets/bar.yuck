@@ -121,7 +121,7 @@
     :click "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
     :class "${mute == "[MUTED]" ? "mute" : ""}"
     :icon "${mute == "[MUTED]" ? "" : volume >= 50 ? "" : ""}"
-    :info "${volume}"
+    :info "${volume == "" ? 0 : volume}"
   )
 )
 
