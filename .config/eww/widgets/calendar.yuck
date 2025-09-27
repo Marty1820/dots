@@ -1,0 +1,24 @@
+(defwidget cal []
+  (box :class "cal-box"
+    :orientation "v"
+    (calendar :class "cal"
+      :day {formattime(EWW_TIME, '%d') ?: "1"}
+      :month {formattime(EWW_TIME, '%m') ?: "1"}
+      :year {formattime(EWW_TIME, '%Y') ?: "2025"}
+    )
+  )
+)
+
+(defwindow calendar
+  :namespace "eww-calendar"
+  :monitor 0
+  :geometry
+    (geometry
+      :x "4px"
+      :y "4px"
+      :anchor "top left")
+  :stacking "fg"
+  :exlusive "false"
+  :focusable "none"
+  (cal)
+)

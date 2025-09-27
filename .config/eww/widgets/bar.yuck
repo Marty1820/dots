@@ -48,6 +48,7 @@
 (defwidget date []
   (container
     :name "date"
+    :click "eww open --toggle calendar"
     :icon "󰃶"
     :info "${formattime(EWW_TIME, "%a, %b %d")}"
   )
