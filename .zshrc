@@ -28,6 +28,9 @@ export SAVEHIST=10000
 export HISTFILESIZE=10000
 export EZA_COLORS="uu=36:uR=31:un=35:gu=37:da=2;34:ur=34:uw=95:ux=36:ue=36:gr=34:gw=35:gx=36:tr=34:tw=35:tx=36:xx=95:"
 
+# --- Home cleanup ---
+alias wget='wget --hsts-file=$XDG_CACHE_HOME/wget-hsts'
+alias adb='HOME="$XDG_DATA_HOME"/android adb'
 
 # --- Aliases ---
 alias v='nvim'
