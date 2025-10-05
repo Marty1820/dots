@@ -16,39 +16,23 @@
 
 ; Power Menu
 (defwidget power []
-  (eventbox
-    :onhover "${EWW_CMD} update power=true"
-    :onhoverlost "${EWW_CMD} update power=false"
-    (box :class "b_power"
-      :space-evenly "false"
-      :orientation "h"
-      (button :class "b_button b_but_shutdown"
-        :tooltip "Shut down"
-        :onclick "systemctl poweroff" "")
-        (revealer :transition "slideright"
-          :reveal power
-          (box :orientation "h"
-            :space-evenly "false"
-            (button :class "b_button b_but_reboot"
-              :tooltip "Reboot"
-              :onclick "systemctl reboot" "󰜉")
-            (button :class "b_button b_but_sleep"
-              :tooltip "Suspend"
-              :onclick "systemctl suspend-then-hibernate" "󰒲")
-            (button :class "b_button b_but_logoff"
-              :tooltip "Logoff"
-              :onclick "niri msg action quit --skip-confirmation" "󰍃")
-        )
-      )
-    )
-  )
-)
+  (container
+    :name "powermenu"
+    :click "${power == "true" ? "sh -c '${EWW_CMD} update power=false;
+             (sleep 0.4 && ${EWW_CMD} close powermenu) &'" :
+           "${EWW_CMD} open powermenu && ${EWW_CMD} update power=true"}"
+    :tooltip "PowerMenu"
+    :class "b_power"
+    :icon ""
+    :info ""))
 
 ; Date
 (defwidget date []
   (container
     :name "date"
-    :click "eww open --toggle calendar"
+    :click "${calendar == "true" ? "sh -c '${EWW_CMD} update calendar=false;
+             (sleep 0.4 && ${EWW_CMD} close calendar) &'" :
+           "${EWW_CMD} open calendar && ${EWW_CMD} update calendar=true"}"
     :icon "󰃶"
     :info "${formattime(EWW_TIME, "%a, %b %d")}"
   )

@@ -5,5 +5,6 @@
 (include "./widgets/bar.yuck")
 
 ;; Widgets
+(include "./widgets/powermenu.yuck")
 (include "./widgets/weather.yuck")
 (include "./widgets/calendar.yuck")

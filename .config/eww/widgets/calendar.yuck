@@ -20,5 +20,8 @@
   :stacking "fg"
   :exlusive "false"
   :focusable "none"
-  (cal)
+  (revealer :transition "slidedown"
+    :reveal calendar
+    (cal)
+  )
 )

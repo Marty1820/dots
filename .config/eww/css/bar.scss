@@ -21,29 +21,6 @@ tooltip {
   color: $foreground;
 }
 
-.b_power,
-.b_button {
-  padding: 0 6px;
-  border-radius: 6px;
-  background: $background-darker;
-}
-
-.b_but_shutdown {
-  color: $red;
-}
-
-.b_but_reboot {
-  color: $yellow;
-}
-
-.b_but_sleep {
-  color: $purple;
-}
-
-.b_but_logoff {
-  color: $orange;
-}
-
 .b_container {
   margin: 0 6px;
 }
@@ -59,6 +36,11 @@ tooltip {
   border-radius: 0 6px 6px 0;
   padding: 0 6px;
   background: $background-darker;
+}
+
+.b_powermenu_icon {
+  background: $background;
+  color: $red;
 }
 
 .b_date_icon,

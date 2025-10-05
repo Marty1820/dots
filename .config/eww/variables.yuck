@@ -1,5 +1,7 @@
-; Bar
+; Revealer variables
 (defvar power false)
+(defvar calendar false)
+(defvar weather false)
 
 ; Volume
 (defpoll volume :interval "3s" :initial "0"
@@ -14,9 +16,6 @@
 ; Brightness
 (defpoll brightness :interval "10s" :initial "0"
   "brightnessctl info | awk -F '[()%]' '/Current/ {print $2}'")
-
-; Weather
-(defvar weather false)
 
 (defvar weather_icons
   '{"01d":"󰖙", "01n":"󰖔", "02d":"󰖕", "02n":"󰼱",
