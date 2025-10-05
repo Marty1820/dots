@@ -87,8 +87,12 @@
 
 ;; Center Modules
 (deflisten b_window :initial '{"title":"","app_id":""}'
-  `niri msg event-stream | while IFS= read -r _; do
-    niri msg -j focused-window; done`)
+  `while true; do
+    niri msg event-stream | while IFS= read -r _; do
+      niri msg -j focused-window || echo '{"title":"","app_id":""}';
+    done
+    sleep 1
+  done`)
 (defwidget center []
   (box :class "b_center"
     :orientation "h"
