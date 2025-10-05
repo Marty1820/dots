@@ -100,7 +100,7 @@
 
 ;; Rigth Modules
 
-; Volume Icon
+; Volume
 (defwidget volume []
   (container
     :name "volume"
@@ -111,7 +111,7 @@
   )
 )
 
-; Network Icon
+; Network
 (defwidget network []
   (container
     :name "network"
@@ -133,7 +133,7 @@
   )
 )
 
-; Battery Icon
+; Battery
 (defwidget battery []
   (container
     :name "battery"
