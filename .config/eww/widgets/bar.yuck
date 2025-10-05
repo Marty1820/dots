@@ -102,7 +102,7 @@
   )
 )
 
-;; Rigth Modules
+;; Right Modules
 
 ; Volume
 (defwidget volume []
