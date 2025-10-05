@@ -1,0 +1,40 @@
+.pm_power {
+  border-radius: 6px;
+  margin: 4px;
+  background: $background-darker;
+  border: solid 1px $purple;
+}
+
+.pm_button {
+  border-radius: 6px;
+  margin: 4px;
+  padding: 4px;
+}
+
+.pm_button:hover {
+  background: $selection;
+}
+
+.pm_entry {
+  margin: 0 4px;
+}
+
+.pm_icon {
+  padding-right: 8px;
+}
+
+.pm_shutdown_icon {
+  color: $red;
+}
+
+.pm_reboot_icon {
+  color: $yellow;
+}
+
+.pm_logoff_icon {
+  color: $orange;
+}
+
+.pm_suspend_icon {
+  color: $purple;
+}

@@ -1,0 +1,50 @@
+(defwidget pmentry [name click icon text]
+  (button :class "pm_button pm_but_${name}"
+    :onclick "${click}"
+    (box :class "pm_entry"
+      :space-evenly "false"
+      :orientation "h"
+      (label :class "pm_icon pm_${name}_icon"
+        :text "${icon}")
+      (label :class "pm_text pm_${name}_text"
+        :text "${text}")
+    )
+  )
+)
+
+(defwidget powermenu []
+  (box :class "pm_power"
+    :space-evenly "false"
+    :orientation "v"
+    (pmentry :name "shutdown"
+      :click "systemctl poweroff"
+      :icon ""
+      :text "Shut Down")
+    (pmentry :name "reboot"
+      :click "systemctl reboot"
+      :icon "󰜉"
+      :text "Reboot")
+    (pmentry :name "logoff"
+      :click "niri msg action quit --skip-confirmation"
+      :icon "󰍃"
+      :text "Logoff")
+    (pmentry :name "suspend"
+      :click "systemctl suspend-then-hibernate"
+      :icon "󰒲"
+      :text "Suspend")
+  )
+)
+
+(defwindow powermenu
+  :namespace "eww-powermenu"
+  :monitor 0
+  :geometry (geometry
+              :x "0"
+              :y "0"
+              :anchor "top left")
+  :stacking "fg"
+  (revealer :transition "slidedown"
+    :reveal power
+    (powermenu)
+  )
+)
