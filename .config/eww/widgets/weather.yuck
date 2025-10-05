@@ -203,25 +203,26 @@
   )
 )
 
+(defwidget weather []
+  (box :classe "weather"
+    :orientation "v"
+    :space-evenly "false"
+    (w_main)
+    (w_alert)
+    (w_data)
+  )
+)
+
 (defwindow weather
   :namespace "eww-weather"
   :monitor 0
-  :geometry
-    (geometry
-      :x "3px"
-      :y "3px"
-      :anchor "top left")
+  :geometry (geometry
+              :x "3px"
+              :y "3px"
+              :anchor "top left")
   :stacking "fg"
-  :exlusive "false"
-  :focusable "none"
   (revealer :transition "slidedown"
     :reveal weather
-    :class "weather"
-    (box :orientation "v"
-      :space-evenly "false"
-      (w_main)
-      (w_alert)
-      (w_data)
-    )
+    (weather)
   )
 )

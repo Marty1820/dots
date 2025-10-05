@@ -60,7 +60,7 @@
 )
 
 ; Weather
-(defwidget weather []
+(defwidget barweather []
   (container
     :name "weather"
     :click "${weather == "true" ? "sh -c '${EWW_CMD} update weather=false;
@@ -81,7 +81,7 @@
     (power)
     (date)
     (clock)
-    (weather)
+    (barweather)
   )
 )
 
