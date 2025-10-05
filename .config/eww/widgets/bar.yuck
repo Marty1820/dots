@@ -24,7 +24,8 @@
     :tooltip "PowerMenu"
     :class "b_power"
     :icon ""
-    :info ""))
+    :info "${power == "true" ? "" : ""}")
+)
 
 ; Date
 (defwidget date []

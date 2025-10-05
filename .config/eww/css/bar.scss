@@ -25,6 +25,12 @@ tooltip {
   margin: 0 6px;
 }
 
+.b_container:hover {
+  .b_cont_info {
+    color: $selection;
+  }
+}
+
 .b_cont_icon {
   font-size: 18px;
   border-radius: 6px 0 0 6px;
