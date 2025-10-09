@@ -29,7 +29,7 @@
       :icon "󰍃"
       :text "Logoff")
     (pmentry :name "suspend"
-      :click "systemctl suspend-then-hibernate"
+      :click "eww close powermenu && systemctl suspend-then-hibernate"
       :icon "󰒲"
       :text "Suspend")
   )
