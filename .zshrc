@@ -16,7 +16,7 @@ if [ "$TERM" = "xterm-kitty" ]; then
   alias icat="kitten icat"
   alias diff="kitten diff"
 else
-  alias diff="diff --color=auto"
+  alias diff="nvim -d"
 fi
 
 
