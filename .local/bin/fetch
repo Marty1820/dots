@@ -1,11 +1,10 @@
 #!/bin/sh
-
 # https://github.com/ThatOneCalculator/NerdFetch
 ## OS/ENVIRONMENT INFO DETECTION
 
 ostype="$(uname)"
 
-version=8.4.1
+version=8.4.2
 font=nerd
 distrotype=none
 osi=""
@@ -13,7 +12,7 @@ ki=""
 ri="󰍛"
 pi="󰏔"
 ui="󰅶"
-ci=""
+ci=""
 
 case $1 in
 "-p")
@@ -216,7 +215,7 @@ apk) packages="$(apk list --installed | wc -l)" ;;
 pmm) packages="$(/bedrock/libexec/pmm pacman pmm -Q 2>/dev/null | wc -l)" ;;
 opkg) packages="$(opkg list-installed | wc -l)" ;;
 eopkg) packages="$(eopkg li | wc -l)" ;;
-slackpkg) packages="$(printf '%s\n' /var/log/packages/* | wc -l)" ;;
+slackpkg) packages="$(ls /var/log/packages | wc -l)" ;;
 bulge) packages="$(bulge list | wc -l)" ;;
 birb) packages="$(birb --list-installed | wc -l)" ;;
 pkg_info)
@@ -232,7 +231,7 @@ pkg_info-netbsd)
 		packages="$(pkg list-installed 2>/dev/null | wc -l)"
 		manager="pkg"
 	else
-		packages="$(printf '%s\n' /usr/bin/* | wc -l)"
+		packages="$(ls /usr/bin | wc -l)"
 		manager="bin"
 	fi
 	;;
@@ -299,7 +298,7 @@ case $ostype in
 	;;
 *"Darwin"*)
 	mem_full=$(($(sysctl -n hw.memsize) / 1024 / 1024))
-  [ "${mem_full}" -gt 0 ] || mem_full=$(( $(sysctl -n hw.memsize) / 1024 / 1024))
+  [ $mem_full -gt 0 ] || mem_full=$(expr $(sysctl -n hw.memsize) / 1024 / 1024)
 	while IFS=:. read -r key val _; do
 		case $key in
 		'Anonymous '*|*' wired'* | *' occupied'*)
@@ -317,7 +316,7 @@ case $ostype in
 	;;
 *"BSD"*)
 	mem_full=$(($(sysctl -n hw.physmem) / 1024 / 1024))
-  [ "${mem_full:-0}" -gt 0 ] || mem_full=$(( $(sysctl -n hw.physmem) / 1024 / 1024))
+	[ $mem_full -gt 0 ] || mem_full=$(expr $(sysctl -n hw.physmem) / 1024 / 1024)
 	if [ $distrotype = netbsd ]; then
 		mem_free=$(($(vmstat | awk 'NR==3 {print $4}') / 1024))
 	else
