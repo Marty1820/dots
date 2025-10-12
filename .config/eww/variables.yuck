@@ -43,11 +43,7 @@
   "jq '.alerts[0].start' < $HOME/.cache/weather/onecall.json")
 
 (defvar aqi_map 
-  '{"1":"Good",
-    "2":"Fair",
-    "3":"Moderate",
-    "4":"Poor",
-    "5":"Very Poor"}')
+  '{"1":"Good", "2":"Fair", "3":"Moderate", "4":"Poor", "5":"Very Poor"}')
 
 (defpoll aqi_num :interval "5m" :initial "0" :run-while weather
   "jq '.list[].main.aqi' < $HOME/.cache/weather/aqidata.json")
