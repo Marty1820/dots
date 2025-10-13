@@ -218,7 +218,7 @@ window-rule {
   match app-id="thunar" title="Confirm to replace files"
   match app-id="thunar" title="File Operation Progress"
   match app-id="thunar" title="^Rename*"
-  match app-id="waterfox-default$" title="Picture-in-Picture"
+  match app-id="waterfox" title="Picture-in-Picture"
   open-floating true
 }
 
