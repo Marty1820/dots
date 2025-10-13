@@ -7,6 +7,11 @@
   padding: 0 1rem 0.2rem;
   color: $foreground;
 
+  .cal-date {
+    padding: 0.5rem 0.15rem 0.2rem;
+    margin: 5px 0 0 5px;
+  }
+
   .cal {
     background-color: inherit;
     padding: 0.5rem 0.15rem 0.2rem;
@@ -19,11 +24,6 @@
 
 calendar:selected {
   color: $purple;
-}
-
-calendar.header {
-  color: $pink;
-  font-weight: bold;
 }
 
 calendar.button {

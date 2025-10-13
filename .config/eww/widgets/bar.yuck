@@ -34,8 +34,9 @@
     :click "${calendar == "true" ? "sh -c '${EWW_CMD} update calendar=false;
              (sleep 0.4 && ${EWW_CMD} close calendar) &'" :
            "${EWW_CMD} open calendar && ${EWW_CMD} update calendar=true"}"
+    :tooltip "${formattime(EWW_TIME, "%a, %b %d")}"
     :icon "󰃶"
-    :info "${formattime(EWW_TIME, "%a, %b %d")}"
+    :info "${formattime(EWW_TIME, "%d/%m/%Y")}"
   )
 )
 
@@ -43,6 +44,9 @@
 (defwidget clock []
   (container
     :name "clock"
+    :click "${calendar == "true" ? "sh -c '${EWW_CMD} update calendar=false;
+             (sleep 0.4 && ${EWW_CMD} close calendar) &'" :
+           "${EWW_CMD} open calendar && ${EWW_CMD} update calendar=true"}"
     :icon "${formattime(EWW_TIME, "%I") == 1 ? "󱐿" :
              formattime(EWW_TIME, "%I") == 2 ? "󱑀" :
              formattime(EWW_TIME, "%I") == 3 ? "󱑁" :
@@ -89,7 +93,7 @@
 (deflisten b_window :initial '{"title":"","app_id":""}'
   `while true; do
     niri msg event-stream | while IFS= read -r _; do
-      niri msg -j focused-window || echo '{"title":"","app_id":""}';
+      niri msg -j focused-window 2>/dev/null || echo '{"title":"","app_id":""}';
     done
     sleep 1
   done`)

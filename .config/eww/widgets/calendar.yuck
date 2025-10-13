@@ -1,7 +1,21 @@
 (defwidget cal []
-  (box :class "cal-box"
+  (box :class "cal-cal"
     :orientation "v"
-    (calendar :class "cal")
+    (calendar :class "cal"
+      :show-heading "false"
+    )
+  )
+)
+
+(defwidget cal-box []
+  (box :class "cal-box"
+    :space-evenly "false"
+    :orientation "v"
+    (label :class "cal-date"
+      :xalign 0
+      :text "${formattime(EWW_TIME, '%A, %B %d')}"
+    )
+      (cal)
   )
 )
 
@@ -15,6 +29,6 @@
   :stacking "fg"
   (revealer :transition "slidedown"
     :reveal calendar
-    (cal)
+    (cal-box)
   )
 )
