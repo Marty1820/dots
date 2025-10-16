@@ -93,7 +93,7 @@
 (deflisten b_window :initial '{"title":"","app_id":""}'
   `while true; do
     niri msg event-stream | while IFS= read -r _; do
-      niri msg -j focused-window 2>/dev/null || echo '{"title":"","app_id":""}';
+      niri msg -j focused-window 2>/dev/null || echo '{"title":"","app_id":""}'
     done
     sleep 1
   done`)
