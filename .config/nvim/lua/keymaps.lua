@@ -39,8 +39,6 @@ wk.add({
 	{ "<leader>lc", vim.lsp.buf.code_action, desc = "[C]ode action" },
 
 	-- Buffer
-	{ "<leader>b", group = "+[B]uffer" },
-	{ "<leader>bh", "<cmd>TSBufEnable highlight<cr>", desc = "[H]ighlight enabled" },
 	{ "<S-h>", "<cmd>bprevious<cr>", desc = "Previous buffer" },
 	{ "<S-l>", "<cmd>bnext<cr>", desc = "Next buffer" },
 
