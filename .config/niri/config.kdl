@@ -160,8 +160,9 @@ layout {
 
   focus-ring {
     width 1
-    active-color "#bd93f9"
-    inactive-color "#282a36"
+    //active-color "#bd93f9"
+    active-gradient from="#44475a" to="#bd93f9" angle=45 in="oklch longer hue"
+    inactive-color "#282a36aa"
     urgent-color "#ff5555"
   }
 
