@@ -23,8 +23,8 @@ check_mirrorlist() {
   local mirrorlist="/etc/pacman.d/mirrorlist"
   if [[ ! -f "$mirrorlist" || $(( $(date +%s) - $(stat -c %Y "$mirrorlist") )) -gt 604800 ]]; then
     print_header "Updating mirrorlist with reflector"
-    systemctl start reflector.service
     print_header "(This may take a minute)"
+    systemctl start reflector.service
 
     # Wait until recletor.service has stopped
     while systemctl is-active --quiet reflector.service; do
