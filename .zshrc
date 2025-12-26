@@ -14,9 +14,7 @@
 if [ "$TERM" = "xterm-kitty" ]; then
   alias ssh="kitten ssh"
   alias icat="kitten icat"
-  alias diff="kitten diff"
-else
-  alias diff="nvim -d"
+  alias d="kitten diff"
 fi
 
 
@@ -34,6 +32,7 @@ alias adb='HOME="$XDG_DATA_HOME"/android adb'
 
 # --- Aliases ---
 alias v='nvim'
+alias diff="nvim -d"
 alias ..='cd ..'
 alias mkdir='mkdir -p'
 alias psa='ps auxf'
