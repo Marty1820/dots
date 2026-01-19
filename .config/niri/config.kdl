@@ -33,7 +33,7 @@ binds {
   Mod+Shift+Slash { show-hotkey-overlay; }
   Mod+Q hotkey-overlay-title="Close Focused Window"         { close-window; }
   Mod+Return hotkey-overlay-title="Open a Terminal: Kitty"  { spawn "kitty"; }
-  Mod+B hotkey-overlay-title="Open a WebBrowser: Waterfox"  { spawn "waterfox"; }
+  Mod+B hotkey-overlay-title="Open a WebBrowser: Helium"  { spawn "helium-browser"; }
   Mod+E hotkey-overlay-title="Open a FileBrowser: Thunar"   { spawn "thunar"; }
   Mod+D hotkey-overlay-title="Application Launcher: Fuzzel" { spawn "fuzzel"; }
   // Logoff
@@ -210,6 +210,7 @@ window-rule {
 }
 window-rule {
   match app-id="waterfox"
+  match app-id="helium"
   open-maximized true
 }
 window-rule {
