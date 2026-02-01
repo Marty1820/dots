@@ -1,9 +1,6 @@
 ; Variables
 (include "./variables.yuck")
 
-;; Bar
-(include "./widgets/bar.yuck")
-
 ;; Widgets
 (include "./widgets/powermenu.yuck")
 (include "./widgets/weather.yuck")
