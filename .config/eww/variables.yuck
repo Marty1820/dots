@@ -1,8 +1,3 @@
-; Revealer variables
-(defvar power false)
-(defvar calendar false)
-(defvar weather false)
-
 ; Volume
 (defpoll volume :interval "3s" :initial "0"
   "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d\", $2 * 100}'")

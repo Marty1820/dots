@@ -1,0 +1,123 @@
+@import url("./colors.css");
+
+* {
+  /* `otf-font-awesome` is required to be installed for icons */
+  font-family:
+    FontAwesome,
+    Mononoki Nerd Font Mono,
+    sans-serif;
+  font-size: 14px;
+}
+
+window#waybar {
+  border-radius: 0px 0px 6px 6px;
+  margin: 1px 4px 0 4px;
+  background: @background-darker;
+  color: @foreground;
+}
+
+.modules-left {
+  padding: 3px 3px 3px 1px;
+}
+
+.modules-center {
+  padding: 3px;
+}
+
+.modules-right {
+  padding: 3px 1px 3px 3px;
+}
+
+#clock,
+#idle_inhibitor,
+#wireplumber,
+#network,
+#backlight,
+#battery,
+#custom-power {
+  color: @background;
+  border-radius: 6px;
+  margin: 0 6px;
+  padding: 0 6px;
+}
+
+#clock {
+  background: linear-gradient(to bottom, @background, @selection);
+  color: @foreground;
+}
+
+#clock:hover {
+  background: @selection;
+}
+
+#idle_inhibitor {
+  background: @background;
+  color: @foreground;
+}
+
+#idle_inhibitor.activated {
+  color: #282a36;
+  background: linear-gradient(to bottom, @background, @red, @red);
+}
+
+#idle_inhibitor:hover {
+  background: @selection;
+  color: @foreground;
+}
+
+#wireplumber {
+  background: linear-gradient(to bottom, @selection, @purple, @purple);
+}
+
+#wireplumber.muted {
+  background: linear-gradient(to bottom, @selection, @red, @red);
+}
+
+#wireplumber:hover {
+  background: @purple;
+}
+
+#network {
+  background: linear-gradient(to bottom, @selection, @green, @green);
+}
+
+#network:hover {
+  background: @green;
+}
+
+#backlight {
+  background: linear-gradient(to bottom, @selection, @yellow, @yellow);
+}
+
+#backlight:hover {
+  background: @yellow;
+}
+
+#battery {
+  background: linear-gradient(to bottom, @selection, @cyan, @cyan);
+}
+
+#battery:hover {
+  background: @cyan;
+}
+
+#battery.warning {
+  background-color: @orange;
+}
+
+#battery.critical {
+  background-color: @red;
+}
+
+#battery.charging,
+#battery.plugged {
+  background-color: @green;
+}
+
+#custom-power {
+  background: linear-gradient(to bottom, @selection, @red, @red);
+}
+
+#custom-power:hover {
+  background: @red;
+}

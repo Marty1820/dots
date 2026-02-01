@@ -171,7 +171,7 @@ layout {
 }
 
 //--- Miscellaneous ---
-spawn-sh-at-startup "eww daemon && eww open bar"
+spawn-sh-at-startup "eww daemon"
 spawn-sh-at-startup "swww-daemon && swww img \"$(find \"$HOME/Pictures/wallpapers\" -type f | shuf -n 1)\""
 
 prefer-no-csd

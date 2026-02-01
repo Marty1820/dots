@@ -1,0 +1,72 @@
+// -*- mode: jsonc -*-
+{
+  "layer": "top", // Waybar at top layer
+  "position": "top", // Waybar position (top|bottom|left|right)
+  "spacing": 4, // Gaps between modules (4px)
+  "reload_style_on_change": true,
+  "modules-left": ["clock", "clock#2"],
+  //"modules-center": [],
+  "modules-right": [
+    "idle_inhibitor",
+    "wireplumber",
+    "network",
+    "backlight",
+    "battery",
+    "custom/power",
+  ],
+  "clock": {
+    "format": "󰃶 {:%d-%m-%Y}",
+    "on-click": "eww open --toggle calendar",
+    "tooltip": false,
+  },
+  "clock#2": {
+    "format": "󰥔 {:%I:%M %p}",
+    "on-click": "eww open --toggle weather",
+    "tooltip": false,
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": "",
+    },
+    "tooltip": false,
+  },
+  "wireplumber": {
+    "format": "{icon} {volume}",
+    "format-muted": " {volume}",
+    "format-icons": ["", ""],
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip": false,
+  },
+  "network": {
+    "format-ethernet": "󰈀 {ipaddr}",
+    "format-wifi": " {essid}",
+    "format-disconnected": "󰅛 Disconnected",
+    "format-disabled": "󰀝",
+    "on-click": "nm-connection-editor",
+    "tooltip": false,
+  },
+  "backlight": {
+    "format": "{icon} {percent}",
+    "format-icons": ["󰃠", "󰃟", "󰃝", "󰃞"],
+    "on-click": "$HOME/.local/bin/ABToggle.sh",
+    "tooltip": false,
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15,
+    },
+    "format-full": "{icon} {capacity}",
+    "format-charging": "󰂄 {capacity}",
+    "format-plugged": "󰚥 {capacity}",
+    "format": "{icon} {capacity}",
+    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+  },
+  "custom/power": {
+    "format": "⏻",
+    "on-click": "eww open --toggle powermenu",
+    "tooltip": false,
+  },
+}
