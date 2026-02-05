@@ -29,6 +29,7 @@ window#waybar {
 }
 
 #clock,
+#custom-weather,
 #idle_inhibitor,
 #wireplumber,
 #network,
@@ -47,6 +48,23 @@ window#waybar {
 }
 
 #clock:hover {
+  background: @selection;
+}
+
+#custom-weather {
+  background: linear-gradient(to bottom, @background, @selection);
+  color: @foreground;
+}
+
+#custom-weather.cold {
+  color: @cyan;
+}
+
+#custom-weather.hot {
+  color: @orange;
+}
+
+#custom-weather:hover {
   background: @selection;
 }
 

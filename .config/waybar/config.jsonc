@@ -4,7 +4,7 @@
   "position": "top", // Waybar position (top|bottom|left|right)
   "spacing": 4, // Gaps between modules (4px)
   "reload_style_on_change": true,
-  "modules-left": ["clock", "clock#2"],
+  "modules-left": ["clock", "clock#2", "custom/weather"],
   //"modules-center": [],
   "modules-right": [
     "idle_inhibitor",
@@ -21,8 +21,16 @@
   },
   "clock#2": {
     "format": "󰥔 {:%I:%M %p}",
+    "on-click": "eww open --toggle calendar",
+    "tooltip": false,
+  },
+  "custom/weather": {
+    "exec": "~/.config/waybar/scripts/weather.py",
+    "return-type": "json",
+    "format": "{}",
     "on-click": "eww open --toggle weather",
     "tooltip": false,
+    "interval": 3600,
   },
   "idle_inhibitor": {
     "format": "{icon}",
