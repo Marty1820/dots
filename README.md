@@ -17,26 +17,27 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 
 - **Shell**: [ZSH](https://www.zsh.org/)
 - **WM**: [Niri](https://github.com/YaLTeR/niri)
-- **Status Bar**: [EWW](https://elkowar.github.io/eww/eww.html)
+- **Status Bar**: [Waybar](https://github.com/Alexays/Waybar)
+- **Widgets**: [EWW](https://elkowar.github.io/eww/eww.html)
 - **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
-|    Name    |            Description            |
-| :--------: | :-------------------------------: |
-|  `NeoVim`  |      `Super + a` Text Editor      |
-|  `Thunar`  |      `Super + e` Filebroswer      |
-| `WaterFox` |      `Super + b` Web Browser      |
-|  `Fuzzel`  | `Super + d` Applications Launcher |
-|   `swww`   |         Wallpaper setting         |
+|   Name   |            Description            |
+| :------: | :-------------------------------: |
+| `NeoVim` |      `Super + a` Text Editor      |
+| `Thunar` |      `Super + e` Filebroswer      |
+| `Helium` |      `Super + b` Web Browser      |
+| `Fuzzel` | `Super + d` Applications Launcher |
+|  `swww`  |         Wallpaper setting         |
 
 #### ZSH changes
 
-|        Name         |                Description                |
-| :-----------------: | :---------------------------------------: |
-|        `exa`        |             `ls` replacement              |
-|        `bat`        |             `cat` replacement             |
-|     `starship`      |              Terminal Prompt              |
-| Decompression Tools | `ex filename` to extract compressed files |
+|       Name       |                Description                |
+| :--------------: | :---------------------------------------: |
+|      `exa`       |             `ls` replacement              |
+|      `bat`       |             `cat` replacement             |
+|    `starship`    |              Terminal Prompt              |
+| Extraction Tools | `ex filename` to extract compressed files |
 
 ## Installation instructions
 
