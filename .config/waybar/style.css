@@ -99,6 +99,11 @@ window#waybar {
   background: linear-gradient(to bottom, @selection, @green, @green);
 }
 
+#network.disconnected,
+#network.disabled {
+  background: @red;
+}
+
 #network:hover {
   background: @green;
 }

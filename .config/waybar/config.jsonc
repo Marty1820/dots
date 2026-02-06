@@ -26,12 +26,13 @@
   },
   "custom/weather": {
     "exec": "~/.config/waybar/scripts/weather.py",
+    "hide-empty-text": true,
     "return-type": "json",
+    "interval": 3600,
     "format": "{}",
     "on-click": "eww open --toggle weather",
     "on-click-right": "~/.config/waybar/scripts/weather.py",
     "tooltip": false,
-    "interval": 3600,
   },
   "idle_inhibitor": {
     "format": "{icon}",
@@ -51,7 +52,7 @@
   "network": {
     "format-ethernet": "󰈀 {ipaddr}",
     "format-wifi": " {essid}",
-    "format-disconnected": "󰅛 Disconnected",
+    "format-disconnected": "󰅛",
     "format-disabled": "󰀝",
     "on-click": "nm-connection-editor",
     "tooltip": false,
@@ -67,11 +68,10 @@
       "warning": 30,
       "critical": 15,
     },
-    "format-full": "{icon} {capacity}",
-    "format-charging": "󰂄 {capacity}",
-    "format-plugged": "󰚥 {capacity}",
     "format": "{icon} {capacity}",
     "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "format-charging": "󰂄 {capacity}",
+    "format-plugged": "󰚥 {capacity}",
   },
   "custom/power": {
     "format": "⏻",
