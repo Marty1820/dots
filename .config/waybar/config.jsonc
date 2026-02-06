@@ -29,6 +29,7 @@
     "return-type": "json",
     "format": "{}",
     "on-click": "eww open --toggle weather",
+    "on-click-right": "~/.config/waybar/scripts/weather.py",
     "tooltip": false,
     "interval": 3600,
   },
