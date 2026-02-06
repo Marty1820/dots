@@ -1,7 +1,8 @@
 @import url("./colors.css");
 
 * {
-  /* `otf-font-awesome` is required to be installed for icons */
+  border: none;
+  border-radius: 0;
   font-family:
     FontAwesome,
     Mononoki Nerd Font Mono,
@@ -10,50 +11,39 @@
 }
 
 window#waybar {
-  border-radius: 0px 0px 6px 6px;
-  margin: 1px 4px 0 4px;
-  background: @background-darker;
+  background: transparent;
   color: @foreground;
 }
 
-.modules-left {
-  padding: 3px 3px 3px 1px;
-}
-
-.modules-center {
-  padding: 3px;
-}
-
+.modules-left,
+.modules-center,
 .modules-right {
-  padding: 3px 1px 3px 3px;
+  padding: 4px 4px 2px 4px;
 }
 
 #clock,
 #custom-weather,
+#window,
 #idle_inhibitor,
 #wireplumber,
 #network,
 #backlight,
 #battery,
 #custom-power {
-  color: @background;
-  border-radius: 6px;
-  margin: 0 6px;
-  padding: 0 6px;
+  background: linear-gradient(to bottom, @background-darker, @background);
+  border-radius: 10px;
+  padding: 1px 6px;
 }
 
-#clock {
+#clock:hover,
+#custom-weather:hover,
+#idle_inhibitor:hover,
+#wireplumber:hover,
+#network:hover,
+#backlight:hover,
+#battery:hover,
+#custom-power:hover {
   background: linear-gradient(to bottom, @background, @selection);
-  color: @foreground;
-}
-
-#clock:hover {
-  background: @selection;
-}
-
-#custom-weather {
-  background: linear-gradient(to bottom, @background, @selection);
-  color: @foreground;
 }
 
 #custom-weather.cold {
@@ -61,75 +51,49 @@ window#waybar {
 }
 
 #custom-weather.hot {
-  color: @orange;
+  color: @red;
 }
 
-#custom-weather:hover {
-  background: @selection;
-}
-
-#idle_inhibitor {
-  background: @background;
-  color: @foreground;
+window#waybar.empty #window {
+  background: transparent;
 }
 
 #idle_inhibitor.activated {
-  color: #282a36;
-  background: linear-gradient(to bottom, @background, @red, @red);
-}
-
-#idle_inhibitor:hover {
-  background: @selection;
-  color: @foreground;
+  background: linear-gradient(to bottom, @background, @red);
 }
 
 #wireplumber {
-  background: linear-gradient(to bottom, @selection, @purple, @purple);
+  color: @purple;
 }
 
 #wireplumber.muted {
-  background: linear-gradient(to bottom, @selection, @red, @red);
-}
-
-#wireplumber:hover {
-  background: @purple;
+  color: @red;
 }
 
 #network {
-  background: linear-gradient(to bottom, @selection, @green, @green);
+  color: @green;
 }
 
 #network.disconnected,
 #network.disabled {
-  background: @red;
-}
-
-#network:hover {
-  background: @green;
+  color: @red;
 }
 
 #backlight {
-  background: linear-gradient(to bottom, @selection, @yellow, @yellow);
-}
-
-#backlight:hover {
-  background: @yellow;
+  color: @yellow;
 }
 
 #battery {
-  background: linear-gradient(to bottom, @selection, @cyan, @cyan);
-}
-
-#battery:hover {
-  background: @cyan;
+  color: @cyan;
 }
 
 #battery.warning {
-  background-color: @orange;
+  color: @orange;
 }
 
 #battery.critical {
   background-color: @red;
+  color: @background;
 }
 
 #battery.charging,
@@ -138,9 +102,5 @@ window#waybar {
 }
 
 #custom-power {
-  background: linear-gradient(to bottom, @selection, @red, @red);
-}
-
-#custom-power:hover {
-  background: @red;
+  color: @red;
 }
