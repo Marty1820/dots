@@ -3,6 +3,7 @@
   "layer": "top", // Waybar at top layer
   "position": "top", // Waybar position (top|bottom|left|right)
   "spacing": 4, // Gaps between modules (4px)
+  "margin": "0 4px 0 4px",
   "reload_style_on_change": true,
   "modules-left": ["clock", "custom/weather"],
   "modules-center": ["niri/window"],
@@ -35,6 +36,7 @@
       "(.*) - Helium": "$1",
       "v (.*)": "NeoVim $1",
     },
+    "tooltip": false,
   },
   "idle_inhibitor": {
     "format": "{icon}",
