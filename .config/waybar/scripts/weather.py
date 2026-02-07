@@ -37,34 +37,24 @@ AQI_MAP = {
 }
 
 
-def load(path):
-    with open(path) as f:
-        return json.load(f)
-
-
 def waybar():
-    w = load(CACHE / "onecall.json")["current"]
-    aqi = load(CACHE / "aqidata.json")["list"][0]["main"]["aqi"]
+    with open(CACHE / "onecall.json") as f:
+        w = json.load(f)["current"]
+    with open(CACHE / "aqidata.json") as f:
+        aqi = json.load(f)["list"][0]["main"]["aqi"]
 
     temp = round(w["temp"])
     icon, color = ICON_MAP.get(w["weather"][0]["icon"], ("󰼯", "#ff5555"))
     aqi_icon, aqi_color = AQI_MAP.get(aqi, ("󰻝", "#ff5555"))
 
-    unit = ""
     css = "hot" if temp > 90 else "cold" if temp < 32 else ""
-
-    text = (
-        f"<span size='18000'><span foreground='{color}'>{icon}</span></span> "
-        f"{temp}{unit}"
-        f"<span foreground='{aqi_color}'>{aqi_icon}</span>"
-    )
 
     print(
         json.dumps(
             {
                 "text": (
-                    f"<span size='18000'><span foreground='{color}'>{icon}</span></span> "
-                    f"{temp}{unit}"
+                    f"<span foreground='{color}'>{icon}</span> "
+                    f"{temp} "
                     f"<span foreground='{aqi_color}'>{aqi_icon}</span>"
                 ),
                 "class": css,
