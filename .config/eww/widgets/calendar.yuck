@@ -27,5 +27,8 @@
               :y "4px"
               :anchor "top left")
   :stacking "fg"
-  (cal-box)
+  (revealer :transition "slidedown"
+    :reveal cal
+    (cal-box)
+  )
 )

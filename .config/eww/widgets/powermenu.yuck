@@ -43,5 +43,8 @@
               :y "0"
               :anchor "top right")
   :stacking "fg"
-  (powermenu)
+  (revealer :transition "slidedown"
+    :reveal pwr
+    (powermenu)
+  )
 )

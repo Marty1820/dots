@@ -221,5 +221,8 @@
               :y "3px"
               :anchor "top left")
   :stacking "fg"
-  (weather)
+  (revealer :transition "slidedown"
+    :reveal wtr
+    (weather)
+  )
 )

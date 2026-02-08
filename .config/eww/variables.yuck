@@ -1,3 +1,8 @@
+; Revealer variables
+(defvar cal false)
+(defvar wtr false)
+(defvar pwr false)
+
 ;; w_main
 (defpoll w_temp :interval "5m" :initial "0"
   "jq '.current.temp' < $HOME/.cache/weather/onecall.json")
