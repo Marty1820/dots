@@ -10,6 +10,7 @@
   "modules-right": [
     "idle_inhibitor",
     "wireplumber",
+    "bluetooth",
     "network",
     "backlight",
     "battery",
@@ -51,6 +52,13 @@
     "format-muted": " {volume}",
     "format-icons": ["", ""],
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip": false,
+  },
+  "bluetooth": {
+    "format-disabled": "󰂲",
+    "format-on": "󰂯",
+    "format-connected": "󰂱",
+    "on-click": "blueman-manager",
     "tooltip": false,
   },
   "network": {

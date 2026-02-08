@@ -38,6 +38,7 @@ tooltip label {
 #window,
 #idle_inhibitor,
 #wireplumber,
+#bluetooth,
 #network,
 #backlight,
 #battery,
@@ -51,6 +52,7 @@ tooltip label {
 #custom-weather:hover,
 #idle_inhibitor:hover,
 #wireplumber:hover,
+#bluetooth:hover,
 #network:hover,
 #backlight:hover,
 #battery:hover,
@@ -82,6 +84,14 @@ window#waybar.empty #window {
   color: @red;
 }
 
+#bluetooth {
+  color: @cyan;
+}
+
+#bluetooth.disabled {
+  color: @red;
+}
+
 #network {
   color: @green;
 }
@@ -99,6 +109,11 @@ window#waybar.empty #window {
   color: @cyan;
 }
 
+#battery.charging,
+#battery.plugged {
+  background-color: @green;
+}
+
 #battery.warning {
   color: @orange;
 }
@@ -106,11 +121,6 @@ window#waybar.empty #window {
 #battery.critical {
   background-color: @red;
   color: @background;
-}
-
-#battery.charging,
-#battery.plugged {
-  background-color: @green;
 }
 
 #custom-power {
