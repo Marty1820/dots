@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-
 # https://github.com/steel99xl/Mac-like-automatic-brightness
-#How much light change must be seen by the sensor before it will act
+# How much light change must be seen by the sensor before it will act
 LightChange=10
 
-#How often it check the sensor
+# How often it checks the sensor
 SensorDelay=1
 
 # Scale sensor to display brightness range
@@ -12,9 +11,9 @@ SensorDelay=1
 SensorToDisplayScale=1
 
 # 12 steps is the most similar on a Macbook 2017 running Arch compared to MacOS
-LevelSteps=60
+LevelSteps=12
 # Plays the 12 step effectively at 30 FPS 32ms
-AnimationDelay=0.016
+AnimationDelay=0.032
 
 # Read the variable names
 MinimumBrightness=001
@@ -43,10 +42,10 @@ else
   chmod 666 /dev/shm/AB.offset
 fi
 
-#if no offset or its less than 0 make 0
+# If no offset or its less than 0 make 0
 OffSet=$((OffSet < 0 ? 0 : OffSet))
 
-# relatively change number in Offset file and write it
+# Relatively change number in Offset file and write it
 if [[ $op -lt 2 ]]; then
   if [[ $op -eq 1 ]]; then
     OffSet=$((OffSet + num))
@@ -76,11 +75,10 @@ BLightPath=$(find -L /sys/class/backlight -maxdepth 2 -name "brightness" 2>/dev/
 # Set path to current luminance sensor
 LSensorPath=$(find -L /sys/bus/iio/devices -maxdepth 2  -name "in_illuminance_raw" 2>/dev/null | grep "in_illuminance_raw")
 
-#Set the current light value so we have something to compare to
-OldLight=$(cat "$LSensorPath")
+# Set the current light value so we have something to compare to
+OldSensorLight=$(cat "$LSensorPath")
 
-while true
-do
+while true; do
     if [[ -f /dev/shm/AB.offset ]]; then
       OffSet=$(cat /dev/shm/AB.offset)
     else
@@ -90,14 +88,17 @@ do
     fi
 
 		Light=$(cat "$LSensorPath")
-    ## apply offset to current light value
+    # Apply offset to current light value
     Light=$((Light + OffSet))
 
     # Set allowed range for light 
-    MaxOld=$((OldLight + OldLight / LightChange))
-    MinOld=$((OldLight - OldLight / LightChange))
+    MaxOld=$((OldSensorLight + OldSensorLight / LightChange))
+    MinOld=$((OldSensorLight - OldSensorLight / LightChange))
 
     if [[ $Light -gt $MaxOld ]] || [[ $Light -lt $MinOld ]]; then
+      # Store new light as old light for next comparison
+      OldSensorLight=$Light
+
 		  CurrentBrightness=$(cat "$BLightPath")
 
       # Add MinimumBrightness here to not effect comparison but the outcome
@@ -109,34 +110,33 @@ do
 
       # Check we do not ask the screen to go brighter than it can
 		  if [[ $TempLight -gt $MaxScreenBrightness ]]; then
-			  NewLight=$MaxScreenBrightness
+			  NewBackLight=$MaxScreenBrightness
 		  else
-			  NewLight=$TempLight
+			  NewBackLight=$TempLight
 		  fi
 
+      # Get new screen brightness as a %
+      ScreenPercentage=$(LC_NUMERIC=C printf "%.0f" $(bc -l <<< "scale=2; ( $NewBackLight / $MaxScreenBrightness ) * 100 "))
+
       # How different should each stop be
-      DiffCount=$(LC_NUMERIC=C printf "%.0f" "$(bc -l <<< "scale=2; ($NewLight - $CurrentBrightness) / $LevelSteps")")
+      DiffCount=$(LC_NUMERIC=C printf "%.0f" "$(bc -l <<< "scale=2; ($NewBackLight - $CurrentBrightness) / $LevelSteps")")
 
       # Step once per Screen Hz to make animation
 		  for ((i=1; i<=LevelSteps; i++)); do
+        CurrentBrightness=$(cat "$BLightPath")
+        FakeBackLight=$(( CurrentBrightness + DiffCount ))
 
-        # Set new relative light value
-			  NewLight=$(( DiffCount ))
+        # Clamp to valid range
+        if (( FakeBackLight < 0 )); then
+          FakeBackLight=0
+        elif (( FakeBackLight > MaxScreenBrightness )); then
+          FakeBackLight=$MaxScreenBrightness
+        fi
 
-              CurrentBrightness=$(cat "$BLightPath")
-              FakeLight=$(( NewLight + CurrentBrightness ))
-
-              if [[ $FakeLight -gt $MaxScreenBrightness ]]; then
-                  NewLight=$MaxScreenBrightness
-                  echo "ERROR"
-              else
-                  echo $FakeLight > "$BLightPath"
-              fi
+        echo "$FakeBackLight" > "$BLightPath"
         # Sleep for the screen Hz time so he effect is visible
 			  sleep $AnimationDelay
 		  done
-      # Store new light as old light for next comparison
-      OldLight=$Light
     fi
 		sleep $SensorDelay
 done
