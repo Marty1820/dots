@@ -17,7 +17,7 @@ window#waybar {
 }
 
 tooltip {
-  background: @background-darker;
+  background: @background;
   border: 1px solid @purple;
   border-radius: 10px;
 }

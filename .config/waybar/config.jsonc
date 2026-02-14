@@ -18,8 +18,17 @@
   ],
   "clock": {
     "format": "󰥔 {:%I:%M %p}",
-    "on-click": "eww get cal | grep -q true && { eww update cal=false; sleep 1; eww close calendar; } || { eww open calendar; eww update cal=true; }",
-    "tooltip-format": "󰃶 {:%d-%b-%Y}",
+    "format-alt": "󰃶 {:%d-%b-%Y}",
+    "tooltip-format": "<span font='Hack Nerd Font Mono'>{calendar}</span>",
+    "calendar": {
+      "mode": "month",
+      "format": {
+        "months": "<span color='#f8f8f2'><b>{}</b></span>",
+        "days": "<span color='#f8f8f2'><b>{}</b></span>",
+        "weekdays": "<span color='#bd93f9'><b>{}</b></span>",
+        "today": "<span color='#ff79c6'><b>{}</b></span>",
+      },
+    },
   },
   "custom/weather": {
     "exec": "~/.config/waybar/scripts/weather.py",
