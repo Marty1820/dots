@@ -111,7 +111,13 @@ window#waybar.empty #window {
 
 #battery.charging,
 #battery.plugged {
-  background-color: @green;
+  background: linear-gradient(
+    to left,
+    @background-darker,
+    @background,
+    @selection,
+    @green
+  );
 }
 
 #battery.warning {
