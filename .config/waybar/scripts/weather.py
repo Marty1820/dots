@@ -36,16 +36,40 @@ AQI_MAP = {
     5: ("", "#bd93f9"),
 }
 
+ERROR_ICON = "󰼯"
+ERROR_AQI_ICON = "󰻝"
+ERROR_COLOR = "#ff5555"
 
-def waybar():
-    with open(CACHE / "onecall.json") as f:
-        w = json.load(f)["current"]
-    with open(CACHE / "aqidata.json") as f:
-        aqi = json.load(f)["list"][0]["main"]["aqi"]
 
-    temp = round(w["temp"])
-    icon, color = ICON_MAP.get(w["weather"][0]["icon"], ("󰼯", "#ff5555"))
-    aqi_icon, aqi_color = AQI_MAP.get(aqi, ("󰻝", "#ff5555"))
+def safe_load(path):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+if __name__ == "__main__":
+    weather_data = safe_load(ONECALL)
+    aqi_data = safe_load(AQI)
+
+    if weather_data and "current" in weather_data:
+        w = weather_data["current"]
+        temp = round(w.get("temp", 0))
+        icon_code = w.get("weather", [{}])[0].get("icon")
+        icon, color = ICON_MAP.get(icon_code, (ERROR_ICON, ERROR_COLOR))
+    else:
+        temp = 0
+        icon, color = ERROR_ICON, ERROR_COLOR
+
+    if aqi_data:
+        try:
+            aqi = aqi_data["list"][0]["main"]["aqi"]
+            aqi_icon, aqi_color = AQI_MAP.get(aqi, (ERROR_AQI_ICON, ERROR_COLOR))
+        except Exception:
+            aqi_icon, aqi_color = ERROR_AQI_ICON, ERROR_COLOR
+    else:
+        aqi_icon, aqi_color = ERROR_AQI_ICON, ERROR_COLOR
 
     css = "hot" if temp > 90 else "cold" if temp < 32 else ""
 
@@ -61,7 +85,3 @@ def waybar():
             }
         )
     )
-
-
-if __name__ == "__main__":
-    waybar()
