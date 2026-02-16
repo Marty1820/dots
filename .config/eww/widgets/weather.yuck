@@ -204,7 +204,7 @@
 )
 
 (defwidget weather []
-  (box :classe "weather"
+  (box :class "weather-box"
     :orientation "v"
     :space-evenly "false"
     (w_main)
