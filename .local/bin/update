@@ -23,7 +23,7 @@ check_mirrorlist() {
   local mirrorlist="/etc/pacman.d/mirrorlist"
   if [[ ! -f "$mirrorlist" || $(( $(date +%s) - $(stat -c %Y "$mirrorlist") )) -gt 604800 ]]; then
     print_header "Updating mirrorlist with reflector"
-    print_header "(This may take a minute)"
+    print_header "(This may take a bit...)"
     systemctl start reflector.service
 
     # Wait until recletor.service has stopped
@@ -36,10 +36,13 @@ check_mirrorlist() {
 # Upgrade packages
 pkg_update() {
   print_header "Upgrading Packages"
+  local flags=""
+  [[ $INTERACTIVE -eq 0 ]] && flags="--noconfirm"
+
   if command -v paru &>/dev/null; then
-    paru -Syu --noconfirm || echo "Paru failed, skipping..."
+    paru -Syu $flags || echo "Paru failed, skipping..."
   else
-    sudo pacman -Syu --noconfirm
+    sudo pacman -Syu $flags
   fi
 }
 
@@ -58,7 +61,7 @@ rebuild() {
 # Update TLDR-pages
 # pacman -S tldr
 tldr_cache() {
-  command -v tldr &>/dev/null || retrun
+  command -v tldr &>/dev/null || return
   print_header "Updating TLDR-pages"
   tldr --update_cache
 }
