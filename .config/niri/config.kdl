@@ -214,6 +214,11 @@ window-rule {
   open-maximized true
 }
 window-rule {
+  match title="(Minecraft )[0-9]" app-id="(Minecraft )[0-9]"
+  open-fullscreen true
+  //spawn-sh "antimicrox --profile ~/.config/antimicrox/stadia.gamecontroller.amgp --hidden"
+}
+window-rule {
   match title="[a-z|A-Z|0-9]( Properties)"
   match app-id="nm-connection-editor"
   match app-id="blueman-manager"
