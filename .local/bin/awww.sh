@@ -10,7 +10,7 @@ STEPS=90
 DURATION=3
 FPS=60
 
-swww img "$WALLPAPER" \
+awww img "$WALLPAPER" \
   --transition-type "$TYPE" \
   --transition-step "$STEPS" \
   --transition-duration "$DURATION" \

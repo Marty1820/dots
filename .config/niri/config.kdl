@@ -123,7 +123,7 @@ binds {
   XF86MonBrightnessDown { spawn-sh "brightnessctl set 5%- && bk-lit.sh"; }
   XF86MonBrightnessUp   { spawn-sh "brightnessctl set +5% && bk-lit.sh"; }
 
-  Super+p hotkey-overlay-title=null { spawn-sh "swww.sh"; } //fn F9 - Projector key
+  Super+p hotkey-overlay-title=null { spawn-sh "awww.sh"; } //fn F9 - Projector key
   //XF86rfkill // fn F10 - Airplane
 
   // fn F11 - Print Screen
@@ -172,7 +172,7 @@ layout {
 
 //--- Miscellaneous ---
 spawn-sh-at-startup "eww daemon"
-spawn-sh-at-startup "swww-daemon && swww img \"$(find \"$HOME/Pictures/wallpapers\" -type f | shuf -n 1)\""
+spawn-sh-at-startup "awww-daemon"
 
 prefer-no-csd
 
@@ -232,7 +232,7 @@ window-rule {
 //--- Layer Rules ---
 layer-rule {
   match namespace="^wallpaper$"
-  match namespace="swww-daemon"
+  match namespace="awww-daemon"
   place-within-backdrop true
 }
 layer-rule {
