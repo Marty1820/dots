@@ -2,6 +2,7 @@
 import argparse
 import json
 import requests
+import sys
 import tomllib
 from pathlib import Path
 from typing import Any, Dict, Literal
@@ -21,28 +22,32 @@ def load_config(config_file: Path) -> Dict[str, Any]:
             cfg = tomllib.load(f)
     except FileNotFoundError:
         print(f"Error: Configuration file not found at {config_file}")
-        raise SystemExit(1)
+        sys.exit(1)
     except tomllib.TOMLDecodeError as e:
-        print(f"Error decoding TOML file: {e}")
-        raise SystemExit(1)
+        print(f"Error decoding TOML file: {e}", file=sys.stderr)
+        sys.exit(1)
 
     # Validate required keys
-    for k in ("API_KEY", "LAT", "LON"):
-        if k not in cfg:
-            print(f"Missing required config key: {k}")
-            raise SystemExit(1)
+    required_keys = ("API_KEY", "LAT", "LON")
+    missing = [k for k in required_keys if k not in cfg]
+    if missing:
+        print(f"Missing required config keys: {', '.join(missing)}", file=sys.stderr)
+        sys.exit(1)
     return cfg
 
 
-def fetch_data(url: str, params: Dict[str, Any]) -> Dict[str, Any]:
-    """Fetches data from a URL and returns the JSON response."""
+def fetch_data(
+    session: requests.Session, url: str, params: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Fetches data using a persistent session."""
     try:
-        response = requests.get(url, params=params, timeout=10)
+        # Using session reduces TCP handshake overhead
+        response = session.get(url, params=params, timeout=10)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
-        print(f"Error fetching data: {e}")
-        raise SystemExit(1)
+        print(f"Error fetching data from {url}: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def get_weather_data(
@@ -52,10 +57,12 @@ def get_weather_data(
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     base_url: str = "http://api.openweathermap.org/data/"
+
     urls = {
-        "onecall": base_url + "3.0/onecall",
-        "air_pollution": base_url + "2.5/air_pollution",
+        "onecall": f"{base_url}3.0/onecall",
+        "air_pollution": f"{base_url}2.5/air_pollution",
     }
+
     params = {
         "appid": api_key,
         "lat": lat,
@@ -64,15 +71,20 @@ def get_weather_data(
         "exclude": "minutely,hourly",
     }
 
-    try:
-        data = {key: fetch_data(url, params) for key, url in urls.items()}
-        ONECALL_FILE.write_text(json.dumps(data["onecall"], indent=2))
-        AQI_FILE.write_text(json.dumps(data["air_pollution"], indent=2))
+    with requests.Session() as session:
+        try:
+            data = {}
+            for key, url in urls.items():
+                data[key] = fetch_data(session, url, params)
 
-        print("Data successfully fetched and saved.")
-    except OSError as e:
-        print(f"File error: {e}")
-        raise SystemExit(1)
+            # Atomic writes to prevent partial files if interrupted
+            ONECALL_FILE.write_text(json.dumps(data["onecall"], indent=2))
+            AQI_FILE.write_text(json.dumps(data["air_pollution"], indent=2))
+
+            print("Data successfully fetched and saved.")
+        except OSError as e:
+            print(f"File error: {e}", file=sys.stderr)
+            sys.exit(1)
 
 
 def main() -> None:
