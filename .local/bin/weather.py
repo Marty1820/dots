@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import logging
 import requests
 import sys
 import tomllib
 from pathlib import Path
 from typing import Any, Dict, Literal
+
+# Systemd loggin integration
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s = %(levelname)s = %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    stream=sys.stderr,
+)
+logger = logging.getLogger(__name__)
 
 # Define paths
 HOME = Path.home()
@@ -21,18 +31,22 @@ def load_config(config_file: Path) -> Dict[str, Any]:
         with config_file.open("rb") as f:
             cfg = tomllib.load(f)
     except FileNotFoundError:
-        print(f"Error: Configuration file not found at {config_file}")
+        logger.error(f"Error: Configuration file not found at {config_file}")
         sys.exit(1)
     except tomllib.TOMLDecodeError as e:
-        print(f"Error decoding TOML file: {e}", file=sys.stderr)
+        logger.error(f"Error decoding TOML file: {e}")
         sys.exit(1)
 
     # Validate required keys
     required_keys = ("API_KEY", "LAT", "LON")
     missing = [k for k in required_keys if k not in cfg]
     if missing:
-        print(f"Missing required config keys: {', '.join(missing)}", file=sys.stderr)
+        logger.error(
+            f"Missing required config keys: {', '.join(missing)}", file=sys.stderr
+        )
         sys.exit(1)
+
+    logger.debug(f"Config loaded successfully from {config_file}")
     return cfg
 
 
@@ -42,11 +56,13 @@ def fetch_data(
     """Fetches data using a persistent session."""
     try:
         # Using session reduces TCP handshake overhead
+        logger.debug(f"Fetching data from {url}")
         response = session.get(url, params=params, timeout=10)
         response.raise_for_status()
+        logger.debug(f"Successfully fetched data from {url}")
         return response.json()
     except requests.RequestException as e:
-        print(f"Error fetching data from {url}: {e}", file=sys.stderr)
+        logger.error(f"Error fetching data from {url}: {e}")
         sys.exit(1)
 
 
@@ -81,9 +97,9 @@ def get_weather_data(
             ONECALL_FILE.write_text(json.dumps(data["onecall"], indent=2))
             AQI_FILE.write_text(json.dumps(data["air_pollution"], indent=2))
 
-            print("Data successfully fetched and saved.")
+            logger.info("Data successfully fetched and saved.")
         except OSError as e:
-            print(f"File error: {e}", file=sys.stderr)
+            logger.error(f"File error: {e}")
             sys.exit(1)
 
 
