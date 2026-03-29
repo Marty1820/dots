@@ -1,18 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
 CONFIG_FILE="$HOME/.local/share/location.toml"
 
-awk -F= '
-  /^\s*LAT/ {gsub(/[" ]/,"",$2); lat=$2}
-  /^\s*LON/ {gsub(/[" ]/,"",$2); lon=$2}
-  END {
-    if (lat && lon)
-      printf "%s %s\n", lat, lon
-    else
-      exit 1
-  }
-' "$CONFIG_FILE" |
-{
-  read -r lat lon || exit 1
-  exec /usr/bin/wlsunset -l "$lat" -L "$lon"
-}
+# Only works for flat keys, won't handle sections properly
+lat=$(grep '^LAT\s*=' "$CONFIG_FILE" | head -1 | sed -E 's/.*=\s*"([^"]*)".*/\1/')
+lon=$(grep '^LON\s*=' "$CONFIG_FILE" | head -1 | sed -E 's/.*=\s*"([^"]*)".*/\1/')
+
+# Validate
+if [[ -z "$lat" || -z "$lon" ]]; then
+  echo "Error: Could not parse LAT or LON from $CONFIG_FILE" >&2
+  exit 1
+fi
+
+echo "Parsed: LAT=$lat, LON=$lon"
+
+exec /usr/bin/wlsunset -l "$lat" -L "$lon"
