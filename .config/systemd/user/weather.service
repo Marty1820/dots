@@ -4,4 +4,6 @@ ConditionNetworkOnline=true
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/weather.py getdata
+ExecStart=/usr/bin/python3 %h/.local/bin/weather.py getdata
+StandardOutput=journal
+StandardError=journal
