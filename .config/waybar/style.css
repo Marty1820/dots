@@ -4,10 +4,11 @@
   border: none;
   border-radius: 0;
   font-family:
-    FontAwesome,
     Mononoki Nerd Font Mono,
+    FontAwesome,
     sans-serif;
   font-size: 14px;
+  min-height: 0;
 }
 
 window#waybar {
@@ -20,6 +21,7 @@ tooltip {
   background: @background;
   border: 1px solid @purple;
   border-radius: 10px;
+  padding: 4px;
 }
 
 tooltip label {
@@ -43,9 +45,10 @@ tooltip label {
 #backlight,
 #battery,
 #custom-power {
-  background: linear-gradient(to bottom, @background-darker, @background);
+  background: @background;
   border-radius: 10px;
   padding: 1px 6px;
+  transition: all 0.2s ease;
 }
 
 #clock:hover,
@@ -57,7 +60,7 @@ tooltip label {
 #backlight:hover,
 #battery:hover,
 #custom-power:hover {
-  background: linear-gradient(to bottom, @background, @selection);
+  background: @selection;
 }
 
 #custom-weather.cold {
@@ -73,7 +76,7 @@ window#waybar.empty #window {
 }
 
 #idle_inhibitor.activated {
-  background: linear-gradient(to bottom, @background, @red);
+  background: @red;
 }
 
 #wireplumber {
@@ -111,13 +114,8 @@ window#waybar.empty #window {
 
 #battery.charging,
 #battery.plugged {
-  background: linear-gradient(
-    to left,
-    @background-darker,
-    @background,
-    @selection,
-    @green
-  );
+  background: @green;
+  color: @background-darker;
 }
 
 #battery.warning {
@@ -125,10 +123,23 @@ window#waybar.empty #window {
 }
 
 #battery.critical {
-  background-color: @red;
+  background: @red;
   color: @background;
+  animation: pulse 2s infinite;
 }
 
 #custom-power {
   color: @red;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
 }
