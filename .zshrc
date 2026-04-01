@@ -7,7 +7,22 @@
 # ZSH CONFIGUARATION
 
 # --- Early Exit for Non-Interactive Shells ---
-[[ $- != *i* ]] && return
+if [[ $- == *i* ]]; then
+    awk -v term_cols="${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}" '
+    BEGIN{
+        s="/\\";
+        for (colnum = 0; colnum < term_cols; colnum++) {
+            r = 255 - (colnum * 255 / term_cols);
+            g = (colnum * 510 / term_cols);
+            if (g > 255) g = 510 - g;
+            b = (colnum * 255 / term_cols);
+            printf "\033[48;2;%d;%d;%dm", r, g, b;
+            printf "\033[38;2;%d;%d;%dm", 255 - r, 255 - g, 255 - b;
+            printf "%s\033[0m", substr(s, colnum % 2 + 1, 1);
+        }
+        printf "\n";
+    }'
+fi
 
 
 # --- Terminal-Specific Aliases (Kitty) ---
@@ -212,5 +227,3 @@ ZSH_HIGHLIGHT_STYLES=(
 
 [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
   . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-[ -f $HOME/.local/bin/color10bit.sh ] && $HOME/.local/bin/color10bit.sh
