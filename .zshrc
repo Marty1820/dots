@@ -72,6 +72,7 @@ alias lt='eza --all --tree --icons=always --color=always --group-directories-fir
 alias l='eza --all --icons=always --color=always --group-directories-first'
 alias l.='eza --all | grep -E "^\."'
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+alias fetch='fastfetch'
 
 # --- Zsh Options ---
 # Directories
