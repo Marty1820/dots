@@ -1,7 +1,7 @@
-.weather {
+.weather-box {
   font-family: Hack Nerd Font Mono;
-  border-radius: 12px;
-  background: rgba($background-darker, 0.99);
+  border-radius: 6px;
+  background: $background-darker;
   border: 1px solid $purple;
   padding: 1rem;
   color: $foreground;

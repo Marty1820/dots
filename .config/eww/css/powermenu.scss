@@ -1,8 +1,9 @@
 .pm_power {
+  font-family: Hack Nerd Font Mono;
   border-radius: 6px;
-  margin: 4px;
   background: $background-darker;
   border: solid 1px $purple;
+  color: $foreground;
 }
 
 .pm_button {
