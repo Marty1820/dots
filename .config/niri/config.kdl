@@ -111,17 +111,19 @@ binds {
 
   // Function (fn) keys
   XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-  XF86AudioLowerVolume       { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01- && wp-vol.sh"; }
-  Shift+XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1- && wp-vol.sh"; }
-  XF86AudioRaiseVolume       { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ && wp-vol.sh"; }
-  Shift+XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ && wp-vol.sh"; }
+  XF86AudioLowerVolume       { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01-"; }
+  Shift+XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+  XF86AudioRaiseVolume       { spawn-sh "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 0.01+"; }
+  Shift+XF86AudioRaiseVolume { spawn-sh "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 0.1+"; }
 
   XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
   XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
   XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
 
-  XF86MonBrightnessDown { spawn-sh "brightnessctl set 5%- && bk-lit.sh"; }
-  XF86MonBrightnessUp   { spawn-sh "brightnessctl set +5% && bk-lit.sh"; }
+  XF86MonBrightnessDown { spawn-sh "brightnessctl set 1%-"; }
+  Shift+XF86MonBrightnessDown { spawn-sh "brightnessctl set 5%-"; }
+  XF86MonBrightnessUp   { spawn-sh "brightnessctl set +1%"; }
+  Shift+XF86MonBrightnessUp   { spawn-sh "brightnessctl set +5%"; }
 
   Super+p hotkey-overlay-title=null { spawn-sh "awww.sh"; } //fn F9 - Projector key
   //XF86rfkill // fn F10 - Airplane
