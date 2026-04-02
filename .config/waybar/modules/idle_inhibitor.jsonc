@@ -1,0 +1,15 @@
+// -*- mode: jsonc -*-
+{
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": "",
+    },
+    "min-length": 2,
+    "max-length": 2,
+    "tooltip-format-activated": "<b>Idle Inhibitor</b>: Activated",
+    "tooltip-format-deactivated": "<b>Idle Inhibitor</b>: Deactivated",
+    "start-activated": false,
+  },
+}

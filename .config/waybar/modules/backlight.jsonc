@@ -1,0 +1,9 @@
+// -*- mode: jsonc -*-
+{
+  "backlight": {
+    "format": "{icon} {percent}",
+    "format-icons": ["󰃠", "󰃟", "󰃝", "󰃞"],
+    "on-click": "$HOME/.local/bin/ABToggle.sh",
+    "tooltip-format": "Screen Brightness",
+  },
+}

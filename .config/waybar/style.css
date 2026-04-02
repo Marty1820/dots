@@ -1,145 +1,64 @@
-@import url("./colors.css");
+@import "styles/colors.css";
 
 * {
-  border: none;
-  border-radius: 0;
-  font-family:
-    Mononoki Nerd Font Mono,
-    FontAwesome,
-    sans-serif;
-  font-size: 14px;
-  min-height: 0;
+  all: initial; /* Reset GTK theme */
+  color: @main-fg;
+  font-family: "Mononoki Nerd Font Mono";
+  font-weight: bold;
+  font-size: 16px;
 }
 
-window#waybar {
-  background: @background-darker;
-  color: @foreground;
-  border-radius: 0 0 8px 8px;
+@import "styles/modules-left.css";
+@import "styles/modules-center.css";
+@import "styles/modules-right.css";
+
+.module {
+  margin-bottom: -1px;
+}
+
+#waybar {
+  background-color: @outline;
+}
+#waybar > box {
+  margin: 4px;
+  background-color: @main-bg;
+}
+
+button {
+  border-radius: 16px;
+  min-width: 16px;
+  padding: 0 10px;
+}
+button:hover {
+  background-color: @hover-bg;
+  color: @hover-fg;
 }
 
 tooltip {
-  background: @background;
-  border: 1px solid @purple;
+  border: 2px solid @accent;
   border-radius: 10px;
-  padding: 4px;
+  background-color: @main-bg;
+}
+tooltip > box {
+  padding: 0 6px;
 }
 
+#window label,
 tooltip label {
-  color: @foreground;
+  font-weight: normal;
 }
 
-.modules-left,
-.modules-center,
-.modules-right {
-  margin: 2px;
-  padding: 2px;
-}
-
-#clock,
-#custom-weather,
-#window,
-#idle_inhibitor,
-#wireplumber,
-#bluetooth,
-#network,
-#backlight,
-#battery,
-#custom-power {
-  background: @background;
-  border-radius: 10px;
-  padding: 1px 6px;
-  transition: all 0.2s ease;
-}
-
-#clock:hover,
-#custom-weather:hover,
-#idle_inhibitor:hover,
-#wireplumber:hover,
-#bluetooth:hover,
-#network:hover,
-#backlight:hover,
-#battery:hover,
-#custom-power:hover {
-  background: @selection;
-}
-
-#custom-weather.cold {
-  color: @cyan;
-}
-
-#custom-weather.hot {
-  color: @red;
-}
-
-window#waybar.empty #window {
-  background: transparent;
-}
-
-#idle_inhibitor.activated {
-  background: @red;
-}
-
-#wireplumber {
-  color: @purple;
-}
-
-#wireplumber.muted {
-  color: @red;
-}
-
-#bluetooth {
-  color: @cyan;
-}
-
-#bluetooth.disabled {
-  color: @red;
-}
-
-#network {
-  color: @green;
-}
-
-#network.disconnected,
-#network.disabled {
-  color: @red;
-}
-
-#backlight {
-  color: @yellow;
-}
-
-#battery {
-  color: @cyan;
-}
-
-#battery.charging,
-#battery.plugged {
-  background: @green;
-  color: @background-darker;
-}
-
-#battery.warning {
-  color: @orange;
-}
-
-#battery.critical {
-  background: @red;
-  color: @background;
-  animation: pulse 2s infinite;
+#custom-distro {
+  font-size: 20px;
 }
 
 #custom-power {
-  color: @red;
+  font-size: 18px;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 1;
-  }
+#custom-left_div,
+#custom-left_inv,
+#custom-right_div,
+#custom-right_inv {
+  font-size: 18px;
 }

@@ -1,0 +1,15 @@
+// -*- mode: jsonc -*-
+{
+  "custom/weather": {
+    "exec": "~/.config/waybar/scripts/weather.py",
+    "hide-empty-text": true,
+    "return-type": "json",
+    "interval": 300,
+    "format": "{}",
+    "min-length": 7,
+    "max-length": 7,
+    "on-click": "eww get wtr | grep -q true && { eww update wtr=false; sleep 1; eww close weather; } || { eww open weather; eww update wtr=true; }",
+    "on-click-right": "~/.config/waybar/scripts/weather.py",
+    "tooltip": false,
+  },
+}

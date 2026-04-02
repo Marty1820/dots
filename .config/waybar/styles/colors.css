@@ -1,0 +1,41 @@
+@define-color background-darker rgba(30, 31, 41, 230);
+@define-color background     #282a36;
+@define-color selection      #44475a;
+@define-color foreground     #f8f8f2;
+@define-color comment        #6272a4;
+@define-color cyan           #8be9fd;
+@define-color green          #50fa7b;
+@define-color orange         #ffb86c;
+@define-color pink           #ff79c6;
+@define-color purple         #bd93f9;
+@define-color red            #ff5555;
+@define-color yellow         #f1fa8c;
+
+/* Main colors */
+
+@define-color accent         @purple;
+@define-color main-br        @foreground;
+@define-color main-bg        @background-darker;
+@define-color main-fg        @foreground;
+@define-color hover-bg       @background;
+@define-color hover-fg       alpha(@main-fg, 0.75);
+@define-color outline        shade(@main-bg, 0.5);
+
+/* Module colors */
+
+@define-color weather        alpha(@background, 0.5);
+@define-color temperature    @background;
+@define-color cpu            @selection;
+@define-color time           @selection;
+@define-color date           @background;
+@define-color tray           alpha(@background, 0.5);
+
+@define-color volume         alpha(@background, 0.5);
+@define-color backlight      @background;
+@define-color battery        @selection;
+
+/* State colors */
+
+@define-color warning        @orange;
+@define-color critical       @red;
+@define-color charging       @green;

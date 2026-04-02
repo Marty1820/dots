@@ -1,0 +1,15 @@
+// -*- mode: jsonc -*-
+{
+  "niri/window": {
+    "format": "{}",
+    "rewrite": {
+      "": "Desktop",
+      "(.*) - Helium": "$1",
+      "v (.*)": "NeoVim $1",
+      "~": "Terminal",
+      "zsh": "Terminal",
+    },
+    "tooltip": false,
+    "swap-icon-label": false,
+  },
+}

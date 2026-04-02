@@ -1,0 +1,122 @@
+/*------------
+    Weather
+------------*/
+
+#custom-left_div.1 {
+  color: @weather;
+}
+
+#custom-weather {
+  background-color: @weather;
+}
+
+/*-----------------
+    Temperature
+-----------------*/
+
+#custom-left_div.2 {
+  background-color: @weather;
+  color: @temperature;
+}
+#temperature {
+  background-color: @temperature;
+}
+
+/*---------
+    CPU
+---------*/
+
+#custom-left_div.3 {
+  background-color: @temperature;
+  color: @cpu;
+}
+#cpu {
+  background-color: @cpu;
+}
+#custom-left_inv.1 {
+  color: @cpu;
+}
+
+/*-----------------
+    Distro icon
+-----------------*/
+
+#custom-left_div.4,
+#custom-right_div.1 {
+  color: @accent;
+}
+#custom-power {
+  padding: 0 10px 0 10px;
+  background-color: @accent;
+  color: @main-bg;
+}
+
+/*--------------------
+    Idle inhibitor
+--------------------*/
+
+#custom-right_inv.1 {
+  color: @time;
+}
+#idle_inhibitor {
+  background-color: @time;
+}
+#idle_inhibitor.activated {
+  color: @warning;
+}
+
+/*----------
+    Time
+----------*/
+
+#clock.time {
+  padding-right: 6px;
+  background-color: @time;
+}
+#custom-right_div.2 {
+  background-color: @date;
+  color: @time;
+}
+
+/*----------
+    Date
+----------*/
+
+#clock.date {
+  padding-left: 6px;
+  background-color: @date;
+}
+#custom-right_div.3 {
+  background-color: @tray;
+  color: @date;
+}
+
+/*-----------------
+    System tray
+-----------------*/
+
+#network {
+  background-color: @tray;
+  color: @green;
+  padding: 0 6px 0 4px;
+}
+#network.disconnected,
+#network.disabled {
+  color: @critical;
+}
+#bluetooth {
+  background-color: @tray;
+  color: @cyan;
+  padding: 0 5px;
+}
+#bluetooth.disabled,
+#bluetooth.off {
+  color: @critical;
+}
+#custom-pacman {
+  background-color: @tray;
+  color: @warning;
+}
+#custom-right_div.4 {
+  color: @tray;
+}

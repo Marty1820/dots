@@ -1,0 +1,8 @@
+// -*- mode: jsonc -*-
+{
+  "custom/power": {
+    "format": "󰣇",
+    "on-click": "eww get pwr | grep -q true && { eww update pwr=false; sleep 1; eww close powermenu; } || { eww open powermenu; eww update pwr=true; }",
+    "tooltip": false,
+  },
+}

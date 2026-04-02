@@ -1,0 +1,17 @@
+// -*- mode: jsonc -*-
+{
+  "wireplumber": {
+    "format": "{icon} {volume}",
+    "format-muted": "{icon} {volume}",
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"],
+      "default-muted": "󰝟",
+      "headphone": "󰋋",
+      "headphone-muted": "󰟎",
+      "headset": "󰋎",
+      "headset-muted": "󰋐",
+    },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip-format": "Output Device: {source_desc}",
+  },
+}
