@@ -7,6 +7,8 @@ import sys
 import tomllib
 from pathlib import Path
 from typing import Any, Dict, Literal
+import subprocess
+import signal
 
 # Systemd loggin integration
 logging.basicConfig(
@@ -98,6 +100,13 @@ def get_weather_data(
             AQI_FILE.write_text(json.dumps(data["air_pollution"], indent=2))
 
             logger.info("Data successfully fetched and saved.")
+            # Reload waybar using SIGRTMIN+10
+            try:
+                rt_signal = signal.SIGRTMIN + 10
+                subprocess.run(["pkill", f"-{rt_signal}", "waybar"], check=False)
+                logger.info("waybar reloaded via SIGRTMIN+10")
+            except Exception as e:
+                logger.warning(f"Failed to send signal to waybar: {e}")
         except OSError as e:
             logger.error(f"File error: {e}")
             sys.exit(1)
