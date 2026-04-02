@@ -25,3 +25,8 @@ border-color=#44475a
 [urgency=high]
 border-color=#ff5555
 default-timeout=0
+
+[app-name=bk-lit]
+history=0
+group-by=app-name
+format=<b>%s</b>\n%b
