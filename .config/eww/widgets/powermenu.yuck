@@ -38,10 +38,7 @@
 (defwindow powermenu
   :namespace "eww-powermenu"
   :monitor 0
-  :geometry (geometry
-              :x "0"
-              :y "0"
-              :anchor "top right")
+  :geometry (geometry :anchor "top center")
   :stacking "fg"
   (revealer :transition "slidedown"
     :reveal pwr

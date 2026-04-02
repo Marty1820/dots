@@ -216,10 +216,7 @@
 (defwindow weather
   :namespace "eww-weather"
   :monitor 0
-  :geometry (geometry
-              :x "3px"
-              :y "3px"
-              :anchor "top left")
+  :geometry (geometry :anchor "top center")
   :stacking "fg"
   (revealer :transition "slidedown"
     :reveal wtr
