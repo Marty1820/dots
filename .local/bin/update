@@ -1,19 +1,38 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INTERACTIVE=1 # set to 0 for unattended runs
+# Configuration
+INTERACTIVE=${INTERACTIVE:-1} # 1 for prompts. 0 for unnatended
+LOG_FILE="$HOME/.local/share/update.log"
+
+# Ensure log directory exists
+mkdir -p "$(dirname "$LOG_FILE")"
 
 # Colors
 BOLD="\033[1m"
 RESET="\033[0m"
 RED="\033[31;1m"
+GREEN="\033[32;1m"
+YELLOW="\033[33;1m"
+
+# Loggin setup
+log() {
+  local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+  echo -e "$msg" | tee -a "$LOG_FILE"
+}
 
 # Print formatted header
-print_header() { echo -e "\n${BOLD}$1${RESET}"; }
+print_header() { 
+  local msg="$1"
+  log "${BOLD}${msg}${RESET}"
+  echo ""
+}
 
-# Confirm prompt if interactive
+# Confirmation wrapper
 confirm() {
-  [[ $INTERACTIVE -eq 0 ]] && return 1
+  if [[ $INTERACTIVE -eq 0 ]]; then
+    return 1 # Auto-decline in unattended mode
+  fi
   read -rp "$1 [y/N]: " ans
   [[ "$ans" =~ ^[Yy]$ ]]
 }
@@ -21,108 +40,233 @@ confirm() {
 # Update mirrors if older than 7 days
 check_mirrorlist() {
   local mirrorlist="/etc/pacman.d/mirrorlist"
-  if [[ ! -f "$mirrorlist" || $(( $(date +%s) - $(stat -c %Y "$mirrorlist") )) -gt 604800 ]]; then
-    print_header "Updating mirrorlist with reflector"
-    print_header "(This may take a bit...)"
-    systemctl start reflector.service
 
-    # Wait until recletor.service has stopped
-    while systemctl is-active --quiet reflector.service; do
-      sleep 1
-    done
+  if [[ ! -f "$mirrorlist" ]]; then
+    log "Mirrorlist not found. Skipping"
+    return 0
+  fi
+
+  local age_seconds=$(( $(date +%s) - $(stat -c %Y "$mirrorlist") ))
+  local max_age=604800 # 7 days
+
+  if [[ $age_seconds -gt $max_age ]]; then
+    print_header "Updating mirrorlist with reflector"
+
+    if ! systemctl is-active --quiet reflector.service 2>/dev/null; then
+      systemctl start reflector.service || {
+        log "${RED}Failed to start reflector.service${RESET}"
+        return 1
+      }
+
+      # Wait for completion
+      while systemctl is-active --quiet reflector.service; do
+        sleep 1
+      done
+      log "Reflectore service completed."
+    else
+      log "Reflectore service already active."
+    fi
+  else
+    log "Mirrorlist is fresh (${age_seconds}s old)."
   fi
 }
 
-# Upgrade packages
+# Package upgrade
 pkg_update() {
   print_header "Upgrading Packages"
   local flags=""
+
   [[ $INTERACTIVE -eq 0 ]] && flags="--noconfirm"
 
   if command -v paru &>/dev/null; then
-    paru -Syu $flags || echo "Paru failed, skipping..."
+    log "Using 'paru' for upgrades."
+    if ! paru -Syu $flags; then
+      log "${RED}Paru upgrade failed.${RESET}"
+      return 1
+    fi
+  elif command -v pacman &>/dev/null; then
+    log "Using 'pacman' for upgrades."
+    if ! sudo pacman -Syu $flags; then
+      log "${RED}Pacman upgrade failed.${RESET}"
+      return 1
+    fi
   else
-    sudo pacman -Syu $flags
+    log "${RED}No package manager found (paru or pacman).${RESET}"
+    return 1
   fi
 }
 
-# Check for broken packages
+# Rebuild check
 # pacman -S rebuild-checker
 rebuild() {
   print_header "Checking for broken packages"
-  if command -v checkrebuild &>/dev/null && ! checkrebuild -v; then
-    echo -e "Rebuild needed for above packages"
-    ((INTERACTIVE)) && read -rp "Press enter to continue..."
+
+  if ! command -v checkrebuild &>/dev/null; then
+    log "checkrebuild not installed. Skipping"
+    return 0
+  fi
+
+  if ! checkrebuild -v; then
+    log "${YELLOW}Rebuild needed for above packages.${RESET}"
+    if [[ $INTERACTIVE -eq 1 ]]; then
+      read -rp "Press enter to continue..."
+    fi
   else
-    echo "No rebuilds needed"
+    log "No rebuilds needed"
   fi
 }
 
-# Update TLDR-pages
+# TLDR cache update
 # pacman -S tldr
 tldr_cache() {
-  command -v tldr &>/dev/null || return
+  if ! command -v tldr &>/dev/null; then
+    log "tldr not installed. Skipping."
+    return 0
+  fi
+
   print_header "Updating TLDR-pages"
-  tldr --update_cache
+
+  if ! tldr --update_cache; then
+    log "${RED}Failed to update tldr cache.${RESET}"
+  fi
 }
 
-# Update firmware
+# Firmware update
 # pacman -S fwupd udisks2
 # systemctl enable --now fwupd-refresh.timer
 fwupd() {
-  command -v fwupdmgr &>/dev/null || return
+  if ! command -v fwupdmgr &>/dev/null; then
+    log "fwupdmgr not installed. Skipping."
+    return 0
+  fi
+
   print_header "Firmware check/update"
-  fwupdmgr update
-}
 
-# CPU vulnerabilities
-cpu_vulns() {
-  print_header "Checking CPU vulnerabilities"
-  if lscpu | grep -q 'Vulnerability:.*Vulnerable'; then
-    cat << EOF
-
-#####################
-##YOU'RE VULNERABLE##
-#####################
-
-Run 'lscpu' and look at the Vulnerability section
-EOF
-    ((INTERACTIVE)) && read -rp "Press enter to continue..."
-  else
-    echo "No vulnerabilities found"
+  if ! fwupdmgr update; then
+    log "${RED}Firmware update failed or cancelled.${RESET}"
   fi
 }
 
-# Kernel check and reboot prompt
+# CPU vulnerability check
+cpu_vulns() {
+  print_header "Checking CPU vulnerabilities"
+
+  if ! command -v lscpu &>/dev/null; then
+    log "lscpu not found. Skipping."
+    return 0
+  fi
+
+  local vuln_output
+  vuln_output=$(lscpu | grep -i "Vulnerability:.*Vulnerable" || true)
+
+  if [[ -n "$vuln_output" ]]; then
+    log "${RED}WARNING: CPU vulnerabilities detected!${RESET}"
+    echo "$vuln_output"
+    echo "Run 'lscpu' manually for details."
+
+    if [[ $INTERACTIVE -eq 1 ]]; then
+      read -rp "Press enter to continue..."
+    fi
+    return 1
+  else
+    log "No know CPU vulnerabilities detected."
+  fi
+}
+
+# Kernel check and reboot
 kern_chk() {
   print_header "Checking for new Kernel"
-  local current running
-  current=$(pacman -Q linux | awk '{print $2}' | tr '-' '.')
-  running=$(uname -r | tr '-' '.')
 
-  if [[ "$current" == "$running" ]]; then
-    echo "Latest Kernel Running - No reboot required"
+  local current_pkg=$(pacman -Q linux 2>/dev/null | awk '{print $2}')
+
+  if [[ -z "$current_pkg" ]]; then
+    log "Could not determine installed kernel package. Skipping."
+    orphan_pkgs
+    return 0
+  fi
+
+  local running_ver=$(uname -r)
+
+  # Extract the numeric version (e.g., 6.19.10)
+  # BETTER METHOD: Use grep to extract the leading version pattern
+  local current_base=$(echo "$current_pkg" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
+  local running_base=$(echo "$running_ver" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
+
+  if [[ -z "$current_base" || -z "$running_base" ]]; then
+    log "Warning: Could not parse version strings. Falling back to string comparison."
+    current_base="$current_pkg"
+    running_base="$running_ver"
+  fi
+
+  log "Installed: $current_pkg (Parsed: $current_base)"
+  log "Running:   $running_ver (Parsed: $running_base)"
+
+  if [[ "$current_base" == "$running_base" ]]; then
+    log "Current kernel matches installed package. No reboot needed."
   else
-    echo -e "${RED}Newer kernel has been installed - Reboot required${RESET}"
-    confirm "Reboot now?" && reboot || echo "Please restart when convenient"
+    log "${RED}Newer kernel ($current_pkg) installed but running ($running_ver). Reboot required.${RESET}"
+    
+    if [[ $INTERACTIVE -eq 1 ]]; then
+      if confirm "Reboot now?"; then
+        log "Rebooting..."
+        reboot
+      else
+        log "Reboot deferred by user."
+      fi
+    else
+      log "Unattended mode: Reboot deferred. Please reboot manually."
+    fi
   fi
 
   orphan_pkgs
 }
 
-# Function to list orphaned packages
+# Orphaned packages
 orphan_pkgs() {
   print_header "Orphaned Packages"
-  pacman -Qdt || echo "No orphaned packages"
+
+  local orphans
+  orphans=$(pacman -Qdtq 2>/dev/null || true)
+
+  if [[ -z "$orphans" ]]; then
+    log "No orphaned packages found."
+  else
+    log "${YELLOW}Found orphaned packages:${RESET}"
+    echo "$orphans"
+    if [[ $INTERACTIVE -eq 1 ]]; then
+      read -rp "Remove them? [y/N]: " ans
+      if [[ "$ans" =~ ^[Yy]$ ]]; then
+        log "Removing orphans..."
+        pacman -Rns $(pacman -Qdtq)
+      fi
+    fi
+  fi
+}
+
+# Waybar reload
+waybar_reload() {
+  if pgrep -x waybar >/dev/null; then
+    print_header "Realoding Waybar"
+    pkill -SIGRTMIN+8 waybar || log "Waybar reload signal sent (or process not found)."
+  else
+    log "Waybar not running. Skipping reload"
+  fi
 }
 
 # ---------------------
 # Main Execution
 # ---------------------
-check_mirrorlist
-pkg_update
-rebuild
-tldr_cache
-fwupd
-cpu_vulns
-kern_chk
+main() {
+  check_mirrorlist
+  pkg_update
+  rebuild
+  tldr_cache
+  fwupd
+  cpu_vulns
+  kern_chk
+  waybar_reload
+
+  log "Update script completed."
+}
+
+main
