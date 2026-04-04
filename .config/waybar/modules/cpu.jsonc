@@ -11,6 +11,6 @@
       "warning": 75,
       "critical": 90,
     },
-    "tooltip-format": "<b>Avg load:</b>",
+    "tooltip": false,
   },
 }
