@@ -2,8 +2,8 @@
 {
   "custom/pacman": {
     "format": "",
-    "min-length": 2,
-    "max-length": 2,
+    "min-length": 1,
+    "max-length": 1,
     "interval": 3600, // every hour
     "exec": "checkupdates | wc -l", // # of updates
     "exec-if": "exit 0", // always run; consider advanced run conditions
