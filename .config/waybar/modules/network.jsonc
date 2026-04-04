@@ -1,7 +1,7 @@
 // -*- mode: jsonc -*-
 {
   "network": {
-    "format": "󰤨",
+    "format": "󰤯",
     "format-ethernet": "󰈀",
     "format-wifi": "{icon}",
     "format-disconnected": "󰤭",
@@ -11,9 +11,9 @@
     "max-length": 1,
     "on-click": "nm-connection-editor",
     "tooltip-format": "<b>Gateway</b>: {gwaddr}",
-    "tooltip-format-ethernet": "<b>Interface</b>: {ifname}",
+    "tooltip-format-ethernet": "<b>Interface</b>: {ifname}\n<b>IP Addr</b>: {ipaddr}",
     "tooltip-format-wifi": "<b>Network</b>: {essid}\n<b>IP Addr</b>: {ipaddr}/{cidr}\n<b>Strength</b>: {signalStrength}%\n<b>Frequency</b>: {frequency} GHz",
     "tooltip-format-disconnected": "Wi-Fi Disconnected",
-    "tooltip-format-disabled": "Wi-Fi Disabled",
+    "tooltip-format-disabled": "Airplane Mode",
   },
 }

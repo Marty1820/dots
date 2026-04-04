@@ -1,10 +1,10 @@
 // -*- mode: jsonc -*-
 {
   "temperature": {
-    "thermal-zone": 1,
+    "thermal-zone": 5,
     "critical-threshold": 90,
     "interval": 10,
-    "format-critical": "󰀦 {temperatureC}󰔄",
+    "format-critical": "󰸁 {temperatureC}󰔄",
     "format": "{icon} {temperatureC}󰔄",
     "format-icons": ["󱃃", "󰔏", "󱃂"],
     "min-length": 8,
