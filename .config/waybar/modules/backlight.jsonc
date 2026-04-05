@@ -2,13 +2,13 @@
 {
   "group/brightness": {
     "orientation": "horizontal",
-    "modules": ["custom/brightness", "backlight"],
+    "modules": ["custom/light-icon", "backlight"],
   },
-  "custom/brightness": {
+  "custom/light-icon": {
     "exec": "if systemctl --user is-active --quiet AB.service; then echo '{\"text\":\"󰃡\",\"class\":\"on\"}'; else echo '{\"text\":\"󰳲\",\"class\": \"off\"}'; fi",
     "return-type": "json",
     "interval": 5,
-    "format": "{text}",
+    "format": "{text} ",
     "tooltip": false,
   },
   "backlight": {
