@@ -24,7 +24,6 @@
 }
 #brightness {
   background-color: @backlight;
-  color: @yellow;
   padding: 0 12px;
 }
 #custom-light-icon,
