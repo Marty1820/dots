@@ -22,10 +22,16 @@
   background-color: @volume;
   color: @backlight;
 }
+#custom-brightness,
 #backlight {
   background-color: @backlight;
   color: @yellow;
-  padding: 0 12px;
+}
+#custom-brightness {
+  padding: 0 2px 0 12px;
+}
+#backlight {
+  padding: 0 12px 0 2px;
 }
 
 /*-------------
