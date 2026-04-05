@@ -15,7 +15,7 @@ RED="\033[31;1m"
 GREEN="\033[32;1m"
 YELLOW="\033[33;1m"
 
-# Loggin setup
+# Logging setup
 log() {
   local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
   echo -e "$msg" | tee -a "$LOG_FILE"
@@ -62,9 +62,9 @@ check_mirrorlist() {
       while systemctl is-active --quiet reflector.service; do
         sleep 1
       done
-      log "Reflectore service completed."
+      log "Reflector service completed."
     else
-      log "Reflectore service already active."
+      log "Reflector service already active."
     fi
   else
     log "Mirrorlist is fresh (${age_seconds}s old)."
@@ -169,7 +169,7 @@ cpu_vulns() {
     fi
     return 1
   else
-    log "No know CPU vulnerabilities detected."
+    log "No known CPU vulnerabilities detected."
   fi
 }
 
@@ -246,7 +246,7 @@ orphan_pkgs() {
 # Waybar reload
 waybar_reload() {
   if pgrep -x waybar >/dev/null; then
-    print_header "Realoding Waybar"
+    print_header "Reloading Waybar"
     pkill -SIGRTMIN+8 waybar || log "Waybar reload signal sent (or process not found)."
   else
     log "Waybar not running. Skipping reload"
