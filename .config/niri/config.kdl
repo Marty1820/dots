@@ -31,11 +31,12 @@ output "eDP-1" {
 binds {
   // Application Launching
   Mod+Shift+Slash { show-hotkey-overlay; }
-  Mod+Q hotkey-overlay-title="Close Focused Window"         { close-window; }
-  Mod+Return hotkey-overlay-title="Open a Terminal: Kitty"  { spawn "kitty"; }
-  Mod+B hotkey-overlay-title="Open a WebBrowser: Helium"  { spawn "helium-browser"; }
-  Mod+E hotkey-overlay-title="Open a FileBrowser: Thunar"   { spawn "thunar"; }
-  Mod+D hotkey-overlay-title="Application Launcher: Fuzzel" { spawn "fuzzel"; }
+  Mod+Q hotkey-overlay-title="Close Focused Window"       { close-window; }
+  Mod+Return hotkey-overlay-title="Terminal: Kitty"       { spawn "kitty"; }
+  Mod+B hotkey-overlay-title="WebBrowser: Helium"         { spawn "helium-browser"; }
+  Mod+Shift+B hotkey-overlay-title="WebBrowser: Waterfox" { spawn "waterfox"; }
+  Mod+E hotkey-overlay-title="FileBrowser: Thunar"        { spawn "thunar"; }
+  Mod+D hotkey-overlay-title="App Launcher: Fuzzel"       { spawn "fuzzel"; }
   // Logoff
   Ctrl+Alt+Delete { quit skip-confirmation=true; }
   Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "swaylock"; }
@@ -60,7 +61,6 @@ binds {
 
   Mod+1 { focus-workspace 1; }
   Mod+2 { focus-workspace 2; }
-  Mod+3 { focus-workspace 3; }
 
   // Moving Windows
   Mod+Ctrl+Left  { move-column-left; }
@@ -82,7 +82,6 @@ binds {
 
   Mod+Ctrl+1 { move-column-to-workspace 1; }
   Mod+Ctrl+2 { move-column-to-workspace 2; }
-  Mod+Ctrl+3 { move-column-to-workspace 3; }
 
   Mod+C      { center-column; }
   Mod+Ctrl+C { center-visible-columns; }
@@ -173,8 +172,8 @@ layout {
 }
 
 //--- Miscellaneous ---
-spawn-sh-at-startup "eww daemon"
 spawn-sh-at-startup "awww-daemon"
+spawn-sh-at-startup "eww daemon"
 
 prefer-no-csd
 
