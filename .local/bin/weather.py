@@ -68,6 +68,16 @@ def fetch_data(
         sys.exit(1)
 
 
+def reload_waybar() -> None:
+    """Sends a signal to Waybar to force a module reload."""
+    try:
+        rt_signal = signal.SIGRTMIN + 10
+        subprocess.run(["pkill", f"-{rt_signal}", "waybar"], check=False)
+        logger.info(f"Waybar reloaded (Signal {rt_signal})")
+    except Exception as e:
+        logger.warning(f"Failed to send signal to waybar: {e}")
+
+
 def get_weather_data(
     api_key: str, lat: float, lon: float, units: Literal["imperial", "metric"]
 ) -> None:
@@ -100,16 +110,12 @@ def get_weather_data(
             AQI_FILE.write_text(json.dumps(data["air_pollution"], indent=2))
 
             logger.info("Data successfully fetched and saved.")
-            # Reload waybar using SIGRTMIN+10
-            try:
-                rt_signal = signal.SIGRTMIN + 10
-                subprocess.run(["pkill", f"-{rt_signal}", "waybar"], check=False)
-                logger.info("waybar reloaded via SIGRTMIN+10")
-            except Exception as e:
-                logger.warning(f"Failed to send signal to waybar: {e}")
         except OSError as e:
             logger.error(f"File error: {e}")
             sys.exit(1)
+
+    # Waybar reload function
+    reload_waybar()
 
 
 def main() -> None:
