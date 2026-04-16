@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
+
 import argparse
 import json
 import logging
 import requests
 import sys
 import tomllib
-from pathlib import Path
-from typing import Any, Dict, Literal
 import subprocess
 import signal
+from pathlib import Path
+from typing import Any, Dict, Literal
 
-# Systemd loggin integration
+# Systemd logging integration
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s = %(levelname)s = %(message)s",
