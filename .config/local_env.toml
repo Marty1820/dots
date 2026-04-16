@@ -1,0 +1,11 @@
+# Example config setup
+
+# Open Weather API Key
+# https://home.openweathermap.org/api_keys
+# Used by HOME/.local/bin/weather.py
+API_KEY = "YOUR-API-KEY-HERE"
+
+# https://www.latlong.net/
+# Used by weather.py and wlsunset.sh
+LAT = "NUMBER.NUMBER"
+LON = "NUMBER.NUMBER"

@@ -7,3 +7,4 @@
 ^/COPYING
 
 \.screenshots
+\.config/local_env.toml
