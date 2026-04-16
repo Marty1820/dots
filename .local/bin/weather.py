@@ -18,6 +18,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     stream=sys.stderr,
 )
+
 logger = logging.getLogger(__name__)
 
 # Define paths
@@ -43,6 +44,7 @@ def load_config(config_file: Path) -> Dict[str, Any]:
     # Validate required keys
     required_keys = ("API_KEY", "LAT", "LON")
     missing = [k for k in required_keys if k not in cfg]
+
     if missing:
         logger.error(
             f"Missing required config keys: {', '.join(missing)}", file=sys.stderr
@@ -58,7 +60,6 @@ def fetch_data(
 ) -> Dict[str, Any]:
     """Fetches data using a persistent session."""
     try:
-        # Using session reduces TCP handshake overhead
         logger.debug(f"Fetching data from {url}")
         response = session.get(url, params=params, timeout=10)
         response.raise_for_status()
@@ -86,7 +87,6 @@ def get_weather_data(
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     base_url: str = "http://api.openweathermap.org/data/"
-
     urls = {
         "onecall": f"{base_url}3.0/onecall",
         "air_pollution": f"{base_url}2.5/air_pollution",
