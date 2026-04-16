@@ -25,7 +25,7 @@ HOME = Path.home()
 CACHE_DIR = HOME / ".cache" / "weather"
 ONECALL_FILE = CACHE_DIR / "onecall.json"
 AQI_FILE = CACHE_DIR / "aqidata.json"
-CONFIG_FILE = HOME / ".local" / "share" / "location.toml"
+CONFIG_FILE = HOME / ".config" / "local_env.toml"
 
 
 def load_config(config_file: Path) -> Dict[str, Any]:

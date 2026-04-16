@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-CONFIG_FILE="$HOME/.local/share/location.toml"
+CONFIG_FILE="$HOME/.config/local_env.toml"
 
 [[ -f "$CONFIG_FILE" ]] || { echo "Error: Config file not found at $CONFIG_FILE" >&2; exit 1; }
 
