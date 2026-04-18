@@ -1,11 +1,11 @@
 local wk = require("which-key")
 
 -- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
+-- See `:help vim.hl.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
-		vim.highlight.on_yank()
+		vim.hl.on_yank()
 	end,
 	group = highlight_group,
 	pattern = "*",
@@ -20,9 +20,20 @@ wk.add({
 
 	-- Diagnostics
 	{ "<leader>d", group = "+[D]iagnostics" },
-	{ "<leader>d[", vim.diagnostic.goto_prev, desc = "Go to previous diagnostic message" },
-	{ "<leader>d]", vim.diagnostic.goto_next, desc = "Go to next diagnostic message" },
-	{ "<leader>de", vim.diagnostic.open_float, desc = "Open floating diagnostic message" },
+	{
+		"<leader>d[",
+		function()
+			vim.diagnostic.jump({ count = -1 })
+		end,
+		desc = "Go to previous diagnostic message",
+	},
+	{
+		"<leader>d]",
+		function()
+			vim.diagnostic.goto_jump({ count = 1 })
+		end,
+		desc = "Go to next diagnostic message",
+	},
 	{ "<leader>dq", vim.diagnostic.setloclist, desc = "Open diagnostics list" },
 
 	-- File
