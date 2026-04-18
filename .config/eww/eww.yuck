@@ -1,6 +1,16 @@
 ; Variables
 (include "./variables.yuck")
 
+;; Close widget when clicking off of it
+(defwidget closer [window]
+  (eventbox
+    :onclick 
+      "${EWW_CMD} update ${window}=false;
+      ${EWW_CMD} close ${window}-closer;
+      ${EWW_CMD} close ${window}"
+  )
+)
+
 ;; Widgets
 (include "./widgets/powermenu.yuck")
 (include "./widgets/weather.yuck")

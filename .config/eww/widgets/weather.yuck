@@ -219,7 +219,19 @@
   :geometry (geometry :anchor "top center")
   :stacking "fg"
   (revealer :transition "slidedown"
-    :reveal wtr
+    :reveal weather
+    :duration "250ms"
     (weather)
+  )
+)
+
+;; Closer
+(defwindow weather-closer
+  :namespace "eww-weather"
+  :monitor 0
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  (closer
+    :window "weather"
   )
 )

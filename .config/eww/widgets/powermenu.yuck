@@ -41,7 +41,19 @@
   :geometry (geometry :anchor "top center")
   :stacking "fg"
   (revealer :transition "slidedown"
-    :reveal pwr
+    :reveal powermenu
+    :duration "250ms"
     (powermenu)
+  )
+)
+
+;; Closer
+(defwindow powermenu-closer
+  :namespace "eww-powermenu"
+  :monitor 0
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  (closer
+    :window "powermenu"
   )
 )

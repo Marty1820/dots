@@ -1,6 +1,6 @@
 ; Revealer variables
-(defvar wtr false)
-(defvar pwr false)
+(defvar weather false)
+(defvar powermenu false)
 
 ;; w_main
 (defpoll w_temp :interval "5m" :initial "0" :run-while wtr
