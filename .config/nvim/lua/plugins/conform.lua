@@ -4,34 +4,38 @@ return {
 	cmd = { "ConformInfo" },
 	keys = {
 		{
-			"<leader>f",
+			"<leader>g",
 			function()
-				require("conform").format()
+				require("conform").format({ async = true })
 			end,
+			mode = "",
 			desc = "Format buffer",
 		},
 	},
+	-- This will provide type hinting with LuaLS
+	---@module "conform"
+	---@type conform.setupOpts
 	opts = {
 		formatters_by_ft = {
+			lua = { "stylua" },
 			sh = { "shfmt" },
-			python = { "black", "isort" }, -- Or just "ruff"
-			javascript = { "biome" },
-			typescript = { "biome" },
+			python = { "black", "isort" },
 			html = { "biome" },
 			css = { "biome" },
-			lua = { "stylua" },
+			javascript = { "biome" },
+		},
+		default_format_opts = {
+			lsp_format = "fallback",
 		},
 		format_on_save = {
 			lsp_fallback = true,
 			async = false,
 			timeout_ms = 1000,
 		},
+		formatters = {
+			shfmt = {
+				append_args = { "-i", "2" },
+			},
+		},
 	},
-	dependencies = { "williamboman/mason.nvim" }, -- Ensure Mason is a dep
-	config = function(_, opts)
-		require("conform").setup(opts)
-		-- Optional: Auto-install formatters via Mason if missing
-		require("mason").setup()
-		require("mason-tool-installer").setup({ ensure_installed = { "shfmt", "black", "biome", "stylua" } })
-	end,
 }
