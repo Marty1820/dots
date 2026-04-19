@@ -39,7 +39,7 @@
   :namespace "eww-powermenu"
   :monitor 0
   :geometry (geometry :anchor "top center")
-  :stacking "fg"
+  :stacking "overlay"
   (revealer :transition "slidedown"
     :reveal powermenu
     :duration "250ms"
