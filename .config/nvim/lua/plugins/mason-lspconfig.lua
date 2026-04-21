@@ -7,7 +7,7 @@ return {
 		{
 			"mason-org/mason.nvim",
 			opts = {
-				ensure_installed = { "prettier", "black" },
+				ensure_installed = { "black" },
 				ui = {
 					icons = {
 						package_installed = "✓",

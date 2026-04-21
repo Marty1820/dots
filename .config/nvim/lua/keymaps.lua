@@ -30,7 +30,7 @@ wk.add({
 	{
 		"<leader>d]",
 		function()
-			vim.diagnostic.goto_jump({ count = 1 })
+			vim.diagnostic.jump({ count = 1 })
 		end,
 		desc = "Go to next diagnostic message",
 	},
@@ -39,7 +39,6 @@ wk.add({
 	-- File
 	{ "<leader>f", group = "+[F]iles" },
 	{ "<leader>fn", "<cmd>enew<cr>", desc = "[N]ew File" },
-	{ "<leader>fp", "<cmd>Prettier<cr>", desc = "[F]ormat with [P]rettier" },
 
 	-- LSP
 	-- See `:help vim.lsp.*` for documentation on the below functions
