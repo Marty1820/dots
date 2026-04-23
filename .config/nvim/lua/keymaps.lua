@@ -39,6 +39,13 @@ wk.add({
 	-- File
 	{ "<leader>f", group = "+[F]iles" },
 	{ "<leader>fn", "<cmd>enew<cr>", desc = "[N]ew File" },
+	{
+		"<leader>fb",
+		function()
+			vim.lsp.buf.format({ async = true })
+		end,
+		desc = "[F]ormat [b]uffer with LSP",
+	},
 
 	-- LSP
 	-- See `:help vim.lsp.*` for documentation on the below functions
