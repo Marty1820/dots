@@ -18,7 +18,7 @@ if [ -z "$WALLPAPER" ]; then
   exit 1
 fi
 
-if ! pgrep -x $SERVICE_NAME > /dev/null; then
+if ! pgrep -x $SERVICE_NAME >/dev/null; then
   echo "Starting $SERVICE_NAME..."
   $SERVICE_NAME &
   sleep 0.5

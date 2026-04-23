@@ -22,7 +22,7 @@ log() {
 }
 
 # Print formatted header
-print_header() { 
+print_header() {
   local msg="$1"
   log "${BOLD}${msg}${RESET}"
   echo ""
@@ -46,7 +46,7 @@ check_mirrorlist() {
     return 0
   fi
 
-  local age_seconds=$(( $(date +%s) - $(stat -c %Y "$mirrorlist") ))
+  local age_seconds=$(($(date +%s) - $(stat -c %Y "$mirrorlist")))
   local max_age=604800 # 7 days
 
   if [[ $age_seconds -gt $max_age ]]; then
@@ -205,7 +205,7 @@ kern_chk() {
     log "Current kernel matches installed package. No reboot needed."
   else
     log "${RED}Newer kernel ($current_pkg) installed but running ($running_ver). Reboot required.${RESET}"
-    
+
     if [[ $INTERACTIVE -eq 1 ]]; then
       if confirm "Reboot now?"; then
         log "Rebooting..."

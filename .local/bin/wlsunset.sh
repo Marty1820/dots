@@ -3,7 +3,10 @@ set -euo pipefail
 
 CONFIG_FILE="$HOME/.config/local_env.toml"
 
-[[ -f "$CONFIG_FILE" ]] || { echo "Error: Config file not found at $CONFIG_FILE" >&2; exit 1; }
+[[ -f "$CONFIG_FILE" ]] || {
+  echo "Error: Config file not found at $CONFIG_FILE" >&2
+  exit 1
+}
 
 # Only works for flat keys, won't handle sections properly
 lat=$(grep -E '^LAT\s*=' "$CONFIG_FILE" | head -1 | sed -E 's/.*=\s*"([^"]*)".*/\1/' | tr -d "'")
@@ -21,12 +24,12 @@ if ! [[ "$lat" =~ ^-?[0-9]+\.?[0-9]*$ && "$lon" =~ ^-?[0-9]+\.?[0-9]*$ ]]; then
   exit 1
 fi
 
-if (( $(echo "$lat < -90 || $lat > 90" | bc -l) )); then
+if (($(echo "$lat < -90 || $lat > 90" | bc -l))); then
   echo "Error: Latitude must be between -90 and 90" >&2
   exit 1
 fi
 
-if (( $(echo "$lon < -180 || $lon > 180" | bc -l) )); then
+if (($(echo "$lon < -180 || $lon > 180" | bc -l))); then
   echo "Error: Longitude must be between -180 and 180" >&2
   exit 1
 fi

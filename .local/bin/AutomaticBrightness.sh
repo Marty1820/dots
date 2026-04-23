@@ -24,10 +24,14 @@ op=2
 # Parse arguments
 while getopts i:d: flag; do
   case "${flag}" in
-    i) op=1
-      num=${OPTARG};;
-    d) op=0 
-      num=${OPTARG};;
+  i)
+    op=1
+    num=${OPTARG}
+    ;;
+  d)
+    op=0
+    num=${OPTARG}
+    ;;
   esac
 done
 
@@ -39,7 +43,7 @@ write_offset() {
     touch /dev/shm/AB.offset
     chmod 666 /dev/shm/AB.offset
   fi
-  echo "$val" > /dev/shm/AB.offset
+  echo "$val" >/dev/shm/AB.offset
 }
 
 # Verify offset file exists and if so read it
@@ -64,7 +68,7 @@ fi
 if [[ $op -lt 2 ]]; then
   if [[ $op -eq 1 ]]; then
     OffSet=$((OffSet + num))
-  else 
+  else
     OffSet=$((OffSet - num))
   fi
 
@@ -98,7 +102,7 @@ if [[ -z "$BLightPath" ]]; then
 fi
 
 # Set path to current luminance sensor
-LSensorPath=$(find -L /sys/bus/iio/devices -maxdepth 2  -name "in_illuminance_raw" 2>/dev/null | head -n1)
+LSensorPath=$(find -L /sys/bus/iio/devices -maxdepth 2 -name "in_illuminance_raw" 2>/dev/null | head -n1)
 if [[ -z "$LSensorPath" ]]; then
   echo "Error: Could not find light sensor path."
   exit 1
@@ -124,13 +128,13 @@ while true; do
     write_offset "$OffSet"
   fi
 
-	Light=$(cat "$LSensorPath" 2>/dev/null)
+  Light=$(cat "$LSensorPath" 2>/dev/null)
   if [[ -z "$Light" ]]; then continue; fi
 
   # Apply offset to current light value
   Light=$((Light + OffSet))
 
-  # Set allowed range for light 
+  # Set allowed range for light
   MaxOld=$((OldSensorLight + OldSensorLight / LightChange))
   MinOld=$((OldSensorLight - OldSensorLight / LightChange))
 
@@ -138,7 +142,7 @@ while true; do
     # Store new light as old light for next comparison
     OldSensorLight=$Light
 
-		CurrentBrightness=$(cat "$BLightPath" 2>/dev/null)
+    CurrentBrightness=$(cat "$BLightPath" 2>/dev/null)
 
     # Add MinimumBrightness here to not effect comparison but the outcome
     # Using bc for float math
@@ -148,40 +152,40 @@ while true; do
     TempBackLight=$(printf "%.0f" "$(echo "scale=2; $Light * $SensorToDisplayScale" | bc)")
 
     # Check we do not ask the screen to go brighter than it can
-		if [[ $TempBackLight -gt $MaxScreenBrightness ]]; then
-			NewBackLight=$MaxScreenBrightness
-		else
-		  NewBackLight=$TempBackLight
-		fi
+    if [[ $TempBackLight -gt $MaxScreenBrightness ]]; then
+      NewBackLight=$MaxScreenBrightness
+    else
+      NewBackLight=$TempBackLight
+    fi
 
     # Get new screen brightness as a %
     ScreenPercentage=$(printf "%.0f" "$(echo "scale=2; ($NewBackLight / $MaxScreenBrightness) * 100" | bc)")
 
     # How different should each stop be
     DiffCount=$(printf "%.0f" "$(echo "scale=2; ($NewBackLight - $CurrentBrightness) / $LevelSteps" | bc)")
-       
+
     # Step once per Screen Hz to make animation
-		for ((i=1; i<=LevelSteps; i++)); do
+    for ((i = 1; i <= LevelSteps; i++)); do
       # Get current screen brightness
       CurrentBrightness=$(cat "$BLightPath" 2>/dev/null)
       if [[ -z "$CurrentBrightness" ]]; then break; fi
 
       # Accumulate the step correctly
-      FakeBackLight=$(( CurrentBrightness + DiffCount ))
+      FakeBackLight=$((CurrentBrightness + DiffCount))
 
       # Clamp to valid range
-      if (( FakeBackLight < 0 )); then
+      if ((FakeBackLight < 0)); then
         FakeBackLight=0
-      elif (( FakeBackLight > MaxScreenBrightness )); then
+      elif ((FakeBackLight > MaxScreenBrightness)); then
         FakeBackLight=$MaxScreenBrightness
       fi
 
-      echo "$FakeBackLight" > "$BLightPath"
-      
+      echo "$FakeBackLight" >"$BLightPath"
+
       # Sleep for the screen Hz time so he effect is visible
-			sleep "$AnimationDelay"
-		done
+      sleep "$AnimationDelay"
+    done
   fi
-	
+
   sleep "$SensorDelay"
 done

@@ -4,31 +4,37 @@ set -euo pipefail
 SSH_CONFIG="${SSH_CONFIG:-$HOME/.ssh/config}"
 
 # Ensure SSH config exists
-[[ -f "$SSH_CONFIG" ]] || { echo "SSH config not found at $SSH_CONFIG" >&2; exit 1; }
+[[ -f "$SSH_CONFIG" ]] || {
+  echo "SSH config not found at $SSH_CONFIG" >&2
+  exit 1
+}
 
 # Get list of hosts, excluding wildcards
 mapfile -t hosts < <(
-  sed 's/#.*//' "$SSH_CONFIG" | \
-  awk '/^Host / {
+  sed 's/#.*//' "$SSH_CONFIG" |
+    awk '/^Host / {
     for (i=2; i<=NF; i++) {
       if ($i !~ /\*/) print $i
     }
   }'
 )
 
-[[ ${#hosts[@]} -gt 0 ]] || { echo "No hosts found." >&2; exit 1; }
+[[ ${#hosts[@]} -gt 0 ]] || {
+  echo "No hosts found." >&2
+  exit 1
+}
 
 echo "Available systems:"
 select host in "${hosts[@]}" "Quit"; do
   case "$host" in
-    "Quit"|"") 
-      echo "Exiting."
-      exit 0
-      ;;
-    *) 
-      echo "Connecting to $host..."
-      ssh "$host"
-      break
-      ;;
+  "Quit" | "")
+    echo "Exiting."
+    exit 0
+    ;;
+  *)
+    echo "Connecting to $host..."
+    ssh "$host"
+    break
+    ;;
   esac
 done
