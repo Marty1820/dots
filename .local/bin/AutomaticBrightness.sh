@@ -8,7 +8,7 @@ SensorDelay=1
 
 # Scale sensor to display brightness range
 # NOW WITH FLOAT SUPPORT
-SensorToDisplayScale=1
+SensorToDisplayScale=0.7
 
 # 12 steps is the most similar on a Macbook 2017 running Arch compared to MacOS
 LevelSteps=12
