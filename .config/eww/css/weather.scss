@@ -34,6 +34,7 @@
   border-radius: 12px;
   padding: 1em;
   background-color: $background;
+
   &.empty {
     all: unset;
   }
@@ -59,18 +60,23 @@
 .aqi-progress {
   background-color: $selection;
 }
+
 .aqi-1 {
   color: $green;
 }
+
 .aqi-2 {
   color: $yellow;
 }
+
 .aqi-3 {
   color: $orange;
 }
+
 .aqi-4 {
   color: $red;
 }
+
 .aqi-5 {
   color: $purple;
 }
@@ -147,15 +153,19 @@
   &.low {
     color: $green;
   }
+
   &.moderate {
     color: $yellow;
   }
+
   &.high {
     color: $orange;
   }
+
   &.veryhigh {
     color: $red;
   }
+
   &.extreem {
     color: $purple;
   }

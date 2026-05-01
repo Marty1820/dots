@@ -39,13 +39,14 @@ ICON_MAP = {
     "50n": ("󰖑", "#6272a4"),
 }
 
-AQI_MAP = {
-    1: ("󰡳", "#50fa7b"),
-    2: ("󰡵", "#f1fa8c"),
-    3: ("󰊚", "#ffb86c"),
-    4: ("󰡴", "#ff5555"),
-    5: ("", "#bd93f9"),
-}
+AQI_MAP = [
+    (19, ("󰡳", "#50fa7b")),
+    (49, ("󰡵", "#f1fa8c")),
+    (99, ("󰊚", "#ffb86c")),
+    (149, ("󰡴", "#ff5555")),
+    (249, ("", "#ff79c6")),
+    (500, ("󰐼", "#bd93f9")),
+]
 
 ERROR_ICON = "󰼯"
 ERROR_AQI_ICON = "󰻝"
@@ -82,7 +83,6 @@ def get_weather_display(weather_data: Optional[Dict]) -> Tuple[str, str]:
 
     try:
         w = weather_data["current"]
-        temp = round(w.get("temp", 0))
         icon_code = w.get("weather", [{}])[0].get("icon")
 
         if not icon_code:
@@ -98,15 +98,20 @@ def get_weather_display(weather_data: Optional[Dict]) -> Tuple[str, str]:
 
 def get_aqi_display(aqi_data: Optional[Dict]) -> Tuple[str, str]:
     """Extract AQI icon and color with fallbacks."""
-    if not aqi_data or "list" not in aqi_data:
+    if not aqi_data:
         return ERROR_AQI_ICON, ERROR_COLOR
 
     try:
-        aqi = aqi_data["list"][0]["main"]["aqi"]
-        if not isinstance(aqi, int) or aqi < 1 or aqi > 5:
+        aqi = aqi_data["data"]["aqi"]
+        if not isinstance(aqi, (int, float)):
             logger.warning(f"Invalid AQI value: {aqi}")
             return ERROR_AQI_ICON, ERROR_COLOR
-        return AQI_MAP.get(aqi, (ERROR_AQI_ICON, ERROR_COLOR))
+        aqi_val = int(aqi)
+        for max_val, (icon, color) in AQI_MAP:
+            if aqi_val <= max_val:
+                return icon, color
+        # If larger than all buckets
+        return AQI_MAP[-1][1]
     except (KeyError, IndexError, TypeError, ValueError) as e:
         logger.error(f"Error parsing AQI data: {e}")
         return ERROR_AQI_ICON, ERROR_COLOR

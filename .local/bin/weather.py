@@ -17,15 +17,19 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     stream=sys.stderr,
 )
-
 logger = logging.getLogger(__name__)
 
 # Define paths
 HOME = Path.home()
-CACHE_DIR = HOME / ".cache" / "weather"
+CACHE_DIR = HOME / "Downloads" / "tmp"
 ONECALL_FILE = CACHE_DIR / "onecall.json"
 AQI_FILE = CACHE_DIR / "aqidata.json"
 CONFIG_FILE = HOME / ".config" / "local_env.json"
+
+# Constants
+ONECALL_URL = "https://api.openweathermap.org/data/3.0/onecall"
+AQI_BASE = "https://api.waqi.info/feed/@{city}/"
+TIMEOUT = 10
 
 
 def load_config(config_file: Path) -> Dict[str, Any]:
@@ -40,32 +44,38 @@ def load_config(config_file: Path) -> Dict[str, Any]:
         logger.error(f"Error decoding JSON file: {e}")
         sys.exit(1)
 
-    # Validate required keys
     openweather = cfg.get("openweather")
     coords = cfg.get("coords")
-    if "openweather" not in cfg or "coords" not in cfg:
-        logger.error("Missing required config keys")
-        sys.exit(1)
+    aqicn = cfg.get("aqicn")
 
-    if "lat" not in coords or "lon" not in coords:
-        logger.error("Missing required config keys")
+    # Validate required keys
+    if not isinstance(openweather, dict) or "api_key" not in openweather:
+        logger.error("Missing 'openweather.api_key' in config")
+        sys.exit(1)
+    if not isinstance(coords, dict) or "lat" not in coords or "lon" not in coords:
+        logger.error("Missing 'coords.lat|.lon' in config")
+        sys.exit(1)
+    if not isinstance(aqicn, dict) or "api_key" not in aqicn or "aqi_city" not in aqicn:
+        logger.error("Missing 'aqicn.api_key|aqi_city' in config")
         sys.exit(1)
 
     logger.debug(f"Config loaded successfully from {config_file}")
     return {
-        "API_KEY": openweather["api_key"],
+        "API_KEY": str(openweather["api_key"]),
         "LAT": coords["lat"],
         "LON": coords["lon"],
+        "AQI_KEY": str(aqicn["api_key"]),
+        "AQI_LOC": str(aqicn["aqi_city"]),
     }
 
 
 def fetch_data(
-    session: requests.Session, url: str, params: Dict[str, Any]
+    session: requests.Session, url: str, params: Dict[str, Any] = None
 ) -> Dict[str, Any]:
     """Fetches data using a persistent session."""
     try:
-        logger.debug(f"Fetching data from {url}")
-        response = session.get(url, params=params, timeout=10)
+        logger.debug("GET %s params=%s", url, params)
+        response = session.get(url, params=params, timeout=TIMEOUT)
         response.raise_for_status()
         logger.debug(f"Successfully fetched data from {url}")
         return response.json()
@@ -84,17 +94,31 @@ def reload_waybar() -> None:
         logger.warning(f"Failed to send signal to waybar: {e}")
 
 
+def get_aqi_data(token: str, city: str) -> None:
+    """Fetch AQI and save to file."""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+    # url: str = f"https://api.waqi.info/feed/@{city}/"
+    url = AQI_BASE.format(city=city)
+    params = {"token": token}
+
+    with requests.Session() as session:
+        try:
+            data = fetch_data(session, url, params)
+            AQI_FILE.write_text(json.dumps(data, indent=2))
+            logger.info("AQI saved.")
+        except OSError as e:
+            logger.error(f"File error: {e}")
+            sys.exit(1)
+
+
 def get_weather_data(
     api_key: str, lat: float, lon: float, units: Literal["imperial", "metric"]
 ) -> None:
-    """Fetches weather and air quality data and saves it to files."""
+    """Fetch weather and save to file."""
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-    base_url: str = "http://api.openweathermap.org/data/"
-    urls = {
-        "onecall": f"{base_url}3.0/onecall",
-        "air_pollution": f"{base_url}2.5/air_pollution",
-    }
+    # url: str = "http://api.openweathermap.org/data/3.0/onecall"
 
     params = {
         "appid": api_key,
@@ -106,21 +130,12 @@ def get_weather_data(
 
     with requests.Session() as session:
         try:
-            data = {}
-            for key, url in urls.items():
-                data[key] = fetch_data(session, url, params)
-
-            # Atomic writes to prevent partial files if interrupted
-            ONECALL_FILE.write_text(json.dumps(data["onecall"], indent=2))
-            AQI_FILE.write_text(json.dumps(data["air_pollution"], indent=2))
-
-            logger.info("Data successfully fetched and saved.")
+            data = fetch_data(session, ONECALL_URL, params)
+            ONECALL_FILE.write_text(json.dumps(data, indent=2))
+            logger.info("Weather saved.")
         except OSError as e:
             logger.error(f"File error: {e}")
             sys.exit(1)
-
-    # Waybar reload function
-    reload_waybar()
 
 
 def main() -> None:
@@ -148,6 +163,8 @@ def main() -> None:
             sys.exit(1)
 
         get_weather_data(config["API_KEY"], lat, lon, args.units)
+        get_aqi_data(config["AQI_KEY"], config["AQI_LOC"])
+        reload_waybar()
 
 
 if __name__ == "__main__":
