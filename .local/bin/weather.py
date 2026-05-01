@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 # Define paths
 HOME = Path.home()
-CACHE_DIR = HOME / "Downloads" / "tmp"
+CACHE_DIR = HOME / ".cache" / "weather"
 ONECALL_FILE = CACHE_DIR / "onecall.json"
 AQI_FILE = CACHE_DIR / "aqidata.json"
 CONFIG_FILE = HOME / ".config" / "local_env.json"
