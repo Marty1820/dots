@@ -1,0 +1,18 @@
+{
+  "EXAMPLE": "CONFIG Change settings and make your own",
+  "openweather": {
+    "documentation": "https://home.openweathermap.org/api_keys",
+    "api_key": "YOUR-API-KEY-HERE"
+  },
+  "aqicn": {
+    "documentation": "https://aqicn.org/json-api/doc/",
+    "example": "https://api.waqi.info/feed/@AQI_CITY/?token=AQI_API_KEY",
+    "aqi_city": "CITYNUMBER",
+    "api_key": "YOUR-API-KEY-HERE"
+  },
+  "coords": {
+    "information": "https://www.latlong.net/",
+    "lat": 12.3456,
+    "lon": 123.456
+  }
+}

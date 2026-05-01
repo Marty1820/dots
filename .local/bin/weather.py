@@ -5,7 +5,6 @@ import json
 import logging
 import requests
 import sys
-import tomllib
 import subprocess
 import signal
 from pathlib import Path
@@ -26,33 +25,38 @@ HOME = Path.home()
 CACHE_DIR = HOME / ".cache" / "weather"
 ONECALL_FILE = CACHE_DIR / "onecall.json"
 AQI_FILE = CACHE_DIR / "aqidata.json"
-CONFIG_FILE = HOME / ".config" / "local_env.toml"
+CONFIG_FILE = HOME / ".config" / "local_env.json"
 
 
 def load_config(config_file: Path) -> Dict[str, Any]:
-    """Loads configuration from a TOML file."""
+    """Loads configuration from a JSON file."""
     try:
-        with config_file.open("rb") as f:
-            cfg = tomllib.load(f)
+        with config_file.open("r") as f:
+            cfg = json.load(f)
     except FileNotFoundError:
         logger.error(f"Error: Configuration file not found at {config_file}")
         sys.exit(1)
-    except tomllib.TOMLDecodeError as e:
-        logger.error(f"Error decoding TOML file: {e}")
+    except json.JSONDecodeError as e:
+        logger.error(f"Error decoding JSON file: {e}")
         sys.exit(1)
 
     # Validate required keys
-    required_keys = ("API_KEY", "LAT", "LON")
-    missing = [k for k in required_keys if k not in cfg]
+    openweather = cfg.get("openweather")
+    coords = cfg.get("coords")
+    if "openweather" not in cfg or "coords" not in cfg:
+        logger.error("Missing required config keys")
+        sys.exit(1)
 
-    if missing:
-        logger.error(
-            f"Missing required config keys: {', '.join(missing)}", file=sys.stderr
-        )
+    if "lat" not in coords or "lon" not in coords:
+        logger.error("Missing required config keys")
         sys.exit(1)
 
     logger.debug(f"Config loaded successfully from {config_file}")
-    return cfg
+    return {
+        "API_KEY": openweather["api_key"],
+        "LAT": coords["lat"],
+        "LON": coords["lon"],
+    }
 
 
 def fetch_data(
@@ -135,7 +139,15 @@ def main() -> None:
 
     if args.command == "getdata":
         config = load_config(CONFIG_FILE)
-        get_weather_data(config["API_KEY"], config["LAT"], config["LON"], args.units)
+
+        try:
+            lat = float(config["LAT"])
+            lon = float(config["LON"])
+        except (TypeError, ValueError):
+            logger.error("LAT and LON must be numeric in the config file")
+            sys.exit(1)
+
+        get_weather_data(config["API_KEY"], lat, lon, args.units)
 
 
 if __name__ == "__main__":

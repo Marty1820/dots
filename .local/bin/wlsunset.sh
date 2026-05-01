@@ -1,16 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
-CONFIG_FILE="$HOME/.config/local_env.toml"
+CONFIG_FILE="$HOME/.config/local_env.json"
 
 [[ -f "$CONFIG_FILE" ]] || {
   echo "Error: Config file not found at $CONFIG_FILE" >&2
   exit 1
 }
 
-# Only works for flat keys, won't handle sections properly
-lat=$(grep -E '^LAT\s*=' "$CONFIG_FILE" | head -1 | sed -E 's/.*=\s*"([^"]*)".*/\1/' | tr -d "'")
-lon=$(grep -E '^LON\s*=' "$CONFIG_FILE" | head -1 | sed -E 's/.*=\s*"([^"]*)".*/\1/' | tr -d "'")
+if ! command -v jq >>/dev/null 2>&1; then
+  echo "Error: jq is required but not installed" >&2
+  exit 1
+fi
+
+lat=$(jq -r '.coords.lat // empty' "$CONFIG_FILE")
+lon=$(jq -r '.coords.lon // empty' "$CONFIG_FILE")
 
 # Validate
 if [[ -z "$lat" || -z "$lon" ]]; then
@@ -24,12 +28,12 @@ if ! [[ "$lat" =~ ^-?[0-9]+\.?[0-9]*$ && "$lon" =~ ^-?[0-9]+\.?[0-9]*$ ]]; then
   exit 1
 fi
 
-if (($(echo "$lat < -90 || $lat > 90" | bc -l))); then
+if awk "BEGIN{exit !($lat >= -90 && $lat <= 90)}"; then :; else
   echo "Error: Latitude must be between -90 and 90" >&2
   exit 1
 fi
 
-if (($(echo "$lon < -180 || $lon > 180" | bc -l))); then
+if awk "BEGIN{exit !($lon >= -180 && $lat <= 180)}"; then :; else
   echo "Error: Longitude must be between -180 and 180" >&2
   exit 1
 fi
