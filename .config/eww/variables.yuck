@@ -22,15 +22,30 @@
 
 ;; w_airquality
 (defvar aqi_map
-  '{"1":"Good", "2":"Fair", "3":"Moderate", "4":"Poor", "5":"Very Poor"}')
+  '{"1":"Good",
+    "2":"Fair",
+    "3":"Moderate",
+    "4":"Poor",
+    "5":"Very Poor",
+    "6":"Hazardous"}')
 (defpoll aqi_num :interval "5m" :initial "0" :run-while wtr
   "jq -r '.data.aqi as $raw
     | if $raw == 0 then 0
     elif $raw <= 19 then 1
     elif $raw <= 49 then 2
-    elif $raw <= 149 then 3
-    elif $raw <= 249 then 4
-    else 5
+    elif $raw <= 99 then 3
+    elif $raw <= 149 then 4
+    elif $raw <= 249 then 5
+    else 6
+    end' $HOME/.cache/weather/aqidata.json")
+(defpoll aqi_percent :interval "5m" :initial "0" :run-while wtr
+  "jq -r '.data.aqi as $v
+    | if $v == null then 0
+    else ($v/2.5) as $p
+      | if $p < 0 then 0
+      elif $p > 100 then 100
+      else ($p+0.5|floor)
+      end
     end' $HOME/.cache/weather/aqidata.json")
 
 ;; w_humidity
