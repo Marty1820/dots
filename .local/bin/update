@@ -17,8 +17,23 @@ YELLOW="\033[33;1m"
 
 # Logging setup
 log() {
-  local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
-  echo -e "$msg" | tee -a "$LOG_FILE"
+  local msg cutoff_date tmp_file
+  msg="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+
+  # Calculate cutoff date
+  cutoff_date=$(date -d '15 days ago' '+%Y-%m-%d')
+
+  # Keep only lines from the cutoff date
+  tmp_file="${LOG_FILE}.tmp"
+  awk -v cutoff="$cutoff_date" '{gsub(/[\[\]]/, "", $1); if ($1 >= cutoff) print}' "$LOG_FILE" >"$tmp_file"
+  mv "$tmp_file" "$LOG_FILE"
+
+  # Output to terminal with colors
+  echo -e "$msg"
+
+  # Write to file without ANSI codes
+  printf '%s\n' "$msg" |
+    sed -E 's/\\033\[[0-9;]*m//g; s/\x1b\[[0-9;]*m//g' >>"$LOG_FILE"
 }
 
 # Print formatted header
@@ -169,31 +184,32 @@ cpu_vulns() {
     fi
     return 1
   else
-    log "No known CPU vulnerabilities detected."
+    log "${GREEN}No known CPU vulnerabilities detected."
   fi
 }
 
 # Kernel check and reboot
 kern_chk() {
+  local current_pkg running_ver current_base running_base
   print_header "Checking for new Kernel"
 
-  local current_pkg=$(pacman -Q linux 2>/dev/null | awk '{print $2}')
+  current_pkg=$(pacman -Q linux 2>/dev/null | awk '{print $2}')
 
   if [[ -z "$current_pkg" ]]; then
-    log "Could not determine installed kernel package. Skipping."
+    log "${RED}Could not determine installed kernel package. Skipping."
     orphan_pkgs
     return 0
   fi
 
-  local running_ver=$(uname -r)
+  running_ver=$(uname -r)
 
   # Extract the numeric version (e.g., 6.19.10)
   # BETTER METHOD: Use grep to extract the leading version pattern
-  local current_base=$(echo "$current_pkg" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
-  local running_base=$(echo "$running_ver" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
+  current_base=$(echo "$current_pkg" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
+  running_base=$(echo "$running_ver" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
 
   if [[ -z "$current_base" || -z "$running_base" ]]; then
-    log "Warning: Could not parse version strings. Falling back to string comparison."
+    log "${YELLOW}Warning: Could not parse version strings. Falling back to string comparison."
     current_base="$current_pkg"
     running_base="$running_ver"
   fi
@@ -208,14 +224,14 @@ kern_chk() {
 
     if [[ $INTERACTIVE -eq 1 ]]; then
       if confirm "Reboot now?"; then
-        log "Rebooting..."
+        log "${GREEN}Rebooting..."
         reboot
         exit 0
       else
-        log "Reboot deferred by user."
+        log "${YELLOW}Reboot deferred by user."
       fi
     else
-      log "Unattended mode: Reboot deferred. Please reboot manually."
+      log "${YELLOW}Unattended mode: Reboot deferred. Please reboot manually."
     fi
   fi
 
@@ -247,10 +263,9 @@ orphan_pkgs() {
 # Waybar reload
 waybar_reload() {
   if pgrep -x waybar >/dev/null; then
-    print_header "Reloading Waybar"
-    pkill -SIGRTMIN+8 waybar || log "Waybar reload signal sent (or process not found)."
+    pkill -SIGRTMIN+8 waybar || log "${GREEN}Waybar reload signal sent"
   else
-    log "Waybar not running. Skipping reload"
+    log "${YELLOW}Waybar not running. Skipping reload"
   fi
 }
 
@@ -267,7 +282,7 @@ main() {
   kern_chk
   waybar_reload
 
-  log "Update script completed."
+  log "${GREEN}Update script completed."
 }
 
 main
