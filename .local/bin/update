@@ -184,7 +184,7 @@ cpu_vulns() {
     fi
     return 1
   else
-    log "${GREEN}No known CPU vulnerabilities detected."
+    log "${GREEN}No known CPU vulnerabilities detected.${RESET}"
   fi
 }
 
@@ -209,7 +209,7 @@ kern_chk() {
   running_base=$(echo "$running_ver" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
 
   if [[ -z "$current_base" || -z "$running_base" ]]; then
-    log "${YELLOW}Warning: Could not parse version strings. Falling back to string comparison."
+    log "${YELLOW}Warning: Could not parse version strings. Falling back to string comparison.${RESET}"
     current_base="$current_pkg"
     running_base="$running_ver"
   fi
@@ -224,14 +224,14 @@ kern_chk() {
 
     if [[ $INTERACTIVE -eq 1 ]]; then
       if confirm "Reboot now?"; then
-        log "${GREEN}Rebooting..."
+        log "${GREEN}Rebooting...${RESET}"
         reboot
         exit 0
       else
-        log "${YELLOW}Reboot deferred by user."
+        log "${YELLOW}Reboot deferred by user.${RESET}"
       fi
     else
-      log "${YELLOW}Unattended mode: Reboot deferred. Please reboot manually."
+      log "${YELLOW}Unattended mode: Reboot deferred. Please reboot manually.${RESET}"
     fi
   fi
 
@@ -263,9 +263,9 @@ orphan_pkgs() {
 # Waybar reload
 waybar_reload() {
   if pgrep -x waybar >/dev/null; then
-    pkill -SIGRTMIN+8 waybar || log "${GREEN}Waybar reload signal sent"
+    pkill -SIGRTMIN+8 waybar || log "${GREEN}Waybar reload signal sent.${RESET}"
   else
-    log "${YELLOW}Waybar not running. Skipping reload"
+    log "${YELLOW}Waybar not running. Skipping reload.${RESET}"
   fi
 }
 
@@ -282,7 +282,7 @@ main() {
   kern_chk
   waybar_reload
 
-  log "${GREEN}Update script completed."
+  log "${GREEN}Update script completed.${RESET}"
 }
 
 main
