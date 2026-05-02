@@ -22,6 +22,8 @@ if [[ $- == *i* ]]; then
         }
         printf "\n";
     }'
+else
+  exit
 fi
 
 
