@@ -254,7 +254,7 @@ orphan_pkgs() {
       read -rp "Remove them? [y/N]: " ans
       if [[ "$ans" =~ ^[Yy]$ ]]; then
         log "Removing orphans..."
-        pacman -Rns $(pacman -Qdtq)
+        sudo pacman -Rns $(pacman -Qdtq)
       fi
     fi
   fi
