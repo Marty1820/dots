@@ -64,4 +64,16 @@ wk.add({
 	{ "<leader>xq", "<cmd>copen<cr>", desc = "Quickfix List" },
 	{ "[q", "<cmd>cprev<cr>", desc = "Previous quickfix" },
 	{ "]q", "<cmd>cnext<cr>", desc = "Next quickfix" },
+
+	-- Micropython
+	{ "<leader>m", group = "+[M]icropython" },
+	{ "<leader>mi", "<cmd>MPInit<cr>", desc = "Initialize project" },
+	{ "<leader>mI", "<cmd>MPInstall<cr>", desc = "Install project dependancies with uv" },
+	{ "<leader>ml", "<cmd>MPListDevices<cr>", desc = "List devices" },
+	{ "<leader>mp", "<cmd>MPRun<cr>", desc = "Run current buffer on device" },
+	{ "<leader>mu", "<cmd>MPUpload<cr>", desc = "MP Upload buffer to device" },
+	{ "<leader>mU", "<cmd>MPUploadAll<cr>", desc = "Upload folder to device" },
+	{ "<leader>mR", "<cmd>MPRepl<cr>", desc = "Open MicroPython REPL" },
+	{ "<leader>mr", "<cmd>MPReset<cr>", desc = "Soft reset device" },
+	{ "<leader>mh", "<cmd>MPHardReset<cr>", desc = "Hard reset device" },
 })
