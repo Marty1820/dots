@@ -8,6 +8,7 @@ return {
 			"html", -- prettierd
 			"cssls", -- prettierd
 			"ts_ls", -- biome
+			"yamlls", -- prettierd
 		},
 		-- Add this to your lspconfig setup or global config
 		vim.api.nvim_create_autocmd("BufWritePre", {
