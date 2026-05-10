@@ -3,6 +3,13 @@ set -euo pipefail
 
 SSH_CONFIG="${SSH_CONFIG:-$HOME/.ssh/config}"
 
+# SSH Command
+if [ "$TERM" = "xterm-kitty" ]; then
+  SSH_CMD=("kitten" "ssh")
+else
+  SSH_CMD=("ssh")
+fi
+
 # Ensure SSH config exists
 [[ -f "$SSH_CONFIG" ]] || {
   echo "SSH config not found at $SSH_CONFIG" >&2
@@ -33,7 +40,7 @@ select host in "${hosts[@]}" "Quit"; do
     ;;
   *)
     echo "Connecting to $host..."
-    ssh "$host"
+    "${SSH_CMD[@]}" "$host"
     break
     ;;
   esac
