@@ -77,17 +77,7 @@ git clone https://github.com/Marty1820/configs.git ~/dots && cd ~/dots && stow -
 
 #### Extra file needed for wlsunset and weather module in Waybar
 
-```bash
-nvim ~/.local/state/location.toml
-```
-
-Example contents:
-
-```toml
-API_KEY = "OPEN_WEATHER_API_KEY"
-LAT = "LATITUDE"
-LON = "LONGITUDE"
-```
+Example file located in `.config/local_env.json`
 
 #### Niri wants
 
