@@ -31,17 +31,16 @@ output "eDP-1" {
 binds {
   // Application Launching
   Mod+Shift+Slash { show-hotkey-overlay; }
-  Mod+Q hotkey-overlay-title="Close Focused Window"       { close-window; }
-  Mod+Return hotkey-overlay-title="Terminal: Kitty"       { spawn "kitty"; }
-  Mod+B hotkey-overlay-title="WebBrowser: Helium"         { spawn "helium-browser"; }
-  Mod+Shift+B hotkey-overlay-title="WebBrowser: Waterfox" { spawn "waterfox"; }
-  Mod+E hotkey-overlay-title="FileBrowser: Thunar"        { spawn "thunar"; }
-  Mod+D hotkey-overlay-title="App Launcher: Fuzzel"       { spawn "fuzzel"; }
+  Mod+Q hotkey-overlay-title="Close Focused Window" { close-window; }
+  Mod+Return hotkey-overlay-title="Terminal: Kitty" { spawn "kitty"; }
+  Mod+B hotkey-overlay-title="WebBrowser: Helium"   { spawn "helium-browser"; }
+  Mod+E hotkey-overlay-title="FileBrowser: Thunar"  { spawn "thunar"; }
+  Mod+D hotkey-overlay-title="App Launcher: Fuzzel" { spawn "fuzzel"; }
   // Logoff
   Ctrl+Alt+Delete { quit skip-confirmation=true; }
   Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "swaylock"; }
 
-  // Changing Window Focus
+  // Navigation: Arrow keys and vim-style (hjkl) bindings for convenience
   Mod+Left  { focus-column-left; }
   Mod+H     { focus-column-left; }
   Mod+Down  { focus-window-down; }
@@ -110,21 +109,18 @@ binds {
 
   // Function (fn) keys
   XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-  XF86AudioLowerVolume       { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01-"; }
-  Shift+XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-  XF86AudioRaiseVolume       { spawn-sh "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 0.01+"; }
-  Shift+XF86AudioRaiseVolume { spawn-sh "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 0.1+"; }
+  XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.01-"; }
+  XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "--limit" "1.0" "@DEFAULT_AUDIO_SINK@" "0.01+"; }
 
   XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
   XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
   XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
 
-  XF86MonBrightnessDown { spawn-sh "brightnessctl set 1%-"; }
-  Shift+XF86MonBrightnessDown { spawn-sh "brightnessctl set 5%-"; }
-  XF86MonBrightnessUp   { spawn-sh "brightnessctl set +1%"; }
-  Shift+XF86MonBrightnessUp   { spawn-sh "brightnessctl set +5%"; }
+  XF86MonBrightnessDown { spawn "brightnessctl" "set" "1%-"; }
+  XF86MonBrightnessUp   { spawn "brightnessctl" "set" "+1%"; }
 
-  Super+p hotkey-overlay-title=null { spawn-sh "awww.sh"; } //fn F9 - Projector key
+  //fn F9
+  Super+p hotkey-overlay-title="Wallpaper Switcher" { spawn-sh "awww.sh"; }
   //XF86rfkill // fn F10 - Airplane
 
   // fn F11 - Print Screen
@@ -134,6 +130,7 @@ binds {
 
   XF86AudioMedia hotkey-overlay-title=null repeat=false { toggle-overview; } // fn F12 - Gear Key
 
+  // Prevent inhibition bypass (ensures shortcuts can't be disabled by apps)
   Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
@@ -214,8 +211,10 @@ window-rule {
 window-rule {
   match title="(Minecraft )[0-9]" app-id="(Minecraft )[0-9]"
   open-fullscreen true
+  // Uncomment below if using controller profile for Minecraft
   //spawn-sh "antimicrox --profile ~/.config/antimicrox/stadia.gamecontroller.amgp --hidden"
 }
+// Floating dialogs: property dialogs, connection managers, files operations, rename prompts
 window-rule {
   match title="[a-z|A-Z|0-9]( Properties)"
   match app-id="nm-connection-editor"
@@ -250,12 +249,12 @@ layer-rule {
 //--- Gestures ---
 gestures {
   dnd-edge-view-scroll {
-    trigger-width 100
-    max-speed 3000
+    trigger-width 100 // Swipe zone width in pixels
+    max-speed 3000 // Max scroll velocity
   }
   dnd-edge-workspace-switch {
-    trigger-height 100
-    max-speed 3000
+    trigger-height 100 // Swipe zone width in pixels
+    max-speed 3000 // Max scroll velocity
   }
   hot-corners {
     off
