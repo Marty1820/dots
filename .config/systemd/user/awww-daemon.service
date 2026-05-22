@@ -1,9 +1,9 @@
 [Unit]
-Description=Starts wlsunset Day/night gamma adjustments for Wayland
+Description=Run awww daemon for wallpaper setting
 PartOf=graphical-session.target
 After=graphical-session.target
 Requisite=graphical-session.target
 
 [Service]
-ExecStart=%h/.local/bin/wlsunset.sh
+ExecStart=awww-daemon
 Restart=on-failure

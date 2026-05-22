@@ -1,9 +1,9 @@
 [Unit]
-Description=Starts wlsunset Day/night gamma adjustments for Wayland
+Description=Run eww daemon for widgets
 PartOf=graphical-session.target
 After=graphical-session.target
 Requisite=graphical-session.target
 
 [Service]
-ExecStart=%h/.local/bin/wlsunset.sh
+ExecStart=ewww daemon
 Restart=on-failure
