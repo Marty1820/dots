@@ -1,3 +1,9 @@
+vim.pack.add({
+  "https://github.com/mason-org/mason.nvim",
+  "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/mason-org/mason-lspconfig.nvim",
+})
+
 require("mason").setup({
   max_concurent_installers = 4,
   ui = {
@@ -20,6 +26,17 @@ require("mason-lspconfig").setup({
     "yamlls", -- prettierd
   },
   automatic_enable = true,
+})
+
+--- LSP Settings
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim" },
+      },
+    },
+  },
 })
 
 -- Autoformat code when saving
