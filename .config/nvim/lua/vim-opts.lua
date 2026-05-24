@@ -1,3 +1,6 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
@@ -28,3 +31,13 @@ vim.o.completeopt = "menu,menuone,noselect"
 
 -- Sets keys to allow wrapping around beginning and ends of lines
 vim.opt.whichwrap:append("<,>,h,l,[,]")
+
+-- See `:help vim.hl.on_yank()`
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.hl.on_yank()
+	end,
+	group = highlight_group,
+	pattern = "*",
+})
