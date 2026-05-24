@@ -1,9 +1,15 @@
 [Unit]
 Description=Mac-like-automatic-brightness as service
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
 
 [Service]
 Type=simple
 Restart=on-failure
 RestartSec=5s
+
+StartLimitBurst=3
+StartLimitIntervalSec=20
 
 ExecStart=%h/.local/bin/AutomaticBrightness.sh
