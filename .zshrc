@@ -36,7 +36,7 @@ fi
 
 
 # --- Environment Variables ---
-export HISTORY_IGNORE='(l[salt.]#( *)#|pwd|exit|history(|*)|cls)'
+export HISTORY_IGNORE='(l[salt.]#( *)#|pwd|exit|history(|*)|cls|cd)'
 export HISTFILE="$XDG_CACHE_HOME/sh_hist"
 export HISTSIZE=10000
 export SAVEHIST=10000
