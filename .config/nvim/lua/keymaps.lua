@@ -2,6 +2,13 @@ local wk = require("which-key")
 
 wk.add({
 	{
+		"<leader>?",
+		function()
+			require("which-key").show({ global = false })
+		end,
+		desc = "Buffer Local Keymaps (which-key)",
+	},
+	{
 		mode = { "n", "v" }, -- NORMAL and VISUAL mode
 		{ "<leader>q", "<cmd>q<cr>", desc = "Quit" }, -- no need to specify mode since it's inherited
 		{ "<leader>w", "<cmd>w<cr>", desc = "Write" },
