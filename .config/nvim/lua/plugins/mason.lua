@@ -32,6 +32,7 @@ require("mason-tool-installer").setup({
   ensure_installed = {
     { "bash-language-server" },
     { "biome" },
+    { "json-lsp" },
     { "css-lsp" },
     { "html-lsp" },
     { "lua-language-server" },
