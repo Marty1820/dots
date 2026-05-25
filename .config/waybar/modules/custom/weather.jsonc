@@ -10,6 +10,6 @@
     "max-length": 8,
     "on-click": "eww get weather | grep -q true && { eww update weather=false; sleep .25; eww close weather-closer; eww close weather; } || { eww open weather; eww update weather=true; eww open weather-closer; }",
     "on-click-right": "~/.config/waybar/scripts/weather.py",
-    "signal": 10,
-  },
+    "signal": 10
+  }
 }

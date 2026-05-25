@@ -9,6 +9,6 @@
     "exec-if": "test $(checkupdates | wc -l) -gt 0", // always run; consider advanced run conditions
     "on-click": "kitty -e 'paru'; pkill -SIGRTMIN+8 waybar", // update system
     "signal": 8,
-    "tooltip-format": "Updates: {} Available",
-  },
+    "tooltip-format": "Updates: {} Available"
+  }
 }

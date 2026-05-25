@@ -6,8 +6,8 @@
     "max-length": 5,
     "tooltip-format": "<b>Standard Time</b>: <span text_transform='lowercase'>{:%I:%M %p}</span>",
     "calendar": {
-      "mode": "month",
-    },
+      "mode": "month"
+    }
   },
   "clock#date": {
     "format": "󰃶 {:%b %d}",
@@ -20,8 +20,8 @@
         "months": "<span color='#f8f8f2'><b>{}</b></span>",
         "days": "<span color='#f8f8f2'><b>{}</b></span>",
         "weekdays": "<span color='#bd93f9'><b>{}</b></span>",
-        "today": "<span color='#ff79c6'><b>{}</b></span>",
-      },
-    },
-  },
+        "today": "<span color='#ff79c6'><b>{}</b></span>"
+      }
+    }
+  }
 }

@@ -9,8 +9,8 @@
     "max-length": 7,
     "states": {
       "warning": 75,
-      "critical": 90,
+      "critical": 90
     },
-    "tooltip": false,
-  },
+    "tooltip": false
+  }
 }

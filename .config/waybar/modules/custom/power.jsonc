@@ -3,6 +3,6 @@
   "custom/power": {
     "format": "󰣇",
     "on-click": "eww get powermenu | grep -q true && { eww update powermenu=false; sleep .25; eww close powermenu-closer; eww close powermenu; } || { eww open powermenu; eww update powermenu=true; eww open powermenu-closer; }",
-    "tooltip": false,
-  },
+    "tooltip": false
+  }
 }

@@ -7,10 +7,10 @@
     "format-critical": "󰀧 {percentage}%",
     "states": {
       "warning": 75,
-      "critical": 90,
+      "critical": 90
     },
     "min-length": 7,
     "max-length": 7,
-    "tooltip-format": "Memory Used: {used:0.0f}/{total:0.0f} GiB",
-  },
+    "tooltip-format": "Memory Used: {used:0.0f}/{total:0.0f} GiB"
+  }
 }
