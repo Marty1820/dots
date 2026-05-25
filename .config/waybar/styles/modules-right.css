@@ -5,11 +5,13 @@
 #custom-left_div.5 {
   color: @volume;
 }
+
 #wireplumber {
   background-color: @volume;
   color: @purple;
   padding: 0 12px;
 }
+
 #wireplumber.muted {
   color: @red;
 }
@@ -22,10 +24,12 @@
   background-color: @volume;
   color: @backlight;
 }
+
 #brightness {
   background-color: @backlight;
   padding: 0 12px;
 }
+
 #custom-light-icon,
 #backlight {
   color: @yellow;
@@ -39,18 +43,22 @@
   background-color: @backlight;
   color: @battery;
 }
+
 #battery {
   background-color: @battery;
   color: @cyan;
   padding: 0 12px;
 }
+
 #battery.plugged,
 #battery.charging {
   color: @green;
 }
+
 #battery.warning {
   color: @warning;
 }
+
 #battery.critical {
   color: @critical;
 }

@@ -1,7 +1,8 @@
 @import "styles/colors.css";
 
 * {
-  all: initial; /* Reset GTK theme */
+  /* Reset GTK theme */
+  all: initial;
   color: @main-fg;
   font-family: "Mononoki Nerd Font Mono";
   font-weight: bold;
@@ -19,7 +20,8 @@
 #waybar {
   background-color: @outline;
 }
-#waybar > box {
+
+#waybar>box {
   margin: 4px;
   background-color: @main-bg;
 }
@@ -29,6 +31,7 @@ button {
   min-width: 16px;
   padding: 0 10px;
 }
+
 button:hover {
   background-color: @hover-bg;
   color: @hover-fg;
@@ -39,7 +42,8 @@ tooltip {
   border-radius: 10px;
   background-color: @main-bg;
 }
-tooltip > box {
+
+tooltip>box {
   padding: 0 6px;
 }
 
