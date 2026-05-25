@@ -4,7 +4,7 @@
 ;; Close widget when clicking off of it
 (defwidget closer [window]
   (eventbox
-    :onclick 
+    :onclick
       "${EWW_CMD} update ${window}=false;
       ${EWW_CMD} close ${window}-closer;
       ${EWW_CMD} close ${window}"
