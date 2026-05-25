@@ -21,6 +21,16 @@ wk.add({
     { "<leader>w", "<cmd>w<cr>", desc = "Write" },
   },
 
+  -- Vim Commands
+  { "<leader>v", group = "+[V]im Commands" },
+  {
+    "<leader>vu",
+    function()
+      vim.pack.update()
+    end,
+    desc = "Plugin Updates",
+  },
+
   -- Diagnostics
   { "<leader>d", group = "+[D]iagnostics" },
   {
