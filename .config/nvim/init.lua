@@ -10,7 +10,7 @@ vim.pack.add({
   "https://github.com/nvim-lualine/lualine.nvim",
 
   -- Micropython
-  "https://github.com/folke/snacks.nvim",
+  { src = "https://github.com/folke/snacks.nvim", version = "stable" },
   "https://github.com/jim-at-jibba/micropython.nvim",
 })
 
