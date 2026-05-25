@@ -8,7 +8,6 @@ require("nvim-web-devicons").setup({
   variant = "dark",
 })
 
-
 require("lualine").setup({
   options = {
     theme = "dracula-nvim",
