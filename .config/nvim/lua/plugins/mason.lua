@@ -11,6 +11,7 @@ vim.pack.add({
   "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
 })
 
+-- Install Mason and related plugins
 require("mason").setup({
   max_concurent_installers = 4,
   ui = {
@@ -26,6 +27,7 @@ require("mason-lspconfig").setup({
   automatic_enable = true,
 })
 
+-- Install tools automatically
 require("mason-tool-installer").setup({
   ensure_installed = {
     { "bash-language-server" },
@@ -47,7 +49,7 @@ require("mason-tool-installer").setup({
   },
 })
 
---- LSP Settings
+-- LSP Setup
 vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
@@ -56,12 +58,4 @@ vim.lsp.config("lua_ls", {
       },
     },
   },
-})
-
--- Autoformat code when saving
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function()
-    vim.lsp.buf.format({ async = false })
-  end,
 })

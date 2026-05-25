@@ -5,6 +5,7 @@ require("which-key").setup()
 local wk = require("which-key")
 
 wk.add({
+  -- Help
   {
     "<leader>?",
     function()
@@ -12,9 +13,11 @@ wk.add({
     end,
     desc = "Buffer Local Keymaps (which-key)",
   },
+
+  -- General
   {
     mode = { "n", "v" }, -- NORMAL and VISUAL mode
-    { "<leader>q", "<cmd>q<cr>", desc = "Quit" }, -- no need to specify mode since it's inherited
+    { "<leader>q", "<cmd>q<cr>", desc = "Quit" },
     { "<leader>w", "<cmd>w<cr>", desc = "Write" },
   },
 
@@ -25,96 +28,84 @@ wk.add({
     function()
       vim.diagnostic.jump({ count = -1 })
     end,
-    desc = "Go to previous diagnostic message",
+    desc = "Previous diagnostic",
   },
   {
     "<leader>d]",
     function()
       vim.diagnostic.jump({ count = 1 })
     end,
-    desc = "Go to next diagnostic message",
+    desc = "Next diagnostic",
   },
-  { "<leader>dq", vim.diagnostic.setloclist, desc = "Open diagnostics list" },
+  { "<leader>dq", vim.diagnostic.setloclist, desc = "Diagnostics list" },
 
-  -- File
+  -- Files
   { "<leader>f", group = "+[F]iles" },
-  { "<leader>fn", "<cmd>enew<cr>", desc = "[N]ew File" },
+  { "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
   {
     "<leader>fb",
     function()
       vim.lsp.buf.format({ async = true })
     end,
-    desc = "[F]ormat [b]uffer with LSP",
+    desc = "Format buffer",
   },
+
   -- Telescope
   {
     "<leader>ff",
     function()
       require("telescope.builtin").find_files()
     end,
-    desc = "Telescope find files",
+    desc = "Find files",
   },
   {
     "<leader>fg",
     function()
       require("telescope.builtin").live_grep()
     end,
-    desc = "Telescope live grep",
-  },
-  {
-    "<leader><space>",
-    function()
-      require("telescope.builtin").buffers()
-    end,
-    desc = "Telescope buffers",
+    desc = "Live grep",
   },
   {
     "<leader>fh",
     function()
       require("telescope.builtin").help_tags()
     end,
-    desc = "Telescope help tags",
+    desc = "Help tags",
+  },
+  {
+    "<leader><space>",
+    function()
+      require("telescope.builtin").buffers()
+    end,
+    desc = "Buffers",
   },
 
   -- LSP
-  -- See `:help vim.lsp.*` for documentation on the below functions
   { "<leader>l", group = "+[L]SP" },
   { "<leader>lk", vim.lsp.buf.hover, desc = "Diagnostics pop-up" },
-  { "<leader>ld", vim.lsp.buf.definition, desc = "[D]efinition" },
-  { "<leader>lr", vim.lsp.buf.references, desc = "[R]eferences" },
-  { "<leader>lc", vim.lsp.buf.code_action, desc = "[C]ode action" },
+  { "<leader>ld", vim.lsp.buf.definition, desc = "Go to definition" },
+  { "<leader>lr", vim.lsp.buf.references, desc = "References" },
+  { "<leader>lc", vim.lsp.buf.code_action, desc = "Code action" },
 
-  -- Buffer
+  -- Buffers
   { "<S-h>", "<cmd>bprevious<cr>", desc = "Previous buffer" },
   { "<S-l>", "<cmd>bnext<cr>", desc = "Next buffer" },
 
   -- MISC
   { "<leader>xl", "<cmd>lopen<cr>", desc = "Location List" },
   { "<leader>xq", "<cmd>copen<cr>", desc = "Quickfix List" },
-  { "[q", "<cmd>cprev<cr>", desc = "Previous quickfix" },
+  { "[q", "<cmd>cprev<cr>", desc = "Prev quickfix" },
   { "]q", "<cmd>cnext<cr>", desc = "Next quickfix" },
 
   -- Micropython
   { "<leader>m", group = "+[M]icropython" },
-  { "<leader>mi", "<cmd>MPInit<cr>", desc = "Initialize project" },
-  {
-    "<leader>mI",
-    "<cmd>MPInstall<cr>",
-    desc = "Install project dependancies with uv",
-  },
+  { "<leader>mi", "<cmd>MPInit<cr>", desc = "Init project" },
+  { "<leader>mI", "<cmd>MPInstall<cr>", desc = "Install deps" },
   { "<leader>ml", "<cmd>MPListDevices<cr>", desc = "List devices" },
-  {
-    "<leader>mp",
-    "<cmd>MPRun<cr>",
-    desc = "Run current buffer on device",
-  },
-  {
-    "<leader>mu",
-    "<cmd>MPUpload<cr>",
-    desc = "MP Upload buffer to device",
-  },
-  { "<leader>mU", "<cmd>MPUploadAll<cr>", desc = "Upload folder to device" },
-  { "<leader>mR", "<cmd>MPRepl<cr>", desc = "Open MicroPython REPL" },
-  { "<leader>mr", "<cmd>MPReset<cr>", desc = "Soft reset device" },
-  { "<leader>mh", "<cmd>MPHardReset<cr>", desc = "Hard reset device" },
+  { "<leader>mp", "<cmd>MPRun<cr>", desc = "Run buffer" },
+  { "<leader>mu", "<cmd>MPUpload<cr>", desc = "Upload buffer" },
+  { "<leader>mU", "<cmd>MPUploadAll<cr>", desc = "Upload folder" },
+  { "<leader>mR", "<cmd>MPRepl<cr>", desc = "REPL" },
+  { "<leader>mr", "<cmd>MPReset<cr>", desc = "Soft reset" },
+  { "<leader>mh", "<cmd>MPHardReset<cr>", desc = "Hard reset" },
 })

@@ -4,6 +4,7 @@ vim.pack.add({
   "https://github.com/nvim-telescope/telescope-ui-select.nvim",
 })
 
+-- Install Telescope and dependencies
 require("telescope").setup({
   defaults = {
     mappings = {
@@ -29,4 +30,6 @@ require("telescope").setup({
     },
   },
 })
+
+-- Load extensions
 require("telescope").load_extension("ui-select")
