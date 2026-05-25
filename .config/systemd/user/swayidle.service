@@ -2,12 +2,16 @@
 Description=Start SwayIdle to lock and power off Monitors when Idle
 PartOf=graphical-session.target
 After=graphical-session.target
-Requisite=graphical-session.target
 
 [Service]
-ExecStart=/usr/bin/swayidle -w \
-  timeout 300 '/usr/bin/swaylock -f' \
-  timeout 330 '/usr/bin/niri msg action power-off-monitors' \
-  resume '/usr/bin/niri msg action power-on-monitors' \
-  before-sleep '/usr/bin/swaylock -f'
+Type=simple
+ExecStart=/usr/bin/swayidle -w timeout 300 '/usr/bin/swaylock -f' timeout 330 '/usr/bin/niri msg action power-off-monitors' resume '/usr/bin/niri msg action power-on-monitors' before-sleep '/usr/bin/swaylock -f'
 Restart=on-failure
+RestartSec=5s
+
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=10s
+
+[Install]
+WantedBy=graphical-session.target

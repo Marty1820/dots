@@ -2,8 +2,16 @@
 Description=Run eww daemon for widgets
 PartOf=graphical-session.target
 After=graphical-session.target
-Requisite=graphical-session.target
 
 [Service]
-ExecStart=eww daemon
+Type=exec
+ExecStart=/usr/sbin/eww daemon --no-daemonize
 Restart=on-failure
+RestartSec=5s
+
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=10s
+
+[Install]
+WantedBy=graphical-session.target

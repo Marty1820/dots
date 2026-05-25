@@ -2,6 +2,7 @@
 Description=Run weather update every 5 minutes
 
 [Timer]
+Unit=weather.service
 OnBootSec=1min
 OnUnitActiveSec=5min
 Persistent=true

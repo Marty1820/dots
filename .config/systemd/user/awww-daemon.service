@@ -2,8 +2,16 @@
 Description=Run awww daemon for wallpaper setting
 PartOf=graphical-session.target
 After=graphical-session.target
-Requisite=graphical-session.target
 
 [Service]
-ExecStart=awww-daemon
+Type=simple
+ExecStart=/usr/sbin/awww-daemon
 Restart=on-failure
+RestartSec=5s
+
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=10s
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,9 +1,14 @@
 [Unit]
 Description=Run weather data fetch
-ConditionNetworkOnline=true
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/python3 %h/.local/bin/weather.py getdata --units imperial
 StandardOutput=journal
 StandardError=journal
+
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=10s

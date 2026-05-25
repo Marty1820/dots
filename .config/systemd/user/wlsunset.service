@@ -2,8 +2,16 @@
 Description=Starts wlsunset Day/night gamma adjustments for Wayland
 PartOf=graphical-session.target
 After=graphical-session.target
-Requisite=graphical-session.target
 
 [Service]
+Type=simple
 ExecStart=%h/.local/bin/wlsunset.sh
 Restart=on-failure
+RestartSec=5s
+
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=10s
+
+[Install]
+WantedBy=graphical-session.target

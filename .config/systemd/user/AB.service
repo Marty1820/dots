@@ -2,11 +2,16 @@
 Description=Mac-like-automatic-brightness as service
 PartOf=graphical-session.target
 After=graphical-session.target
-Requisite=graphical-session.target
 
 [Service]
 Type=simple
+ExecStart=%h/.local/bin/AutomaticBrightness.sh
 Restart=on-failure
 RestartSec=5s
 
-ExecStart=%h/.local/bin/AutomaticBrightness.sh
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=10s
+
+[Install]
+WantedBy=graphical-session.target
