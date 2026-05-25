@@ -100,9 +100,10 @@ wk.add({
   -- Micropython
   { "<leader>m", group = "+[M]icropython" },
   { "<leader>mi", "<cmd>MPInit<cr>", desc = "Init project" },
-  { "<leader>mI", "<cmd>MPInstall<cr>", desc = "Install deps" },
   { "<leader>ml", "<cmd>MPListDevices<cr>", desc = "List devices" },
+  { "<leader>mL", "<cmd>MPListFiles<cr>", desc = "List files" },
   { "<leader>mp", "<cmd>MPRun<cr>", desc = "Run buffer" },
+  { "<leader>mP", "<cmd>MPRunMain<cr>", desc = "Run main.py" },
   { "<leader>mu", "<cmd>MPUpload<cr>", desc = "Upload buffer" },
   { "<leader>mU", "<cmd>MPUploadAll<cr>", desc = "Upload folder" },
   { "<leader>mR", "<cmd>MPRepl<cr>", desc = "REPL" },
