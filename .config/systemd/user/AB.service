@@ -9,7 +9,4 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 
-StartLimitBurst=3
-StartLimitIntervalSec=20
-
 ExecStart=%h/.local/bin/AutomaticBrightness.sh

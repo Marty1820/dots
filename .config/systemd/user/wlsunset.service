@@ -7,6 +7,3 @@ Requisite=graphical-session.target
 [Service]
 ExecStart=%h/.local/bin/wlsunset.sh
 Restart=on-failure
-
-StartLimitBurst=3
-StartLimitIntervalSec=20
