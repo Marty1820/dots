@@ -33,7 +33,8 @@ binds {
   Mod+Shift+Slash { show-hotkey-overlay; }
   Mod+Q hotkey-overlay-title="Close Focused Window" { close-window; }
   Mod+Return hotkey-overlay-title="Terminal: Kitty" { spawn "kitty"; }
-  Mod+B hotkey-overlay-title="WebBrowser: Helium"   { spawn "helium-browser"; }
+  Mod+B hotkey-overlay-title="WebBrowser: Zen"   { spawn "zen-browser"; }
+  Mod+Shift+B hotkey-overlay-title="WebBrowser: Helium"   { spawn "helium-browser"; }
   Mod+E hotkey-overlay-title="FileBrowser: Thunar"  { spawn "thunar"; }
   Mod+D hotkey-overlay-title="App Launcher: Fuzzel" { spawn "fuzzel"; }
   // Logoff
