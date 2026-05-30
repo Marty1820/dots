@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+# pacman -S jq
 
 CONFIG_FILE="$HOME/.config/local_env.json"
 

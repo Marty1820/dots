@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# pacman -S python-requests
+
 import argparse
 import json
 import logging
