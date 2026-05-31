@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# pacman -Syu reflector rebuild-detector tldr fwupd udisks2
+# systemctl enable --now reflector.timer fwupd-refresh.timer udisks2.service
+# fwupdmgr get-updates
 
 # Configuration
 INTERACTIVE=${INTERACTIVE:-1} # 1 for prompts. 0 for unnatended
@@ -7,6 +10,7 @@ LOG_FILE="$HOME/.local/share/update.log"
 
 # Ensure log directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
+touch "$LOG_FILE"
 
 # Colors
 BOLD="\033[1m"
@@ -52,40 +56,6 @@ confirm() {
   [[ "$ans" =~ ^[Yy]$ ]]
 }
 
-# Update mirrors if older than 7 days
-check_mirrorlist() {
-  local mirrorlist="/etc/pacman.d/mirrorlist"
-
-  if [[ ! -f "$mirrorlist" ]]; then
-    log "Mirrorlist not found. Skipping"
-    return 0
-  fi
-
-  local age_seconds=$(($(date +%s) - $(stat -c %Y "$mirrorlist")))
-  local max_age=604800 # 7 days
-
-  if [[ $age_seconds -gt $max_age ]]; then
-    print_header "Updating mirrorlist with reflector"
-
-    if ! systemctl is-active --quiet reflector.service 2>/dev/null; then
-      systemctl start reflector.service || {
-        log "${RED}Failed to start reflector.service${RESET}"
-        return 1
-      }
-
-      # Wait for completion
-      while systemctl is-active --quiet reflector.service; do
-        sleep 1
-      done
-      log "Reflector service completed."
-    else
-      log "Reflector service already active."
-    fi
-  else
-    log "Mirrorlist is fresh (${age_seconds}s old)."
-  fi
-}
-
 # Package upgrade
 pkg_update() {
   print_header "Upgrading Packages"
@@ -112,7 +82,6 @@ pkg_update() {
 }
 
 # Rebuild check
-# pacman -S rebuild-checker
 rebuild() {
   print_header "Checking for broken packages"
 
@@ -132,7 +101,6 @@ rebuild() {
 }
 
 # TLDR cache update
-# pacman -S tldr
 tldr_cache() {
   if ! command -v tldr &>/dev/null; then
     log "tldr not installed. Skipping."
@@ -147,8 +115,6 @@ tldr_cache() {
 }
 
 # Firmware update
-# pacman -S fwupd udisks2
-# systemctl enable --now fwupd-refresh.timer
 fwupd() {
   if ! command -v fwupdmgr &>/dev/null; then
     log "fwupdmgr not installed. Skipping."
@@ -167,7 +133,7 @@ cpu_vulns() {
   print_header "Checking CPU vulnerabilities"
 
   if ! command -v lscpu &>/dev/null; then
-    log "lscpu not found. Skipping."
+    log "${RED}lscpu not found. Skipping.${RESET}"
     return 0
   fi
 
@@ -204,7 +170,6 @@ kern_chk() {
   running_ver=$(uname -r)
 
   # Extract the numeric version (e.g., 6.19.10)
-  # BETTER METHOD: Use grep to extract the leading version pattern
   current_base=$(echo "$current_pkg" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
   running_base=$(echo "$running_ver" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
 
@@ -273,7 +238,6 @@ waybar_reload() {
 # Main Execution
 # ---------------------
 main() {
-  check_mirrorlist
   pkg_update
   rebuild
   tldr_cache
