@@ -124,11 +124,12 @@ def get_weather_data(
     # url: str = "http://api.openweathermap.org/data/3.0/onecall"
 
     params = {
-        "appid": appid,
         "lat": lat,
         "lon": lon,
-        "units": units,
+        "appid": appid,
         "exclude": "minutely,hourly",
+        "units": units,
+        "lang": "en",
     }
 
     with requests.Session() as session:
@@ -145,7 +146,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Weather fetching script.")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    getdata_parser = subparsers.add_parser("getdata", help="Fetch Weather data")
+    getdata_parser = subparsers.add_parser(
+        "getdata", help="Fetch Weather data (--units: imperial=󰔅, metric=󰔄)"
+    )
     getdata_parser.add_argument(
         "--units",
         choices=["imperial", "metric"],
