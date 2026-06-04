@@ -47,27 +47,28 @@ def load_config(config_file: Path) -> Dict[str, Any]:
         sys.exit(1)
 
     openweather = cfg.get("openweather")
-    coords = cfg.get("coords")
     aqicn = cfg.get("aqicn")
 
     # Validate required keys
-    if not isinstance(openweather, dict) or "api_key" not in openweather:
-        logger.error("Missing 'openweather.api_key' in config")
+    if (
+        not isinstance(openweather, dict)
+        or "appid" not in openweather
+        or "lat" not in openweather
+        or "lon" not in openweather
+    ):
+        logger.error("Missing 'openweather.keys' in config")
         sys.exit(1)
-    if not isinstance(coords, dict) or "lat" not in coords or "lon" not in coords:
-        logger.error("Missing 'coords.lat|.lon' in config")
-        sys.exit(1)
-    if not isinstance(aqicn, dict) or "api_key" not in aqicn or "aqi_city" not in aqicn:
-        logger.error("Missing 'aqicn.api_key|aqi_city' in config")
+    if not isinstance(aqicn, dict) or "token" not in aqicn or "city" not in aqicn:
+        logger.error("Missing 'aqicn.token|city' in config")
         sys.exit(1)
 
     logger.debug(f"Config loaded successfully from {config_file}")
     return {
-        "API_KEY": str(openweather["api_key"]),
-        "LAT": coords["lat"],
-        "LON": coords["lon"],
-        "AQI_KEY": str(aqicn["api_key"]),
-        "AQI_LOC": str(aqicn["aqi_city"]),
+        "LAT": openweather["lat"],
+        "LON": openweather["lon"],
+        "APPID": str(openweather["appid"]),
+        "AQI_KEY": str(aqicn["token"]),
+        "AQI_LOC": str(aqicn["city"]),
     }
 
 
@@ -115,7 +116,7 @@ def get_aqi_data(token: str, city: str) -> None:
 
 
 def get_weather_data(
-    api_key: str, lat: float, lon: float, units: Literal["imperial", "metric"]
+    appid: str, lat: float, lon: float, units: Literal["imperial", "metric"]
 ) -> None:
     """Fetch weather and save to file."""
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -123,7 +124,7 @@ def get_weather_data(
     # url: str = "http://api.openweathermap.org/data/3.0/onecall"
 
     params = {
-        "appid": api_key,
+        "appid": appid,
         "lat": lat,
         "lon": lon,
         "units": units,
@@ -164,7 +165,7 @@ def main() -> None:
             logger.error("LAT and LON must be numeric in the config file")
             sys.exit(1)
 
-        get_weather_data(config["API_KEY"], lat, lon, args.units)
+        get_weather_data(config["APPID"], lat, lon, args.units)
         get_aqi_data(config["AQI_KEY"], config["AQI_LOC"])
         reload_waybar()
 
