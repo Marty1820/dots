@@ -39,7 +39,7 @@ binds {
   Mod+D hotkey-overlay-title="App Launcher: Fuzzel" { spawn "fuzzel"; }
   // Logoff
   Ctrl+Alt+Delete { quit skip-confirmation=true; }
-  Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "swaylock"; }
+  Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "hyprlock"; }
 
   // Navigation: Arrow keys and vim-style (hjkl) bindings for convenience
   Mod+Left  { focus-column-left; }
