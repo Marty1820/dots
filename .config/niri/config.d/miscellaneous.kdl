@@ -1,0 +1,29 @@
+//--- Miscellaneous ---
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
+
+environment {
+  GDK_BACKEND "wayland,x11,*"
+  QT_QPA_PLATFORM "wayland"
+  SDL_VIDEODRIVER "wayland"
+  CLUTTER_BACKEND "wayland"
+  QT_AUTO_SCREEN_SCALE_FACTOR "1"
+  QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+  ELECTRON_OZONE_PLATFORM_HINT "auto"
+}
+
+cursor {
+  hide-when-typing
+  hide-after-inactive-ms 5000
+}
+
+overview {
+  zoom 0.75
+  backdrop-color "#282a36"
+}
+
+hotkey-overlay {
+  skip-at-startup
+  hide-not-bound
+}

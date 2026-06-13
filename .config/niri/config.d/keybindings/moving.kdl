@@ -1,0 +1,33 @@
+//---Key Bindings ---
+binds {
+  // Moving Windows
+  Mod+Ctrl+Left  { move-column-left; }
+  Mod+Ctrl+H     { move-column-left; }
+  Mod+Ctrl+Down  { move-window-down; }
+  Mod+Ctrl+J     { move-window-down; }
+  Mod+Ctrl+Up    { move-window-up; }
+  Mod+Ctrl+K     { move-window-up; }
+  Mod+Ctrl+Right { move-column-right; }
+  Mod+Ctrl+L     { move-column-right; }
+
+  Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+  Mod+Ctrl+U         { move-column-to-workspace-down; }
+  Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+  Mod+Ctrl+I         { move-column-to-workspace-up; }
+
+  Mod+Ctrl+Home { move-column-to-first; }
+  Mod+Ctrl+End  { move-column-to-last; }
+
+  Mod+Ctrl+1 { move-column-to-workspace 1; }
+  Mod+Ctrl+2 { move-column-to-workspace 2; }
+
+  Mod+C      { center-column; }
+  Mod+Ctrl+C { center-visible-columns; }
+
+  // Move the focused window between the floating and the tiling layout.
+  Mod+V { toggle-window-floating; }
+
+  // The following binds move the focused window in and out of a column.
+  Mod+Comma hotkey-overlay-title="Consume Window into Column" { consume-window-into-column; }
+  Mod+Period hotkey-overlay-title="Expel Window from Column"  { expel-window-from-column; }
+}

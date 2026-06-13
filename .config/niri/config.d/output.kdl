@@ -1,0 +1,7 @@
+//--- Output ---
+// Run `niri msg outputs` while inside a niri instance for output info.
+output "eDP-1" {
+  mode "2256x1504@59.999"
+  scale 1.5
+  transform "normal"
+}

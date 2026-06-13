@@ -1,0 +1,18 @@
+//--- Input ---
+input {
+  touchpad {
+    natural-scroll
+    scroll-method "two-finger"
+
+    tap
+    dwt
+    drag true
+    drag-lock
+    disabled-on-external-mouse
+  }
+
+  warp-mouse-to-focus mode="center-xy"
+  focus-follows-mouse max-scroll-amount="10%"
+
+  mod-key "Super"
+}

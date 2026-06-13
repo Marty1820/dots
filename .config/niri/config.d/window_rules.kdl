@@ -1,0 +1,28 @@
+//--- Window Rules ---
+window-rule {
+  geometry-corner-radius 12
+  clip-to-geometry true
+}
+window-rule {
+  match app-id="waterfox"
+  match app-id="helium"
+  open-maximized true
+}
+window-rule {
+  match title="(Minecraft )[0-9]" app-id="(Minecraft )[0-9]"
+  open-fullscreen true
+  // Uncomment below if using controller profile for Minecraft
+  //spawn-sh "antimicrox --profile ~/.config/antimicrox/stadia.gamecontroller.amgp --hidden"
+}
+// Floating dialogs: property dialogs, connection managers, files operations, rename prompts
+window-rule {
+  match title="[a-z|A-Z|0-9]( Properties)"
+  match app-id="nm-connection-editor"
+  match app-id="blueman-manager"
+  match app-id="thunar" title="Confirm to replace files"
+  match app-id="thunar" title="File Operation Progress"
+  match app-id="thunar" title="^Rename*"
+  match app-id="waterfox" title="Picture-in-Picture"
+  match title="Unlock Security Device"
+  open-floating true
+}

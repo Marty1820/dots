@@ -1,0 +1,32 @@
+//--- Layout ---
+layout {
+  gaps 4
+  center-focused-column "never"
+  always-center-single-column
+  background-color "transparent"
+  default-column-display "normal"
+
+  preset-column-widths {
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+  }
+
+  default-column-width {}
+
+  preset-window-heights {
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+  }
+
+  focus-ring {
+    width 1
+    active-gradient from="#44475a" to="#bd93f9" angle=45 in="oklch longer hue"
+    inactive-color "#282a36aa"
+    urgent-color "#ff5555"
+  }
+
+  border { off; }
+  insert-hint { color "#6272a480"; }
+}
