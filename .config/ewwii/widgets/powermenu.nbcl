@@ -1,0 +1,61 @@
+component PmEntry (name, click, icon, text) {
+  Box {
+    class = "pm_entry"
+    space_evenly = "false"
+    orientation = "h"
+    Label {
+      class = "pm_icon pm_${name}_icon"
+      text = "${icon}"
+    }
+    Button {
+      class = "pm_button pm_but_${name}"
+      onclick = "${click}"
+      label = "${text}"
+    }
+  }
+}
+
+component PmList () {
+  Box {
+    class = "pm_power"
+    orientation = "v"
+    space_evenly = "true"
+    PmEntry {
+      name = "shutdown"
+      click = "systemctl poweroff"
+      icon = ""
+      text = "Shut Down"
+    }
+    PmEntry {
+      name = "reboot"
+      click = "systemctl reboot"
+      icon = "󰜉"
+      text = "Reboot"
+    }
+    PmEntry {
+      name = "logoff"
+      click = "niri msg action quit --skip-confirmation"
+      icon = "󰍃"
+      text = "Logoff"
+    }
+    PmEntry {
+      name = "suspend"
+      click = "systemctl suspend-then-hibernate"
+      icon = "󰒲"
+      text = "Suspend"
+    }
+  }
+}
+
+Window "powermenu" {
+  monitor = 0
+  geometry = {
+    y = "5px"
+    anchor = "top center"
+  }
+  stacking = "overlay"
+  exclusive = "false"
+  focusable = "none"
+  namespace = "ewwii-powermenu"
+  PmList {}
+}

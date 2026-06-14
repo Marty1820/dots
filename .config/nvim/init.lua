@@ -1,6 +1,6 @@
 -- Plugin Installation
 vim.pack.add({
-  "https://github.com/elkowar/yuck.vim",
+  "https://github.com/NBCL-Lang/vim-nbcl",
   "https://github.com/jim-at-jibba/micropython.nvim",
 })
 

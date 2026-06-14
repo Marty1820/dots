@@ -1,0 +1,10 @@
+* {
+  all: unset;
+}
+
+// Global
+@import "styles/colors";
+
+// Widget's CSS
+@import "styles/powermenu";
+@import "styles/weather";

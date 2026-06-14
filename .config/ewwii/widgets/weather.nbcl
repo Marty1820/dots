@@ -1,0 +1,527 @@
+# --- Weather ---
+const wtrjson = "$HOME/.cache/weather/onecall.json"
+const aqijson = "$HOME/.cache/weather/aqidata.json"
+
+Poll "w_desc" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq -r '.current.weather[0].description' < " + wtrjson
+}
+for name in ["temp", "feels_like"] {
+  Poll ("w_" + name) {
+    initial = "null"
+    interval = "5m"
+    cmd = "jq -r \'.current." + name + "\' < " + wtrjson
+  }
+}
+for name in ["day", "night"] {
+  Poll ("w_" + name + "temp") {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq \'.daily[0].temp." + name + "\' < " + wtrjson
+  }
+}
+
+component Wmain () {
+  Box {
+    class = "w_main"
+    orientation = "v"
+    space_evenly = "false"
+    Label {
+      class = "w_desc"
+      text = global("w_desc")
+    }
+    Label {
+      class = "w_temp"
+      text = global("w_temp").template("{w_temp}")
+    }
+    Label {
+      class = "w_feels_like"
+      text = global("w_feels_like").template("{w_feels_like}")
+    }
+    Box {
+      class = "w_hilo"
+      orientation = "h"
+      space_evenly = "false"
+      halign = "center"
+      Label {
+        text = global("w_daytemp").template("{w_daytemp}")
+      }
+      Label {
+        text = " | "
+      }
+      Label {
+        text = global("w_nighttemp").template("{w_nighttemp}")
+      }
+    }
+  }
+}
+
+# Alert
+Poll "w_alert" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq '.alerts[0].event' < " + wtrjson
+}
+Poll "w_alert_start" {
+  initial = "0"
+  interval = "5m"
+  cmd = "date -d @$(jq -r '.alerts[0].start' < " + wtrjson + ") +%I:%M%p"
+}
+
+component Walert () {
+  Box {
+    class = global("w_alert").template("w_alert {
+      w_alert == 'null' ? 'empty' : 'alert'}")
+    orientation = "h"
+    space_evenly = "false"
+    Label {
+      class = "w_alert_icon"
+      text = global("w_alert").template("{
+        w_alert == 'null' ? '' : ' '}")
+    }
+    Box {
+      orientation = "v"
+      Label {
+        class = "w_alert_name"
+        xalign = 0
+        text = global("w_alert").template("{
+          w_alert == 'null' ? '' : w_alert
+        }")
+      }
+      Label {
+        class = "w_alert_time"
+        xalign = 0
+        text = global("w_alert_start").template("{
+          w_alert_start == 'null' ? '' : w_alert_start
+        }")
+      }
+    }
+  }
+}
+
+# Airquality
+# NEED COLORED HIGH NUMBERS
+Poll "aqi_num" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq -r '.data.aqi' < " + aqijson
+}
+Poll "aqi_num_lvl" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq -r '.data.aqi // 0 |
+    if . < 19 then 1
+    elif . < 49 then 2
+    elif . < 99 then 3
+    elif . < 149 then 4
+    elif . < 249 then 5
+    else 6
+    end' " + aqijson
+}
+for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
+  Poll ("aqi_" + name) {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq -r '.data.iaqi." + name + ".v' < " + aqijson
+  }
+}
+for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
+  Poll ("aqi_" + name + "_lvl") {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq -r --arg m '" + name + "' '
+      def thresh:
+        if $m == \"co\" then [4.4,9.4,12.4,15.4,30.4,40.4,50.4]
+        elif $m == \"no2\" then [53,100,360,649,1249,1649,2049]
+        elif $m == \"o3\" then [54,70,85,105,200]
+        elif $m == \"pm10\" then [54,154,254,354,424,504,604]
+        elif $m == \"pm25\" then [12,35.4,55.4,150.4,250.4,350.4]
+        elif $m == \"so2\" then [35,75,185,304,604,804,1004]
+        else [] end;
+      .data.iaqi.[$m].v as $val | thresh | to_entries |
+        reduce .[] as $e (0; if $val > $e.value then ($e.key +1) else . end)' < " + aqijson
+  }
+}
+
+component WaqiModule (name, number) {
+  Box {
+    orientation = "h"
+    space_evenly = "true"
+    Label {
+      class = "aqi_label aqi_${name}"
+      xalign = 0
+      text = "${name}"
+    }
+    Label {
+      class = "aqi_sep"
+      xalign = 1
+      text = " : "
+    }
+    Label {
+      # class = "aqi_num aqi_${name}"
+      class = global("${number}_lvl").template("aqi_num aqi_${name} aqi_lvl_{${number}_lvl}")
+      xalign = 0
+      text = global("${number}")
+    }
+  }
+}
+
+component Waqi () {
+  Box {
+    class = "w_block w_aqi"
+    orientation = "v"
+    Box {
+      class = "aqi-info"
+      orientation = "v"
+      space_evenly = "true"
+      Label {
+        class = "w_block_title aqi_title"
+        text = "Air Quality"
+      }
+      WaqiModule {
+        name = "AQI"
+        number = "aqi_num"
+      }
+      WaqiModule {
+        name = "CO"
+        number = "aqi_co"
+      }
+      WaqiModule {
+        name = "NO²"
+        number = "aqi_no2"
+      }
+      WaqiModule {
+        name = "O³"
+        number = "aqi_o3"
+      }
+      WaqiModule {
+        name = "PM¹⁰"
+        number = "aqi_pm10"
+      }
+      WaqiModule {
+        name = "PM²⁵"
+        number = "aqi_pm25"
+      }
+      WaqiModule {
+        name = "SO²"
+        number = "aqi_so2"
+      }
+    }
+  }
+}
+
+# Humidity
+for name in ["humidity", "dew_point"] {
+  Poll ("w_" + name) {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq \'.current." + name + "\' < " + wtrjson
+  }
+}
+
+component Whumid () {
+  Box {
+    class = "w_block w_hum"
+    orientation = "v"
+    style = global("w_humidity").template("background-image:
+      linear-gradient(to bottom,
+        rgb(40, 42, 54) {100 - w_humidity}%,
+        rgb(189, 147, 249) {100 - w_humidity}%)"
+      )
+    Box {
+      class = "w_block_title"
+      orientation = "h"
+      space_evenly = "false"
+      Label {
+        class = "w_hum_label w_hum_icon"
+        xalign = 0
+        yalign = 0
+        text = "  "
+      }
+      Label {
+        class = "w_hum_label w_hum_text"
+        xalign = 0
+        yalign = 0
+        text = "Humidity"
+      }
+    }
+    Label {
+      class = "w_block_data w_hum_perc"
+      xalign = 0
+      text = global("w_humidity").template("{w_humidity}󱉸")
+    }
+    Label {
+      class = "w_hum_dew"
+      xalign = 0
+      yalign = 1
+      text = global("w_dew_point").template("{w_dew_point} dew point")
+    }
+  }
+}
+
+# Sun
+for name in ["sunrise", "sunset"] {
+  Poll ("w_" + name) {
+    initial = "--:--"
+    interval = "5m"
+    cmd = "date -d @$(jq -r \'.current." + name + "\' < " + wtrjson + ") +%I:%M%p"
+  }
+}
+
+component Wsun () {
+  Box {
+    class = "w_block w_sun"
+    orientation = "v"
+    Box {
+      class = "w_block_title"
+      orientation = "h"
+      space_evenly = "false"
+      Label {
+        class = "w_sun_label w_sun_icon"
+        xalign = 0
+        yalign = 0
+        text = global("w_sunrise").template("{
+          w_sunrise == 'null' ? '': ' '
+        }")
+      }
+      Label {
+        class = "w_sun_label w_sun_text"
+        xalign = 0
+        yalign = 0
+        text = "Sun"
+      }
+    }
+    Label {
+      class = "w_block_data w_sun_data"
+      yalign = 1
+      text = global("w_sunrise").template(" {w_sunrise}")
+    }
+    Label {
+      class = "w_block_data w_sun_data"
+      yalign = 1
+      text = global("w_sunset").template(" {w_sunset}")
+    }
+    Box {
+      orientation = "h"
+      space_evenly = "false"
+      Label {
+        class = "w_sun_info w_sun_info_icon"
+        yalign = 1
+        text = global("w_sunrise").template("{
+          w_sunrise == 'null' ? '': '󰌵'
+        }")
+      }
+      Label {
+        class = "w_sun_info w_sun_info_text"
+        yalign = 1
+        text = " UV Index "
+      }
+      Label {
+        class = "w_sun_info w_sun_info_num"
+        yalign = 1
+        text = "TEMP"
+      }
+    }
+  }
+}
+
+# Moon
+for name in ["moonrise", "moonset"] {
+  Poll ("w_" + name) {
+    initial = "--:--"
+    interval = "5m"
+    cmd = "date -d @$(jq -r \'.daily[0]." + name + "\' < " + wtrjson + ") +%I:%M%p"
+  }
+}
+Poll "w_moon_icon" {
+  initial = ""
+  interval = "1h"
+  cmd = "jq -r '
+    def icons:
+      [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
+      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
+      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"];
+    .daily[0].moon_phase
+      | (.*27 | round) as $i
+      | icons[$i] ' " + wtrjson
+}
+
+component Wmoon () {
+  Box {
+    class = "w_block w_moon"
+    orientation = "v"
+    Box {
+      class = "w_block_title"
+      orientation = "h"
+      space_evenly = "false"
+      Label {
+        class = "w_moon_label w_moon_icon"
+        xalign = 0
+        yalign = 0
+        text = global("w_moon_icon").template("{w_moon_icon} ")
+      }
+      Label {
+        class = "w_moon_label w_moon_text"
+        xalign = 0
+        yalign = 0
+        text = "Moon"
+      }
+    }
+    Label {
+      class = "w_block_data w_moon_data"
+      yalign = 1
+      text = global("w_moonrise").template(" {w_moonrise}")
+    }
+    Label {
+      class = "w_block_data w_moon_data"
+      yalign = 1
+      text = global("w_moonset").template(" {w_moonset}")
+    }
+    Label {
+      class = "w_moon_info"
+      yalign = 1
+      text = global("w_moon_icon")
+    }
+  }
+}
+
+# Wind
+for name in ["speed", "deg", "gust"] {
+  Poll ("w_wind_" + name) {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq \'.current.wind_" + name + "\' < " + wtrjson
+  }
+}
+
+component Wwind () {
+  Box {
+    class = "w_block w_wind"
+    orientation = "v"
+    style = global("w_wind_deg").template("
+      background:
+      linear-gradient({w_wind_deg + 180 + 60}deg,
+        rgb(98, 114, 164) 50%, transparent 50%) top left,
+      linear-gradient({w_wind_deg + 180 - 60}deg,
+        rgb(98, 114, 164) 50%, transparent 50%) top right;
+    ")
+    Box {
+      class = "w_block_title"
+      orientation = "h"
+      space_evenly = "false"
+      Label {
+        class = "w_wind_label w_wind_icon"
+        xalign = 0
+        yalign = 0
+        text = " "
+      }
+      Label {
+        class = "w_wind_label w_wind_text"
+        xalign = 0
+        yalign = 0
+        text = "Wind"
+      }
+    }
+    Label {
+      class = "w_block_data w_wind_speed"
+      xalign = 0
+      text = global("w_wind_speed").template("{w_wind_speed}mph")
+    }
+    Label {
+      class = "w_wind_gust"
+      xalign = 0
+      yalign = 1
+      text = global("w_wind_gust").template("Gusts: {w_wind_gust}mph")
+    }
+  }
+}
+
+# Rain
+Poll "w_rain" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq '.daily[0].rain' < " + wtrjson
+}
+
+component Wrain () {
+  Box {
+    class = "w_block w_rain"
+    orientation = "v"
+    Box {
+      class = "w_block_title"
+      orientation = "h"
+      space_evenly = "false"
+      Label {
+        class = "w_rain_label w_rain_icon"
+        xalign = 0
+        yalign = 0
+        text = "󰖗 "
+      }
+      Label {
+        class = "w_rain_label w_rain_text"
+        xalign = 0
+        yalign = 0
+        text = "Rain"
+      }
+    }
+    Label {
+      class = "w_block_data w_rain_label"
+      xalign = 0
+      text = global("w_rain").template("{
+        w_rain == 'null' ? '0' :
+        w_rain * 0.03937
+      }in")
+    }
+    Label {
+      class = "w_rain_daily"
+      xalign = 0
+      yalign = 1
+      text = "Daily Rain"
+    }
+  }
+}
+
+# Main blocks
+component Wdata () {
+  Box {
+    orientation = "v"
+    space_evenly = "false"
+    Box {
+      orientation = "h"
+      Waqi {}
+      Whumid {}
+    }
+    Box {
+      orientation = "h"
+      Wsun {}
+      Wmoon {}
+    }
+    Box {
+      orientation = "h"
+      Wwind {}
+      Wrain {}
+    }
+  }
+}
+
+# Window
+Window "weather" {
+  monitor = 0
+  geometry = {
+    y = "5px"
+    anchor = "top right"
+  }
+  stacking = "overlay"
+  exclusive = "false"
+  focusable = "none"
+  namespace = "ewwii-weather"
+  Box {
+    class = "weather-box"
+    orientation = "v"
+    space_evenly = "false"
+    Wmain {}
+    Walert {}
+    Wdata {}
+  }
+}
