@@ -2,26 +2,179 @@
 const wtrjson = "$HOME/.cache/weather/onecall.json"
 const aqijson = "$HOME/.cache/weather/aqidata.json"
 
+# ===============================================
+# WEATHER DATA POLLS
+# ===============================================
+
+# Description
 Poll "w_desc" {
-  initial = "0"
+  initial = ""
   interval = "5m"
   cmd = "jq -r '.current.weather[0].description' < " + wtrjson
 }
+
+# Temp & Feels Like
 for name in ["temp", "feels_like"] {
   Poll ("w_" + name) {
-    initial = "null"
+    initial = "0"
     interval = "5m"
-    cmd = "jq -r \'.current." + name + "\' < " + wtrjson
+    cmd = "jq -r \'.current." + name + " // 0\' < " + wtrjson
   }
 }
+
+# Daily High/Low Temp
 for name in ["day", "night"] {
   Poll ("w_" + name + "temp") {
     initial = "0"
     interval = "5m"
-    cmd = "jq \'.daily[0].temp." + name + "\' < " + wtrjson
+    cmd = "jq \'.daily[0].temp." + name + " // 0\' < " + wtrjson
   }
 }
 
+# Humidity & Dew Point
+for name in ["humidity", "dew_point"] {
+  Poll ("w_" + name) {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq \'.current." + name + " // 0\' < " + wtrjson
+  }
+}
+
+# Sunrise/Sunset
+for name in ["sunrise", "sunset"] {
+  Poll ("w_" + name) {
+    initial = "--:--"
+    interval = "5m"
+    cmd = "date -d @$(jq -r \'.current." + name + " // 0\' < " + wtrjson + ") +%I:%M%p"
+  }
+}
+
+# UV Index
+Poll "w_uvi" {
+  initial = "UNK"
+  interval = "5m"
+  cmd = "jq -r \'.current.uvi\' < " + wtrjson
+}
+
+# Wind
+for name in ["speed", "deg", "gust"] {
+  Poll ("w_wind_" + name) {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq \'.current.wind_" + name + "\' < " + wtrjson
+  }
+}
+
+# Rain
+Poll "w_rain" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq '.daily[0].rain // 0 | . * 0.03937 | floor' < " + wtrjson
+}
+
+# Alert
+Poll "w_alert" {
+  initial = ""
+  interval = "5m"
+  cmd = "jq '.alerts[0].event' < " + wtrjson
+}
+Poll "w_alert_start" {
+  initial = "--:--"
+  interval = "5m"
+  cmd = "date -d @$(jq -r '.alerts[0].start' < " + wtrjson + ") +%I:%M%p"
+}
+
+# Moonrise/Moonset
+for name in ["moonrise", "moonset"] {
+  Poll ("w_" + name) {
+    initial = "--:--"
+    interval = "5m"
+    cmd = "date -d @$(jq -r \'.daily[0]." + name + " // 0\' < " + wtrjson + ") +%I:%M%p"
+  }
+}
+
+# Moon Phase Icon
+Poll "w_moon_icon" {
+  initial = ""
+  interval = "1h"
+  cmd = "jq -r '
+    def icons:
+      [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
+      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
+      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"];
+    .daily[0].moon_phase
+      | (.*27 | round) as $i
+      | icons[$i] ' " + wtrjson
+}
+
+# Moon Phase Text
+Poll "w_moon_phase" {
+  initial = "New Moon"
+  interval = "1h"
+  cmd = "jq -r '(.daily[0].moon_phase // 0)
+    | if (. == 0 or . == 1) then \"New Moon\"
+    elif (. >= 0 and . < 0.125) then \"Waxing Crescent\"
+    elif (. >= 0.125 and . < 0.375) then \"First Quarter\"
+    elif (. >= 0.375 and . < 0.625) then \"Waxing Gibbous\"
+    elif (. >= 0.625 and . < 0.875) then \"Full Moon\"
+    elif (. >= 0.875 and . < 1.0) then \"Waning Crescent\"
+    else \"Unknown\" end' " + wtrjson
+}
+
+# ===============================================
+# AIR QUALITY DATA POLLS
+# ===============================================
+
+# Main AQI
+Poll "aqi_num" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq -r '.data.aqi // 0' < " + aqijson
+}
+Poll "aqi_num_lvl" {
+  initial = "0"
+  interval = "5m"
+  cmd = "jq -r '.data.aqi // 0 |
+    if . < 19 then 1
+    elif . < 49 then 2
+    elif . < 99 then 3
+    elif . < 149 then 4
+    elif . < 249 then 5
+    else 6
+    end' " + aqijson
+}
+
+# Individual Pollutants
+for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
+  Poll ("aqi_" + name) {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq -r '.data.iaqi." + name + ".v // 0' < " + aqijson
+  }
+}
+for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
+  Poll ("aqi_" + name + "_lvl") {
+    initial = "0"
+    interval = "5m"
+    cmd = "jq -r --arg m '" + name + "' '
+      def thresh:
+        if $m == \"co\" then [4.4,9.4,12.4,15.4,30.4,40.4,50.4]
+        elif $m == \"no2\" then [53,100,360,649,1249,1649,2049]
+        elif $m == \"o3\" then [54,70,85,105,200]
+        elif $m == \"pm10\" then [54,154,254,354,424,504,604]
+        elif $m == \"pm25\" then [12,35.4,55.4,150.4,250.4,350.4]
+        elif $m == \"so2\" then [35,75,185,304,604,804,1004]
+        else [] end;
+      .data.iaqi.[$m].v as $val | thresh | to_entries |
+        reduce .[] as $e (0; if $val > $e.value then ($e.key +1) else . end)' < " + aqijson
+  }
+}
+
+# ===============================================
+# COMPONENTS
+# ===============================================
+
+# Main Weather Component
 component Wmain () {
   Box {
     class = "w_main"
@@ -57,18 +210,7 @@ component Wmain () {
   }
 }
 
-# Alert
-Poll "w_alert" {
-  initial = "0"
-  interval = "5m"
-  cmd = "jq '.alerts[0].event' < " + wtrjson
-}
-Poll "w_alert_start" {
-  initial = "0"
-  interval = "5m"
-  cmd = "date -d @$(jq -r '.alerts[0].start' < " + wtrjson + ") +%I:%M%p"
-}
-
+# Alert Component
 component Walert () {
   Box {
     class = global("w_alert").template("w_alert {
@@ -100,49 +242,7 @@ component Walert () {
   }
 }
 
-# Airquality
-Poll "aqi_num" {
-  initial = "0"
-  interval = "5m"
-  cmd = "jq -r '.data.aqi' < " + aqijson
-}
-Poll "aqi_num_lvl" {
-  initial = "0"
-  interval = "5m"
-  cmd = "jq -r '.data.aqi // 0 |
-    if . < 19 then 1
-    elif . < 49 then 2
-    elif . < 99 then 3
-    elif . < 149 then 4
-    elif . < 249 then 5
-    else 6
-    end' " + aqijson
-}
-for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
-  Poll ("aqi_" + name) {
-    initial = "0"
-    interval = "5m"
-    cmd = "jq -r '.data.iaqi." + name + ".v' < " + aqijson
-  }
-}
-for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
-  Poll ("aqi_" + name + "_lvl") {
-    initial = "0"
-    interval = "5m"
-    cmd = "jq -r --arg m '" + name + "' '
-      def thresh:
-        if $m == \"co\" then [4.4,9.4,12.4,15.4,30.4,40.4,50.4]
-        elif $m == \"no2\" then [53,100,360,649,1249,1649,2049]
-        elif $m == \"o3\" then [54,70,85,105,200]
-        elif $m == \"pm10\" then [54,154,254,354,424,504,604]
-        elif $m == \"pm25\" then [12,35.4,55.4,150.4,250.4,350.4]
-        elif $m == \"so2\" then [35,75,185,304,604,804,1004]
-        else [] end;
-      .data.iaqi.[$m].v as $val | thresh | to_entries |
-        reduce .[] as $e (0; if $val > $e.value then ($e.key +1) else . end)' < " + aqijson
-  }
-}
-
+# Air Quality Module Component
 component WaqiModule (name, number) {
   Box {
     orientation = "h"
@@ -165,6 +265,7 @@ component WaqiModule (name, number) {
   }
 }
 
+# Air Quality Component
 component Waqi () {
   Box {
     class = "w_block w_aqi"
@@ -182,7 +283,6 @@ component Waqi () {
         number = "aqi_num"
       }
       for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
-        # Map readable names to internal IDs
         let display_name =
           if name == "co" { "CO" }
           else if name == "no2" { "NO²" }
@@ -199,15 +299,7 @@ component Waqi () {
   }
 }
 
-# Humidity
-for name in ["humidity", "dew_point"] {
-  Poll ("w_" + name) {
-    initial = "0"
-    interval = "5m"
-    cmd = "jq \'.current." + name + "\' < " + wtrjson
-  }
-}
-
+# Humidity Component
 component Whumid () {
   Box {
     class = "w_block w_hum"
@@ -225,7 +317,7 @@ component Whumid () {
         class = "w_hum_label w_hum_icon"
         xalign = 0
         yalign = 0
-        text = "  "
+        text = " "
       }
       Label {
         class = "w_hum_label w_hum_text"
@@ -248,20 +340,7 @@ component Whumid () {
   }
 }
 
-# Sun
-for name in ["sunrise", "sunset"] {
-  Poll ("w_" + name) {
-    initial = "--:--"
-    interval = "5m"
-    cmd = "date -d @$(jq -r \'.current." + name + "\' < " + wtrjson + ") +%I:%M%p"
-  }
-}
-Poll "w_uvi" {
-  initial = "UNK"
-  interval = "5m"
-  cmd = "jq -r \'.current.uvi\' < " + wtrjson
-}
-
+# Sun Component
 component Wsun () {
   Box {
     class = "w_block w_sun"
@@ -319,32 +398,7 @@ component Wsun () {
   }
 }
 
-# Moon
-for name in ["moonrise", "moonset"] {
-  Poll ("w_" + name) {
-    initial = "--:--"
-    interval = "5m"
-    cmd = "date -d @$(jq -r \'.daily[0]." + name + "\' < " + wtrjson + ") +%I:%M%p"
-  }
-}
-Poll "w_moon_phase" {
-  initial = "UNK"
-  interval = "1h"
-  cmd = "jq -r '.daily[0].moon_phase' < " + wtrjson
-}
-Poll "w_moon_icon" {
-  initial = ""
-  interval = "1h"
-  cmd = "jq -r '
-    def icons:
-      [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
-      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",
-      \"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"];
-    .daily[0].moon_phase
-      | (.*27 | round) as $i
-      | icons[$i] ' " + wtrjson
-}
-
+# Moon Component
 component Wmoon () {
   Box {
     class = "w_block w_moon"
@@ -379,31 +433,12 @@ component Wmoon () {
     Label {
       class = "w_moon_info"
       yalign = 1
-      text = global("w_moon_phase").template("{
-        w_moon_phase == 1 ? \"New Moon\" :
-        w_moon_phase == 0 ? \"New Moon\" :
-        w_moon_phase == 0.25 ? \"First Quarter\" :
-        w_moon_phase == 0.5 ? \"Full Moon\" :
-        w_moon_phase == 0.75 ? \"Last Quarter\" :
-        w_moon_phase < 0.25 ? \"Waxing Crescent\" :
-        w_moon_phase < 0.5 ? \"Waxing Gibbous\" :
-        w_moon_phase < 0.75 ? \"Waning Gibbous\" :
-        w_moon_phase < 1 ? \"Waning Crescent\" :
-        \"UNKNOWN\"
-      }")
+      text = global("w_moon_phase")
     }
   }
 }
 
-# Wind
-for name in ["speed", "deg", "gust"] {
-  Poll ("w_wind_" + name) {
-    initial = "0"
-    interval = "5m"
-    cmd = "jq \'.current.wind_" + name + "\' < " + wtrjson
-  }
-}
-
+# Wind Component
 component Wwind () {
   Box {
     class = "w_block w_wind"
@@ -446,13 +481,7 @@ component Wwind () {
   }
 }
 
-# Rain
-Poll "w_rain" {
-  initial = "0"
-  interval = "5m"
-  cmd = "jq '.daily[0].rain' < " + wtrjson
-}
-
+# Rain Component
 component Wrain () {
   Box {
     class = "w_block w_rain"
@@ -491,7 +520,7 @@ component Wrain () {
   }
 }
 
-# Main blocks
+# Data Container
 component Wdata () {
   Box {
     orientation = "v"
@@ -514,12 +543,15 @@ component Wdata () {
   }
 }
 
-# Window
+# ===============================================
+# WINDOW DEFINITION
+# ===============================================
+#
 Window "weather" {
   monitor = 0
   geometry = {
     y = "5px"
-    anchor = "top right"
+    anchor = "top center"
   }
   stacking = "overlay"
   exclusive = "false"
