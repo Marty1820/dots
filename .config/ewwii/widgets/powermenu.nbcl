@@ -1,3 +1,5 @@
+# --- Power Menu Component ---
+
 component PmEntry (name, click, icon, text) {
   Box {
     class = "pm_entry"
@@ -20,29 +22,38 @@ component PmList () {
     class = "pm_power"
     orientation = "v"
     space_evenly = "true"
-    PmEntry {
-      name = "shutdown"
-      click = "systemctl poweroff"
-      icon = ""
-      text = "Shut Down"
-    }
-    PmEntry {
-      name = "reboot"
-      click = "systemctl reboot"
-      icon = "󰜉"
-      text = "Reboot"
-    }
-    PmEntry {
-      name = "logoff"
-      click = "niri msg action quit --skip-confirmation"
-      icon = "󰍃"
-      text = "Logoff"
-    }
-    PmEntry {
-      name = "suspend"
-      click = "systemctl suspend-then-hibernate"
-      icon = "󰒲"
-      text = "Suspend"
+    let actions = [
+      {
+        name = "shutdown"
+        icon = ""
+        text = "Shut Down"
+        click = "systemctl poweroff"
+      },
+      {
+        name = "reboot"
+        icon = "󰜉"
+        text = "Reboot"
+        click = "systemctl reboot"
+      },
+      {
+        name = "logoff"
+        icon = "󰍃" text = "Logoff"
+        click = "niri msg action quit --skip-confirmation"
+      },
+      {
+        name = "suspend"
+        icon = "󰒲"
+        text = "Suspend"
+        click = "ewwii close-all && loginctl lock-session && systemctl suspend-then-hibernate"
+      }
+    ]
+    for act in actions {
+      PmEntry {
+        name = act.name
+        icon = act.icon
+        text = act.text
+        click = act.click
+      }
     }
   }
 }
