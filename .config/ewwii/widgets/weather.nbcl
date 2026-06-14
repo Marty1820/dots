@@ -135,12 +135,12 @@ Poll "aqi_num_lvl" {
   initial = "0"
   interval = "5m"
   cmd = "jq -r '.data.aqi // 0 |
-    if . < 19 then 1
-    elif . < 49 then 2
-    elif . < 99 then 3
-    elif . < 149 then 4
-    elif . < 249 then 5
-    else 6
+    if . < 50 then 0
+    elif . < 100 then 1
+    elif . < 150 then 2
+    elif . < 200 then 3
+    elif . < 300 then 4
+    else 5
     end' " + aqijson
 }
 
@@ -158,12 +158,12 @@ for name in ["co", "no2", "o3", "pm10", "pm25", "so2"] {
     interval = "5m"
     cmd = "jq -r --arg m '" + name + "' '
       def thresh:
-        if $m == \"co\" then [4.4,9.4,12.4,15.4,30.4,40.4,50.4]
-        elif $m == \"no2\" then [53,100,360,649,1249,1649,2049]
-        elif $m == \"o3\" then [54,70,85,105,200]
+        if $m == \"co\" then [4.4,9.4,12.4,15.4,30.4,1004]
+        elif $m == \"no2\" then [53,100,360,649,1249,2049]
+        elif $m == \"o3\" then [54,70,85,105,200,605]
         elif $m == \"pm10\" then [54,154,254,354,424,504,604]
-        elif $m == \"pm25\" then [12,35.4,55.4,150.4,250.4,350.4]
-        elif $m == \"so2\" then [35,75,185,304,604,804,1004]
+        elif $m == \"pm25\" then [12,35.4,55.4,150.4,250.4,500.4]
+        elif $m == \"so2\" then [35,75,185,304,604,1004]
         else [] end;
       .data.iaqi.[$m].v as $val | thresh | to_entries |
         reduce .[] as $e (0; if $val > $e.value then ($e.key +1) else . end)' < " + aqijson
@@ -557,12 +557,18 @@ Window "weather" {
   exclusive = "false"
   focusable = "none"
   namespace = "ewwii-weather"
-  Box {
-    class = "weather-box"
-    orientation = "v"
-    space_evenly = "false"
-    Wmain {}
-    Walert {}
-    Wdata {}
+  Revealer {
+    transition = "slidedown"
+    # reveal = global("weather")
+    reveal = true
+    duration = "250ms"
+    Box {
+      class = "weather-box"
+      orientation = "v"
+      space_evenly = "false"
+      Wmain {}
+      Walert {}
+      Wdata {}
+    }
   }
 }

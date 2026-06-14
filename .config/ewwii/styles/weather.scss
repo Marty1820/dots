@@ -85,32 +85,31 @@
 
 /* AQI Values
 Good */
-.aqi_lvl_0,
-.aqi_lvl_1 {
+.aqi_lvl_0 {
   color: $green;
 }
 
 /* Moderate */
-.aqi_lvl_2 {
+.aqi_lvl_1 {
   color: $yellow;
 }
 
 /* Sensitive */
-.aqi_lvl_3 {
+.aqi_lvl_2 {
   color: $orange;
 }
 
 /* Unhealthy */
-.aqi_lvl_4 {
+.aqi_lvl_3 {
   color: $red;
 }
 
 /* Very Unhealthy */
-.aqi_lvl_5 {
+.aqi_lvl_4 {
   color: $pink;
 }
 
 /* Hazardous */
-.aqi_lvl_6 {
+.aqi_lvl_5 {
   color: $purple;
 }

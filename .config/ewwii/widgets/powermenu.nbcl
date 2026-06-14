@@ -1,5 +1,4 @@
 # --- Power Menu Component ---
-
 component PmEntry (name, click, icon, text) {
   Box {
     class = "pm_entry"
@@ -26,24 +25,25 @@ component PmList () {
       {
         name = "shutdown"
         icon = ""
-        text = "Shut Down"
+        text = "Shut down"
         click = "systemctl poweroff"
       },
       {
         name = "reboot"
         icon = "󰜉"
-        text = "Reboot"
+        text = "Restart"
         click = "systemctl reboot"
       },
       {
         name = "logoff"
-        icon = "󰍃" text = "Logoff"
+        icon = "󰍃"
+        text = "Sign out"
         click = "niri msg action quit --skip-confirmation"
       },
       {
         name = "suspend"
         icon = "󰒲"
-        text = "Suspend"
+        text = "Sleep"
         click = "ewwii close-all && loginctl lock-session && systemctl suspend-then-hibernate"
       }
     ]
@@ -68,5 +68,11 @@ Window "powermenu" {
   exclusive = "false"
   focusable = "none"
   namespace = "ewwii-powermenu"
-  PmList {}
+  Revealer {
+    transition = "slidedown"
+    # reveal = global("powermenu")
+    reveal = true
+    duration = "250ms"
+    PmList {}
+  }
 }
