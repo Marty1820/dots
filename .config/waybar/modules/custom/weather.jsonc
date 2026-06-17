@@ -8,7 +8,7 @@
     "format": "{}",
     "min-length": 8,
     "max-length": 8,
-    "on-click": "ewwii open --toggle weather",
+    "on-click": "ewwii call-fns 'toggle_window(weather)'",
     "on-click-right": "~/.config/waybar/scripts/weather.py",
     "signal": 10
   }

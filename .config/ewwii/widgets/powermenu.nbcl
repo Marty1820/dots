@@ -58,6 +58,7 @@ component PmList () {
   }
 }
 
+# Window
 Window "powermenu" {
   monitor = 0
   geometry = {
@@ -68,11 +69,23 @@ Window "powermenu" {
   exclusive = "false"
   focusable = "none"
   namespace = "ewwii-powermenu"
-  Revealer {
-    transition = "slidedown"
-    # reveal = global("powermenu")
-    reveal = true
-    duration = "250ms"
-    PmList {}
+  PmList {}
+}
+
+# Widget Closer
+Window "powermenu-closer" {
+  monitor = 0
+  geometry = {
+    width = "100%"
+    height = "100%"
+    anchor = "center"
+    resizable = "false"
+  }
+  stacking = "fg"
+  exclusive = "false"
+  focusable = "none"
+  namespace = "ewwii-powermenu"
+  Closer {
+    window = "powermenu"
   }
 }

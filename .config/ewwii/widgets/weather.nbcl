@@ -557,18 +557,30 @@ Window "weather" {
   exclusive = "false"
   focusable = "none"
   namespace = "ewwii-weather"
-  Revealer {
-    transition = "slidedown"
-    # reveal = global("weather")
-    reveal = true
-    duration = "250ms"
-    Box {
-      class = "weather-box"
-      orientation = "v"
-      space_evenly = "false"
-      Wmain {}
-      Walert {}
-      Wdata {}
-    }
+  Box {
+    class = "weather-box"
+    orientation = "v"
+    space_evenly = "false"
+    Wmain {}
+    Walert {}
+    Wdata {}
+  }
+}
+
+# Widget Closer
+Window "weather-closer" {
+  monitor = 0
+  geometry = {
+    width = "100%"
+    height = "100%"
+    anchor = "center"
+    resizable = "false"
+  }
+  stacking = "fg"
+  exclusive = "false"
+  focusable = "none"
+  namespace = "ewwii-weather"
+  Closer {
+    window = "weather"
   }
 }

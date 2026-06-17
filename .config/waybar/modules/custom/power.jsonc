@@ -2,7 +2,7 @@
 {
   "custom/power": {
     "format": "󰣇",
-    "on-click": "ewwii open --toggle powermenu",
+    "on-click": "ewwii call-fns 'toggle_window(powermenu)'",
     "tooltip": false
   }
 }
