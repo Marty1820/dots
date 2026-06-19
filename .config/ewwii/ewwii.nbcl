@@ -17,6 +17,7 @@ component Closer (window) {
 # Widgets
 import "widgets/powermenu.nbcl" as powermenu
 import "widgets/weather.nbcl" as weather
+import "widgets/calendar.nbcl" as calendar
 
 # Toggle Window and closer with a simple function
 import core.command
