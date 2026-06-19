@@ -69,19 +69,29 @@ for name in ["speed", "deg", "gust"] {
 Poll "w_rain" {
   initial = "0"
   interval = "5m"
-  cmd = "jq '.daily[0].rain // 0 | . * 0.03937 | floor' < " + wtrjson
+  cmd = "jq '.daily[0].rain // 0 | . * 0.0393700787 | floor' < " + wtrjson
 }
 
 # Alert
 Poll "w_alert" {
   initial = ""
   interval = "5m"
-  cmd = "jq '.alerts[0].event' < " + wtrjson
+  cmd = "jq -r '.alerts[0].event' < " + wtrjson
 }
-Poll "w_alert_start" {
-  initial = "--:--"
+Poll "w_alert_desc" {
+  initial = ""
   interval = "5m"
-  cmd = "date -d @$(jq -r '.alerts[0].start' < " + wtrjson + ") +%I:%M%p"
+  cmd = "jq '.alerts[0].description' < " + wtrjson
+}
+Poll "w_alert_timerange" {
+  initial = "-- --- --:--"
+  interval = "5m"
+  cmd = "jq -r '
+    .alerts[0] | \"\\(.start) \\(.end)\"' < " + wtrjson + " | while read start end; do\
+    DATE_START=$(date -d @$start '+%d %b %I:%M%p'); \
+    DATE_END=$(date -d @$end '+%d %b %I:%M%p'); \
+    echo \"$DATE_START - $DATE_END\"; \
+  done"
 }
 
 # Moonrise/Moonset
@@ -212,31 +222,35 @@ component Wmain () {
 
 # Alert Component
 component Walert () {
-  Box {
+  EventBox {
     class = global("w_alert").template("w_alert {
       w_alert == 'null' ? 'empty' : 'alert'}")
     orientation = "h"
     space_evenly = "false"
-    Label {
-      class = "w_alert_icon"
-      text = global("w_alert").template("{
-        w_alert == 'null' ? '' : ' '}")
-    }
-    Box {
-      orientation = "v"
+    onhover = global("w_alert_desc").template("notify-send {w_alert_desc}")
+    Box{
+      space_evenly = "false"
       Label {
-        class = "w_alert_name"
-        xalign = 0
+        class = "w_alert_icon"
         text = global("w_alert").template("{
-          w_alert == 'null' ? '' : w_alert
-        }")
+          w_alert == 'null' ? '' : ' '}")
       }
-      Label {
-        class = "w_alert_time"
-        xalign = 0
-        text = global("w_alert_start").template("{
-          w_alert_start == 'null' ? '' : w_alert_start
-        }")
+      Box {
+        orientation = "v"
+        Label {
+          class = "w_alert_name"
+          xalign = 0
+          text = global("w_alert").template("{
+            w_alert == 'null' ? '' : w_alert
+          }")
+        }
+        Label {
+          class = "w_alert_time"
+          xalign = 0
+          text = global("w_alert_timerange").template("{
+            w_alert_timerange == 'null' ? '' : w_alert_timerange
+          }")
+        }
       }
     }
   }
@@ -507,8 +521,7 @@ component Wrain () {
       class = "w_block_data w_rain_label"
       xalign = 0
       text = global("w_rain").template("{
-        w_rain == 'null' ? '0' :
-        w_rain * 0.03937
+        w_rain == 'null' ? '0' : w_rain
       }in")
     }
     Label {
@@ -551,7 +564,8 @@ Window "weather" {
   monitor = 0
   geometry = {
     y = "5px"
-    anchor = "top center"
+    # anchor = "top center"
+    anchor = "top right"
   }
   stacking = "overlay"
   exclusive = "false"
