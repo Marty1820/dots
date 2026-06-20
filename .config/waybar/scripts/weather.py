@@ -62,7 +62,6 @@ ERROR_ICON = "󰼯"
 ERROR_AQI_ICON = "󰻝"
 ERROR_COLOR = "#ff5555"
 
-# Pollutant thresholds (upper bounds, ascending). Index->category (1-based)
 POLLUTANT_THRESHOLDS: Dict[str, List[float]] = {
     "co": [4.4, 9.4, 12.4, 15.4, 30.4, 1004],
     "no2": [53, 100, 360, 649, 1249, 2049],
@@ -85,11 +84,8 @@ def safe_load(path: Path) -> Optional[Dict[str, Any]]:
                 logger.error(f"Invalid JSON structure in {path}")
                 return None
             return data
-    except json.JSONDecodeError as e:
-        logger.error(f"JSON decode error in {path}: {e}")
-        return None
-    except PermissionError as e:
-        logger.error(f"Permission denied reading {path}: {e}")
+    except (json.JSONDecodeError, PermissionError) as e:
+        logger.error(f"Error loading {path}: {e}")
         return None
     except Exception as e:
         logger.error(f"Unexpected error loading {path}: {e}")
@@ -100,18 +96,14 @@ def get_weather_display(weather_data: Optional[Dict]) -> Tuple[str, str]:
     """Extract weather icon and color with fallbacks."""
     if not weather_data or "current" not in weather_data:
         return ERROR_ICON, ERROR_COLOR
-
     try:
         w = weather_data["current"]
         icon_code = w.get("weather", [{}])[0].get("icon")
-
         if not icon_code:
             logger.warning("No weather icon code found")
             return ERROR_ICON, ERROR_COLOR
-
-        icon, color = ICON_MAP.get(icon_code, (ERROR_ICON, ERROR_COLOR))
-        return icon, color
-    except (KeyError, IndexError, TypeError) as e:
+        return ICON_MAP.get(icon_code, (ERROR_ICON, ERROR_COLOR))
+    except Exception as e:
         logger.error(f"Error parsing weather data: {e}")
         return ERROR_ICON, ERROR_COLOR
 
@@ -120,7 +112,6 @@ def get_aqi_display(aqi_data: Optional[Dict]) -> Tuple[str, str]:
     """Extract AQI icon and color with fallbacks."""
     if not aqi_data:
         return ERROR_AQI_ICON, ERROR_COLOR
-
     try:
         aqi = aqi_data["data"]["aqi"]
         if not isinstance(aqi, (int, float)):
@@ -130,9 +121,9 @@ def get_aqi_display(aqi_data: Optional[Dict]) -> Tuple[str, str]:
         for max_val, (icon, color) in AQI_MAP:
             if aqi_val <= max_val:
                 return icon, color
-        # If larger than all buckets
+        # Fallback: return the last bucket's tuple
         return AQI_MAP[-1][1]
-    except (KeyError, IndexError, TypeError, ValueError) as e:
+    except Exception as e:
         logger.error(f"Error parsing AQI data: {e}")
         return ERROR_AQI_ICON, ERROR_COLOR
 
@@ -143,11 +134,9 @@ def set_weather_class(weather_data: Optional[Dict]) -> Tuple[int, str]:
     if weather_data and "current" in weather_data:
         try:
             temp = round(weather_data["current"].get("temp", 0))
-        except (KeyError, TypeError):
+        except Exception:
             pass
-
-    css_class = "hot" if temp > 90 else "cold" if temp < 32 else ""
-
+    css_class = "hot" if temp >= 90 else "cold" if temp <= 32 else ""
     return temp, css_class
 
 
@@ -160,16 +149,12 @@ def pull_aqi_value(aqi_data: Optional[Dict], name: str) -> Optional[float]:
 
     for k in candidates:
         try:
-            v = aqi_data["data"]["iaqi"].get(k)
-            if v and "v" in v:
-                try:
-                    return float(v["v"])
-                except (TypeError, ValueError):
-                    logger.debug(f"Non-numeric IAQI value for {k}: {v['v']}")
-                    return None
-        except (KeyError, TypeError):
+            iaqi_data = aqi_data["data"]["iaqi"]
+            v = iaqi_data.get(k)
+            if isinstance(v, dict) and "v" in v:
+                return float(v["v"])
+        except (KeyError, TypeError, ValueError):
             continue
-
     logger.debug(f"IAQI pollutant '{name}' not found")
     return None
 
@@ -179,16 +164,12 @@ def set_aqi_category(value: Optional[float], pollutant: str) -> int:
     if value is None:
         return 7
     p = pollutant.lower()
-
     thresholds = POLLUTANT_THRESHOLDS.get(p)
     if not thresholds:
-        logger.debug(f"No thresholds defined for pollutant '{pollutant}'")
         return 7
-
     for idx, upper in enumerate(thresholds, start=1):
         if value <= upper:
             return idx
-    # If above threshold, return highest category
     return min(len(thresholds) + 1, 7)
 
 
@@ -197,25 +178,29 @@ def category_color(value: Optional[float], pollutant: str) -> str:
     return AQI_COLORS.get(cat, AQI_COLORS[7])
 
 
+def format_val(val: Optional[float]) -> str:
+    return f"{val:.1f}" if val is not None else "--"
+
+
 def set_tooltip_info(aqi_data: Optional[Dict]) -> str:
     """Format AQI information to show on module hover"""
-    co = pull_aqi_value(aqi_data, "co")
-    no2 = pull_aqi_value(aqi_data, "no2")
-    o3 = pull_aqi_value(aqi_data, "o3")
-    pm10 = pull_aqi_value(aqi_data, "pm10")
-    pm25 = pull_aqi_value(aqi_data, "pm25")
-    so2 = pull_aqi_value(aqi_data, "so2")
+    pollutants = [
+        ("co", "CO"),
+        ("no2", "NO²"),
+        ("o3", "O³"),
+        ("pm10", "PM10"),
+        ("pm25", "PM2.5"),
+        ("so2", "SO²"),
+    ]
 
-    tooltip = (
-        f"<span foreground='{category_color(co, 'co')}'>CO    : {co}</span>\n"
-        f"<span foreground='{category_color(no2, 'no2')}'>NO²   : {no2}</span>\n"
-        f"<span foreground='{category_color(o3, 'o3')}'>O³    : {o3}</span>\n"
-        f"<span foreground='{category_color(pm10, 'pm10')}'>PM10  : {pm10}</span>\n"
-        f"<span foreground='{category_color(pm25, 'pm25')}'>PM2.5 : {pm25}</span>\n"
-        f"<span foreground='{category_color(so2, 'so2')}'>SO²   : {so2}</span>"
-    )
+    lines = []
+    for key, label in pollutants:
+        val = pull_aqi_value(aqi_data, key)
+        color = category_color(val, key)
+        display = format_val(val)
+        lines.append(f"<span foreground='{color}'>{label:<6}: {display}</span>")
 
-    return tooltip
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":
