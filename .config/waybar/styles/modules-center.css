@@ -109,9 +109,12 @@
   padding: 0 6px 0 4px;
 }
 
-#network.disconnected,
-#network.disabled {
+#network.disconnected {
   color: @critical;
+}
+
+#network.disabled {
+  color: @selection;
 }
 
 #bluetooth {
@@ -122,7 +125,7 @@
 
 #bluetooth.disabled,
 #bluetooth.off {
-  color: @critical;
+  color: @selection;
 }
 
 #custom-pacman {
