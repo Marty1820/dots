@@ -567,8 +567,7 @@ Window "weather" {
   monitor = 0
   geometry = {
     y = "5px"
-    # anchor = "top center"
-    anchor = "top right"
+    anchor = "top center"
   }
   stacking = "overlay"
   exclusive = "false"
