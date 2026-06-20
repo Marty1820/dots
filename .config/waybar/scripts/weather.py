@@ -188,8 +188,8 @@ def set_tooltip_info(aqi_data: Optional[Dict]) -> str:
         ("co", "CO"),
         ("no2", "NO²"),
         ("o3", "O³"),
-        ("pm10", "PM10"),
-        ("pm25", "PM2.5"),
+        ("pm10", "PM¹⁰"),
+        ("pm25", "PM²⁵"),
         ("so2", "SO²"),
     ]
 
