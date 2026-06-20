@@ -84,7 +84,7 @@ Poll "w_alert_desc" {
   cmd = "jq '.alerts[0].description' < " + wtrjson
 }
 Poll "w_alert_timerange" {
-  initial = "-- --- --:--"
+  initial = "-- --- --:-- - -- --- --:--"
   interval = "5m"
   cmd = "jq -r '
     .alerts[0] | \"\\(.start) \\(.end)\"' < " + wtrjson + " | while read start end; do\
@@ -224,10 +224,13 @@ component Wmain () {
 component Walert () {
   EventBox {
     class = global("w_alert").template("w_alert {
-      w_alert == 'null' ? 'empty' : 'alert'}")
+      w_alert == 'null' ? 'empty' : 'alert'
+    }")
     orientation = "h"
     space_evenly = "false"
-    onhover = global("w_alert_desc").template("notify-send {w_alert_desc}")
+    onclick = global("w_alert_desc").template("
+      {w_alert_desc} == 'null' ? '' : 'notify-send {w_alert_desc}'
+    ")
     Box{
       space_evenly = "false"
       Label {
@@ -248,7 +251,7 @@ component Walert () {
           class = "w_alert_time"
           xalign = 0
           text = global("w_alert_timerange").template("{
-            w_alert_timerange == 'null' ? '' : w_alert_timerange
+            w_alert_timerange == '-' ? '' : w_alert_timerange
           }")
         }
       }
