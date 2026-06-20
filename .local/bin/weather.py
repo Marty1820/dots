@@ -10,7 +10,7 @@ import sys
 import subprocess
 import signal
 from pathlib import Path
-from typing import Any, Dict, Literal
+from typing import Any, Dict, Literal, Optional, TypedDict
 
 # Systemd logging integration
 logging.basicConfig(
@@ -34,11 +34,22 @@ AQI_BASE = "https://api.waqi.info/feed/@{city}/"
 TIMEOUT = 10
 
 
-def load_config(config_file: Path) -> Dict[str, Any]:
-    """Loads configuration from a JSON file."""
+# --- Type Definitions ---
+
+
+class ProcessedConfig(TypedDict):
+    LAT: str
+    LON: str
+    APPID: str
+    AQI_KEY: str
+    AQI_LOC: str
+
+
+def load_config(config_file: Path) -> ProcessedConfig:
+    """Loads configuration from a JSON file and validates structure."""
     try:
         with config_file.open("r") as f:
-            cfg = json.load(f)
+            raw_cfg: Dict[str, Any] = json.load(f)
     except FileNotFoundError:
         logger.error(f"Error: Configuration file not found at {config_file}")
         sys.exit(1)
@@ -46,8 +57,8 @@ def load_config(config_file: Path) -> Dict[str, Any]:
         logger.error(f"Error decoding JSON file: {e}")
         sys.exit(1)
 
-    openweather = cfg.get("openweather")
-    aqicn = cfg.get("aqicn")
+    openweather = raw_cfg.get("openweather")
+    aqicn = raw_cfg.get("aqicn")
 
     # Validate required keys
     if (
@@ -63,19 +74,24 @@ def load_config(config_file: Path) -> Dict[str, Any]:
         sys.exit(1)
 
     logger.debug(f"Config loaded successfully from {config_file}")
-    return {
-        "LAT": openweather["lat"],
-        "LON": openweather["lon"],
+
+    cfg: ProcessedConfig = {
+        "LAT": str(openweather["lat"]),
+        "LON": str(openweather["lon"]),
         "APPID": str(openweather["appid"]),
         "AQI_KEY": str(aqicn["token"]),
         "AQI_LOC": str(aqicn["city"]),
     }
+    return cfg
 
 
 def fetch_data(
-    session: requests.Session, url: str, params: Dict[str, Any] = None
+    session: requests.Session, url: str, params: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
-    """Fetches data using a persistent session."""
+    """
+    Fetches data using a persistent session.
+    Returns the parsed JSON response.
+    """
     try:
         logger.debug("GET %s params=%s", url, params)
         response = session.get(url, params=params, timeout=TIMEOUT)
@@ -91,39 +107,53 @@ def reload_waybar() -> None:
     """Sends a signal to Waybar to force a module reload."""
     try:
         rt_signal = signal.SIGRTMIN + 10
-        subprocess.run(["pkill", f"-{rt_signal}", "waybar"], check=False)
+        if rt_signal > signal.SIGRTMAX:
+            logger.warning(
+                f"Real-time signal {rt_signal} exceeds MAX ({signal.SIGRTMAX}), skipping."
+            )
+            return
+
+        subprocess.run(
+            ["pkill", f"-{rt_signal}", "waybar"], check=False, capture_output=True
+        )
         logger.info(f"Waybar reloaded (Signal {rt_signal})")
     except Exception as e:
         logger.warning(f"Failed to send signal to waybar: {e}")
 
 
-def get_aqi_data(token: str, city: str) -> None:
-    """Fetch AQI and save to file."""
+def get_aqi_data(token: str, city: str) -> Optional[Dict[str, Any]]:
+    """
+    Fetch AQI and save to file.
+    Returns the datae dict if successful, None if saved (or exits on fail)
+    """
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-    # url: str = f"https://api.waqi.info/feed/@{city}/"
     url = AQI_BASE.format(city=city)
-    params = {"token": token}
+    params: Dict[str, Any] = {"token": token}
 
     with requests.Session() as session:
         try:
             data = fetch_data(session, url, params)
             AQI_FILE.write_text(json.dumps(data, indent=2))
             logger.info("AQI saved.")
+            return data
         except OSError as e:
             logger.error(f"File error: {e}")
             sys.exit(1)
+        except requests.RequestException:
+            return None
 
 
 def get_weather_data(
     appid: str, lat: float, lon: float, units: Literal["imperial", "metric"]
-) -> None:
-    """Fetch weather and save to file."""
+) -> Optional[Dict[str, Any]]:
+    """
+    Fetch weather and save to file.
+    Returns the data dict if successful
+    """
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-    # url: str = "http://api.openweathermap.org/data/3.0/onecall"
-
-    params = {
+    params: Dict[str, Any] = {
         "lat": lat,
         "lon": lon,
         "appid": appid,
@@ -137,9 +167,12 @@ def get_weather_data(
             data = fetch_data(session, ONECALL_URL, params)
             ONECALL_FILE.write_text(json.dumps(data, indent=2))
             logger.info("Weather saved.")
+            return data
         except OSError as e:
             logger.error(f"File error: {e}")
             sys.exit(1)
+        except requests.RequestException:
+            return None
 
 
 def main() -> None:
@@ -170,6 +203,7 @@ def main() -> None:
 
         get_weather_data(config["APPID"], lat, lon, args.units)
         get_aqi_data(config["AQI_KEY"], config["AQI_LOC"])
+
         reload_waybar()
 
 
