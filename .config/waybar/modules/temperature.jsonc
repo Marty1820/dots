@@ -1,4 +1,3 @@
-// -*- mode: jsonc -*-
 {
   "temperature": {
     "thermal-zone": 5,

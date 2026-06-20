@@ -1,11 +1,3 @@
-# ███╗░░░███╗░█████╗░██████╗░████████╗
-# ████╗░████║██╔══██╗██╔══██╗╚══██╔══╝
-# ██╔████╔██║███████║██████╔╝░░░██║░░░
-# ██║╚██╔╝██║██╔══██║██╔══██╗░░░██║░░░
-# ██║░╚═╝░██║██║░░██║██║░░██║░░░██║░░░
-# ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░
-
-
 # --- XDG Base Directories ---
 export XDG_DATA_HOME="$HOME"/.local/share
 export XDG_CONFIG_HOME="$HOME"/.config
@@ -51,7 +43,5 @@ export NPM_CONFIG_TMP="$XDG_RUNTIME_DIR"/npm
 
 
 # --- PATH Setup ---
-[[ -d "$HOME/.bin" ]] && PATH="$HOME/.bin:$PATH"
 [[ -d "$HOME/.local/bin" ]] && PATH="$HOME/.local/bin:$PATH"
 [[ -d "$HOME/Applications" ]] && PATH="$HOME/Applications:$PATH"
-[[ -d "$HOME/Scripts" ]] && PATH="$HOME/Scripts:${PATH}"

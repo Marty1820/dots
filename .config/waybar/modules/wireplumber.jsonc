@@ -1,4 +1,3 @@
-// -*- mode: jsonc -*-
 {
   "wireplumber": {
     "format": "{icon} {volume}%",

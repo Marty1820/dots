@@ -1,4 +1,3 @@
-// -*- mode: jsonc -*-
 {
   "group/brightness": {
     "orientation": "horizontal",

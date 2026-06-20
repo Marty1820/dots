@@ -1,11 +1,3 @@
-# ███╗░░░███╗░█████╗░██████╗░████████╗
-# ████╗░████║██╔══██╗██╔══██╗╚══██╔══╝
-# ██╔████╔██║███████║██████╔╝░░░██║░░░
-# ██║╚██╔╝██║██╔══██║██╔══██╗░░░██║░░░
-# ██║░╚═╝░██║██║░░██║██║░░██║░░░██║░░░
-# ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░
-# ZSH CONFIGUARATION
-
 # --- Early Exit for Non-Interactive Shells ---
 if [[ $- == *i* ]]; then
     awk -v term_cols="${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}" '
@@ -41,7 +33,25 @@ export HISTFILE="$XDG_CACHE_HOME/sh_hist"
 export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILESIZE=10000
-export EZA_COLORS="uu=36:uR=31:un=35:gu=37:da=2;34:ur=34:uw=95:ux=36:ue=36:gr=34:gw=35:gx=36:tr=34:tw=35:tx=36:xx=95:"
+
+# eza universal Dracula
+export EZA_COLORS="\
+  uu=36:\
+  uR=31:\
+  un=35:\
+  gu=37:\
+  da=2;34:\
+  ur=34:\
+  uw=95:\
+  ux=36:\
+  ue=36:\
+  gr=34:\
+  gw=35:\
+  gx=36:\
+  tr=34:\
+  tw=35:\
+  tx=36:\
+  xx=95:"
 
 # --- Home cleanup ---
 alias wget='wget --hsts-file=$XDG_CACHE_HOME/wget-hsts'
@@ -124,7 +134,7 @@ ex() {
   fi
 
   for n in "$@"; do
-    if [[ -f $n ]]; then      
+    if [[ -f $n ]]; then
       # Remove ALL extensions (archive.tar.gz > archive)
       dirname="${n%%.*}"
       dirname="${n%%.*}"

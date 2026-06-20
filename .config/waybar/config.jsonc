@@ -1,4 +1,3 @@
-// -*- mode: jsonc -*-
 {
   "include": [
     "~/.config/waybar/modules/*.jsonc",

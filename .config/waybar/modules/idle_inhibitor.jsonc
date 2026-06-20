@@ -1,4 +1,3 @@
-// -*- mode: jsonc -*-
 {
   "idle_inhibitor": {
     "format": "{icon}",

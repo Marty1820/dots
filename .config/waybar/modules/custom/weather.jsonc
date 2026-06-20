@@ -1,4 +1,3 @@
-// -*- mode: jsonc -*-
 {
   "custom/weather": {
     "exec": "~/.config/waybar/scripts/weather.py",
