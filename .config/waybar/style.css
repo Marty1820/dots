@@ -3,10 +3,9 @@
 * {
   /* Reset GTK theme */
   all: initial;
-  color: @main-fg;
   font-family: "Mononoki Nerd Font Mono";
-  font-weight: bold;
   font-size: 16px;
+  color: @main-fg;
 }
 
 @import "styles/modules-left.css";
@@ -17,7 +16,7 @@
   margin-bottom: -1px;
 }
 
-#waybar {
+window#waybar {
   background-color: @outline;
 }
 
@@ -26,21 +25,11 @@
   background-color: @main-bg;
 }
 
-button {
-  border-radius: 16px;
-  min-width: 16px;
-  padding: 0 10px;
-}
-
-button:hover {
-  background-color: @hover-bg;
-  color: @hover-fg;
-}
-
 tooltip {
-  border: 2px solid @accent;
+  opacity: 0.99;
   border-radius: 10px;
-  background-color: @main-bg;
+  border: 2px solid @accent;
+  background: @main-bg;
 }
 
 tooltip>box {
@@ -50,14 +39,6 @@ tooltip>box {
 #window label,
 tooltip label {
   font-weight: normal;
-}
-
-#custom-distro {
-  font-size: 20px;
-}
-
-#custom-power {
-  font-size: 18px;
 }
 
 #custom-left_div,
