@@ -69,7 +69,10 @@ Window "powermenu" {
   exclusive = "false"
   focusable = "none"
   namespace = "ewwii-powermenu"
-  PmList {}
+  Box {
+    class = "outer-box"
+    PmList {}
+  }
 }
 
 # Widget Closer

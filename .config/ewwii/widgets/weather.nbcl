@@ -536,25 +536,32 @@ component Wrain () {
   }
 }
 
-# Data Container
-component Wdata () {
+# Merge Full Box
+component Wbox () {
   Box {
+    class = "weather-box"
     orientation = "v"
     space_evenly = "false"
+    Wmain {}
+    Wlaert {}
     Box {
-      orientation = "h"
-      Waqi {}
-      Whumid {}
-    }
-    Box {
-      orientation = "h"
-      Wsun {}
-      Wmoon {}
-    }
-    Box {
-      orientation = "h"
-      Wwind {}
-      Wrain {}
+      orientation = "v"
+      space_evenly = "false"
+      Box {
+        orientation = "h"
+        Waqi {}
+        Whumid {}
+      }
+      Box {
+        orientation = "h"
+        Wsun {}
+        Wmoon {}
+      }
+      Box {
+        orientation = "h"
+        Wwind {}
+        Wrain {}
+      }
     }
   }
 }
@@ -574,12 +581,8 @@ Window "weather" {
   focusable = "none"
   namespace = "ewwii-weather"
   Box {
-    class = "weather-box"
-    orientation = "v"
-    space_evenly = "false"
-    Wmain {}
-    Walert {}
-    Wdata {}
+    class = "outer-box"
+    Wbox {}
   }
 }
 

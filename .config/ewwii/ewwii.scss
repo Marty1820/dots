@@ -5,6 +5,14 @@
 // Global
 @import "styles/colors";
 
+.outer-box {
+  font-family: Hack Nerd Font Mono;
+  border-radius: 6px;
+  background: $background-darker;
+  border: solid 1px $purple;
+  color: $foreground;
+}
+
 // Widget's CSS
 @import "styles/powermenu";
 @import "styles/weather";

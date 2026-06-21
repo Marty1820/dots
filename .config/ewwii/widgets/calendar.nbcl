@@ -1,13 +1,3 @@
-component Cal () {
-  Box{
-    class = "cal-box"
-    Calendar {
-      class = "cal"
-      onclick = "xdg-open https://calendar.google.com/calendar/u/0/r/day/{2}/{1}/{0}?pli=1"
-    }
-  }
-}
-
 # Window
 Window "calendar" {
   monitor = 0
@@ -19,7 +9,13 @@ Window "calendar" {
   exclusive = "false"
   focusable = "none"
   namespace = "ewwii-calendar"
-  Cal {}
+  Box {
+    class = "outer-box"
+    Calendar {
+      class = "cal"
+      onclick = "xdg-open https://calendar.google.com/calendar/u/0/r/day/{2}/{1}/{0}?pli=1"
+    }
+  }
 }
 
 # Widget Closer
