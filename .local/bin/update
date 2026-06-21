@@ -7,9 +7,10 @@ set -euo pipefail
 # Configuration
 INTERACTIVE=${INTERACTIVE:-1} # 1 for prompts. 0 for unnatended
 LOG_FILE="$HOME/.local/share/update.log"
+CONFIG_LOG_DIR="$(dirname "$LOG_FILE")"
 
 # Ensure log directory exists
-mkdir -p "$(dirname "$LOG_FILE")"
+mkdir -p "$CONFIG_LOG_DIR"
 touch "$LOG_FILE"
 
 # Colors
@@ -22,22 +23,23 @@ YELLOW="\033[33;1m"
 # Logging setup
 log() {
   local msg cutoff_date tmp_file
-  msg="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
-
-  # Calculate cutoff date
-  cutoff_date=$(date -d '15 days ago' '+%Y-%m-%d')
-
-  # Keep only lines from the cutoff date
-  tmp_file="${LOG_FILE}.tmp"
-  awk -v cutoff="$cutoff_date" '{gsub(/[\[\]]/, "", $1); if ($1 >= cutoff) print}' "$LOG_FILE" >"$tmp_file"
-  mv "$tmp_file" "$LOG_FILE"
+  timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+  msg="[$timestamp] $1"
 
   # Output to terminal with colors
   echo -e "$msg"
 
-  # Write to file without ANSI codes
+  # Writ to file without ANSI codes
   printf '%s\n' "$msg" |
     sed -E 's/\\033\[[0-9;]*m//g; s/\x1b\[[0-9;]*m//g' >>"$LOG_FILE"
+
+  # Log rotation (Keep last 15 days)
+  cutoff_date=$(date -d '15 days ago' '+%Y-%m-%d')
+  tmp_file="${LOG_FILE}.tmp"
+
+  # Use awk to filer safely
+  awk -v cutoff="$cutoff_date" '{gsub(/[\[\]]/, "", $1); if ($1 >= cutoff) print}' "$LOG_FILE" >"$tmp_file"
+  mv "$tmp_file" "$LOG_FILE"
 }
 
 # Print formatted header
@@ -60,23 +62,24 @@ confirm() {
 pkg_update() {
   print_header "Upgrading Packages"
   local flags=""
+  local pm=""
 
   [[ $INTERACTIVE -eq 0 ]] && flags="--noconfirm"
 
   if command -v paru &>/dev/null; then
+    pm="paru"
     log "Using 'paru' for upgrades."
-    if ! paru -Syu $flags; then
-      log "${RED}Paru upgrade failed.${RESET}"
-      return 1
-    fi
   elif command -v pacman &>/dev/null; then
+    pm="pacman"
     log "Using 'pacman' for upgrades."
-    if ! sudo pacman -Syu $flags; then
-      log "${RED}Pacman upgrade failed.${RESET}"
-      return 1
-    fi
   else
     log "${RED}No package manager found (paru or pacman).${RESET}"
+    return 1
+  fi
+
+  # Run upgrade
+  if ! "$pm" -Syu $flags; then
+    log "${RED}Package upgrade failed.${RESET}"
     return 1
   fi
 }
@@ -84,7 +87,6 @@ pkg_update() {
 # Rebuild check
 rebuild() {
   print_header "Checking for broken packages"
-
   if ! command -v checkrebuild &>/dev/null; then
     log "checkrebuild not installed. Skipping"
     return 0
@@ -108,7 +110,6 @@ tldr_cache() {
   fi
 
   print_header "Updating TLDR-pages"
-
   if ! tldr --update_cache; then
     log "${RED}Failed to update tldr cache.${RESET}"
   fi
@@ -122,7 +123,6 @@ fwupd() {
   fi
 
   print_header "Firmware check/update"
-
   if ! fwupdmgr update; then
     log "${RED}Firmware update failed or cancelled.${RESET}"
   fi
@@ -132,19 +132,22 @@ fwupd() {
 cpu_vulns() {
   print_header "Checking CPU vulnerabilities"
 
-  if ! command -v lscpu &>/dev/null; then
-    log "${RED}lscpu not found. Skipping.${RESET}"
-    return 0
+  # Prefer /sys method over lscpu for accuracy
+  local vuln_found=0
+
+  if [[ -d "/sys/devices/system/cpu/vulnerabilities" ]]; then
+    for v in /sys/devices/system/cpu/vulnerabilities/*; do
+      if grep -qi "vulnerable" "$v"; then
+        local name=$(basename "$v")
+        local status=$(cat "$v")
+        log "${RED}WARNING: CPU vulnerability '$name' detected: $status${RESET}"
+        vuln_found=1
+      fi
+    done
   fi
 
-  local vuln_output
-  vuln_output=$(lscpu | grep -i "Vulnerability:.*Vulnerable" || true)
-
-  if [[ -n "$vuln_output" ]]; then
-    log "${RED}WARNING: CPU vulnerabilities detected!${RESET}"
-    echo "$vuln_output"
-    echo "Run 'lscpu' manually for details."
-
+  if [[ $vuln_found -eq 1 ]]; then
+    echo "Run 'lscpu' or check '/sys/devices/system/cpu/vulnerabilities/' for details."
     if [[ $INTERACTIVE -eq 1 ]]; then
       read -rp "Press enter to continue..."
     fi
@@ -159,17 +162,16 @@ kern_chk() {
   local current_pkg running_ver current_base running_base
   print_header "Checking for new Kernel"
 
-  current_pkg=$(pacman -Q linux 2>/dev/null | awk '{print $2}')
-
-  if [[ -z "$current_pkg" ]]; then
-    log "${RED}Could not determine installed kernel package. Skipping."
+  # Determine installed kernel package dynamically
+  current_pkg=$(pacman -Q linux 2>/dev/null | awk '{print $2}') || {
+    log "${YELLOW}Could not determine installed kernel package (linux). Assuming manual management.${RESET}"
     orphan_pkgs
     return 0
-  fi
+  }
 
   running_ver=$(uname -r)
 
-  # Extract the numeric version (e.g., 6.19.10)
+  # Extract major.minor.patch for comparison
   current_base=$(echo "$current_pkg" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
   running_base=$(echo "$running_ver" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?')
 
@@ -183,7 +185,7 @@ kern_chk() {
   log "Running:   $running_ver (Parsed: $running_base)"
 
   if [[ "$current_base" == "$running_base" ]]; then
-    log "Current kernel matches installed package. No reboot needed."
+    log "Kernel matches running version. No reboot needed."
   else
     log "${RED}Newer kernel ($current_pkg) installed but running ($running_ver). Reboot required.${RESET}"
 
@@ -212,33 +214,38 @@ orphan_pkgs() {
 
   if [[ -z "$orphans" ]]; then
     log "No orphaned packages found."
-  else
-    log "${YELLOW}Found orphaned packages:${RESET}"
-    echo "$orphans"
-    if [[ $INTERACTIVE -eq 1 ]]; then
-      read -rp "Remove them? [y/N]: " ans
-      if [[ "$ans" =~ ^[Yy]$ ]]; then
-        log "Removing orphans..."
-        sudo pacman -Rns $(pacman -Qdtq)
-      fi
+    return 0
+  fi
+
+  log "${YELLOW}Found orphaned packages:${RESET}"
+  echo "$orphans"
+
+  if [[ $INTERACTIVE -eq 1 ]]; then
+    if confirm "Remove them?"; then
+      log "Removing orphans..."
+      echo "$orphans" | sudo xargs pacman -Rns --noconfirm --needed
     fi
+  else
+    log "${YELLOW}Unattended mode: Opheran removal skipped. Manual review recommended.${RESET}"
   fi
 }
 
 # Waybar reload
 waybar_reload() {
   if pgrep -x waybar >/dev/null; then
-    pkill -SIGRTMIN+8 waybar || log "${GREEN}Waybar reload signal sent.${RESET}"
+    pkill -SIGRTMIN+8 waybar
+    log "${GREEN}Waybar reload signal sent.${RESET}"
   else
     log "${YELLOW}Waybar not running. Skipping reload.${RESET}"
   fi
 }
 
-# ---------------------
-# Main Execution
-# ---------------------
+# Main
 main() {
-  pkg_update
+  pkg_update || {
+    log "${RED}Update aborted due to package manager failure.${RESET}"
+    exit 1
+  }
   rebuild
   tldr_cache
   fwupd
