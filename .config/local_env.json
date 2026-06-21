@@ -11,5 +11,9 @@
     "example": "https://api.waqi.info/feed/@AQI_CITY/?token=AQI_API_KEY",
     "city": "CITYNUMBER",
     "token": "YOUR-API-KEY-HERE"
+  },
+  "wlsunset": {
+    "lat": 12.3456,
+    "lon": 123.456
   }
 }
