@@ -26,7 +26,7 @@ if [ "$TERM" = "xterm-kitty" ]; then
 fi
 
 # --- Environment Variables ---
-export HISTORY_IGNORE='(l[salt.]#( *)#|pwd|exit|history(|*)|cls|cd)'
+export HISTORY_IGNORE='(l[salt.]#( *)#|pwd|exit|history(|*)|cls)'
 export HISTFILE="$XDG_CACHE_HOME/sh_hist"
 export HISTSIZE=10000
 export SAVEHIST=10000
