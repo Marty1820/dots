@@ -13,6 +13,5 @@ layer-rule {
   shadow {
     on
   }
-  geometry-corner-radius 10
-  baba-is-float true
+  geometry-corner-radius 12
 }
