@@ -18,7 +18,6 @@ else
   exit
 fi
 
-
 # --- Terminal-Specific Aliases (Kitty) ---
 if [ "$TERM" = "xterm-kitty" ]; then
   alias ssh="kitten ssh"
@@ -26,32 +25,12 @@ if [ "$TERM" = "xterm-kitty" ]; then
   alias d="kitten diff"
 fi
 
-
 # --- Environment Variables ---
 export HISTORY_IGNORE='(l[salt.]#( *)#|pwd|exit|history(|*)|cls|cd)'
 export HISTFILE="$XDG_CACHE_HOME/sh_hist"
 export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILESIZE=10000
-
-# eza universal Dracula
-export EZA_COLORS="\
-  uu=36:\
-  uR=31:\
-  un=35:\
-  gu=37:\
-  da=2;34:\
-  ur=34:\
-  uw=95:\
-  ux=36:\
-  ue=36:\
-  gr=34:\
-  gw=35:\
-  gx=36:\
-  tr=34:\
-  tw=35:\
-  tx=36:\
-  xx=95:"
 
 # --- Home cleanup ---
 alias wget='wget --hsts-file=$XDG_CACHE_HOME/wget-hsts'
@@ -80,7 +59,7 @@ alias cat='bat'
 alias ls='eza --icons=always --color=always --group-directories-first'
 alias la='eza --all --icons=always --color=always --group-directories-first'
 alias ll='eza --all --long --smart-group --icons=always --color=always --group-directories-first'
-alias lt='eza --all --tree --icons=always --color=always --group-directories-first'
+alias lt='eza --all --tree --icons=always --color=always --group-directories-first --ignore-glob=".git"'
 alias l='eza --all --icons=always --color=always --group-directories-first'
 alias l.='eza --all | grep -E "^\."'
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
@@ -113,7 +92,6 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 compinit -d "$HOME/.cache/zsh/zcompdump-$ZSH_VERSION"
 _comp_options+=(globdots)
 
-
 # --- Man Pager & LESS Colors ---
 export MANPAGER="nvim +Man!"
 export GROFF_NO_SGR=1                   # for konsole
@@ -125,161 +103,23 @@ export LESS_TERMCAP_me=$'\e[0m'
 export LESS_TERMCAP_se=$'\e[0m'
 export LESS_TERMCAP_ue=$'\e[0m'
 
-
 # --- Extract Function ---
-ex() {
-  local archive="$1"
-  local base_name tmp_dir target_dir exit_code=0
-
-  [[ -f "$archive" ]] || { echo "ex: '$archive' not found"; return 1; }
-
-  # 1. Determine the base name
-  base_name="${archive%.tar}"
-  base_name="${base_name%.tgz}"
-  base_name="${base_name%.tbz2}"
-  base_name="${base_name%.txz}"
-  base_name="${base_name%.tar.xz}"
-  base_name="${base_name%.tar.bz2}"
-  base_name="${base_name%.tar.gz}"
-  base_name="${base_name%.*}" # Strip last remaining dot-extension (e.g. .zip, .rar)
-
-  # Fallback if stripping removed everything (rare edge case)
-  [[ -z "$base_name" ]] && base_name="extracted"
-
-  # For complex archives (tar/7z/etc), we might need a specific folder.
-  case "$archive" in
-    *.tar*|*.zip|*.rar|*.7z|*.epub|*.cb[rtb7]|*.cab|*.iso|*.dmg|*.deb|*.cpio|*.ace)
-      target_dir="$(pwd)/${base_name}_tmp"
-      mkdir -p "$target_dir" || return 1
-
-      case "$archive" in
-        *.tar.bz2|*.tbz2|*.cbt) tar xvjf "$archive" -C "$target_dir" ;;
-        *.tar.gz|*.tgz)         tar xvzf "$archive" -C "$target_dir" ;;
-        *.tar.xz|*.txz)         tar xvJf "$archive" -C "$target_dir" ;;
-        *.tar.zst)              unzstd -c "$archive" | tar xvf - -C "$target_dir" ;;
-        *.tar)                  tar xvf "$archive" -C "$target_dir" ;;
-        *.zip|*.cbz|*.epub)     unzip -q "$archive" -d "$target_dir" ;;
-        *.rar|*.cbr)            unrar x -ad "$archive" "$target_dir/" ;;
-        *.7z|*.arj|*.cab|*.cb7|*.chm|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
-                                7z x "$archive" -o"$target_dir" >/dev/null 2>&1 ;;
-        *.deb)                  dpkg-deb -x "$archive" "$target_dir" ;;
-        *.cpio)                 cpio -id < "$archive" -D "$target_dir" ;;
-        *.ace)                  unace x "$archive" "$target_dir/" ;;
-        *.exe)                  cabextract "$archive" -d "$target_dir" >/dev/null 2>&1 ;;
-        *)                      echo "ex: unknown format '$archive'"; rm -rf "$target_dir"; return 1 ;;
-      esac
-      exit_code=$?
-
-      if (( exit_code == 0 )); then
-        local contents=( "$target_dir"/*(-N) )
-        local count=${#contents[@]}
-
-        if (( count == 0 )); then
-          echo "ex: archive appears empty"
-          rmdir "$target_dir"
-          return 1
-        elif (( count == 1 )) && [[ -d "${contents[1]}" ]]; then
-          # Case: Single folder inside -> Move contents to current dir
-          mv -n "${contents[1]}"/* ./ 2>/dev/null
-          rmdir "${contents[1]}"
-          rmdir "$target_dir"
-        elif (( count == 1 )) && [[ -f "${contents[1]}" ]]; then
-          # Case: Single file inside -> Move file to current dir
-          mv "${contents[1]}" ./
-          rmdir "$target_dir"
-        else
-          # Case: Multiple files/folders -> Rename tmp to base_name
-          mv "$target_dir" "../$base_name"
-        fi
-      fi
-      ;;
-
-    # Handle simple compressors
-    *.gz)
-      local out_name="${archive%.gz}"
-      gunzip -c "$archive" > "$out_name" 2>/dev/null || {
-        gunzip -f "$archive"
-        out_name=$(basename "$archive" .gz)
-      }
-      ;;
-    *.bz2)
-      bzip2 -dc "$archive" > "${archive%.bz2}"
-      ;;
-    *.xz)
-      xz -dc "$archive" > "${archive%.xz}"
-      ;;
-    *)
-      echo "ex: unsupported simple compression '$archive'"
-      return 1
-      ;;
-  esac
-
-  return $exit_code
-}
-
+[[ -f "$XDG_CONFIG_HOME"/zsh/extract.zsh ]] && source "$XDG_CONFIG_HOME"/zsh/extract.zsh
 
 # --- Color Support ---
 autoload -U colors && colors
 [[ "$COLORTERM" == (24bit|truecolor) || "${terminfo[colors]}" -eq '16777216' ]] || zmodload zsh/nearcolor
 
-
 # --- Prompt ---
 eval "$(starship init zsh)"
 
-
-# --- Dracual Theme for zsh-syntax-highlighting ---
-# https://github.com/zenorocha/dracula-theme
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
-typeset -gA ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES=(
-  # Comments
-  comment                      'fg=#6272A4'
-  # Functions/Methods
-  alias                        'fg=#50FA7B'
-  suffix-alias                 'fg=#50FA7B'
-  global-alias                 'fg=#50FA7B'
-  function                     'fg=#50FA7B'
-  command                      'fg=#50FA7B'
-  precommand                   'fg=#50FA7B,italic'
-  autodirectory                'fg=#FFB86C,italic'
-  single-hyphen-option         'fg=#FFB86C'
-  double-hyphen-option         'fg=#FFB86C'
-  # Built-ins
-  builtin                      'fg=#8BE9FD'
-  reserved-word                'fg=#8BE9FD'
-  hashed-command               'fg=#8BE9FD'
-  # Punctuation
-  commandseparator             'fg=#FF79C6'
-  command-substitution-delimiter 'fg=#F8F8F2'
-  process-substitution-delimiter 'fg=#F8F8F2'
-  back-quoted-argument-delimiter 'fg=#FF79C6'
-  back-double-quoted-argument 'fg=#FF79C6'
-  back-dollar-quoted-argument 'fg=#FF79C6'
-  # Strings
-  command-substitution-quoted 'fg=#F1FA8C'
-  single-quoted-argument      'fg=#F1FA8C'
-  double-quoted-argument      'fg=#F1FA8C'
-  rc-quote                    'fg=#F1FA8C'
-  # Variables
-  dollar-quoted-argument      'fg=#F8F8F2'
-  assign                      'fg=#F8F8F2'
-  named-fd                    'fg=#F8F8F2'
-  numeric-fd                  'fg=#F8F8F2'
-  # No Category Relevant in SPEC
-  unknown-token               'fg=#FF5555'
-  path                        'fg=#F8F8F2'
-  globbing                    'fg=#F8F8F2'
-  history-expansion           'fg=#BD93F9'
-  redirection                 'fg=#F8F8F2'
-  arg0                        'fg=#F8F8F2'
-  default                     'fg=#F8F8F2'
-  cursor                      'standout'
-)
-
 # --- Plugins ---
 # pacman -S zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting
-[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
-  . /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
   . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+[[ -f "$XDG_CONFIG_HOME"/zsh/colors.zsh ]] && source "$XDG_CONFIG_HOME"/zsh/colors.zsh
+
+[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+  . /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh && \
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6272a4,bold"
