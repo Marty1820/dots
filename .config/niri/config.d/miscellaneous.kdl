@@ -15,11 +15,11 @@ environment {
 
 cursor {
   hide-when-typing
-  hide-after-inactive-ms 5000
+  hide-after-inactive-ms 1000
 }
 
 overview {
-  zoom 0.75
+  zoom 0.95
   backdrop-color "#282a36"
 }
 

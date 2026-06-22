@@ -18,8 +18,7 @@ binds {
 }
 
 //--- Switch Events ---
-switch-events {
-}
+// switch-events {}
 
 //--- Layout ---
 include "config.d/layout.kdl"
@@ -33,5 +32,18 @@ include "config.d/window_rules.kdl"
 //--- Layer Rules ---
 include "config.d/layer_rules.kdl"
 
+//--- Animations
+animations {
+  slowdown 0.75
+}
+
 //--- Gestures ---
 include "config.d/gestures.kdl"
+
+//--- Recent Windows ---
+recent-windows {
+  off
+}
+
+//--- Debug ---
+// debug {}
