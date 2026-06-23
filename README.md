@@ -17,8 +17,7 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 
 - **Shell**: [ZSH](https://www.zsh.org/)
 - **WM**: [Niri](https://github.com/YaLTeR/niri)
-- **Status Bar**: [Waybar](https://github.com/Alexays/Waybar)
-- **Widgets**: [EWWii](https://github.com/Ewwii-sh)
+- **Status Bar**: [Wayle](https://github.com/wayle-rs/wayle)
 - **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
@@ -28,7 +27,7 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 | `Thunar` |      `Super + e` Filebroswer      |
 | `Helium` |      `Super + b` Web Browser      |
 | `Fuzzel` | `Super + d` Applications Launcher |
-|  `swww`  |         Wallpaper setting         |
+|  `awww`  |         Wallpaper setting         |
 
 #### ZSH changes
 
@@ -82,5 +81,5 @@ Example file located in `.config/local_env.json`
 #### Niri wants
 
 ```bash
-systemctl --user add-wants niri.service AB.service awww-daemon.service ewwii-daemon.service hypridle.service waybar.service weather.timer wlsunset.service
+systemctl --user add-wants niri.service AB.service awww-daemon.service hypridle.service wayle.service weather.timer wlsunset.service
 ```

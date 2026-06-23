@@ -1,7 +1,0 @@
-{
-  "custom/power": {
-    "format": "󰣇",
-    "on-click": "ewwii call-fns 'toggle_window(powermenu)'",
-    "tooltip": false
-  }
-}

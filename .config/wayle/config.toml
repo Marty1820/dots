@@ -1,0 +1,76 @@
+[bar]
+scale = 0.75
+
+[[bar.layout]]
+monitor = "*"
+left = ["dashboard", "window-title"]
+center = ["weather", "clock", "idle-inhibit", "systray"]
+right = ["brightness", "volume", "network", "battery"]
+
+[styling.palette]
+# Dracula pallete
+bg = "#191a21"
+surface = "#282a36"
+elevated = "#44475a"
+fg = "#f8f8f2"
+fg_muted = "#6272a4"
+primary = "#bd93f9"
+red = "#ff5555"
+yellow = "#f1fa8c"
+green = "#50fa7b"
+blue = "#8be9fd"
+
+[general]
+font-mono = "Mononoki Nerd Font Mono"
+
+[osd]
+enabled = false
+
+[modules.battery]
+format = "{{ percent }}"
+icon-bg-color = "blue"
+label-color = "blue"
+
+[[modules.battery.thresholds]]
+below = 30
+icon-bg-color = "status-warning"
+
+[[modules.battery.thresholds]]
+below = 15
+icon-bg-color = "status-error"
+label-color = "status-error"
+
+[modules.brightness]
+format = "{{ percent }}"
+right-click = "$HOME/.local/bin/ABToggle.sh"
+
+[modules.clock]
+format = "%H:%M %a, %b %d"
+icon-bg-color = "yellow"
+label-color = "yellow"
+
+[modules.dashboard]
+icon-bg-color = "red"
+
+[modules.idle-inhibit]
+label-show = false
+icon-bg-color = "red"
+
+[modules.network]
+icon-bg-color = "green"
+label-color = "green"
+right-click = "nm-connection-editor"
+
+[modules.systray]
+
+[modules.volume]
+format = "{{ percent }}"
+icon-bg-color = "accent"
+label-color = "accent"
+
+[modules.weather]
+units = "imperial"
+
+[modules.window-title]
+icon-bg-color = "green"
+label-color = "green"
