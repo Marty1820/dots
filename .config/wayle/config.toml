@@ -4,21 +4,21 @@ scale = 0.75
 [[bar.layout]]
 monitor = "*"
 left = ["dashboard", "window-title"]
-center = ["weather", "custom-aqi", "clock", "idle-inhibit", "systray", "notifications"]
+center = ["weather", "custom-aqi", "clock", "idle-inhibit", "notifications"]
 right = ["brightness", "volume", "network", "battery"]
 
 [styling.palette]
 # Dracula pallete
-bg = "#191a21"
-surface = "#282a36"
-elevated = "#44475a"
-fg = "#f8f8f2"
-fg_muted = "#6272a4"
-primary = "#bd93f9"
-red = "#ff5555"
-yellow = "#f1fa8c"
-green = "#50fa7b"
-blue = "#8be9fd"
+bg = "#191a21"       # bg-base
+surface = "#282a36"  # bg-surface
+elevated = "#44475a" # bg-surface-elevated
+fg = "#f8f8f2"       # fg-default
+fg_muted = "#6272a4" # fg-muted
+primary = "#bd93f9"  # accent
+red = "#ff5555"      # red status-error
+yellow = "#f1fa8c"   # yellow status-warning
+green = "#50fa7b"    # green
+blue = "#8be9fd"     # blue
 
 [general]
 font-mono = "Mononoki Nerd Font Mono"
@@ -31,6 +31,7 @@ format = "{{ percent }}"
 icon-bg-color = "blue"
 label-color = "blue"
 thresholds = [
+  { above = 80, label-color = "green" },
   { below = 30, icon-bg-color = "status-warning" },
   { below = 15, icon-bg-color = "status-error", label-color = "status-error"}
 ]
@@ -42,7 +43,7 @@ right-click = "$HOME/.local/bin/ABToggle.sh"
 [modules.clock]
 format = "%H:%M %a, %b %d"
 icon-bg-color = "yellow"
-label-color = "yellow"
+label-color = "fg-default"
 
 [modules.dashboard]
 icon-bg-color = "red"
@@ -57,8 +58,11 @@ label-color = "green"
 right-click = "nm-connection-editor"
 
 [modules.notifications]
-
-[modules.systray]
+icon-bg-color = "bg-surface-elevated"
+label-show = false
+thresholds = [
+ { above = 1, icon-bg-color = "green" }
+]
 
 [modules.volume]
 format = "{{ percent }}"
@@ -67,6 +71,8 @@ label-color = "accent"
 
 [modules.weather]
 units = "imperial"
+icon-bg-color = "yellow"
+label-color = "yellow"
 
 [modules.window-title]
 icon-bg-color = "green"
