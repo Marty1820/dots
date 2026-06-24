@@ -41,7 +41,7 @@ format = "{{ percent }}"
 right-click = "$HOME/.local/bin/ABToggle.sh"
 
 [modules.clock]
-format = "%H:%M %a, %b %d"
+format = "%I:%M %p"
 icon-bg-color = "yellow"
 label-color = "fg-default"
 
