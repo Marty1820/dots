@@ -4,7 +4,7 @@ scale = 0.75
 [[bar.layout]]
 monitor = "*"
 left = ["dashboard", "window-title"]
-center = ["weather", "clock", "idle-inhibit", "systray"]
+center = ["weather", "custom-aqi", "clock", "idle-inhibit", "systray", "notifications"]
 right = ["brightness", "volume", "network", "battery"]
 
 [styling.palette]
@@ -30,15 +30,10 @@ enabled = false
 format = "{{ percent }}"
 icon-bg-color = "blue"
 label-color = "blue"
-
-[[modules.battery.thresholds]]
-below = 30
-icon-bg-color = "status-warning"
-
-[[modules.battery.thresholds]]
-below = 15
-icon-bg-color = "status-error"
-label-color = "status-error"
+thresholds = [
+  { below = 30, icon-bg-color = "status-warning" },
+  { below = 15, icon-bg-color = "status-error", label-color = "status-error"}
+]
 
 [modules.brightness]
 format = "{{ percent }}"
@@ -61,6 +56,8 @@ icon-bg-color = "green"
 label-color = "green"
 right-click = "nm-connection-editor"
 
+[modules.notifications]
+
 [modules.systray]
 
 [modules.volume]
@@ -74,3 +71,18 @@ units = "imperial"
 [modules.window-title]
 icon-bg-color = "green"
 label-color = "green"
+
+[[modules.custom]]
+id = "aqi"
+command = "~/.config/wayle/scripts/waqi.py"
+interval-ms = 300000
+format = "{{ text }}"
+left-click = "xdg-open https://aqicn.org"
+icon-names = [
+  "ld-sun",
+  "ld-cloud-sun",
+  "ld-cloud",
+  "ld-cloud-fog",
+  "alert-triangle",
+  "flame"
+]
