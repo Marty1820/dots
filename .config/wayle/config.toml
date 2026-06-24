@@ -77,12 +77,14 @@ id = "aqi"
 command = "~/.config/wayle/scripts/waqi.py"
 interval-ms = 300000
 format = "{{ text }}"
+hide-if-empty = true
 left-click = "xdg-open https://aqicn.org"
-icon-names = [
-  "ld-sun",
-  "ld-cloud-sun",
-  "ld-cloud",
-  "ld-cloud-fog",
-  "alert-triangle",
-  "flame"
-]
+icon-map = {
+# wayle icons install lucide thumbs-up thumbs-down triangle-alert octagon-alert biohazard
+  "good" = "ld-thumbs-up",
+  "moderate" = "ld-info",
+  "sensitive"  = "ld-thumbs-down",
+  "unhealthy" = "ld-triangle-alert",
+  "veryunhealthy" = "ld-octagon-alert",
+  "hazardous" = "ld-biohazard"
+}

@@ -64,8 +64,25 @@ def set_tooltip_info(data):
     lines = []
     for key, label in pollutants:
         val = pull_aqi_value(data, key)
-        lines.append(f"{label:<6}: {format_val(val)}")
+        lines.append(f"{label:<5}: {format_val(val)}")
     return "\n".join(lines)
+
+
+def get_aqi_label(aqi_value):
+    if aqi_value is None:
+        return "Unknown"
+    if aqi_value <= 50:
+        return "good"
+    elif aqi_value <= 100:
+        return "moderate"
+    elif aqi_value <= 150:
+        return "sensitive"
+    elif aqi_value <= 200:
+        return "unhealthy"
+    elif aqi_value <= 300:
+        return "veryunhealthy"
+    else:
+        return "hazardous"
 
 
 if __name__ == "__main__":
@@ -78,13 +95,12 @@ if __name__ == "__main__":
         except ValueError:
             pass
 
-    scaled_percent = 0
-    if aqi_value is not None:
-        scaled_percentage = min(int((aqi_value / MAX_AQI) * 100), 100)
+    label = get_aqi_label(aqi_value)
 
     output = {
-        "percentage": scaled_percentage,
         "text": str(aqi_value) if aqi_value is not None else "?",
+        "alt": label,
+        "class": label,
         "tooltip": set_tooltip_info(aqi_data),
     }
 
