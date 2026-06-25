@@ -21,10 +21,22 @@ green = "#50fa7b"    # green
 blue = "#8be9fd"     # blue
 
 [general]
+font-sans = "Arimo Nerd Font"
 font-mono = "Mononoki Nerd Font Mono"
 
 [osd]
-enabled = false
+# enabled = false
+position = "top-right"
+margin = 0
+
+[wallpaper]
+enging-enabled = true
+transition-type = "random"
+transition-duration = 3
+cycling-enabled = true
+cycling-directory = "$HOME/Pictures/wallpapers/framework"
+cycling-mode = "shuffle"
+cycling-interval-mins = 5
 
 [modules.battery]
 format = "{{ percent }}"
