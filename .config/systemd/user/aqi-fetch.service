@@ -1,11 +1,11 @@
 [Unit]
-Description=Run weather data fetch
+Description=Run AQI data fetch
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 %h/.local/bin/weather.py getdata --units imperial
+ExecStart=/usr/bin/python3 %h/.local/bin/aqi.py
 StandardOutput=journal
 StandardError=journal
 

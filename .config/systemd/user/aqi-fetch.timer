@@ -1,8 +1,8 @@
 [Unit]
-Description=Run weather update every 5 minutes
+Description=Run AQI update every 10 minutes
 
 [Timer]
-Unit=weather.service
+Unit=aqi-fetch.service
 OnBootSec=1min
 OnUnitActiveSec=10min
 Persistent=true
