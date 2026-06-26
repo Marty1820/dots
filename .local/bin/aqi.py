@@ -30,20 +30,17 @@ TIMEOUT = 10
 def load_config() -> dict:
     """Loads configuration from a JSON file and validates structure."""
     try:
-        config = json.loads(CONFIG_FILE.read_text())
+        config = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
         aqicn = config.get("aqicn", {})
 
         if not aqicn.get("token") or not aqicn.get("city"):
             logger.error("Missing 'aqicn.token' or 'aqicn.city' in config")
-            sys.exit(1)
 
         return {"token": aqicn["token"], "city": aqicn["city"]}
     except FileNotFoundError:
-        logger.error(f"Config file not found: {CONFIG_FILE}")
-        sys.exit(1)
+        raise RuntimeError(f"Config file not found: {CONFIG_FILE}")
     except json.JSONDecodeError as e:
-        logger.error(f"Invalid JSON in config: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Invalid JSON in config: {e}")
 
 
 def fetch_aqi(token: str, city: str) -> None:
@@ -56,16 +53,31 @@ def fetch_aqi(token: str, city: str) -> None:
         response.raise_for_status()
 
         data = response.json()
-        AQI_FILE.write_text(json.dumps(data, indent=2))
+
+        # Validate API response
+        api_status = data.get("status")
+        if api_status != "ok":
+            error_msg = data.get("data", "unknown error")
+            raise RuntimeError(f"WAQI API returned '{api_status}': {error_msg}")
+
+        AQI_FILE.write_text(json.dumps(data, separators=(",", ":"), indent=2))
         logger.info("AQI data saved")
+
+    except requests.HTTPError as e:
+        raise RuntimeError(
+            f"HTTP error fetching AQI data ({e.response.status_code}): {e}"
+        )
     except requests.RequestException as e:
-        logger.error(f"Failed to fetch AQI data: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Failed to fetch AQI data: {e}")
     except OSError as e:
-        logger.error(f"Failed to write cache file: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Failed to write cache file: {e}")
 
 
 if __name__ == "__main__":
-    config = load_config()
-    fetch_aqi(config["token"], config["city"])
+    try:
+        config = load_config()
+        fetch_aqi(config["token"], config["city"])
+        sys.exit(0)
+    except RuntimeError as e:
+        logger.error(str(e))
+        sys.exit(1)
