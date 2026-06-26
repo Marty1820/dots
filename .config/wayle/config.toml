@@ -111,6 +111,6 @@ icon-map = {
   "Moderate" = "ld-info",
   "Sensitive"  = "ld-thumbs-down",
   "Unhealthy" = "ld-triangle-alert",
-  "Very Unhealthy" = "ld-octagon-alert",
+  "Very_Unhealthy" = "ld-octagon-alert",
   "Hazardous" = "ld-biohazard"
 }

@@ -3,121 +3,147 @@
 import json
 import logging
 import sys
+from bisect import bisect_right
 from pathlib import Path
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    stream=sys.stderr,
-)
-logger = logging.getLogger(__name__)
-
-AQI_CACHE = Path.home() / ".cache" / "weather" / "aqidata.json"
+# --- Configuration ---
+CACHE_DIR = Path.home() / ".cache" / "weather"
+AQI_CACHE = CACHE_DIR / "aqidata.json"
 
 POLLUTANT_THRESHOLDS: Dict[str, list] = {
-    "co": [4.4, 9.4, 12.4, 15.4, 30.4, 1004],
-    "no2": [53, 100, 360, 649, 1249, 2049],
-    "o3": [54, 70, 85, 105, 200, 605],
-    "pm10": [54, 154, 254, 354, 424, 504, 604],
-    "pm25": [12, 35.4, 55.4, 150.4, 250.4, 500.4],
-    "so2": [35, 75, 185, 304, 604, 1004],
+    "co": [4.5, 9.5, 12.5, 15.5, 30.5],
+    "no2": [54, 101, 361, 650, 1250],
+    "o3": [55, 71, 86, 106, 404],
+    "pm10": [55, 155, 255, 355, 425],
+    "pm25": [9.1, 35.5, 55.5, 125.5, 225.5],
+    "so2": [36, 76, 186, 305, 605],
 }
-colors: List[str] = ["#50fa7b", "#F1fa8c", "#ffb86c", "#ff5555", "#bd93f9", "#ff79c6"]
-MAX_AQI = 200
+COLORS: List[str] = ["#50fa7b", "#F1fa8c", "#ffb86c", "#ff5555", "#bd93f9", "#ff79c6"]
+POLLUTANTS: List[tuple] = [
+    ("co", "CO"),
+    ("no2", "NO²"),
+    ("o3", "O³"),
+    ("pm10", "PM¹⁰"),
+    ("pm25", "PM²⁵"),
+    ("so2", "SO²"),
+]
 
 
-def safe_load(path: Path) -> Optional[Dict]:
+def setup_logging() -> None:
+    """Config stderr-based logging."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        stream=sys.stderr,
+    )
+
+
+def load_json_file(path: Path) -> Optional[Dict[str, Any]]:
+    """Load JSON from file."""
+    if not path.exists():
+        logging.debug(f"Cache file not found: {path}")
+        return None
+
     try:
-        if not path.exists():
-            logger.warning(f"Cache file not found: {path}")
-            return None
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
-    except Exception as e:
-        logger.error(f"Error loading {path}: {e}")
-        return None
+    except json.JSONDecodeError as e:
+        logging.error(f"Invalid JSON at {path}: {e}")
+    except UnicodeDecodeError as e:
+        logging.error(f"Encoding error at {path}: {e}")
+    except PermissionError as e:
+        logging.error(f"Permission denied at {path}: {e}")
+    except OSError as e:
+        logging.error(f"IO error at {path}: {e}")
+
+    return None
 
 
-def pull_aqi_value(data, name):
-    if not data:
+def extract_pollutant_value(data: Optional[Dict], key: str) -> Optional[float]:
+    """Safely extract pollutant value from nested AQI API response."""
+    if not isinstance(data, dict):
         return None
     try:
-        val = data["data"]["iaqi"][name.lower()]["v"]
-        return float(val)
-    except Exception:
+        val = data.get("data", {}).get("iaqi", {}).get(key.lower(), {}).get("v")
+        return float(val) if val is not None else None
+    except (TypeError, ValueError):
         return None
 
 
-def format_val(val):
-    return f"{val:.1f}" if val is not None else "--"
-
-
-def get_aqi_color(value, thresholds):
+def get_aqi_category(value: Optional[int]) -> str:
+    """Map numeric AQI to human-readable category."""
     if value is None:
-        return "#f8f8f2"
-    for i, threshold in enumerate(thresholds):
-        if value <= threshold:
-            return colors[i]
-    return colors[-1]
-
-
-def set_tooltip_info(data):
-    pollutants = [
-        ("co", "CO"),
-        ("no2", "NO²"),
-        ("o3", "O³"),
-        ("pm10", "PM¹⁰"),
-        ("pm25", "PM²⁵"),
-        ("so2", "SO²"),
+        return "unknown"
+    categories = [
+        (50, "good"),
+        (100, "moderate"),
+        (150, "sensitive"),
+        (200, "unhealthy"),
+        (300, "very_unhealthy"),
     ]
+    for threshold, label in categories:
+        if value <= threshold:
+            return label
+    return "hazardous"
+
+
+def compute_color_index(value: float, thresholds: List[float]) -> int:
+    """Binary search threshold index for color lookup."""
+    idx = bisect_right(thresholds, value)
+    return min(idx, len(COLORS) - 1)
+
+
+def build_tooltip(data: Optional[Dict]) -> str:
+    """Construct multi-line tooltip string with all pollutants."""
     lines = []
-    for key, label in pollutants:
-        val = pull_aqi_value(data, key)
-        # color = get_aqi_color(val, POLLUTANT_THRESHOLDS[key])
-        # lines.append(f'{label:<8}: <span color="{color}">{format_val(val)}</span>')
-        lines.append(f"{label:<8}: {format_val(val)}")
-    return "\n".join(lines)
+    overall_label = "Unknown"
 
-
-def get_aqi_label(aqi_value):
-    if aqi_value is None:
-        return "Unknown"
-    if aqi_value <= 50:
-        return "Good"
-    elif aqi_value <= 100:
-        return "Moderate"
-    elif aqi_value <= 150:
-        return "Sensitive"
-    elif aqi_value <= 200:
-        return "Unhealthy"
-    elif aqi_value <= 300:
-        return "Very Unhealthy"
-    else:
-        return "Hazardous"
-
-
-if __name__ == "__main__":
-    aqi_data = safe_load(AQI_CACHE)
-
-    aqi_value = None
-    if aqi_data and "data" in aqi_data and "aqi" in aqi_data["data"]:
+    if data:
+        aqi_val = data.get("data", {}).get("aqi")
         try:
-            aqi_value = int(aqi_data["data"]["aqi"])
-        except ValueError:
+            overall_label = get_aqi_category(int(aqi_val))
+        except (ValueError, TypeError):
+            pass
+
+        for key, label in POLLUTANTS:
+            val = extract_pollutant_value(data, key)
+            # Colors reserved for future feature activation
+            # thresh = POLLUTANT_THRESHOLDS[key]
+            # color = COLORS[compute_color_index(val, thresh)] if val else "#f8f8f2"
+            # lines.append(f'{label:<8}: <span color="{color}">{val:.1f}</span>' if val else f'{label:<8}: --')
+            lines.append(f"{label:<8}: {'--' if val is None else f'{val:.1f}'}")
+
+    return f"Overall : {overall_label.title()}\n" + "\n".join(lines)
+
+
+def generate_output(data: Optional[Dict]) -> Dict[str, str]:
+    """Build final JSON payload for consumer application."""
+    aqi_value = None
+    if data:
+        try:
+            aqi_value = int(data.get("data", {}).get("aqi"))
+        except (ValueError, TypeError):
             pass
 
     text = str(aqi_value) if aqi_value is not None else "UNK"
-    label = get_aqi_label(aqi_value)
-    css = label.lower().replace(" ", "_")
-    tooltip = f"Overall : {label}\n{set_tooltip_info(aqi_data)}"
+    category = get_aqi_category(aqi_value)
+    css_class = f"aqi-{category}"
+    tooltip = build_tooltip(data)
 
-    output = {
-        # "text": f'<span color="#f8f8f2">{text}</span>',
+    return {
         "text": text,
         "tooltip": tooltip,
-        "alt": label,
-        "class": f"aqi-{css}",
+        "alt": category.replace("_", " ").title(),
+        "class": css_class,
+        # "text_colored": f'<span color="#f8f8f2">{text}</span>',  # Reserved
     }
 
-    print(json.dumps(output))
+
+if __name__ == "__main__":
+    setup_logging()
+
+    data = load_json_file(AQI_CACHE)
+    result = generate_output(data)
+
+    print(json.dumps(result))
