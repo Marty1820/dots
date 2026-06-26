@@ -230,16 +230,6 @@ orphan_pkgs() {
   fi
 }
 
-# Waybar reload
-waybar_reload() {
-  if pgrep -x waybar >/dev/null; then
-    pkill -SIGRTMIN+8 waybar
-    log "${GREEN}Waybar reload signal sent.${RESET}"
-  else
-    log "${YELLOW}Waybar not running. Skipping reload.${RESET}"
-  fi
-}
-
 # Main
 main() {
   pkg_update || {
@@ -251,7 +241,6 @@ main() {
   fwupd
   cpu_vulns
   kern_chk
-  waybar_reload
 
   log "${GREEN}Update script completed.${RESET}"
 }
