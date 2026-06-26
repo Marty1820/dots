@@ -4,10 +4,12 @@ gestures {
     trigger-width 100 // Swipe zone width in pixels
     max-speed 3000 // Max scroll velocity
   }
+
   dnd-edge-workspace-switch {
     trigger-height 100 // Swipe zone width in pixels
     max-speed 3000 // Max scroll velocity
   }
+
   hot-corners {
     off
   }

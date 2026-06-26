@@ -1,4 +1,4 @@
-//---Key Bindings ---
+//--- Key Bindings ---
 binds {
   // Moving Windows
   Mod+Ctrl+Left  { move-column-left; }

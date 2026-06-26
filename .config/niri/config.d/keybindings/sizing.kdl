@@ -1,11 +1,13 @@
 //--- Key Bindings ---
 binds {
   // Change Window Sizing
+
   // Width
   Mod+R      { switch-preset-column-width; }
   Mod+Ctrl+F { expand-column-to-available-width; }
   Mod+Minus  { set-column-width "-10%"; }
   Mod+Equal  { set-column-width "+10%"; }
+
   // Height
   Mod+Shift+R hotkey-overlay-title="Switch Preset Window Heights" { switch-preset-window-height; }
   Mod+Ctrl+R      { reset-window-height; }

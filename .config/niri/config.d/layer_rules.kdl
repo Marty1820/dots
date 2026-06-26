@@ -4,14 +4,18 @@ layer-rule {
   match namespace="awww-daemon"
   place-within-backdrop true
 }
+
 layer-rule {
   match namespace="^notifications$"
   block-out-from "screencast"
 }
+
 layer-rule {
   match namespace="^launcher$"
+
   shadow {
     on
   }
+
   geometry-corner-radius 12
 }
