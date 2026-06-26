@@ -105,8 +105,8 @@ label-color = "fg-default"
 hide-if-empty = true
 left-click = "xdg-open https://aqicn.org"
 icon-map = {
-# wayle icons install lucide circle-question-mark thumbs-up thumbs-down triangle-alert octagon-alert biohazard
-  "Unknown" = "ld-circle-question-mark",
+# wayle icons install lucide thumbs-up thumbs-down triangle-alert octagon-alert biohazard
+  "Unknown" = "ld-x",
   "Good" = "ld-thumbs-up",
   "Moderate" = "ld-info",
   "Sensitive"  = "ld-thumbs-down",
