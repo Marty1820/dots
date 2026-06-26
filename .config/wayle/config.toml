@@ -39,7 +39,7 @@ transition-duration = 3
 cycling-enabled = true
 cycling-directory = "/home/marty/Pictures/wallpapers"
 cycling-mode = "shuffle"
-cycling-interval-mins = 5
+cycling-interval-mins = 30
 
 [modules.battery]
 format = "{{ percent }}"
