@@ -27,6 +27,7 @@ font-sans = "Arimo Nerd Font"
 font-mono = "Mononoki Nerd Font Mono"
 
 [osd]
+enabled = false
 # With auto brightness this might get annoying
 position = "top-right"
 margin = 0
@@ -104,11 +105,12 @@ label-color = "fg-default"
 hide-if-empty = true
 left-click = "xdg-open https://aqicn.org"
 icon-map = {
-# wayle icons install lucide thumbs-up thumbs-down triangle-alert octagon-alert biohazard
-  "good" = "ld-thumbs-up",
-  "moderate" = "ld-info",
-  "sensitive"  = "ld-thumbs-down",
-  "unhealthy" = "ld-triangle-alert",
-  "veryunhealthy" = "ld-octagon-alert",
-  "hazardous" = "ld-biohazard"
+# wayle icons install lucide circle-question-mark thumbs-up thumbs-down triangle-alert octagon-alert biohazard
+  "Unknown" = "ld-circle-question-mark",
+  "Good" = "ld-thumbs-up",
+  "Moderate" = "ld-info",
+  "Sensitive"  = "ld-thumbs-down",
+  "Unhealthy" = "ld-triangle-alert",
+  "Very Unhealthy" = "ld-octagon-alert",
+  "Hazardous" = "ld-biohazard"
 }

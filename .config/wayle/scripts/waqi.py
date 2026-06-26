@@ -4,7 +4,7 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 logging.basicConfig(
     level=logging.INFO,
@@ -23,6 +23,7 @@ POLLUTANT_THRESHOLDS: Dict[str, list] = {
     "pm25": [12, 35.4, 55.4, 150.4, 250.4, 500.4],
     "so2": [35, 75, 185, 304, 604, 1004],
 }
+colors: List[str] = ["#50fa7b", "#F1fa8c", "#ffb86c", "#ff5555", "#bd93f9", "#ff79c6"]
 MAX_AQI = 200
 
 
@@ -52,6 +53,15 @@ def format_val(val):
     return f"{val:.1f}" if val is not None else "--"
 
 
+def get_aqi_color(value, thresholds):
+    if value is None:
+        return "#f8f8f2"
+    for i, threshold in enumerate(thresholds):
+        if value <= threshold:
+            return colors[i]
+    return colors[-1]
+
+
 def set_tooltip_info(data):
     pollutants = [
         ("co", "CO"),
@@ -64,7 +74,9 @@ def set_tooltip_info(data):
     lines = []
     for key, label in pollutants:
         val = pull_aqi_value(data, key)
-        lines.append(f"{label:<5}: {format_val(val)}")
+        # color = get_aqi_color(val, POLLUTANT_THRESHOLDS[key])
+        # lines.append(f'{label:<8}: <span color="{color}">{format_val(val)}</span>')
+        lines.append(f"{label:<8}: {format_val(val)}")
     return "\n".join(lines)
 
 
@@ -72,17 +84,17 @@ def get_aqi_label(aqi_value):
     if aqi_value is None:
         return "Unknown"
     if aqi_value <= 50:
-        return "good"
+        return "Good"
     elif aqi_value <= 100:
-        return "moderate"
+        return "Moderate"
     elif aqi_value <= 150:
-        return "sensitive"
+        return "Sensitive"
     elif aqi_value <= 200:
-        return "unhealthy"
+        return "Unhealthy"
     elif aqi_value <= 300:
-        return "veryunhealthy"
+        return "Very Unhealthy"
     else:
-        return "hazardous"
+        return "Hazardous"
 
 
 if __name__ == "__main__":
@@ -95,13 +107,17 @@ if __name__ == "__main__":
         except ValueError:
             pass
 
+    text = str(aqi_value) if aqi_value is not None else "UNK"
     label = get_aqi_label(aqi_value)
+    css = label.lower().replace(" ", "_")
+    tooltip = f"Overall : {label}\n{set_tooltip_info(aqi_data)}"
 
     output = {
-        "text": str(aqi_value) if aqi_value is not None else "?",
+        # "text": f'<span color="#f8f8f2">{text}</span>',
+        "text": text,
+        "tooltip": tooltip,
         "alt": label,
-        "class": label,
-        "tooltip": set_tooltip_info(aqi_data),
+        "class": f"aqi-{css}",
     }
 
     print(json.dumps(output))
