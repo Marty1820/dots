@@ -8,6 +8,7 @@ window-rule {
   match app-id="waterfox"
   match app-id="helium"
   match app-id="zen"
+  exclude title="^(Extension: )*"
   open-maximized true
 }
 
