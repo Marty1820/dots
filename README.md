@@ -74,12 +74,8 @@ No overwriting files:
 git clone https://github.com/Marty1820/configs.git ~/dots && cd ~/dots && stow --adopt .
 ```
 
-#### Extra file needed for wlsunset and weather module in Waybar
-
-Example file located in `.config/local_env.json`
-
 #### Niri wants
 
 ```bash
-systemctl --user add-wants niri.service AB.service awww-daemon.service hypridle.service wayle.service weather.timer wlsunset.service
+systemctl --user add-wants niri.service AB.service awww-daemon.service hypridle.service wayle.service aqi-fetch.timer wlsunset.service
 ```
