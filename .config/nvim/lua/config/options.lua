@@ -18,7 +18,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 
 -- Mouse
-vim.opt.mouse = "a"
+vim.opt.mouse = "nvi"
 
 -- Clipboard
 vim.opt.clipboard = "unnamedplus"
