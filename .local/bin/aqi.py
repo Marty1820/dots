@@ -19,12 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Define paths
 HOME = Path.home()
-CACHE_DIR = HOME / ".cache" / "weather"
-AQI_FILE = CACHE_DIR / "aqidata.json"
 CONFIG_FILE = HOME / ".config" / "local_env.json"
-
-AQI_BASE = "https://api.waqi.info/feed/@{city}/"
-TIMEOUT = 10
 
 
 def load_config() -> dict:
@@ -36,20 +31,30 @@ def load_config() -> dict:
         if not aqicn.get("token") or not aqicn.get("city"):
             logger.error("Missing 'aqicn.token' or 'aqicn.city' in config")
 
-        return {"token": aqicn["token"], "city": aqicn["city"]}
+        cache_dir = config.get("cache_dir", str(HOME / ".cache" / "weather"))
+
+        return {
+            "aqi_url": aqicn["url"],
+            "token": aqicn["token"],
+            "city": aqicn["city"],
+            "cache_directory": cache_dir,
+        }
     except FileNotFoundError:
         raise RuntimeError(f"Config file not found: {CONFIG_FILE}")
     except json.JSONDecodeError as e:
         raise RuntimeError(f"Invalid JSON in config: {e}")
 
 
-def fetch_aqi(token: str, city: str) -> None:
+def fetch_aqi(url: str, token: str, city: str, cache_directory: str) -> None:
     """Fetch AQI data and save to cache."""
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_dir = Path(cache_directory)
+    aqi_file = cache_dir / "aqidata.json"
 
-    url = AQI_BASE.format(city=city)
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    url = url.format(city=city)
     try:
-        response = requests.get(url, params={"token": token}, timeout=TIMEOUT)
+        response = requests.get(url, params={"token": token}, timeout=10)
         response.raise_for_status()
 
         data = response.json()
@@ -60,7 +65,7 @@ def fetch_aqi(token: str, city: str) -> None:
             error_msg = data.get("data", "unknown error")
             raise RuntimeError(f"WAQI API returned '{api_status}': {error_msg}")
 
-        AQI_FILE.write_text(json.dumps(data, separators=(",", ":"), indent=2))
+        aqi_file.write_text(json.dumps(data, separators=(",", ":"), indent=2))
         logger.info("AQI data saved")
 
     except requests.HTTPError as e:
@@ -76,7 +81,12 @@ def fetch_aqi(token: str, city: str) -> None:
 if __name__ == "__main__":
     try:
         config = load_config()
-        fetch_aqi(config["token"], config["city"])
+        fetch_aqi(
+            config["aqi_url"],
+            config["token"],
+            config["city"],
+            config["cache_directory"],
+        )
         sys.exit(0)
     except RuntimeError as e:
         logger.error(str(e))

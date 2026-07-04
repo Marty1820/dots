@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Optional, Dict, List, Any
 
 # --- Configuration ---
-CACHE_DIR = Path.home() / ".cache" / "weather"
-AQI_CACHE = CACHE_DIR / "aqidata.json"
+HOME = Path.home()
+CONFIG_FILE = HOME / ".config" / "local_env.json"
 
 POLLUTANT_THRESHOLDS: Dict[str, list] = {
     "co": [4.5, 9.5, 12.5, 15.5, 30.5],
@@ -39,11 +39,12 @@ def setup_logging() -> None:
     )
 
 
-def load_json_file(path: Path) -> Optional[Dict[str, Any]]:
+def load_json_file() -> Optional[Dict[str, Any]]:
     """Load JSON from file."""
-    if not path.exists():
-        logging.debug(f"Cache file not found: {path}")
-        return None
+    config = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+    cache_dir = config.get("cache_dir")
+    cache_file = config.get("aqi_file")
+    path = Path(cache_dir) / Path(cache_file)
 
     try:
         with open(path, encoding="utf-8") as f:
@@ -143,7 +144,7 @@ def generate_output(data: Optional[Dict]) -> Dict[str, str]:
 if __name__ == "__main__":
     setup_logging()
 
-    data = load_json_file(AQI_CACHE)
+    data = load_json_file()
     result = generate_output(data)
 
     print(json.dumps(result))
