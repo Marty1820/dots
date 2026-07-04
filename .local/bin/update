@@ -219,15 +219,7 @@ orphan_pkgs() {
 
   log "${YELLOW}Found orphaned packages:${RESET}"
   echo "$orphans"
-
-  if [[ $INTERACTIVE -eq 1 ]]; then
-    if confirm "Remove them?"; then
-      log "Removing orphans..."
-      echo "$orphans" | sudo xargs pacman -Rns --noconfirm --needed
-    fi
-  else
-    log "${YELLOW}Unattended mode: Opheran removal skipped. Manual review recommended.${RESET}"
-  fi
+  log "${YELLOW}Manually verify and remove if uneeded${RESET}"
 }
 
 # Main
