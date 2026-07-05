@@ -7,12 +7,12 @@ from pathlib import Path
 HOME = Path.home()
 CONFIG_FILE = HOME / ".config" / "local_env.json"
 ICON_MAP = {
-    "good": "󰡳",
-    "moderate": "󰡵",
-    "sensitive": "󰊚",
-    "unhealthy": "󰡴",
-    "very_unhealthy": "󰂧",
-    "hazardous": "󰵄",
+    "good": "󰡳 ",
+    "moderate": "󰡵 ",
+    "sensitive": "󰊚 ",
+    "unhealthy": "󰡴 ",
+    "very_unhealthy": "󰂧 ",
+    "hazardous": "󰵄 ",
 }
 
 
