@@ -1,0 +1,83 @@
+log_level = "warn"
+position = "Top"       # "Top" (default) or "Bottom"
+layer = "Top"      # "Bottom" (default), "Top", or "Overlay"
+enable_esc_key = true  # Pressing Escape closes open menus
+
+[osd]
+enabled = true
+timeout = 1500    # milliseconds
+show_volume_percentage = true
+show_brightness_percentage = true
+
+[animations]
+enabled = true
+
+[modules]
+left = [ "WindowTitle" ]
+center = [ "Aqi", "Tempo", [ "Privacy", "Updates", "Notifications" ] ]
+right = [ "Settings" ]
+
+[updates]
+check_cmd = "checkupdates; paru -Qua"
+update_cmd = 'kitty -e bash -c "paru; echo Done - Press enter to exit; read" &'
+interval = 3600
+
+[window_title]
+mode = "Title"
+truncate_title_after_length = 75
+
+[tempo]
+clock_format = "%I:%M %p"
+weather_location = "Current"
+weather_indicator = "IconAndTemperature"  # "Icon", or "None"
+wind_speed_unit = "Mph" # "Kmh", "Mph", or "Ms"
+
+[notifications]
+format = "%H:%M"
+show_timestamps = true
+show_bodies = true
+grouped = true
+
+[settings]
+lock_cmd = "loginctl lock-session &"
+
+wifi_more_cmd = "nm-connection-editor &"
+vpn_more_cmd = "nm-connection-editor &"
+bluetooth_more_cmd = "blueman-manager &"
+
+suspend_cmd = "systemctl suspend-then-hibernate"
+hibernate_cmd = "systemctl hibernate"
+
+indicators = [ "IdleInhibitor", "Brightness", "Audio", "Network", "Vpn", "Battery" ]
+
+battery_format = "IconAndPercentage"
+peripheral_battery_format = "Icon"
+peripheral_indicators = "All"
+volume_step = 1
+
+[[CustomModule]]
+name = "Aqi"
+type = "Text"
+# listen_cmd = "~/.config/ashell/scripts/aqi.py"
+listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 3; done'"
+
+[appearance]
+font_name = "Mononoki Nerd Font Mono"
+scale_factor = 1.1
+style = "Solid"  # "Island", "Solid", or "Gradient"
+
+success_color = "#50FA7B"
+warning_color = "#F1FA8C"
+danger_color  = "#FF5555"
+text_color   = "#F8F8F2"
+
+workspace_colors = ["#BD93F9", "#8BE9FD", "#FFB86C"]
+
+[appearance.primary_color]
+base = "#BD93F9"
+text = "#282A36"
+
+[appearance.background_color]
+base   = "#282A36"
+weak   = "#44475A"
+strong = "#6272A4"
