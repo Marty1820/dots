@@ -1,20 +1,20 @@
 //--- Key Bindings ---
 binds {
   // Function (fn) keys
-  XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-  XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.01-"; }
-  XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "--limit" "1.0" "@DEFAULT_AUDIO_SINK@" "0.01+"; }
+  XF86AudioMute allow-when-locked=true { spawn "ashell" "msg" "volume-toggle-mute"; }
+  XF86AudioLowerVolume allow-when-locked=true { spawn "ashell" "msg" "volume-down"; }
+  XF86AudioRaiseVolume allow-when-locked=true { spawn "ashell" "msg" "volume-up"; }
 
   XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
   XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
   XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
 
-  XF86MonBrightnessDown { spawn "brightnessctl" "set" "1%-"; }
-  XF86MonBrightnessUp   { spawn "brightnessctl" "set" "+1%"; }
+  XF86MonBrightnessDown { spawn "ashell" "msg" "brightness-down"; }
+  XF86MonBrightnessUp   { spawn "ashell" "msg" "brightness-up"; }
 
   //fn F9 - Projector key
   Super+p hotkey-overlay-title="Wallpaper Switcher" { spawn-sh "awww.sh"; }
-  //XF86rfkill // fn F10 - Airplane
+  XF86rfkill { spawn "ashell" "msg" "toggle-airplane-mode"; } // fn F10 - Airplane
 
   // fn F11 - Print Screen
   Print     { screenshot-screen; } // Full screen
