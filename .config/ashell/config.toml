@@ -1,30 +1,30 @@
 log_level = "warn"
-position = "Top"       # "Top" (default) or "Bottom"
-layer = "Top"      # "Bottom" (default), "Top", or "Overlay"
+
+position = "Top"       # "Top" or "Bottom"
+layer = "Top"          # "Bottom", "Top", or "Overlay"
 enable_esc_key = true  # Pressing Escape closes open menus
 
-[osd]
-enabled = true
-timeout = 1500    # milliseconds
-show_volume_percentage = true
-show_brightness_percentage = true
-
-[animations]
-enabled = true
-
 [modules]
-left = [ "WindowTitle" ]
-center = [ "Aqi", "Tempo", [ "Privacy", "Updates", "Notifications" ] ]
-right = [ "Settings" ]
+left = [ [ "Aqi", "Tempo" ], ["Updates", "Notifications" ] ]
+center = [ "WindowTitle" ]
+right = [ "Tray", [ "Settings", "Privacy" ] ]
 
 [updates]
 check_cmd = "checkupdates; paru -Qua"
 update_cmd = 'kitty -e bash -c "paru; echo Done - Press enter to exit; read" &'
 interval = 3600
 
+[[CustomModule]]
+name = "Aqi"
+type = "Text"
+listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 3; done'"
+
 [window_title]
 mode = "Title"
 truncate_title_after_length = 75
+
+[tray]
+right_click = "menu"
 
 [tempo]
 clock_format = "%I:%M %p"
@@ -37,41 +37,39 @@ format = "%H:%M"
 show_timestamps = true
 show_bodies = true
 grouped = true
+toast_position = "top_left"
 
 [settings]
 lock_cmd = "loginctl lock-session &"
 
-wifi_more_cmd = "nm-connection-editor &"
-vpn_more_cmd = "nm-connection-editor &"
-bluetooth_more_cmd = "blueman-manager &"
-
 suspend_cmd = "systemctl suspend-then-hibernate"
 hibernate_cmd = "systemctl hibernate"
 
+wifi_more_cmd = "nm-connection-editor"
+vpn_more_cmd = "nm-connection-editor"
+bluetooth_more_cmd = "blueman-manager"
+battery_format = "IconAndPercentage"
+
 indicators = [ "IdleInhibitor", "Brightness", "Audio", "Network", "Vpn", "Battery" ]
 
-battery_format = "IconAndPercentage"
-peripheral_battery_format = "Icon"
-peripheral_indicators = "All"
-volume_step = 1
+[osd]
+enabled = true
+timeout = 1500    # milliseconds
+show_volume_percentage = true
+show_brightness_percentage = true
 
-[[CustomModule]]
-name = "Aqi"
-type = "Text"
-# listen_cmd = "~/.config/ashell/scripts/aqi.py"
-listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 3; done'"
+[animations]
+enabled = true
 
 [appearance]
+style = "Solid"  # "Islands", "Solid", or "Gradient"
 font_name = "Mononoki Nerd Font Mono"
 scale_factor = 1.1
-style = "Solid"  # "Island", "Solid", or "Gradient"
 
 success_color = "#50FA7B"
-warning_color = "#F1FA8C"
+warning_color = "#FFB86C"
 danger_color  = "#FF5555"
-text_color   = "#F8F8F2"
-
-workspace_colors = ["#BD93F9", "#8BE9FD", "#FFB86C"]
+text_color    = "#F8F8F2"
 
 [appearance.primary_color]
 base = "#BD93F9"
@@ -79,5 +77,8 @@ text = "#282A36"
 
 [appearance.background_color]
 base   = "#282A36"
-weak   = "#44475A"
-strong = "#6272A4"
+weak   = "#343746"
+strong = "#21222C"
+weaker = "#424450"
+stronger = "#191a21"
+text   = "#F8F8F2"
