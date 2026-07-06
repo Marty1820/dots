@@ -30,6 +30,46 @@ wk.add({
     end,
     desc = "Plugin Updates",
   },
+  {
+    "<leader>vr",
+    function()
+      -- Collect all plugins marked as inactive
+      local inactive = vim
+        .iter(vim.pack.get())
+        :filter(function(pkg)
+          return not pkg.active
+        end)
+        :map(function(pkg)
+          return pkg.spec.name
+        end)
+        :totable()
+      -- Early exit if nothing to remove
+      if #inactive == 0 then
+        vim.notify("No inactive plugins found", vim.log.levels.INFO)
+        return
+      end
+      -- Track successful deletions
+      local removed = 0
+      for _, name in ipairs(inactive) do
+        local ok, err = pcall(vim.pack.del, { name })
+        if ok then
+          removed = removed + 1
+          vim.notify("Removed: " .. name, vim.log.levels.DEBUG)
+        else
+          vim.notify(
+            "Failed: " .. name .. " (" .. tostring(err) .. ")",
+            vim.log.levels.ERROR
+          )
+        end
+      end
+      -- Summary: report how many succedded vs attempted total
+      vim.notify(
+        string.format("Successfully removed %d/%d plugins", removed, #inactive),
+        vim.log.levels.INFO
+      )
+    end,
+    desc = "Remove Inactive Plugins",
+  },
 
   -- Diagnostics
   { "<leader>d", group = "+[D]iagnostics" },
