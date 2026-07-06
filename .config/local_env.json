@@ -10,7 +10,7 @@
     "token": "YOUR-API-KEY-HERE"
   },
   "wlsunset": {
-    "lat": 12.3456,
-    "lon": 123.456
+    "lat": 12.3,
+    "lon": 123.4
   }
 }
