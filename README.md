@@ -23,9 +23,8 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 
 |   Name   |            Description            |
 | :------: | :-------------------------------: |
-| `NeoVim` |      `Super + a` Text Editor      |
-| `Thunar` |      `Super + e` Filebroswer      |
-| `Helium` |      `Super + b` Web Browser      |
+| `Cosmic Files` |      `Super + e` Filebroswer      |
+| `Zen` |      `Super + b` Web Browser      |
 | `Fuzzel` | `Super + d` Applications Launcher |
 |  `awww`  |         Wallpaper setting         |
 
@@ -77,5 +76,13 @@ git clone https://github.com/Marty1820/configs.git ~/dots && cd ~/dots && stow -
 #### Niri wants
 
 ```bash
-systemctl --user add-wants niri.service AB.service awww-daemon.service hypridle.service hyprpolkitagent.service aqi-fetch.timer wlsunset.service
+systemctl --user add-wants niri.service \
+    AB.service \
+    ashell.service \
+    awww-daemon.service \
+    hypridle.service \
+    hyprpolkitagent.service \
+    syncthing.service \
+    wlsunset.service \
+    aqi-fetch.timer \
 ```
