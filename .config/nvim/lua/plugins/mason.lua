@@ -40,6 +40,7 @@ require("mason-tool-installer").setup({
     { "ruff" },
     { "shfmt" },
     { "stylua" },
+    { "tombi" },
     { "typescript-language-server" },
     { "yaml-language-server" },
   },
