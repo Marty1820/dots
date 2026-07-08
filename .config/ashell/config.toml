@@ -52,10 +52,10 @@ battery_format = "IconAndPercentage"
 
 indicators = [
   "IdleInhibitor",
-  "Brightness",
-  "Audio",
   "Network",
   "Vpn",
+  "Bluetooth",
+  "Audio",
   "Battery"
 ]
 
