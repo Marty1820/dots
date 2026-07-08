@@ -6,14 +6,6 @@ from pathlib import Path
 # --- Configuration ---
 HOME = Path.home()
 CONFIG_FILE = HOME / ".config" / "local_env.json"
-ICON_MAP = {
-    "good": "󰡳 ",
-    "moderate": "󰡵 ",
-    "sensitive": "󰊚 ",
-    "unhealthy": "󰡴 ",
-    "very_unhealthy": "󰂧 ",
-    "hazardous": "󰵄 ",
-}
 
 
 def load_config():
@@ -25,31 +17,32 @@ def get_aqi(path):
     try:
         with open(path) as f:
             return int(json.load(f).get("data", {}).get("aqi"))
-    except Exception:
+    except (json.JSONDecodeError, ValueError, TypeError):
         return None
 
 
 def get_category(aqi):
+    if aqi is None:
+        return "unknown"
+
     thresholds = [
         (50, "good"),
         (100, "moderate"),
         (150, "sensitive"),
         (200, "unhealthy"),
         (300, "very_unhealthy"),
+        (float("inf"), "hazardous"),
     ]
-    for limit, label in thresholds:
-        if aqi <= limit:
-            return label
-    return "hazardous" if aqi else "unknown"
+
+    return next(label for limit, label in thresholds if aqi <= limit)
 
 
 def main() -> None:
     cache_path = load_config()
     aqi = get_aqi(cache_path)
     cat = get_category(aqi)
-    icon = ICON_MAP.get(cat, "?")
     val = str(aqi) if aqi is not None else "UNK"
-    print(json.dumps({"text": f"{icon} {val}", "alt": cat}))
+    print(json.dumps({"text": val, "alt": cat}))
 
 
 if __name__ == "__main__":

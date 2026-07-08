@@ -16,8 +16,16 @@ interval = 3600
 
 [[CustomModule]]
 name = "Aqi"
-type = "Text"
-listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 3; done'"
+type = "Button"
+icon = "󰵄"
+icons."^good" = "󰡳"
+icons."^moderate" = "󰡵"
+icons."^sensitive" = "󰊚"
+icons."^unhealthy" = "󰡴"
+icons."^very_unhealthy" = ""
+icons."^hazardous" = ""
+alert = "unhealthy$"
+listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 60; done'"
 
 [window_title]
 mode = "Title"
