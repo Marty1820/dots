@@ -18,6 +18,8 @@ interval = 3600
 name = "Aqi"
 type = "Button"
 icon = "󰵄"
+command = "xdg-open https://aqicn.org/here"
+listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 60; done'"
 icons."^good" = "󰡳"
 icons."^moderate" = "󰡵"
 icons."^sensitive" = "󰊚"
@@ -25,7 +27,6 @@ icons."^unhealthy" = "󰡴"
 icons."^very_unhealthy" = ""
 icons."^hazardous" = ""
 alert = "unhealthy$"
-listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 60; done'"
 
 [window_title]
 mode = "Title"
