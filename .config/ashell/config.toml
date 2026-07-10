@@ -1,3 +1,4 @@
+# https://malpenzibo.github.io/ashell/
 log_level = "warn"
 
 position = "Top"  # "Top" or "Bottom"
