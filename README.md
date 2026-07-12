@@ -21,21 +21,21 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 - **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
-|   Name   |            Description            |
-| :------: | :-------------------------------: |
+|      Name      |            Description            |
+| :------------: | :-------------------------------: |
 | `Cosmic Files` |      `Super + e` Filebroswer      |
-| `Zen` |      `Super + b` Web Browser      |
-| `Fuzzel` | `Super + d` Applications Launcher |
-|  `awww`  |         Wallpaper setting         |
+|     `Zen`      |      `Super + b` Web Browser      |
+|    `Fuzzel`    | `Super + d` Applications Launcher |
+|     `awww`     |         Wallpaper setting         |
 
 #### ZSH changes
 
-|       Name       |                Description                |
-| :--------------: | :---------------------------------------: |
-|      `exa`       |             `ls` replacement              |
-|      `bat`       |             `cat` replacement             |
-|    `starship`    |              Terminal Prompt              |
-| Extraction Tools | `ex filename` to extract compressed files |
+|       Name       |            Description            |
+| :--------------: | :-------------------------------: |
+|      `exa`       |         `ls` replacement          |
+|      `bat`       |         `cat` replacement         |
+|    `starship`    |          Terminal Prompt          |
+| Extraction Tools | `ex $filename` decompresses files |
 
 ## Installation instructions
 
