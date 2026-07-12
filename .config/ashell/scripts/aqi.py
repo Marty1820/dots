@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import json
+import time
 from pathlib import Path
 
 # --- Configuration ---
 HOME = Path.home()
 CONFIG_FILE = HOME / ".config" / "local_env.json"
+POLL_INTERVAL = 10  # seconds between mtime checks
 
 
 def load_config():
@@ -37,13 +39,25 @@ def get_category(aqi):
     return next(label for limit, label in thresholds if aqi <= limit)
 
 
-def main() -> None:
-    cache_path = load_config()
-    aqi = get_aqi(cache_path)
+def emit(aqi):
     cat = get_category(aqi)
     val = str(aqi) if aqi is not None else "UNK"
-    print(json.dumps({"text": val, "alt": cat}))
+    print(json.dumps({"text": val, "alt": cat}), flush=True)
 
 
 if __name__ == "__main__":
-    main()
+    cache_path = load_config()
+    last_mtime = None
+
+    while True:
+        try:
+            mtime = cache_path.stat().st_mtime_ns
+        except FileNotFoundError:
+            mtime = None
+
+        if mtime != last_mtime:
+            last_mtime = mtime
+            aqi = get_aqi(cache_path) if mtime is not None else None
+            emit(aqi)
+
+        time.sleep(POLL_INTERVAL)

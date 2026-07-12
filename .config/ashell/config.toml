@@ -6,9 +6,9 @@ layer = "Top"  # "Bottom", "Top", or "Overlay"
 enable_esc_key = true  # Pressing Escape closes open menus
 
 [modules]
-left = [["Aqi", "Tempo"], ["Updates", "Notifications"]]
+left = ["Aqi", "Tempo"]
 center = ["WindowTitle"]
-right = ["Tray", ["Settings", "Privacy"]]
+right = [["Tray", "Updates", "Notifications"], ["Settings", "Privacy"]]
 
 [updates]
 check_cmd = "checkupdates; paru -Qua"
@@ -20,14 +20,14 @@ name = "Aqi"
 type = "Button"
 icon = "󰵄"
 command = "xdg-open https://aqicn.org/here"
-listen_cmd = "sh -c 'while true; do python ~/.config/ashell/scripts/aqi.py; sleep 60; done'"
-icons."^good" = "󰡳"
-icons."^moderate" = "󰡵"
-icons."^sensitive" = "󰊚"
-icons."^unhealthy" = "󰡴"
-icons."^very_unhealthy" = ""
-icons."^hazardous" = ""
-alert = "unhealthy$"
+listen_cmd = "~/.config/ashell/scripts/aqi.py"
+icons."good" = "󰡳"
+icons."moderate" = "󰡵"
+icons."sensitive" = "󰊚"
+icons."unhealthy" = "󰡴"
+icons."very_unhealthy" = ""
+icons."hazardous" = ""
+alert = "sensitive|unhealthy|hazardous"
 
 [window_title]
 mode = "Title"
