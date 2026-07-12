@@ -9,6 +9,7 @@ vim.pack.add({
     version = "stable",
   },
   "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
+  "https://github.com/stevearc/conform.nvim",
 })
 
 -- Install Mason and related plugins
@@ -59,5 +60,22 @@ vim.lsp.config("lua_ls", {
         globals = { "vim" },
       },
     },
+  },
+})
+
+-- Conform setup
+require("conform").setup({
+  formatters_by_ft = {
+    javascript = { "prettierd" },
+    typescript = { "prettierd" },
+    markdown = { "prettierd" },
+    json = { "prettierd" },
+    css = { "prettierd" },
+    html = { "prettierd" },
+    yaml = { "prettierd" },
+  },
+  format_on_save = {
+    timeout_ms = 500,
+    lsp_format = "fallback",
   },
 })
