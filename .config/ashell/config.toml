@@ -46,15 +46,12 @@ toast_position = "top_left"
 
 [settings]
 lock_cmd = "loginctl lock-session &"
-
 suspend_cmd = "systemctl suspend-then-hibernate"
 hibernate_cmd = "systemctl hibernate"
-
 wifi_more_cmd = "nm-connection-editor"
 vpn_more_cmd = "nm-connection-editor"
 bluetooth_more_cmd = "blueman-manager"
 battery_format = "IconAndPercentage"
-
 indicators = [
   "IdleInhibitor",
   "Network",
@@ -77,7 +74,6 @@ enabled = true
 style = "Solid"  # "Islands", "Solid", or "Gradient"
 font_name = "Mononoki Nerd Font Mono"
 # scale_factor = 1.1
-
 success_color = "#50FA7B"
 warning_color = "#FFB86C"
 danger_color = "#FF5555"
