@@ -10,7 +10,7 @@ require("nvim-web-devicons").setup({
 
 require("lualine").setup({
   options = {
-    theme = "dracula-nvim",
+    theme = "auto",
     icons_enabled = true,
   },
   sections = {

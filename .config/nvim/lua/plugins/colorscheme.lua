@@ -1,13 +1,15 @@
 vim.pack.add({
-  "https://github.com/Mofiqul/dracula.nvim",
+  { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 })
 
 -- Configuration
-require("dracula").setup({
-  -- show_end_of_buffer = true,
-  lualine_bg_color = "#282A36",
-  italic_comment = true,
+require("catppuccin").setup({
+  flavour = "mocha",
+  integrations = {
+    mason = true,
+    which_key = true,
+  },
 })
 
 -- Set Colorscheme
-vim.cmd([[colorscheme dracula]])
+vim.cmd([[colorscheme catppuccin-nvim]])

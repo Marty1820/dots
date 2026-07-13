@@ -74,17 +74,18 @@ enabled = true
 style = "Solid"  # "Islands", "Solid", or "Gradient"
 font_name = "Mononoki Nerd Font Mono"
 # scale_factor = 1.1
-success_color = "#50FA7B"
-warning_color = "#FFB86C"
-danger_color = "#FF5555"
-text_color = "#F8F8F2"
+success_color = "#a6e3a1"
+warning_color = "#f9e2af"
+danger_color = "#f38ba8"
+text_color = "#cdd6f4"
+
+workspace_colors = ["#fab387", "#b4befe", "#cba6f7"]
 
 [appearance.primary_color]
-base = "#BD93F9"  # Main accent color
-text = "#282A36"
+base = "#fab387"
+text = "#1e1e2e"
 
 [appearance.background_color]
-base = "#21222C"
-weak = "#44475A"
-strong = "#282A36"
-text = "#F8F8F2"
+base = "#1e1e2e"
+weak = "#313244"
+strong = "#45475a"

@@ -2,14 +2,14 @@
 # Configuration reference: https://starship.rs/config/
 
 # Get editor completions based on the config schema
-'$schema' = 'https://starship.rs/config-schema.json'
-palette = 'dracula'
+"$schema" = "https://starship.rs/config-schema.json"
+palette = "catppuccin_mocha"
 scan_timeout = 60
 
 add_newline = true
 
 format = """\
-[](fg:purple)\
+[](fg:lavender)\
 $directory\
 ${custom.directory_separator_not_git}\
 ${custom.directory_separator_git}\
@@ -17,94 +17,111 @@ $symbol($git_branch[](fg:pink))\
 $symbol( $git_commit$git_status$git_metrics$git_state) $fill$cmd_duration$all\
 $character"""
 
-continuation_prompt = '[❯❯](bold green)'
+continuation_prompt = "[❯❯](bold green)"
 
 [fill]
-symbol = ' '
+symbol = " "
 
 [character]
-format = '$symbol '
-success_symbol = '[ ❯](bold green)'
-error_symbol = '[ ❯](bold red)'
+format = "$symbol "
+success_symbol = "[ ❯](bold green)"
+error_symbol = "[ ❯](bold red)"
 
 [line_break]
 disabled = false
 
 [directory]
 truncate_to_repo = true
-format = '[ $path ]($style)'
-style = 'bold fg:background bg:purple'
-read_only = ''
-read_only_style = 'red'
-truncation_symbol = '.../'
-home_symbol = '~'
+format = "[ $path ]($style)"
+style = "bold fg:base bg:lavender"
+read_only = ""
+read_only_style = "red"
+truncation_symbol = ".../"
+home_symbol = "~"
+
 [directory.substitutions]
-"Documents" = '󰈙'
-"Downloads" = ''
-"Music" = ''
-"Pictures" = ''
-"Videos" = ''
-".config" = ''
-"dots" = ''
+"Documents" = "󰈙"
+"Downloads" = ""
+"Music" = ""
+"Pictures" = ""
+"Videos" = ""
+".config" = ""
+"dots" = ""
 
 [git_branch]
-symbol = ''
-format = '[ $symbol$branch(:$remote_branch) ]($style)'
-style = 'fg:background bg:pink'
+symbol = ""
+format = "[ $symbol$branch(:$remote_branch) ]($style)"
+style = "fg:base bg:pink"
 
 [git_metrics]
 disabled = false
 
 [git_status]
-style = 'fg:background bg:red'
+style = "fg:base bg:red"
 
 [cmd_duration]
 min_time = 500
-format = '[  $duration ]($style)'
-style = 'yellow'
+format = "[  $duration ]($style)"
+style = "yellow"
 
 [battery]
-format = '[$symbol $percentage]($style)'
-charging_symbol = ''
-discharging_symbol = '󰂃'
+format = "[$symbol $percentage]($style)"
+charging_symbol = ""
+discharging_symbol = "󰂃"
 
 [[battery.display]]
 threshold = 10
-style = 'red'
+style = "red"
 
 [[battery.display]]
 threshold = 20
-style = 'orange'
+style = "yellow"
 
 [custom.directory_separator_git]
-description = 'Output a styled separator right after the directory when inside a git repository.'
-command = ''
-format = '[](fg:purple bg:pink)'
+description = "Output a styled separator right after the directory when inside a git repository."
+command = ""
+format = "[](fg:lavender bg:pink)"
 # Only when inside git repository
-when = 'git rev-parse --is-inside-work-tree >/dev/null 2>&1'
+when = "git rev-parse --is-inside-work-tree >/dev/null 2>&1"
+
 [custom.directory_separator_not_git]
-description = 'Output a styled separator right after the directory when NOT inside a git repository.'
-command = ''
-format = '[](fg:purple)'
+description = "Output a styled separator right after the directory when NOT inside a git repository."
+command = ""
+format = "[](fg:lavender)"
 # Only when NOT inside a git repository
-when = '! git rev-parse --is-inside-work-tree > /dev/null 2>&1'
+when = "! git rev-parse --is-inside-work-tree > /dev/null 2>&1"
 
 [python]
-symbol = '󰌠 '
+symbol = "󰌠 "
 
 [lua]
-symbol = ' '
+symbol = " "
 
-# Define Dracula color palette
-[palettes.dracula]
-background = '#282a36'
-current_line = '#44475a'
-foreground = '#f8f8f2'
-comment = '#6272a4'
-cyan = '#8be9fd'
-green = '#50fa7b'
-orange = '#ffb86c'
-pink = '#ff79c6'
-purple = '#bd93f9'
-red = '#ff5555'
-yellow = '#f1fa8c'
+# Define color palette
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
