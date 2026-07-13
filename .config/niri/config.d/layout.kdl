@@ -22,11 +22,15 @@ layout {
 
   focus-ring {
     width 1
-    active-gradient from="#44475a" to="#bd93f9" angle=45 in="oklch longer hue"
-    inactive-color "#282a36aa"
-    urgent-color "#ff5555"
+    active-gradient from="#cba6f7" to="#b4befe" angle=45 in="oklch longer hue"
+    inactive-gradient from="#b4befe" to="#585b70" angle=45 relative-to="workspace-view"
+    urgent-gradient from="#f9e2af" to="#fab387" angle=45
   }
 
   border { off; }
-  insert-hint { color "#6272a480"; }
+  insert-hint {
+    on
+    color "#fab387"
+    gradient from="#fab387" to="#b4befe" angle=45 relative-to="workspace-view"
+  }
 }

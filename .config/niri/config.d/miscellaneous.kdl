@@ -20,7 +20,7 @@ cursor {
 
 overview {
   zoom 0.95
-  backdrop-color "#282a36"
+  backdrop-color "#1e1e2e"
 }
 
 hotkey-overlay {

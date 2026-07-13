@@ -10,6 +10,7 @@ export EDITOR=nvim
 export GIT_EDITOR=nvim
 export VISUAL=nvim
 export DIFFPROG='nvim -d'
+export BAT_THEME="Catppuccin Mocha"
 
 
 # --- Application-Secific Env ---
