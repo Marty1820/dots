@@ -21,12 +21,12 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 - **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
-|      Name      |            Description            |
-| :------------: | :-------------------------------: |
-| `Cosmic Files` |      `Super + e` Filebroswer      |
-|     `Zen`      |      `Super + b` Web Browser      |
-|    `Fuzzel`    | `Super + d` Applications Launcher |
-|     `awww`     |         Wallpaper setting         |
+|   Name   |            Description            |
+| :------: | :-------------------------------: |
+| `thunar` |      `Super + e` Filebroswer      |
+|  `Zen`   |      `Super + b` Web Browser      |
+| `Fuzzel` | `Super + d` Applications Launcher |
+|  `awww`  |         Wallpaper setting         |
 
 #### ZSH changes
 
