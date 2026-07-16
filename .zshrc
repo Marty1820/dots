@@ -1,22 +1,18 @@
-# --- Early Exit for Non-Interactive Shells ---
-if [[ $- == *i* ]]; then
-    awk -v term_cols="${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}" '
-    BEGIN{
-        s="/\\";
-        for (colnum = 0; colnum < term_cols; colnum++) {
-            r = 255 - (colnum * 255 / term_cols);
-            g = (colnum * 510 / term_cols);
-            if (g > 255) g = 510 - g;
-            b = (colnum * 255 / term_cols);
-            printf "\033[48;2;%d;%d;%dm", r, g, b;
-            printf "\033[38;2;%d;%d;%dm", 255 - r, 255 - g, 255 - b;
-            printf "%s\033[0m", substr(s, colnum % 2 + 1, 1);
-        }
-        printf "\n";
-    }'
-else
-  exit
-fi
+# Show banner in terminal
+awk -v term_cols="${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}" '
+BEGIN{
+  s="/\\";
+  for (colnum = 0; colnum < term_cols; colnum++) {
+    r = 255 - (colnum * 255 / term_cols);
+    g = (colnum * 510 / term_cols);
+    if (g > 255) g = 510 - g;
+      b = (colnum * 255 / term_cols);
+      printf "\033[48;2;%d;%d;%dm", r, g, b;
+      printf "\033[38;2;%d;%d;%dm", 255 - r, 255 - g, 255 - b;
+      printf "%s\033[0m", substr(s, colnum % 2 + 1, 1);
+  }
+  printf "\n";
+}'
 
 # --- Terminal-Specific Aliases (Kitty) ---
 if [ "$TERM" = "xterm-kitty" ]; then
@@ -30,7 +26,6 @@ export HISTORY_IGNORE='(l[salt.]#( *)#|pwd|exit|history(|*)|cls)'
 export HISTFILE="$XDG_CACHE_HOME/sh_hist"
 export HISTSIZE=10000
 export SAVEHIST=10000
-export HISTFILESIZE=10000
 
 # --- Home cleanup ---
 alias wget='wget --hsts-file=$XDG_CACHE_HOME/wget-hsts'
@@ -52,7 +47,7 @@ alias free='free -h'
 alias du='du -h'
 alias tree='tree -C'
 alias grep='grep --color=auto'
-alias egrep='grep -F --color=auto'
+alias egrep='grep -E --color=auto'
 alias fgrep='grep -F --color=auto'
 alias ip='ip --color=auto'
 alias cat='bat'
@@ -89,7 +84,7 @@ autoload -Uz compinit
 zmodload zsh/complist
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
-compinit -d "$HOME/.cache/zsh/zcompdump-$ZSH_VERSION"
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 _comp_options+=(globdots)
 
 # --- Man Pager & LESS Colors ---
