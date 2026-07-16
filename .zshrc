@@ -113,13 +113,6 @@ autoload -U colors && colors
 # --- Prompt ---
 eval "$(starship init zsh)"
 
-# --- Plugins ---
+# --- Colors & Plugins ---
 # pacman -S zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting
-[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
-  . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 [[ -f "$XDG_CONFIG_HOME"/zsh/colors.zsh ]] && source "$XDG_CONFIG_HOME"/zsh/colors.zsh
-
-[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
-  . /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh && \
-  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6272a4,bold"
