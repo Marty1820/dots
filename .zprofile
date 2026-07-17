@@ -13,8 +13,6 @@ export DIFFPROG='nvim -d'
 
 
 # --- Application-Secific Env ---
-export LIBVA_DRIVER_NAME='i965'
-export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
 export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
 export PYTHONSTARTUP="/etc/python/pythonrc"
 export WGETRC="$XDG_CONFIG_HOME"/wgetrc
