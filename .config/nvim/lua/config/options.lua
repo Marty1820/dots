@@ -31,14 +31,3 @@ vim.opt.completeopt = "menu,menuone,noselect"
 
 -- Wrapping
 vim.opt.whichwrap:append("<,>,h,l,[,]")
-
--- Yank Highlight
-local highlight_group =
-  vim.api.nvim_create_augroup("YankHighlight", { clear = true })
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.hl.on_yank()
-  end,
-  group = highlight_group,
-  pattern = "*",
-})
