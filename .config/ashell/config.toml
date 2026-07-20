@@ -42,7 +42,7 @@ format = "%H:%M"
 show_timestamps = true
 show_bodies = true
 grouped = true
-toast_position = "top_left"
+toast_position = "top_right"
 
 [settings]
 lock_cmd = "loginctl lock-session &"
