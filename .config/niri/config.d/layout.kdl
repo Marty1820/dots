@@ -1,4 +1,5 @@
 //--- Layout ---
+// https://niri-wm.github.io/niri/Configuration%3A-Layout.html
 layout {
   gaps 4
   center-focused-column "never"

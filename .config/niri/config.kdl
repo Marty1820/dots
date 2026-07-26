@@ -1,49 +1,65 @@
 // https://niri-wm.github.io/niri
 
 //--- Input ---
+// https://niri-wm.github.io/niri/Configuration%3A-Input.html
 include "config.d/input.kdl"
 
 //--- Outputs ---
-include "config.d/output.kdl"
+// https://niri-wm.github.io/niri/Configuration%3A-Outputs.html
+output "eDP-1" {
+  mode "2256x1504@59.999"
+  scale 1.5
+  transform "normal"
+}
 
 //--- Key Bindings ---
-include "config.d/keybindings/applaunch.kdl"
-include "config.d/keybindings/navigation.kdl"
-include "config.d/keybindings/moving.kdl"
-include "config.d/keybindings/sizing.kdl"
-include "config.d/keybindings/fnkeys.kdl"
+// https://niri-wm.github.io/niri/Configuration%3A-Key-Bindings.html
+include "config.d/keybindings.kdl"
 binds {
   // Prevent inhibition bypass (ensures shortcuts can't be disabled by apps)
   Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
 
 //--- Switch Events ---
+// https://niri-wm.github.io/niri/Configuration%3A-Switch-Events.html
 // switch-events {}
 
 //--- Layout ---
+// https://niri-wm.github.io/niri/Configuration%3A-Layout.html
 include "config.d/layout.kdl"
 
+//--- Named Workspaces ---
+// https://niri-wm.github.io/niri/Configuration%3A-Named-Workspaces.html
+// workspace "" {}
+
 //--- Miscellaneous ---
+// https://niri-wm.github.io/niri/Configuration%3A-Miscellaneous.html
 include "config.d/miscellaneous.kdl"
 
 //--- Window Rules ---
+// https://niri-wm.github.io/niri/Configuration%3A-Window-Rules.html
 include "config.d/window_rules.kdl"
 
 //--- Layer Rules ---
+// https://niri-wm.github.io/niri/Configuration%3A-Layer-Rules.html
 include "config.d/layer_rules.kdl"
 
-//--- Animations
+//--- Animations ---
+// https://niri-wm.github.io/niri/Configuration%3A-Animations.html
 animations {
   slowdown 0.75
 }
 
 //--- Gestures ---
+// https://niri-wm.github.io/niri/Configuration%3A-Gestures.html
 include "config.d/gestures.kdl"
 
 //--- Recent Windows ---
+// https://niri-wm.github.io/niri/Configuration%3A-Recent-Windows.html
 recent-windows {
   off
 }
 
 //--- Debug ---
+// https://niri-wm.github.io/niri/Configuration%3A-Debug-Options.html
 // debug {}

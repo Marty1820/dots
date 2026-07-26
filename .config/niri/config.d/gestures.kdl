@@ -1,4 +1,5 @@
 //--- Gestures ---
+// https://niri-wm.github.io/niri/Configuration%3A-Gestures.html
 gestures {
   dnd-edge-view-scroll {
     trigger-width 100 // Swipe zone width in pixels

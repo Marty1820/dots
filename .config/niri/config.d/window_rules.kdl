@@ -1,4 +1,5 @@
 //--- Window Rules ---
+// https://niri-wm.github.io/niri/Configuration%3A-Window-Rules.html
 window-rule {
   geometry-corner-radius 12
   clip-to-geometry true

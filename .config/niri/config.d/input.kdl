@@ -1,4 +1,5 @@
 //--- Input ---
+// https://niri-wm.github.io/niri/Configuration%3A-Input.html
 input {
   touchpad {
     natural-scroll

@@ -1,4 +1,5 @@
 //--- Layer Rules ---
+// https://niri-wm.github.io/niri/Configuration%3A-Layer-Rules.html
 layer-rule {
   match namespace="^wallpaper$"
   match namespace="awww-daemon"
