@@ -20,7 +20,7 @@ name = "Aqi"
 type = "Button"
 icon = "󰵄"
 command = "xdg-open https://aqicn.org/here"
-listen_cmd = "~/.config/ashell/scripts/aqi.py"
+listen_cmd = "~/.config/ashell/scripts/ash_aqi.py"
 icons = { good = "󰡳", moderate = "󰡵", sensitive = "󰊚", unhealthy = "󰡴", very_unhealthy = "", hazardous = "" }
 alert = "sensitive|unhealthy|hazardous"
 
