@@ -1,15 +1,12 @@
 vim.pack.add({
-  { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
+  { src = "https://github.com/folke/tokyonight.nvim" },
 })
 
 -- Configuration
-require("catppuccin").setup({
-  flavour = "mocha",
-  integrations = {
-    mason = true,
-    which_key = true,
-  },
+require("tokyonight").setup({
+  style = "night",
+  lualine_bold = true,
 })
 
 -- Set Colorscheme
-vim.cmd([[colorscheme catppuccin-nvim]])
+vim.cmd([[colorscheme tokyonight]])

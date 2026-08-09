@@ -10,7 +10,7 @@ require("nvim-web-devicons").setup({
 
 require("lualine").setup({
   options = {
-    theme = "auto",
+    theme = "tokyonight",
     icons_enabled = true,
   },
   sections = {
