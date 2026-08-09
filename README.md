@@ -2,7 +2,7 @@
 
 # Marty's Dots
 
-![GitHub last commit](https://img.shields.io/github/last-commit/Marty1820/configs?style=for-the-badge&colorA=363a4f&colorB=b7bdf8) ![GitHub repo size](https://img.shields.io/github/repo-size/Marty1820/configs?style=for-the-badge&colorA=363a4f&colorB=a6da95)
+![GitHub last commit](https://img.shields.io/github/last-commit/Marty1820/dots?style=for-the-badge&colorA=414868&colorB=9d7cd8) ![GitHub repo size](https://img.shields.io/github/repo-size/Marty1820/dots?style=for-the-badge&colorA=414868&colorB=9ece6a)
 
 </div>
 
