@@ -1,9 +1,19 @@
 # https://malpenzibo.github.io/ashell/
-log_level = "warn"
-
 position = "Top"  # "Top" or "Bottom"
 layer = "Top"  # "Bottom", "Top", or "Overlay"
 enable_esc_key = true  # Pressing Escape closes open menus
+
+[logging]
+level = "warn"
+
+[osd]
+enabled = true
+timeout = 1500  # milliseconds
+show_volume_percentage = true
+show_brightness_percentage = true
+
+[animations]
+enabled = true
 
 [modules]
 left = ["Aqi", "Tempo"]
@@ -29,7 +39,7 @@ mode = "Title"
 truncate_title_after_length = 75
 
 [tray]
-right_click = "menu"
+right_click = "Menu"
 
 [tempo]
 clock_format = "%I:%M %p"
@@ -42,7 +52,7 @@ format = "%H:%M"
 show_timestamps = true
 show_bodies = true
 grouped = true
-toast_position = "top_right"
+toast_position = "TopRight"
 
 [settings]
 lock_cmd = "loginctl lock-session &"
@@ -52,28 +62,11 @@ wifi_more_cmd = "nm-connection-editor"
 vpn_more_cmd = "nm-connection-editor"
 bluetooth_more_cmd = "blueman-manager"
 battery_format = "IconAndPercentage"
-indicators = [
-  "IdleInhibitor",
-  "Network",
-  "Vpn",
-  "Bluetooth",
-  "Audio",
-  "Battery"
-]
-
-[osd]
-enabled = true
-timeout = 1500  # milliseconds
-show_volume_percentage = true
-show_brightness_percentage = true
-
-[animations]
-enabled = true
+indicators = ["IdleInhibitor", "Network", "Vpn", "Bluetooth", "Audio", "Battery"]
 
 [appearance]
-style = "Solid"  # "Islands", "Solid", or "Gradient"
 font_name = "Mononoki Nerd Font Mono"
-# scale_factor = 1.1
+
 primary_color = "#7aa2f7"
 success_color = "#9ece6a"
 warning_color = "#e0af68"
@@ -81,6 +74,9 @@ danger_color = "#f7768e"
 text_color = "#a9b1d6"
 
 workspace_colors = ["#7aa2f7", "#9ece6a"]
+
+[appearance.bar]
+surface = "solid"
 
 [appearance.background_color]
 base = "#1a1b26"
