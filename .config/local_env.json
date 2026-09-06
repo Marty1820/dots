@@ -1,10 +1,12 @@
 {
   "EXAMPLE": "CONFIG Change settings and make your own",
   "cache_dir": "/path/to/cache/folder",
-  "aqi_file": "aqi_file.json",
+  "open_meteo": {
+    "url": "https://api.open-meteo.com/v1/forecast",
+    "latitude": "NUMBER",
+    "longitude": "NUMBER"
+  },
   "aqicn": {
-    "documentation": "https://aqicn.org/json-api/doc/",
-    "example": "https://api.waqi.info/feed/@AQI_CITY/?token=AQI_API_KEY",
     "url": "https://api.waqi.info/feed/@{city}/",
     "city": "CITYNUMBER",
     "token": "YOUR-API-KEY-HERE"
