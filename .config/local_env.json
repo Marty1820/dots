@@ -8,9 +8,5 @@
     "url": "https://api.waqi.info/feed/@{city}/",
     "city": "CITYNUMBER",
     "token": "YOUR-API-KEY-HERE"
-  },
-  "wlsunset": {
-    "lat": 12.3,
-    "lon": 123.4
   }
 }

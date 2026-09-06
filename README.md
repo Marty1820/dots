@@ -77,12 +77,10 @@ git clone https://github.com/Marty1820/configs.git ~/dots && cd ~/dots && stow -
 
 ```bash
 systemctl --user add-wants niri.service \
-    AB.service \
     ashell.service \
     awww-daemon.service \
     hypridle.service \
     hyprpolkitagent.service \
     syncthing.service \
-    wlsunset.service \
     aqi-fetch.timer \
 ```
