@@ -14,11 +14,9 @@
 @define-color teal #1abc9c;
 
 * {
-  border: none;
-  border-radius: 0;
+  all: unset;
   font-family: Mononoki Nerd Font Mono;
   font-size: 16px;
-  min-height: 0;
 }
 
 /* Bar Styling */
@@ -35,11 +33,11 @@ window#waybar {
 }
 
 /* Tooltips */
-tooltips {
-  opacity: 0.95;
+tooltip {
+  opacity: 0.99;
   border-radius: 20px;
   border: 2px solid @bg-storm;
-  background: @background;
+  background: @bg;
 }
 
 /* Modules */
@@ -83,9 +81,6 @@ tooltips {
   color: @red;
 }
 
-#idle_inhibitor {
-  color: @orange;
-}
 #idle_inhibitor.activated {
   color: @red;
 }

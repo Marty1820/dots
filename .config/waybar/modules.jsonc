@@ -1,7 +1,6 @@
 {
   // Module Configurations
   "backlight": {
-    // "device": "acpi_video1",
     "format": "{icon} {percent}",
     "format-icons": [
       "󰃚",
@@ -12,7 +11,8 @@
       "󰃟",
       "󰃠"
     ],
-    "min-brightness": 1
+    "min-brightness": 1,
+    "tooltip": false
   },
   "battery": {
     "states": {
@@ -43,6 +43,7 @@
     "format-off": "󰂲",
     "format-connected": "󰂱",
     "format-connected-battery": " {device_battery_percentage}",
+    "on-click": "blueman-manager &",
     "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
@@ -50,41 +51,50 @@
   },
   "clock": {
     "format": "{:%I:%M %p}",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format-alt": "{:%Y-%m-%d}"
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "mode": "month",
+      "first-day-of-week": 1,
+      "on-scroll": 1
+    },
+    "format-alt": "{:%Y %b %d}"
   },
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
       "activated": "󰈈",
       "deactivated": "󰈉"
-    }
+    },
+    "tooltip": false
   },
   "network": {
     "format-ethernet": "󰈀",
     "format-wifi": "{icon} {essid}",
-    "tooltip-format": "{signalStrength}%",
-    "format-disconnected": "󰤫",
-    "format-disabled": "󰤮",
+    "format-disconnected": "󰤮",
+    "format-disabled": "󰀝",
     "format-icons": [
       "󰤯",
       "󰤟",
       "󰤢",
       "󰤥",
       "󰤨"
-    ]
+    ],
+    "on-click": "nm-connection-editor &",
+    "tooltip-format": "Strength: {signalStrength}\nIP: {ipaddr}\nFreq: {frequency}",
+    "tooltip-format-ethernet": "IP: {ipaddr}\nLinkSpd: {linkSpeed}",
+    "tooltip-format-disabled": "Airplane Mode"
   },
   "niri/window": {
     "format": "{}",
     "rewrite": {
-      "(.*) — Zen Browser": "󰖟 $1",
+      "(.*) — Zen Browser": "$1",
       "v (.*)": "Neovim $1"
     }
   },
   "wireplumber": {
     "format": "{icon} {volume}",
-    "format-bluetooth": "󰥰 {volume}",
     "format-muted": " {volume}",
+    "format-bluetooth": "󰥰 {volume}",
     "format-icons": {
       "headphone": "",
       "default": [
@@ -94,6 +104,7 @@
         ""
       ]
     },
+    "tooltip": false,
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
   "custom/power": {
