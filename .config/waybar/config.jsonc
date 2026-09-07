@@ -19,7 +19,7 @@
     "backlight",
     "network",
     "bluetooth",
-    "pulseaudio",
+    "wireplumber",
     "battery"
   ],
   "spacing": 4, // Gaps between modules (4px)

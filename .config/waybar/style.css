@@ -49,7 +49,7 @@ tooltips {
 #clock,
 #idle_inhibitor,
 #network,
-#pulseaudio,
+#wireplumber,
 #custom-power,
 #custom-aqi,
 #custom-weather {
@@ -98,13 +98,13 @@ tooltips {
   color: @red;
 }
 
-#pulseaudio {
+#wireplumber {
   color: @purple;
 }
-#pulseaudio.bluetooth {
+#wireplumber.bluetooth {
   color: @cyan;
 }
-#pulseaudio.muted {
+#wireplumber.muted {
   color: @red;
 }
 
