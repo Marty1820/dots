@@ -32,6 +32,22 @@ window#waybar {
   padding: 2px 2px 1px;
 }
 
+/* Power Menu */
+menu {
+  border-radius: 20px;
+  border: 2px solid @bg-storm;
+  background: @bg;
+}
+menuitem {
+  border-radius: 20px;
+  padding: 5px;
+  margin: 0px 4px;
+}
+menuitem:hover {
+  background: @bg-storm;
+  color: @comment;
+}
+
 /* Tooltips */
 tooltip {
   opacity: 0.99;
@@ -71,6 +87,21 @@ tooltip {
 }
 #battery.charging {
   color: @green;
+}
+@keyframes blink {
+  to {
+    background-color: @fg;
+    color: @bg;
+  }
+}
+#battery.critical:not(.charging) {
+  background: @red;
+  color: @fg;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: steps(12);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 #bluetooth {
