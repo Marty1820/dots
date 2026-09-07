@@ -17,7 +17,7 @@ Lots of older configs in another repo [here](https://github.com/Marty1820/old-do
 
 - **Shell**: [ZSH](https://www.zsh.org/)
 - **WM**: [Niri](https://github.com/YaLTeR/niri)
-- **Status Bar**: [ashell](https://github.com/MalpenZibo/ashell)
+- **Status Bar**: [waybar](https://github.com/Alexays/Waybar)
 - **Application Launcher**: [fuzzel](https://codeberg.org/dnkl/fuzzel)
 - **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/)
 
@@ -77,10 +77,10 @@ git clone https://github.com/Marty1820/configs.git ~/dots && cd ~/dots && stow -
 
 ```bash
 systemctl --user add-wants niri.service \
-    ashell.service \
     awww-daemon.service \
     hypridle.service \
     hyprpolkitagent.service \
     syncthing.service \
+    waybar.service \
     aqi-fetch.timer \
 ```

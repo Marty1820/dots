@@ -1,0 +1,122 @@
+{
+  // Module Configurations
+  "backlight": {
+    // "device": "acpi_video1",
+    "format": "{icon} {percent}",
+    "format-icons": [
+      "󰃚",
+      "󰃛",
+      "󰃜",
+      "󰃝",
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
+    "min-brightness": 1
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}",
+    "format-full": "{icon} {capacity}",
+    "format-charging": "󰂄 {capacity}",
+    "format-plugged": " {capacity}",
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ]
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "format-connected": "󰂱",
+    "format-connected-battery": " {device_battery_percentage}",
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}"
+  },
+  "clock": {
+    "format": "{:%I:%M %p}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%Y-%m-%d}"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰈈",
+      "deactivated": "󰈉"
+    }
+  },
+  "network": {
+    "format-ethernet": "󰈀",
+    "format-wifi": "{icon} {essid}",
+    "tooltip-format": "{signalStrength}%",
+    "format-disconnected": "󰤫",
+    "format-disabled": "󰤮",
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ]
+  },
+  "niri/window": {
+    "format": "{}",
+    "rewrite": {
+      "(.*) — Zen Browser": "󰖟 $1",
+      "v (.*)": "Neovim $1"
+    }
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}",
+    "format-bluetooth": "󰥰 {volume}",
+    "format-muted": " {volume}",
+    "format-icons": {
+      "headphone": "",
+      "default": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+  },
+  "custom/power": {
+    "format": "⏻ ",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
+    "menu-actions": {
+      "hibernate": "systemctl hibernate",
+      "reboot": "systemctl reboot",
+      "shutdown": "systemctl poweroff"
+    }
+  },
+  "custom/aqi": {
+    "on-click": "xdg-open https://aqicn.org/here",
+    "exec": "$HOME/.config/waybar/scripts/aqi-waybar.py",
+    "interval": 120,
+    "return-type": "json"
+  },
+  "custom/weather": {
+    // "on-click": "xdg-open https://",
+    "exec": "$HOME/.config/waybar/scripts/weather-waybar.py",
+    "interval": 120,
+    "return-type": "json"
+  }
+}

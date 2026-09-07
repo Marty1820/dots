@@ -1,0 +1,145 @@
+@define-color bg #1a1b26;
+@define-color bg-storm #24283b;
+@define-color fg #c0caf5;
+@define-color fg-dark #a9b1d6;
+@define-color comment #565f89;
+@define-color blue #7aa2f7;
+@define-color cyan #7dcfff;
+@define-color green #9ece6a;
+@define-color magenta #bb9af7;
+@define-color purple #9d7cd8;
+@define-color orange #ff9e64;
+@define-color yellow #e0af68;
+@define-color red #f7768e;
+@define-color teal #1abc9c;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: Mononoki Nerd Font Mono;
+  font-size: 16px;
+  min-height: 0;
+}
+
+/* Bar Styling */
+window#waybar {
+  background: @bg;
+  color: @fg;
+}
+
+/* Module Group Styling */
+.modules-left,
+.modules-center,
+.modules-right {
+  padding: 2px 2px 1px;
+}
+
+/* Tooltips */
+tooltips {
+  opacity: 0.95;
+  border-radius: 20px;
+  border: 2px solid @bg-storm;
+  background: @background;
+}
+
+/* Modules */
+#backlight,
+#battery,
+#bluetooth,
+#clock,
+#idle_inhibitor,
+#network,
+#pulseaudio,
+#custom-power,
+#custom-aqi,
+#custom-weather {
+  border-radius: 20px;
+  padding: 0 10px;
+  background-color: @bg-storm;
+}
+
+#backlight {
+  color: @yellow;
+}
+
+#battery {
+  color: @cyan;
+}
+#battery.warning {
+  color: @yellow;
+}
+#battery.critical {
+  color: @red;
+}
+#battery.charging {
+  color: @green;
+}
+
+#bluetooth {
+  color: @cyan;
+}
+#bluetooth.disabled,
+#bluetooth.off {
+  color: @red;
+}
+
+#idle_inhibitor {
+  color: @orange;
+}
+#idle_inhibitor.activated {
+  color: @red;
+}
+
+#network {
+  color: @green;
+}
+#network.disconnected,
+#network.disabled {
+  color: @red;
+}
+
+#pulseaudio {
+  color: @purple;
+}
+#pulseaudio.bluetooth {
+  color: @cyan;
+}
+#pulseaudio.muted {
+  color: @red;
+}
+
+#custom-power {
+  color: @red;
+}
+
+#custom-aqi.good {
+  color: @green;
+}
+#custom-aqi.moderate {
+  color: @yellow;
+}
+#custom-aqi.usg {
+  color: @orange;
+}
+#custom-aqi.unhealthy {
+  color: @red;
+}
+#custom-aqi.very-unhealthy {
+  color: @purple;
+}
+#custom-aqi.hazardous {
+  color: @magenta;
+}
+
+#custom-weather.cold {
+  color: @blue;
+}
+#custom-weather.mild {
+  color: @green;
+}
+#custom-weather.warm {
+  color: @orange;
+}
+#custom-weather.hot {
+  color: @red;
+}
