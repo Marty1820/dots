@@ -63,6 +63,7 @@ tooltip {
 #clock,
 #idle_inhibitor,
 #network,
+#power-profiles-daemon,
 #wireplumber,
 #custom-power,
 #custom-aqi,
@@ -122,6 +123,13 @@ tooltip {
 #network.disconnected,
 #network.disabled {
   color: @red;
+}
+
+#power-profiles-daemon.performance {
+  color: @red;
+}
+#power-profiles-daemon.power-saver {
+  color: @green;
 }
 
 #wireplumber {

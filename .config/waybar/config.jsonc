@@ -16,6 +16,7 @@
   ],
   "modules-right": [
     "idle_inhibitor",
+    "power-profiles-daemon",
     "backlight",
     "network",
     "bluetooth",
