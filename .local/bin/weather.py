@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-# pacman -S python-requests
-
-import requests
-import json
 import logging
+import json
+import requests  # pacman -S python-requests
 import sys
+
 from pathlib import Path
+
 
 # Systemd logging integration
 logging.basicConfig(
