@@ -3,6 +3,7 @@
 import logging
 import json
 import requests  # pacman -S python-requests
+import subprocess
 import sys
 
 from pathlib import Path
@@ -110,6 +111,18 @@ def fetch_open_meteo(cfg: dict, cache_dir: Path) -> None:
     logger.info("Open-Meteo data saved")
 
 
+def reload_waybar_module():
+    """Send RTMIN+2 to waybar."""
+    try:
+        subprocess.run(
+            ["pkill", "-RTMIN+2", "waybar"], capture_output=True, text=True, check=True
+        )
+        logger.info("Sent RTMIN+2 signal to waybar")
+
+    except subprocess.CalledProcessError as e:
+        logger.warning(f"Failed to signal waybar: {e.stderr}")
+
+
 def main() -> int:
     try:
         config = load_config()
@@ -127,6 +140,10 @@ def main() -> int:
         except RuntimeError as e:
             logger.error("%s fetch failed: %s", name, e)
             failures += 1
+
+    # Send SIGINT to waybar on success
+    if failures == 0:
+        reload_waybar_module()
 
     return 1 if failures else 0
 

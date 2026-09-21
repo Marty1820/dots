@@ -131,13 +131,13 @@
   "custom/aqi": {
     "on-click": "xdg-open https://aqicn.org/here",
     "exec": "$HOME/.config/waybar/scripts/aqi-waybar.py",
-    "interval": 120,
+    "signal": 2,
     "return-type": "json"
   },
   "custom/weather": {
     // "on-click": "xdg-open https://",
     "exec": "$HOME/.config/waybar/scripts/weather-waybar.py",
-    "interval": 120,
+    "signal": 2,
     "return-type": "json"
   }
 }
